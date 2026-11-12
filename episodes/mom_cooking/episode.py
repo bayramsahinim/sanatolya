@@ -24,7 +24,7 @@ import numpy as np  # noqa: E402
 from cinecode import audio as A  # noqa: E402
 from cinecode import tts  # noqa: E402
 from cinecode.align import trim  # noqa: E402
-from cinecode.core import FPS, H, W, ease_out, prog  # noqa: E402
+from cinecode.core import FPS, H, W, ease_out, prog, rrect  # noqa: E402
 from cinecode.timeline import Episode, VoiceDB  # noqa: E402
 from episodes.mom_cooking import sfx as FX  # noqa: E402
 from episodes.mom_cooking.script import DIALOGUE, SLUG, TITLE, all_texts  # noqa: E402
@@ -89,12 +89,117 @@ def draw_text_accent(cx, t, c):
     cx.restore()
 
 
+DLG_SIZE, LABEL_SIZE, DLG_MAX_W, DLG_IN, DLG_OUT = 66, 32, 760, 0.12, 0.12
+
+
+def _wrap(cx, text, maxw):
+    words, rows, cur = text.split(), [], ""
+    for w in words:
+        trial = (cur + " " + w).strip()
+        if cur and cx.text_extents(trial.replace("[", "").replace("]", "")).x_advance > maxw:
+            rows.append(cur)
+            cur = w
+        else:
+            cur = trial
+    rows.append(cur)
+    # carry [..] highlight across a line break
+    out, open_ = [], False
+    for r in rows:
+        r2 = ("[" if open_ else "") + r
+        open_ = r2.count("[") > r2.count("]")
+        out.append(r2 + ("]" if open_ else ""))
+    return out
+
+
+def draw_dialogue(cx, t, c, head, other_faces):
+    """Speaker caption: white card + charcoal outline, small blue speaker tag, tail to the speaker,
+    placed above the speaker's head and never over a face."""
+    if head is None or t < c["t0"] or t > c["t1"] + DLG_OUT:
+        return
+    a_in = ease_out(prog(t, c["t0"], c["t0"] + DLG_IN))
+    a = min(a_in, 1 - prog(t, c["t1"], c["t1"] + DLG_OUT))
+    if a <= 0:
+        return
+    text = c["text"]
+    if c.get("reveal_dt") and t < c["t0"] + c["reveal_dt"]:
+        shown_upto = text.index("[")          # second word lands on its beat
+    else:
+        shown_upto = None
+    cx.save()
+    cx.select_font_face(FONT, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    cx.set_font_size(DLG_SIZE)
+    rows = _wrap(cx, text, DLG_MAX_W)
+    widths = [sum(cx.text_extents(s).x_advance for s, _ in _runs(r)) for r in rows]
+    cap = cx.text_extents("H").height
+    lh = DLG_SIZE * 1.18
+    padx, pady = 34, 22
+    lab_h = LABEL_SIZE * 1.15
+    bw = max(widths) + 2 * padx
+    bh = pady * 2 + lab_h + lh * len(rows) - (lh - cap)
+    hx, hy, hr = head
+    gap, tail = 22, 30
+    bx = min(max(hx - bw / 2, 50), W - 50 - bw)
+    by = hy - hr - gap - tail - bh
+    # keep clear of any other face
+    for (fx, fy, fr) in other_faces:
+        if bx < fx + fr and bx + bw > fx - fr and by < fy + fr and by + bh > fy - fr:
+            by = fy - fr - gap - bh
+    by = max(by, 120)
+    sc = 0.9 + 0.1 * a_in if not c.get("dry") else 0.97 + 0.03 * a_in
+    ox, oy = min(max(hx, bx + 40), bx + bw - 40), by + bh
+    cx.translate(ox, oy)
+    cx.scale(sc, sc)
+    cx.translate(-ox, -oy)
+    cx.push_group()
+    rrect(cx, bx, by, bw, bh, 28)
+    tx = min(max(hx, bx + 50), bx + bw - 50)
+    cx.move_to(tx - 20, by + bh - 2)
+    cx.line_to(hx + (tx - hx) * 0.3, hy - hr - gap * 0.6)
+    cx.line_to(tx + 20, by + bh - 2)
+    cx.close_path()
+    cx.set_source_rgba(1, 1, 1, 0.97)
+    cx.fill_preserve()
+    cx.set_source_rgba(*INK)
+    cx.set_line_width(4)
+    cx.set_line_join(cairo.LINE_JOIN_ROUND)
+    cx.stroke()
+    # speaker tag
+    cx.set_font_size(LABEL_SIZE)
+    cx.move_to(bx + padx, by + pady + LABEL_SIZE * 0.78)
+    cx.set_source_rgba(*ACCENT)
+    cx.show_text(c["label"])
+    # dialogue text
+    cx.set_font_size(DLG_SIZE)
+    y = by + pady + lab_h + cap
+    count = 0
+    for r, wr in zip(rows, widths):
+        x = bx + padx
+        for s, hi in _runs(r):
+            if shown_upto is not None and count >= shown_upto:
+                break
+            seg = s if shown_upto is None else s[: max(0, shown_upto - count)]
+            cx.move_to(x, y)
+            cx.set_source_rgba(*(ACCENT if hi else INK))
+            cx.show_text(seg)
+            x += cx.text_extents(s).x_advance
+            count += len(s)
+        y += lh
+    cx.pop_group_to_source()
+    cx.paint_with_alpha(a)
+    cx.restore()
+
+
 class Short(Episode):
     def render(self, cx, gt):
         super().render(cx, gt)
+        sh = self.shots[self.shot_at(gt)]
         for c in self.cues:
             if c["type"] == "jn_accent":
                 draw_text_accent(cx, gt, c)
+            elif c["type"] == "jn_dlg":
+                head = sh.heads.get(c["who"])
+                others = [h for k, h in sh.heads.items() if k != c["who"]]
+                draw_dialogue(cx, gt, c, head, others)
 
 
 # ------------------------------------------------------------------ build
@@ -296,6 +401,8 @@ def write_srt(ep, path):
         txt = texts[c["id"]]
         if speaker.get(c["id"]) == "Mom":
             txt = "MOM: " + txt
+        elif speaker.get(c["id"]) == "Me":
+            txt = "ME: " + txt
         words, rows, cur = txt.split(), [], ""
         for w in words:
             if len(cur) + len(w) + 1 > 32 and cur:

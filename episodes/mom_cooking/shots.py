@@ -56,12 +56,12 @@ class S1Room(Shot):
         P.t = tc + 1.55
         music(P, None, tc - 0.3, fade=0.12)
         # sound
-        for k, tt in enumerate([0.05, 0.22, 0.31, 0.52, 0.66, 0.83, 1.05, 1.2, 1.38]):
+        for k, tt in enumerate([0.0, 0.1, 0.19, 0.28]):
             P.sfx("game", t=tt, vol=0.22, seed=k)
-        P.sfx("step", t=0.28, vol=0.3)
-        P.sfx("plate", t=0.45, vol=0.35)
-        P.sfx("eyeroll", t=1.12, vol=0.5)
-        P.sfx("raspberry", t=1.78, vol=0.45)
+        P.sfx("plate", t=0.05, vol=0.35)
+        P.sfx("scratch", t=0.3, vol=0.35)
+        P.sfx("raspberry", t=0.5, vol=0.45)
+        P.sfx("eyeroll", t=1.62, vol=0.5)
         P.sfx("rumble", t=tc - 0.3, vol=0.55)
         P.sfx("crack", t=tc - 0.2, vol=0.6)
         P.sfx("portal", t=tc + 0.05, vol=0.55)
@@ -72,29 +72,33 @@ class S1Room(Shot):
         tq, to, ts = self.mt("quake"), self.mt("open"), self.mt("suck")
         quake = prog(t, tq, tq + 0.3)
         sx, sy = shake(t, 16 * quake + 10 * prog(t, to, ts), 22)
-        z = kf(t, [(0, 1.32), (1.0, 1.32), (1.6, 1.4), (tq, 1.4), (ts + 0.6, 1.46)])
-        cam = Cam(560 + sx, 1160 + sy, z)
+        # hook: punch in on the complaint (hero + plate), ease back out for "I did."
+        z = kf(t, [(0, 1.42), (0.42, 1.62), (2.2, 1.62), (2.6, 1.4), (tq, 1.4), (ts + 0.6, 1.46)])
+        camx = kf(t, [(0, 470), (0.42, 430), (2.2, 430), (2.6, 560)])
+        camy = kf(t, [(0, 1140), (0.42, 1130), (2.2, 1130), (2.6, 1160)])
+        cam = Cam(camx + sx, camy + sy, z)
         bedroom(cx, cam, t, tv=1.0, crack=prog(t, tq, tq + 0.45), glow=prog(t, to, ts))
         world(cx, cam)
         # ---- Mom in the doorway with the casserole
-        m_in = ease_out(prog(t, 0.25, 0.6))
-        if t >= 0.25:
-            mx = lerp(-60, 255, m_in)
+        if True:   # Mom is already in the doorway on frame 1 (the hook starts mid-complaint)
+            mx = 255
             scared = t >= tq + 0.1
-            meh = t >= 2.0 and not scared
+            meh = t >= 0.55 and not scared
             mp = mom_pose(mx, FLOOR, t, s=1.45, f=1, arm_a=74, elb_a=26, arm_b=80, elb_b=18,
                           mouth="o" if scared else ("flat" if meh else "smile"),
                           eyes="wide" if scared else ("half" if meh else "open"),
                           brows="worried" if scared else ("flat" if meh else "up"))
             if not scared:
                 mp = breathe(mp, t)
-                if t < 0.6:
-                    mp = walk(mp, t, 2.2, 0.8, arms=False)
+                if meh:
+                    mp = mp.but(lean=-3, head_dy=4)
             else:
                 mp = mp.but(lean=-8, arm_a=110, elb_a=20)
             J = fig(cx, self, cam, MOM, mp, "mom")
             hx, hy = J["hand_b"]
             casserole_plate(cx, hx + 20, hy - 6, 1.05, t, steam_a=1.0 if not scared else 0.0)
+            # his verdict on the food: green stink lines rising off the plate
+            stink(cx, hx + 20, hy - 40, t, prog(t, 0.3, 0.5) * (1 - prog(t, 2.2, 2.5)))
         # ---- beanbag + hero
         bx, by = self.HX + 10, FLOOR
         squash = 0.0
@@ -120,27 +124,29 @@ class S1Room(Shot):
         if t < ts + 0.62:
             hero_spin(cx, (hp.x, hp.y - 160), spin, shrink, draw_hero)
         end(cx)
-        # final flash into the past
-        flash(cx, 0.9 * prog(t, ts + 0.45, ts + 0.75), (1.0, 0.85, 0.6))
+        # final flash into the past (kept short: no empty white frames)
+        flash(cx, 0.7 * prog(t, ts + 0.55, ts + 0.75), (1.0, 0.85, 0.6))
 
     def hero_pose(self, t):
         tq = self.mt("quake")
         p = hero_pose(self.HX, FLOOR - 70, t, s=HS, f=1, eyes="half", brows="flat", mouth="flat",
                       look=(1, 0.1), arm_a=44, elb_a=72, arm_b=56, elb_b=60, lean=6)
         p = sit(p, seat_h=60)
-        if t < 0.9:   # button mashing, glued to the TV
+        if t < 0.22:   # button mashing, glued to the TV
             j = math.sin(t * 40) * 4
             p = p.but(arm_a=44 + j, arm_b=56 - j, eyes="open", brows="angry", look=(1, 0.1))
-        elif t < 1.12:   # side-eye at Mom
-            p = p.but(look=(-1, 0), eyes="open", brows="skeptic", tilt=-4)
-        elif t < 1.72:   # eye roll
-            a = (t - 1.12) / 0.6 * 2 * math.pi
+        elif t < 0.45:   # side-eye at the plate
+            p = p.but(look=(-1, 0.2), eyes="open", brows="skeptic", mouth="flat", tilt=-4)
+        elif t < 1.55:   # thumbs down + "bleh" + complaining
+            k = ease_out(prog(t, 0.45, 0.6))
+            talking = 0.75 < t < 1.5 and math.sin(t * 26) > 0
+            p = p.but(arm_b=lerp(56, 74, k), elb_b=lerp(60, -14, k), eyes="squeeze", brows="angry",
+                      mouth="yell" if talking else "wavy", mouth_open=0.6, look=(-1, 0), lean=4,
+                      tilt=-8 + 4 * math.sin(t * 9))
+        elif t < 2.2:   # eye roll
+            a = (t - 1.55) / 0.6 * 2 * math.pi
             p = p.but(look=(-math.cos(a) * 0.9, -abs(math.sin(a)) * 0.9 - 0.2), eyes="open", brows="flat",
                       tilt=-6 * math.sin(a / 2), mouth="flat")
-        elif t < 2.55:   # thumbs down + "bleh"
-            k = ease_out(prog(t, 1.72, 1.9))
-            p = p.but(arm_b=lerp(56, -78, k), elb_b=lerp(60, -6, k), eyes="squeeze", brows="angry",
-                      mouth="wavy", look=(-1, 0), lean=4, tilt=-8)
         elif t < tq:     # "I did." smug turn back to the game
             p = p.but(eyes="half", brows="skeptic", mouth="smirk", look=(1, 0))
         else:            # panic
@@ -154,11 +160,12 @@ class S1Room(Shot):
     def props(self, cx, t, J, p):
         tq = self.mt("quake")
         if t < tq:
-            hx = (J["hand_a"][0] + J["hand_b"][0]) / 2 if t < 1.72 else J["hand_a"][0] + 8
-            hy = (J["hand_a"][1] + J["hand_b"][1]) / 2 if t < 1.72 else J["hand_a"][1]
+            out = 0.45 <= t < 1.55
+            hx = J["hand_a"][0] + 8 if out else (J["hand_a"][0] + J["hand_b"][0]) / 2
+            hy = J["hand_a"][1] if out else (J["hand_a"][1] + J["hand_b"][1]) / 2
             controller(cx, hx + 4, hy, 0.62 * p.s, 0.1)
-            if 1.72 <= t < 2.55:
-                thumb(cx, J["hand_b"][0], J["hand_b"][1] + 6, p.s * 0.9, True)
+            if out:
+                thumb(cx, J["hand_b"][0], J["hand_b"][1] + 8, p.s * 1.35, True)
                 mx = J["head"][0] - 0.22 * J["head_rad"] * 0.0 + 0.22 * J["head_rad"]
                 tongue(cx, mx + 6, J["head"][1] + 0.5 * J["head_rad"], p.s * 0.9)
         else:
@@ -170,7 +177,7 @@ class S1Room(Shot):
 class S2Land(Shot):
     """Crash-landing 10,000 years ago; spots a mammoth; thinks it's dinner."""
     scene = "s2"
-    trans_in = ("white", 0.3)
+    trans_in = ("flash", 0.16)
 
     def plan(self, P):
         music(P, "stone", 0.25, 0.9)
@@ -812,8 +819,18 @@ class S5Punch(Shot):
         tf = self.m["fast"][0]
         for k in range(7):
             P.sfx("chew" if k % 2 else "bite", t=tf + k * 0.1, vol=0.4)
-        # bubbles are not used in this Short (no captions); drop them
+        # dialogue captions near the speaker. d2 is already shown word-for-word by the
+        # "BEST MEAL OF MY LIFE!" accent, so it is not duplicated.
         P.cues[:] = [c for c in P.cues if c["type"] != "bubble"]
+        for lid, who, text, label in (("d1", "mom", "So… how's the chicken?", "MOM"),
+                                      ("d3", "mom", "It's yesterday's [leftovers.]", "MOM"),
+                                      ("d4", "hero", "Even [better.]", "ME")):
+            a, b = self.m[lid]
+            cue = {"type": "jn_dlg", "who": who, "text": text, "label": label, "t0": a + 0.04, "t1": b - 0.06}
+            if lid == "d4":
+                cue["reveal_dt"] = 0.45 * (b - a)   # "better." lands on its word: dry beat
+                cue["dry"] = True
+            P.cues.append(cue)
 
     def draw(self, cx, t):
         d1 = self.mt("d1"), self.mt("d1", 1)

@@ -50,7 +50,7 @@ MOM: So… how's the chicken?
 
 13
 00:00:33,570 --> 00:00:35,830
-BEST MEAL OF MY LIFE!
+ME: BEST MEAL OF MY LIFE!
 
 14
 00:00:35,980 --> 00:00:38,280
@@ -58,4 +58,4 @@ MOM: It's yesterday's leftovers.
 
 15
 00:00:38,550 --> 00:00:39,780
-Even better.
+ME: Even better.

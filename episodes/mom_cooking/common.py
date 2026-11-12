@@ -184,6 +184,22 @@ def steam(cx, x, y, t, a=1.0, s=1.0, n=3):
         cx.stroke()
 
 
+def stink(cx, x, y, t, a=1.0, s=1.0):
+    """Wavy green 'this smells bad' lines over food."""
+    if a <= 0:
+        return
+    for k in range(3):
+        ph = (t * 0.9 + k / 3) % 1
+        xx = x + (k - 1) * 34 * s
+        cx.move_to(xx, y - ph * 40 * s)
+        for j in range(1, 7):
+            cx.line_to(xx + math.sin(j * 1.4 + t * 7 + k) * 10 * s, y - (ph * 40 + j * 16) * s)
+        src(cx, hexc("#7BAE3A"), a * math.sin(ph * math.pi) ** 0.5)
+        cx.set_line_width(6 * s)
+        cx.set_line_cap(cairo.LINE_CAP_ROUND)
+        cx.stroke()
+
+
 def light_rays(cx, x, y, t, a=1.0, r=900, n=14, c=(1.0, 0.92, 0.6)):
     if a <= 0:
         return
