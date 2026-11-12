@@ -1,0 +1,737 @@
+{
+ "s1_01": {
+  "take": "narration_00",
+  "start": 39.47,
+  "end": 41.5,
+  "heard": "i bought a time machine for twelve dollars",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s1_02": {
+  "take": "narration_00",
+  "start": 42.13,
+  "end": 43.94,
+  "heard": "now the roman army wants me dead",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s1_03": {
+  "take": "narration_00",
+  "start": 44.77,
+  "end": 47.96,
+  "heard": "and somehow this is still not the worst thing ive ever bought online",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s1_04": {
+  "take": "narration_00",
+  "start": 49.13,
+  "end": 50.17,
+  "heard": "okay let me explain",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_01": {
+  "take": "narration_00",
+  "start": 51.19,
+  "end": 54.6,
+  "heard": "it started when i found a time machine online for twelve dollars",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_02": {
+  "take": "narration_00",
+  "start": 54.94,
+  "end": 56.07,
+  "heard": "the reviews were amazing",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_03": {
+  "take": "narration_00",
+  "start": 56.44,
+  "end": 59.11,
+  "heard": "five stars five stars five stars",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_04": {
+  "take": "narration_00",
+  "start": 59.38,
+  "end": 61.7,
+  "heard": "and one guy saying it turned his dog into a refrigerator",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_05": {
+  "take": "narration_00",
+  "start": 62.47,
+  "end": 63.37,
+  "heard": "i assumed he was joking",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_06": {
+  "take": "narration_00",
+  "start": 64.02,
+  "end": 65.73,
+  "heard": "so i pressed the big red button",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_07": {
+  "take": "narration_00",
+  "start": 66.65,
+  "end": 68.06,
+  "heard": "one second i was in my room",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_08": {
+  "take": "narration_00",
+  "start": 68.65,
+  "end": 70.52,
+  "heard": "the next i was in ancient rome",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_09": {
+  "take": "narration_00",
+  "start": 71.24,
+  "end": 71.9,
+  "heard": "no wi fi",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_10": {
+  "take": "narration_00",
+  "start": 72.42,
+  "end": 72.88,
+  "heard": "no money",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_11": {
+  "take": "narration_00",
+  "start": 73.43,
+  "end": 74.97,
+  "heard": "no idea what year it was",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_12": {
+  "take": "narration_00",
+  "start": 75.41,
+  "end": 80.08,
+  "heard": "my phone had three percent battery and my time machine said it needed seven days to recharge",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_13": {
+  "take": "narration_00",
+  "start": 80.61,
+  "end": 81.82,
+  "heard": "seven days",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_14": {
+  "take": "narration_00",
+  "start": 82.54,
+  "end": 84.92,
+  "heard": "i couldnt even survive seven minutes without checking my phone",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_15": {
+  "take": "narration_00",
+  "start": 86.17,
+  "end": 87.28,
+  "heard": "then things got worse",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_16": {
+  "take": "narration_00",
+  "start": 88.27,
+  "end": 90.77,
+  "heard": "a roman soldier saw my phone flashlight",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_17": {
+  "take": "narration_00",
+  "start": 91.32,
+  "end": 96.15,
+  "heard": "and apparently a tiny glowing rectangle was enough to convince him i was some kind of powerful wizard",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s2_18": {
+  "take": "narration_00",
+  "start": 97.03,
+  "end": 98.53,
+  "heard": "this was going to be a problem",
+  "file": "assets/audio/tts/narration_00_5c8b09f784.wav"
+ },
+ "s3_01": {
+  "take": "narration_01",
+  "start": 34.48,
+  "end": 37.76,
+  "heard": "by day two i had discovered something important about ancient rome",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_02": {
+  "take": "narration_01",
+  "start": 38.57,
+  "end": 39.62,
+  "heard": "everybody wanted money",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_03": {
+  "take": "narration_01",
+  "start": 40.29,
+  "end": 42.03,
+  "heard": "and nobody accepted apple pay",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_04": {
+  "take": "narration_01",
+  "start": 42.93,
+  "end": 44.78,
+  "heard": "i tried explaining digital payments",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_05": {
+  "take": "narration_01",
+  "start": 45.58,
+  "end": 48.49,
+  "heard": "the woman selling bread handed me an actual apple",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_06": {
+  "take": "narration_01",
+  "start": 49.4,
+  "end": 50.75,
+  "heard": "honestly fair enough",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_07": {
+  "take": "narration_01",
+  "start": 51.58,
+  "end": 52.41,
+  "heard": "her name was lucia",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_08": {
+  "take": "narration_01",
+  "start": 52.93,
+  "end": 55.04,
+  "heard": "she offered me bread in exchange for cleaning dishes",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_09": {
+  "take": "narration_01",
+  "start": 55.6,
+  "end": 58.13,
+  "heard": "finally a job that matched my qualifications",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_10": {
+  "take": "narration_01",
+  "start": 59.38,
+  "end": 61.32,
+  "heard": "i had no qualifications",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_11": {
+  "take": "narration_01",
+  "start": 62.38,
+  "end": 63.28,
+  "heard": "i even made a friend",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_12": {
+  "take": "narration_01",
+  "start": 63.98,
+  "end": 66.29,
+  "heard": "a little kid who found everything i did hilarious",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_13": {
+  "take": "narration_01",
+  "start": 66.85,
+  "end": 67.5,
+  "heard": "which was nice",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s3_14": {
+  "take": "narration_01",
+  "start": 68.21,
+  "end": 70.74,
+  "heard": "because back home people usually just found it concerning",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_01": {
+  "take": "narration_01",
+  "start": 71.74,
+  "end": 73.83,
+  "heard": "on day three i had a brilliant idea",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_02": {
+  "take": "narration_01",
+  "start": 74.81,
+  "end": 75.61,
+  "heard": "i was from the future",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_03": {
+  "take": "narration_01",
+  "start": 76.29,
+  "end": 77.59,
+  "heard": "i knew things these people didnt",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_04": {
+  "take": "narration_01",
+  "start": 78.14,
+  "end": 81.49,
+  "heard": "so i decided to become rich by introducing ancient rome to modern food",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_05": {
+  "take": "narration_01",
+  "start": 82.22,
+  "end": 83.64,
+  "heard": "specifically pizza",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_06": {
+  "take": "narration_01",
+  "start": 84.52,
+  "end": 85.76,
+  "heard": "there was one small problem",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_07": {
+  "take": "narration_01",
+  "start": 86.63,
+  "end": 87.37,
+  "heard": "no tomatoes",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_08": {
+  "take": "narration_01",
+  "start": 88.53,
+  "end": 90.92,
+  "heard": "i made something with dough cheese and olives",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_09": {
+  "take": "narration_01",
+  "start": 91.64,
+  "end": 92.58,
+  "heard": "technically edible",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_10": {
+  "take": "narration_01",
+  "start": 93.46,
+  "end": 94.55,
+  "heard": "emotionally devastating",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_11": {
+  "take": "narration_01",
+  "start": 95.51,
+  "end": 99.45,
+  "heard": "lucia took one bite and stared at me like id personally insulted her ancestors",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_12": {
+  "take": "narration_01",
+  "start": 100.32,
+  "end": 102.31,
+  "heard": "so that was the end of my restaurant empire",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_13": {
+  "take": "narration_01",
+  "start": 103.11,
+  "end": 104.37,
+  "heard": "then the soldier found me again",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_14": {
+  "take": "narration_01",
+  "start": 105.08,
+  "end": 106.03,
+  "heard": "his name was maximus",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_15": {
+  "take": "narration_01",
+  "start": 106.49,
+  "end": 110.22,
+  "heard": "and he had apparently been telling everyone about the magical glowing rectangle",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_16": {
+  "take": "narration_01",
+  "start": 111.15,
+  "end": 111.33,
+  "heard": "great",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_17": {
+  "take": "narration_01",
+  "start": 112.15,
+  "end": 113.6,
+  "heard": "ive been in rome for three days and i was already involved in a religious misunderstanding",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s4_18": {
+  "take": "narration_01",
+  "start": 113.62,
+  "end": 116.12,
+  "heard": "ive been in rome for three days and i was already involved in a religious misunderstanding",
+  "file": "assets/audio/tts/narration_01_76afce00a6.wav"
+ },
+ "s5_01": {
+  "take": "narration_02",
+  "start": 36.7,
+  "end": 38.92,
+  "heard": "maximus wanted me to demonstrate my powers",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_02": {
+  "take": "narration_02",
+  "start": 39.46,
+  "end": 40.12,
+  "heard": "in public",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_03": {
+  "take": "narration_02",
+  "start": 40.75,
+  "end": 41.64,
+  "heard": "for an audience",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_04": {
+  "take": "narration_02",
+  "start": 42.52,
+  "end": 44.34,
+  "heard": "normally i handle pressure very well",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_05": {
+  "take": "narration_02",
+  "start": 45.05,
+  "end": 45.69,
+  "heard": "that was a lie",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_06": {
+  "take": "narration_02",
+  "start": 46.37,
+  "end": 47.3,
+  "heard": "my phone was dead",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_07": {
+  "take": "narration_02",
+  "start": 47.92,
+  "end": 49.68,
+  "heard": "my time machine still had three days left",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_08": {
+  "take": "narration_02",
+  "start": 50.33,
+  "end": 51.87,
+  "heard": "and everyone was staring at me",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_09": {
+  "take": "narration_02",
+  "start": 52.55,
+  "end": 55.56,
+  "heard": "i grabbed a shiny tray and reflected sunlight into his face",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_10": {
+  "take": "narration_02",
+  "start": 56.17,
+  "end": 56.6,
+  "heard": "pure science",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_11": {
+  "take": "narration_02",
+  "start": 57.46,
+  "end": 58.19,
+  "heard": "very advanced",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_12": {
+  "take": "narration_02",
+  "start": 58.72,
+  "end": 60.64,
+  "heard": "mostly because nobody here knew i was improvising",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_13": {
+  "take": "narration_02",
+  "start": 61.32,
+  "end": 63.13,
+  "heard": "then a pigeon landed on his head",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_14": {
+  "take": "narration_02",
+  "start": 63.77,
+  "end": 67.23,
+  "heard": "and for reasons i still dont understand everyone started cheering",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_15": {
+  "take": "narration_02",
+  "start": 67.91,
+  "end": 69.65,
+  "heard": "maximus declared me a wizard",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_16": {
+  "take": "narration_02",
+  "start": 70.27,
+  "end": 72.96,
+  "heard": "then he invited me to perform a miracle at the city festival",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_17": {
+  "take": "narration_02",
+  "start": 73.6,
+  "end": 74.24,
+  "heard": "in three days",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s5_18": {
+  "take": "narration_02",
+  "start": 74.9,
+  "end": 78.07,
+  "heard": "i had accidentally become romes least qualified magician",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_01": {
+  "take": "narration_02",
+  "start": 78.66,
+  "end": 81.13,
+  "heard": "by day five people were asking me to predict the future",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_02": {
+  "take": "narration_02",
+  "start": 81.76,
+  "end": 82.79,
+  "heard": "which sounded easy",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_03": {
+  "take": "narration_02",
+  "start": 82.99,
+  "end": 84.49,
+  "heard": "i was literally from the future",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_04": {
+  "take": "narration_02",
+  "start": 85.2,
+  "end": 87.6,
+  "heard": "unfortunately i knew absolutely nothing useful",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_05": {
+  "take": "narration_02",
+  "start": 88.24,
+  "end": 90.29,
+  "heard": "one man wanted to know whether hed become rich",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_06": {
+  "take": "narration_02",
+  "start": 90.98,
+  "end": 92.26,
+  "heard": "i told him to invest in property",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_07": {
+  "take": "narration_02",
+  "start": 92.89,
+  "end": 94.33,
+  "heard": "another wanted tomorrows weather",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_08": {
+  "take": "narration_02",
+  "start": 95.05,
+  "end": 95.79,
+  "heard": "i looked at the sky",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_09": {
+  "take": "narration_02",
+  "start": 96.46,
+  "end": 96.98,
+  "heard": "not a cloud",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_10": {
+  "take": "narration_02",
+  "start": 97.6,
+  "end": 99.52,
+  "heard": "so i confidently predicted sunshine",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_11": {
+  "take": "narration_02",
+  "start": 100.29,
+  "end": 102.67,
+  "heard": "for the first time in my life i felt like a genius",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s6_12": {
+  "take": "narration_02",
+  "start": 103.34,
+  "end": 105.2,
+  "heard": "that feeling lasted about eleven seconds",
+  "file": "assets/audio/tts/narration_02_0f7b9fff73.wav"
+ },
+ "s7_01": {
+  "take": "narration_03",
+  "start": 34.68,
+  "end": 35.24,
+  "heard": "day six",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_02": {
+  "take": "narration_03",
+  "start": 36.03,
+  "end": 36.53,
+  "heard": "it rained",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_03": {
+  "take": "narration_03",
+  "start": 37.28,
+  "end": 37.7,
+  "heard": "a lot",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_04": {
+  "take": "narration_03",
+  "start": 38.38,
+  "end": 41.91,
+  "heard": "apparently people dont enjoy paying for a weather forecast thats completely wrong",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_05": {
+  "take": "narration_03",
+  "start": 42.55,
+  "end": 45.19,
+  "heard": "especially when the forecast comes from a wizard",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_06": {
+  "take": "narration_03",
+  "start": 45.58,
+  "end": 47.04,
+  "heard": "maximus was furious",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_07": {
+  "take": "narration_03",
+  "start": 47.67,
+  "end": 51.21,
+  "heard": "he said that tomorrow at the festival i would have to prove i could control the weather",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_08": {
+  "take": "narration_03",
+  "start": 52.18,
+  "end": 53.22,
+  "heard": "or id be thrown in prison",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_09": {
+  "take": "narration_03",
+  "start": 54.2,
+  "end": 55.94,
+  "heard": "this was a slight career setback",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_10": {
+  "take": "narration_03",
+  "start": 56.75,
+  "end": 57.7,
+  "heard": "luckily i had a plan",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_11": {
+  "take": "narration_03",
+  "start": 58.37,
+  "end": 59.63,
+  "heard": "a terrible plan",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_12": {
+  "take": "narration_03",
+  "start": 59.89,
+  "end": 60.86,
+  "heard": "but technically a plan",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_13": {
+  "take": "narration_03",
+  "start": 61.67,
+  "end": 65.45,
+  "heard": "id hide a bucket above the stage pull a rope and make it rain",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_14": {
+  "take": "narration_03",
+  "start": 66.53,
+  "end": 67.2,
+  "heard": "fake rain",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_15": {
+  "take": "narration_03",
+  "start": 67.48,
+  "end": 68.48,
+  "heard": "but still rain",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_16": {
+  "take": "narration_03",
+  "start": 69.48,
+  "end": 70.6,
+  "heard": "lucia looked at the machine",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_17": {
+  "take": "narration_03",
+  "start": 71.39,
+  "end": 71.84,
+  "heard": "then at me",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_18": {
+  "take": "narration_03",
+  "start": 72.74,
+  "end": 73.64,
+  "heard": "then back at the machine",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_19": {
+  "take": "narration_03",
+  "start": 74.7,
+  "end": 75.5,
+  "heard": "she didnt say anything",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_20": {
+  "take": "narration_03",
+  "start": 76.2,
+  "end": 78.35,
+  "heard": "which somehow was worse than yelling",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ },
+ "s7_21": {
+  "take": "narration_03",
+  "start": 79.38,
+  "end": 84.61,
+  "heard": "after six hours of engineering i had successfully invented getting hit by a bucket",
+  "file": "assets/audio/tts/narration_03_dafae9d59f.wav"
+ }
+}
