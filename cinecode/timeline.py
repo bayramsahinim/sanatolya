@@ -22,6 +22,7 @@ class VoiceDB:
         self.d = durations      # lid -> seconds (final, stretched)
         self.texts = texts      # lid -> text
         self.tempo = tempo
+        self.gap_scale = 1.0     # global multiplier on the pauses between lines (comic timing)
         self.estimated = set()
 
     def dur(self, lid):
@@ -47,7 +48,7 @@ class Planner:
         self.cues.append({"type": "narr", "id": lid, "t0": self.t, "dur": d})
         self.m[lid] = (self.t, self.t + d)
         start = self.t
-        self.t += d + gap
+        self.t += d + gap * self.voice.gap_scale
         return start
 
     def dlg(self, lid, who, text, gap=0.4, lead=0.0, prefer=None, size=60):
@@ -58,7 +59,7 @@ class Planner:
                           "t1": self.t + d + 0.4, "size": size, "prefer": prefer})
         self.m[lid] = (self.t, self.t + d)
         start = self.t
-        self.t += d + gap
+        self.t += d + gap * self.voice.gap_scale
         return start
 
     def wait(self, s):

@@ -1,8 +1,10 @@
 {
   "_note": "Just Needy channel narrator. Reuse this exact block for every episode so the voice never changes.",
   "provider": "google-gemini-tts",
-  "model": "gemini-3.8-flash-lite-tts",
-  "voice": "Charon",
+  "model": "gemini-3.8-flash-tts",
+  "fallback_models": ["gemini-3.1-flash-tts-preview", "gemini-3.8-flash-lite-tts"],
+  "voice": "Puck",
   "sample_rate": 24000,
-  "style_prompt": "You are the narrator of a 2D animated comedy cartoon, speaking in first person as the main character's inner voice. Speak natural, conversational American English with dry, sarcastic, deadpan humor. Slightly playful, calm and unbothered even when describing absurd disasters. Expressive but never exaggerated or theatrical. Become a little more serious and quiet when building suspense. Take a small beat right before a punchline and let it land. Read every line exactly as written, without adding or skipping words. Leave a clear pause of about one second between lines."
+  "playback_tempo": 1.0,
+  "director_notes": "Narrator of a witty YouTube animation channel. Voice: young adult American male, energetic but natural, clean and bright, medium-fast pace, lightly sarcastic and clever. Natural pauses and comic timing. Not deep, not booming, not a documentary voice, never shouting, not a kids-show voice, no fake excitement.\nLeave a clear pause of about one second between paragraphs.\nSpeak only the transcript below, nothing else."
 }

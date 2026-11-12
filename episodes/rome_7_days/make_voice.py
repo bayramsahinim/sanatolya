@@ -14,13 +14,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 CFG = json.load(open(os.path.join(ROOT, "config", "narrator_voice.json")))
 OUT = os.path.join(ROOT, "assets", "audio", "tts")
 
-DIALOGUE_MODEL = "gemini-3.8-flash-lite-tts"
+DIALOGUE_MODEL = CFG["model"]
 DIALOGUE_VOICES = {"Maximus": "Algenib", "Lucia": "Kore", "Boy": "Leda"}
 
 
 def chunk_text(scenes):
     lines = [t for s in scenes for _, t in NARRATION[s]]
-    return CFG["style_prompt"] + "\n\n" + "\n\n".join(lines)
+    return ("### DIRECTOR'S NOTES\n" + CFG["director_notes"] + "\n\n#### TRANSCRIPT\n" + "\n\n".join(lines))
 
 
 def chunk_path(i):
@@ -33,15 +33,23 @@ def make_chunk(i):
         print("cached", p)
         return
     t = time.time()
-    a = tts.synth(chunk_text(TTS_CHUNKS[i]), p, CFG["model"], voice=CFG["voice"])
+    a = None
+    for model in [CFG["model"]] + CFG.get("fallback_models", []):
+        try:
+            a = tts.synth(chunk_text(TTS_CHUNKS[i]), p, model, voice=CFG["voice"])
+            break
+        except RuntimeError as e:
+            print(f"  {model}: {str(e)[:120]}")
+    if a is None:
+        raise RuntimeError("all TTS models exhausted")
     print(f"chunk {i}: {len(a)/tts.SR:.1f}s audio in {time.time()-t:.0f}s -> {p}")
 
 
 def dialogue_take_text():
     body = "\n".join(f"{who}: {text}" for _, who, text in DIALOGUE)
-    return ("TTS the following lines from a cartoon. Maximus is a huge, loud, gruff Roman soldier, "
-            "booming and dramatic. Boy is an excited, playful young boy. Leave a one second pause "
-            "between lines.\n\n" + body)
+    return ("### DIRECTOR'S NOTES\nTwo cartoon characters. Maximus: a huge, gruff Roman soldier, loud and "
+            "dramatic. Boy: an excited, playful young boy. Leave a clear pause of about one second between "
+            "lines.\nSpeak only the transcript below, nothing else.\n\n#### TRANSCRIPT\n" + body)
 
 
 def dialogue_path():
@@ -53,8 +61,16 @@ def make_dialogue():
     if os.path.exists(p):
         print("cached", p)
         return
-    a = tts.synth(dialogue_take_text(), p, DIALOGUE_MODEL,
-                  speakers={"Maximus": DIALOGUE_VOICES["Maximus"], "Boy": DIALOGUE_VOICES["Boy"]})
+    a = None
+    for model in [DIALOGUE_MODEL] + CFG.get("fallback_models", []):
+        try:
+            a = tts.synth(dialogue_take_text(), p, model,
+                          speakers={"Maximus": DIALOGUE_VOICES["Maximus"], "Boy": DIALOGUE_VOICES["Boy"]})
+            break
+        except RuntimeError as e:
+            print(f"  {model}: {str(e)[:120]}")
+    if a is None:
+        raise RuntimeError("all TTS models exhausted")
     print(f"dialogue take: {len(a)/tts.SR:.1f}s")
 
 
