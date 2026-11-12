@@ -44,7 +44,7 @@ class S5Gather(Shot):
 
     def plan(self, P):
         P.accent("DAY 4", t=0.4, dur=1.7, size=120)
-        P.wait(1.6)
+        P.wait(2.5)
         P.dlg("d_max_show", "max", "Show them your [power!]", gap=0.35)
         P.say("s5_01", gap=0.3)
         a = P.say("s5_02", gap=0.25)

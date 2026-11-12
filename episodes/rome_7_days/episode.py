@@ -90,7 +90,7 @@ def _worker(args):
     w, h = int(W * scale), int(H * scale)
     cmd = ["ffmpeg", "-loglevel", "error", "-y", "-f", "rawvideo", "-pix_fmt", "bgra", "-s", f"{w}x{h}",
            "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium" if scale == 1 else "veryfast",
-           "-crf", "18" if scale == 1 else "26", "-tune", "animation", "-pix_fmt", "yuv420p", path]
+           "-crf", "20" if scale == 1 else "26", "-tune", "animation", "-pix_fmt", "yuv420p", path]
     pr = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     s = cairo.ImageSurface(cairo.FORMAT_ARGB32, w, h)
     for i in range(a, b):
