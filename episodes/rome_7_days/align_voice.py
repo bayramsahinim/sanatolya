@@ -31,13 +31,18 @@ def marker_transcript(name, audio):
         if d["pieces"] == [[round(s, 3), round(e, 3)] for s, e in segs]:
             return segs, d["transcript"]
     mp3 = f"/tmp/markers_{name}.mp3"
-    _mp3(align.marker_audio(audio, segs), mp3)
-    for attempt in range(4):
+    good = False
+    for attempt, gain in enumerate([0.3, 0.6, 0.45, 0.8, 0.3, 0.6]):
+        align.MARKER_GAIN = gain
+        _mp3(align.marker_audio(audio, segs), mp3)
         tr = transcribe(mp3)
         pw = align.parse_marked_transcript(tr, len(segs))
         if sum(1 for w in pw if w) >= 0.5 * len(segs):
+            good = True
             break
-        print(f"  {name}: transcript nearly empty, retrying")
+        print(f"  {name}: markers missing from transcript (gain {gain}), retrying")
+    if not good:
+        raise RuntimeError(f"{name}: could not get a marker transcript")
     json.dump({"pieces": [[round(s, 3), round(e, 3)] for s, e in segs], "transcript": tr},
               open(cache, "w"), indent=1)
     return segs, tr
@@ -98,6 +103,7 @@ def main(which=None):
         for lid, r in res.items():
             r["file"] = os.path.relpath(p, ROOT)
         lines.update(res)
+        json.dump(lines, open(LINES_JSON, "w"), indent=1)
         print(f"take {i}: aligned {len(res)} lines")
     dp = dialogue_path()
     if os.path.exists(dp) and (not which or -1 in which):

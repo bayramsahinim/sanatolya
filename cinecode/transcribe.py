@@ -8,7 +8,7 @@ import urllib.request
 MODEL = "gemini-3.5-transcribe"
 
 
-def transcribe(mp3_path, retries=6):
+def transcribe(mp3_path, retries=10):
     b = base64.b64encode(open(mp3_path, "rb").read()).decode()
     body = {"contents": [{"parts": [{"inlineData": {"mimeType": "audio/mp3", "data": b}}]}]}
     last = None
@@ -19,9 +19,13 @@ def transcribe(mp3_path, retries=6):
             headers={"Content-Type": "application/json", "x-goog-api-key": "dummy"})
         try:
             d = json.load(urllib.request.urlopen(req, timeout=300))
-            return "".join(p.get("audioTranscription", {}).get("text", "") or p.get("text", "")
-                           for p in d["candidates"][0]["content"]["parts"])
+            parts = (d.get("candidates") or [{}])[0].get("content", {}).get("parts", [])
+            out = "".join(p.get("audioTranscription", {}).get("text", "") or p.get("text", "") for p in parts)
+            if out:
+                return out
+            last = "empty response"
+            time.sleep(30)
         except urllib.error.HTTPError as e:
             last = f"{e.code} {e.read().decode()[:200]}"
-            time.sleep(8 * (i + 1))
+            time.sleep(65 if e.code == 429 else 10 * (i + 1))
     raise RuntimeError(last)

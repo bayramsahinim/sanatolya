@@ -56,6 +56,8 @@ def synth(text, cache_path, model, voice=None, speakers=None, retries=4):
             last = f"{e.code}: {msg}"
             if e.code == 429 and "per day" in msg and "per minute" not in msg:
                 raise RuntimeError("daily quota exhausted: " + msg)
+            if 400 <= e.code < 500 and e.code != 429:
+                raise RuntimeError(f"request rejected ({e.code}): " + msg)
             time.sleep(35 * (i + 1))
         except Exception as e:  # network hiccup / bad payload
             last = repr(e)
