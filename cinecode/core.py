@@ -1,10 +1,13 @@
 """Cinecode core: canvas helpers, easing, keyframes, camera."""
 import math
+import os
 import random
 
 import cairo
 
-W, H = 1920, 1080
+# Canvas size. Landscape episodes use the default; vertical Shorts set
+# CINECODE_SIZE=1080x1920 before importing cinecode.
+W, H = (int(v) for v in os.environ.get("CINECODE_SIZE", "1920x1080").split("x"))
 FPS = 30
 
 OUTLINE = (0.11, 0.11, 0.14)

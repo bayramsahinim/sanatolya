@@ -1,0 +1,107 @@
+{
+ "n1a": {
+  "take": "mom_narration",
+  "start": 0.0,
+  "end": 2.11,
+  "heard": "ever complained about your moms cooking",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n1b": {
+  "take": "mom_narration",
+  "start": 2.57,
+  "end": 2.91,
+  "heard": "i did",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n1c": {
+  "take": "mom_narration",
+  "start": 3.58,
+  "end": 4.26,
+  "heard": "big mistake",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n2": {
+  "take": "mom_narration",
+  "start": 5.0,
+  "end": 8.51,
+  "heard": "then i found out how people got dinner ten thousand years ago",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n3a": {
+  "take": "mom_narration",
+  "start": 8.8,
+  "end": 9.51,
+  "heard": "no fridge",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n3b": {
+  "take": "mom_narration",
+  "start": 9.68,
+  "end": 10.48,
+  "heard": "no delivery",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n3c": {
+  "take": "mom_narration",
+  "start": 10.71,
+  "end": 11.92,
+  "heard": "not even a microwave",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n4a": {
+  "take": "mom_narration",
+  "start": 12.42,
+  "end": 13.33,
+  "heard": "i chased my food",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n4b": {
+  "take": "mom_narration",
+  "start": 13.59,
+  "end": 15.26,
+  "heard": "got chased by my food",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n4c": {
+  "take": "mom_narration",
+  "start": 15.28,
+  "end": 17.93,
+  "heard": "and somehow burned a potato",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "n5": {
+  "take": "mom_narration",
+  "start": 18.74,
+  "end": 20.61,
+  "heard": "then suddenly i was back home",
+  "file": "assets/audio/tts/mom_cooking/narration_3460b9d49d.wav"
+ },
+ "d2": {
+  "take": "mom_me",
+  "start": 0.2,
+  "end": 2.06,
+  "heard": "best meal of my life",
+  "file": "assets/audio/tts/mom_cooking/me_0c49518b0c.wav"
+ },
+ "d4": {
+  "take": "mom_me",
+  "start": 3.05,
+  "end": 4.18,
+  "heard": "even better",
+  "file": "assets/audio/tts/mom_cooking/me_0c49518b0c.wav"
+ },
+ "d1": {
+  "take": "mom_mom",
+  "start": 0.25,
+  "end": 2.49,
+  "heard": "so hows the chicken",
+  "file": "assets/audio/tts/mom_cooking/mom_78daa865c6.wav"
+ },
+ "d3": {
+  "take": "mom_mom",
+  "start": 3.02,
+  "end": 4.92,
+  "heard": "its yesterdays leftovers",
+  "file": "assets/audio/tts/mom_cooking/mom_78daa865c6.wav"
+ }
+}

@@ -46,3 +46,23 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Short: "I Complained About Mom's Cooking. Big Mistake."
+
+Vertical 9:16 YouTube Short / TikTok / Reels (1080×1920, 30 fps, ~41 s).
+
+| Deliverable | Path |
+|---|---|
+| Final video (H.264/AAC, -14 LUFS) | `output/I_Complained_About_Moms_Cooking.mp4` |
+| English subtitles (separate, not burned in) | `output/I_Complained_About_Moms_Cooking.en.srt` |
+
+Code: `episodes/mom_cooking/` (script, voice, alignment, shots, SFX, assembly). Vertical canvas is
+enabled with `CINECODE_SIZE=1080x1920` (set automatically by the episode module). On-screen text
+uses Inter ExtraBold (charcoal `#1F1F24` + accent `#3478F6`).
+
+```bash
+python -m episodes.mom_cooking.make_voice      # TTS takes (cached in assets/audio/tts/mom_cooking)
+python -m episodes.mom_cooking.align_voice     # per-line alignment -> lines.json
+python -m episodes.mom_cooking.episode audio   # mix + SRT
+python -m episodes.mom_cooking.episode video   # render the final MP4
+```
