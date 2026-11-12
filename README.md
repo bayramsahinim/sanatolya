@@ -46,3 +46,35 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Series: Just Needy — Zombie Apocalypse (vertical Shorts)
+
+### Episode 1 — "The First Morning" (Day 1)
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 9:16, 30 fps, H.264/AAC, 62.0 s) | `output/zombie_ep01/Just_Needy_Zombie_Apocalypse_Ep01_The_First_Morning.mp4` |
+| English subtitles (YouTube CC, synced to the final audio) | `output/zombie_ep01/Just_Needy_Zombie_Apocalypse_Ep01_The_First_Morning.en.srt` |
+
+```
+episodes/zombie_series/   reusable for every episode: the farm (farm.py), cast (cast.py: zombies,
+                          mailman, rooster), sound identity (sound.py: SFX, "dread"/"confident" beds, ambience)
+episodes/zombie_ep01/     script, voice (make_voice / align_voice), shots_a.py (scenes 1-4),
+                          shots_b.py (scenes 5-7), episode.py (assembly/mix/SRT/render), qa.py
+assets/audio/tts/zombie_ep01/   cached narration takes + per-line alignment (lines.json)
+assets/audio/sfx_voice/         cached voice-actor SFX takes (rooster crow, zombie groans)
+```
+
+Vertical rendering: `cinecode.core` reads `CINECODE_SIZE` (default `1920x1080`); the zombie packages
+set it to `1080x1920` on import, so landscape episodes are unaffected.
+
+```bash
+python -m episodes.zombie_ep01.make_voice        # TTS (cached)
+python -m episodes.zombie_ep01.align_voice       # split take into lines
+python -m episodes.zombie_ep01.episode audio     # soundtrack + SRT
+python -m episodes.zombie_ep01.episode video     # final render (~90 s on 4 cores)
+python -m episodes.zombie_ep01.qa                # delivery checks
+```
+
+Continuity for Episode 2: it opens on the open back door (S7Door) — muddy footprints lead from the
+door toward the hallway; whoever came in is never shown in Episode 1.
