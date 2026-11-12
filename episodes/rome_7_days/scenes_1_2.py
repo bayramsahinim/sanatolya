@@ -10,7 +10,7 @@ class S1ColdOpen(Shot):
 
     def plan(self, P):
         P.sfx("step", t=0.0, vol=0.0)  # (anchor)
-        P.wait(0.55)
+        P.wait(1.5)
         a = P.say("s1_01", gap=0.25)
         P.accent("[$12] TIME MACHINE", t=a + 0.25, dur=self_dur(P, "s1_01") - 0.1, size=92)
         P.say("s1_02", gap=0.15)

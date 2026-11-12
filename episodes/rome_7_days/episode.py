@@ -30,7 +30,7 @@ OUT = os.path.join(ROOT, "output")
 LINES = os.path.join(ROOT, "assets", "audio", "tts", "lines.json")
 TEMPO = json.load(open(os.path.join(ROOT, "config", "narrator_voice.json"))).get("playback_tempo", 1.0)
 CLIP_PRE, CLIP_POST = 0.05, 0.12
-GAP_SCALE = 1.0         # tune pauses between lines so the cut lands at 8-9 minutes
+GAP_SCALE = 1.35        # tune pauses between lines so the cut lands at 8-9 minutes
 TITLE = "I Got Stuck in Ancient Rome for 7 Days"
 
 

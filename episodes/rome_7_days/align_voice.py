@@ -49,41 +49,77 @@ def marker_transcript(name, audio):
 
 
 def align_take(name, audio, ids, texts):
+    """Word-level timing: every transcribed word gets a span inside its piece (proportional to
+    its length), words are matched to the script, and each line runs from its first to its last
+    word. Boundaries between lines that share a piece are snapped to the quietest point."""
+    import difflib
     segs, tr = marker_transcript(name, audio)
     pw = align.parse_marked_transcript(tr, len(segs))
-    assign, votes = align.assign_pieces(pw, texts)
-    spans = {}
-    for li in range(len(texts)):
-        ks = [k for k in range(len(segs)) if assign[k] == li and votes[k]]
-        if ks:
-            spans[li] = [segs[ks[0]][0], segs[ks[-1]][1], ks]
-    # lines with no piece of their own share a piece with a neighbour: split it
-    for li in range(len(texts)):
-        if li in spans:
+    words = []  # (word, t0, t1, piece)
+    for k, ((ps, pe), ws) in enumerate(zip(segs, pw)):
+        if not ws:
             continue
-        # find the piece voted for this line
-        k = next((k for k in range(len(segs)) if li in votes[k]), None)
-        if k is None:
-            raise RuntimeError(f"{name}: no audio found for {ids[li]}: {texts[li]}")
-        owner = assign[k]
-        ps, pe = segs[k]
-        n_this = votes[k][li]
-        n_all = sum(votes[k].values())
-        if owner > li:  # this line is the first part of the piece
-            cut = align.split_point(audio, ps, pe, n_this / n_all)
-            spans[li] = [ps, cut, [k]]
-            if spans[owner][0] == ps:
-                spans[owner][0] = cut + 0.02
-        else:  # this line is the tail of the piece
-            cut = align.split_point(audio, ps, pe, 1 - n_this / n_all)
-            spans[li] = [cut + 0.02, pe, [k]]
-            if spans[owner][1] == pe:
-                spans[owner][1] = cut
+        wts = [len(w) + 2 for w in ws]
+        tot = sum(wts)
+        t = ps
+        for w, wt in zip(ws, wts):
+            d = (pe - ps) * wt / tot
+            words.append((w, t, t + d, k))
+            t += d
+    line_words = [align._words(x) for x in texts]
+    flat = [w for ws in line_words for w in ws]
+    owner = [li for li, ws in enumerate(line_words) for _ in ws]
+    sm = difflib.SequenceMatcher(a=[w[0] for w in words], b=flat, autojunk=False)
+    hits = {}
+    for i, j, n in sm.get_matching_blocks():
+        for q in range(n):
+            hits.setdefault(owner[j + q], []).append(i + q)
+    # a line with no matching words (e.g. "Catch!" heard as "Cat.") takes the unmatched
+    # transcript words between its neighbours
+    for li in range(len(ids)):
+        if li in hits:
+            continue
+        lo = max(hits[li - 1]) + 1 if li - 1 in hits else 0
+        nxt = next((min(hits[j]) for j in range(li + 1, len(ids)) if j in hits), len(words))
+        if lo < nxt:
+            hits[li] = list(range(lo, nxt))
+    spans = []
+    for li, lid in enumerate(ids):
+        if li not in hits:
+            raise RuntimeError(f"{name}: no audio found for {lid}: {texts[li]}")
+        i0, i1 = min(hits[li]), max(hits[li])
+        # include unmatched transcript words that sit between this line's matches
+        spans.append([words[i0][1], words[i1][2], words[i0][3], words[i1][3], i0, i1])
+    # unmatched transcript words between two lines: give them to the line that is missing words
+    for li in range(len(spans) - 1):
+        a_, b_ = spans[li], spans[li + 1]
+        gap = list(range(a_[5] + 1, b_[4]))
+        if not gap:
+            continue
+        a_full = len(hits[li]) >= len(line_words[li])
+        if a_full:
+            b_[4] = gap[0]
+            b_[0] = words[gap[0]][1]
+            b_[2] = words[gap[0]][3]
+        else:
+            a_[5] = gap[-1]
+            a_[1] = words[gap[-1]][2]
+            a_[3] = words[gap[-1]][3]
+    for li in range(len(spans) - 1):
+        a_, b_ = spans[li], spans[li + 1]
+        if a_[3] == b_[2]:  # same piece: cut at the quietest point between them
+            k = a_[3]
+            ps, pe = segs[k]
+            guess = (a_[1] + b_[0]) / 2
+            cut = align.split_point(audio, ps, pe, (guess - ps) / max(pe - ps, 1e-3), window=0.15)
+            cut = min(max(cut, a_[0] + 0.25), b_[1] - 0.25)
+            a_[1] = cut
+            b_[0] = cut + 0.02
     out = {}
-    for li, (lid, text) in enumerate(zip(ids, texts)):
-        s, e, ks = spans[li]
-        heard = " ".join(w for k in range(ks[0], ks[-1] + 1) for w in pw[k])
-        out[lid] = {"take": name, "start": round(s, 3), "end": round(e, 3), "heard": heard}
+    for li, lid in enumerate(ids):
+        s0, e0, k0, k1, i0, i1 = spans[li]
+        heard = " ".join(w[0] for w in words[i0:i1 + 1])
+        out[lid] = {"take": name, "start": round(s0, 3), "end": round(e0, 3), "heard": heard}
     return out
 
 

@@ -238,7 +238,7 @@ class S5Pigeon(Shot):
         P.sfx("flap", t=a + 0.2, vol=0.6)
         P.sfx("coo", t=a + P.voice.dur("s5_13") + 0.3, vol=0.6)
         P.sfx("gasp", t=a + P.voice.dur("s5_13") + 0.5, vol=0.6)
-        P.wait(1.4)
+        P.wait(2.2)
         b = P.say("s5_14", gap=0.5)
         P.mark("cheer", b + P.voice.dur("s5_14") * 0.7)
         P.sfx("cheer", t=b + P.voice.dur("s5_14") * 0.65, vol=0.8)
@@ -796,7 +796,7 @@ class S7Bucket(Shot):
         P.sfx("splash", t=1.38, vol=0.6)
         P.sfx("drip", t=2.6, vol=0.5)
         P.sfx("drip", t=3.3, vol=0.5)
-        P.wait(2.9)
+        P.wait(3.4)
         P.say("s7_21", gap=0.9)
 
     def draw(self, cx, t):

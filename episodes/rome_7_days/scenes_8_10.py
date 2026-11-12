@@ -45,7 +45,7 @@ class S8Arrive(Shot):
     def plan(self, P):
         P.accent("DAY 7", t=0.4, dur=1.7, size=120)
         P.sfx("cheer", t=0.2, vol=0.6)
-        P.wait(1.0)
+        P.wait(2.2)
         P.say("s8_01", gap=0.3)
         P.say("s8_02", gap=0.4)
         a = P.say("s8_03", gap=0.5)
@@ -226,7 +226,7 @@ class S8Awkward(Shot):
         P.wait(0.3)
         P.sfx("coo", t=0.4, vol=0.7)
         P.sfx("crickets", t=1.0, vol=0.3)
-        P.wait(1.6)
+        P.wait(2.4)
         P.say("s8_18", gap=0.4)
         P.say("s8_19", gap=0.9)
         P.sfx("wah", t=P.t - 1.4, vol=0.4)
@@ -419,11 +419,11 @@ class S9Chase(Shot):
     amb = "market"
 
     def plan(self, P):
-        P.wait(1.6)
+        P.wait(3.6)
         P.mark("basket", 1.2)
         P.sfx("crash_wood", t=1.2, vol=0.5)
-        P.mark("cart", 2.5)
-        P.sfx("cart", t=2.5, vol=0.6)
+        P.mark("cart", 2.9)
+        P.sfx("cart", t=2.9, vol=0.6)
         P.say("s9_10", gap=0.3)
         P.mark("trip", P.t + 0.2)
         P.sfx("thud", t=P.t + 0.3, vol=0.7)
@@ -785,7 +785,7 @@ class S10Desert(Shot):
         P.mark("land2", 0.85)
         P.sfx("thud", t=0.85, vol=0.9)
         P.sfx("clank", t=0.9, vol=0.5)
-        P.wait(2.4)
+        P.wait(3.2)
         P.mark("turn", 1.6)
         P.say("s10_13", gap=0.35)
         P.say("s10_14", gap=0.5)
@@ -858,7 +858,7 @@ class S10Run(Shot):
         P.sfx("whoosh", t=0.9, vol=0.7)
         P.wait(1.2)
         P.say("s10_18", gap=0.5)
-        self.tail = 2.6
+        self.tail = 3.4
         for k in range(12):
             P.sfx("step", t=1.0 + k * 0.22, vol=0.3)
 
