@@ -46,3 +46,33 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: "Just Needy — Zombie Apocalypse, Part 3: Don't Let It Out"
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920 vertical, 30 fps, H.264/AAC, 60.5 s) | `output/JUST_NEEDY_ZOMBIE_PART_3_FINAL.mp4` |
+| English subtitles (separate SRT, not burned in) | `output/JUST_NEEDY_ZOMBIE_PART_3_FINAL.srt` |
+
+Part 3 moves Cinecode from flat 2D sets to a **real 3D world** (Three.js / WebGL, rendered headless in
+Chromium at native 1080×1920): a modelled farmhouse with interior, ~25k individually animated corn stalks
+(GPU bend driven by the unseen thing's route), barn, tractor, fence, maintenance hatch, fog, shadows,
+depth of field and a film grade. The stick-figure characters stay 2D: they are drawn with Canvas2D every
+frame and placed in the world as lit, fogged, shadow-casting billboards.
+
+```
+episodes/zombie_part3/
+  script.py, timeline.json     narration (verbatim) + single timing source for picture, sound, SRT
+  make_voice.py                Gemini TTS: one continuous narrator take + radio whisper (cached)
+  soundtrack.py                line placement, radio processing, procedural SFX + score, mix, SRT
+  web/                         world.js (set), rig.js (2D characters), main.js (shots), post.js
+  render.js                    headless frame renderer      assemble.sh / qa.py   mux + checks
+```
+
+```bash
+(cd build/p3 && npm i three@0.170.0)          # or set P3_NODE_MODULES
+python -m episodes.zombie_part3.make_voice
+python -m episodes.zombie_part3.soundtrack
+node episodes/zombie_part3/render.js frames build/p3/frames 0 60.5
+episodes/zombie_part3/assemble.sh && python episodes/zombie_part3/qa.py
+```

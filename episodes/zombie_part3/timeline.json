@@ -1,0 +1,14 @@
+{
+  "_note": "Single source of truth for timing (seconds). Narration line starts are used by the mixer, the SRT writer and the 3D shot timeline.",
+  "duration": 60.5,
+  "fps": 30,
+  "lines": {
+    "n01": 0.12, "n02": 2.85, "n03": 4.30,
+    "n04": 6.00, "n05": 9.90,
+    "n06": 12.90, "n07": 16.40, "n08": 22.20,
+    "n09": 25.90, "n10": 27.80, "n11": 29.50, "n12": 33.50,
+    "n13": 37.40, "n14": 39.30, "n15": 41.60, "n16": 44.60,
+    "n17": 49.00, "n18": 52.60,
+    "r01": 54.90
+  }
+}
