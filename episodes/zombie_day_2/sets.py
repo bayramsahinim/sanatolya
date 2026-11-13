@@ -101,6 +101,11 @@ def outside(cx, x0, y0, w, h, t, ground_frac=0.78, draw_fg=None, dim=0.0):
     ellipse(cx, sx, sy, w * 0.05, w * 0.05)
     src(cx, hexc("#fff5d6"))
     cx.fill()
+    for k, (cy, cs) in enumerate(((0.18, 1.0), (0.32, 0.7))):
+        ccx = x0 + ((t * (9 + 5 * k) + k * 0.45 * w) % (w * 1.6)) - w * 0.3
+        ellipse(cx, ccx, y0 + h * cy, w * 0.13 * cs, h * 0.025 * cs)
+        src(cx, (1, 1, 1, 0.5))
+        cx.fill()
     hy = y0 + h * 0.56
     cx.move_to(x0, hy + 30)
     for i in range(13):
@@ -179,10 +184,11 @@ def window(cx, x0, y0, w, h, t, draw_fg=None, curtains=True, sill=True):
     if curtains:
         for side in (-1, 1):
             cxp = x0 - fw * 2 if side < 0 else x0 + w + fw * 2
+            sway = w * 0.025 * math.sin(t * 1.1 + side) + w * 0.012 * math.sin(t * 2.3 + side * 2)
             cx.move_to(cxp, y0 - fw * 3)
             cx.line_to(cxp - side * w * 0.2, y0 - fw * 3)
-            cx.curve_to(cxp - side * w * 0.12, y0 + h * 0.4, cxp - side * w * 0.2, y0 + h * 0.8,
-                        cxp - side * w * 0.14, y0 + h + fw * 2)
+            cx.curve_to(cxp - side * w * 0.12 + sway * 0.5, y0 + h * 0.4, cxp - side * w * 0.2 + sway,
+                        y0 + h * 0.8, cxp - side * w * 0.14 + sway * 1.4, y0 + h + fw * 2)
             cx.line_to(cxp, y0 + h + fw * 2)
             cx.close_path()
             fs(cx, hexc("#d9b65a"), INK, 3)
@@ -397,7 +403,7 @@ def hatch_floor(cx, x, y, w, h, open_=0.0, glow=0.0):
 CELLAR_W = 1900
 
 
-def cellar(cx, t, hatch_open=0.0):
+def cellar(cx, t, hatch_open=0.0, box_fall=None):
     # stone walls
     cx.rectangle(0, 0, CELLAR_W, H)
     src(cx, hexc("#4a4036"))
@@ -447,8 +453,11 @@ def cellar(cx, t, hatch_open=0.0):
     for x in (sx, sx + 520):
         line(cx, [(x, 620), (x, 1580)], hexc("#5a3e27"), 18)
     # boxes
-    for (bx, by, bw, bh) in ((640, 1400, 220, 180), (700, 1250, 170, 150), (1560, 1380, 260, 200),
-                             (1600, 1220, 190, 160)):
+    for i, (bx, by, bw, bh) in enumerate(((640, 1400, 220, 180), (700, 1250, 170, 150), (1560, 1380, 260, 200),
+                                          (1600, 1220, 190, 160))):
+        if i == 1 and box_fall is not None:
+            falling_box(cx, box_fall)
+            continue
         rrect(cx, bx, by, bw, bh, 6)
         fs(cx, hexc("#9c7a4c"), INK, 4)
         line(cx, [(bx + bw / 2, by), (bx + bw / 2, by + bh * 0.35)], hexc("#c9b48a"), 10)
@@ -479,8 +488,10 @@ def cellar(cx, t, hatch_open=0.0):
             aa = a if d > 0 else math.pi - a
             line(cx, [(wx, wy), (wx + math.cos(aa) * 200, wy + math.sin(aa) * 200)], (0.85, 0.85, 0.85, 0.35), 2)
     # hanging bulb (off)
-    line(cx, [(760, 170), (760, 330)], INK, 3)
-    ellipse(cx, 760, 350, 22, 28)
+    sw = 0.06 * math.sin(t * 1.4)
+    bx, by = 760 + math.sin(sw) * 170, 170 + math.cos(sw) * 170
+    line(cx, [(760, 170), (bx, by)], INK, 3)
+    ellipse(cx, bx, by + 20, 22, 28)
     fs(cx, hexc("#9a9a8a"), INK, 3)
 
 
@@ -647,3 +658,32 @@ def vignette(cx, k=0.45):
     g.add_color_stop_rgba(1, 0, 0, 0, k)
     cx.set_source(g)
     cx.paint()
+
+
+def falling_box(cx, ft):
+    """The top box of the left stack slides off and crashes to the floor (ft = seconds since it started)."""
+    bx, by, bw, bh = 700, 1250, 170, 150
+    if ft <= 0:
+        x, y, rot = bx, by, 0.0
+    else:
+        g = 2600
+        x = bx + 170 * min(ft, 0.42) / 0.42
+        y = min(by + 0.5 * g * ft * ft, 1580 - bh)
+        rot = min(1.0, ft / 0.42) * 1.35
+        if y >= 1580 - bh:
+            rot = math.pi / 2 + 0.06 * math.exp(-(ft - 0.42) * 8) * math.sin((ft - 0.42) * 40)
+    cx.save()
+    cx.translate(x + bw / 2, y + bh / 2)
+    cx.rotate(rot)
+    rrect(cx, -bw / 2, -bh / 2, bw, bh, 6)
+    fs(cx, hexc("#9c7a4c"), INK, 4)
+    line(cx, [(0, -bh / 2), (0, -bh / 2 + bh * 0.35)], hexc("#c9b48a"), 10)
+    cx.restore()
+    if ft > 0.4:  # dust puff
+        k = ft - 0.4
+        for j in range(8):
+            a = math.pi + j * math.pi / 7
+            r = 40 + 260 * (1 - math.exp(-k * 4))
+            ellipse(cx, x + bw / 2 + math.cos(a) * r, 1560 + math.sin(a) * r * 0.25, 40 + 30 * k, 22 + 14 * k)
+            src(cx, (0.7, 0.65, 0.55, max(0, 0.35 - k * 0.3)))
+            cx.fill()

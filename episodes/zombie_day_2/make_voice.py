@@ -24,12 +24,13 @@ TAKE_A = [l for l in LINES if l[0] <= "n17" and l[0].startswith("n")]
 TAKE_B = [l for l in LINES if l not in TAKE_A]
 
 PERFORMANCE_A = (
-    "This is episode 2 of a zombie survival comedy, told in first person. Keep the same voice through "
-    "every line. Lines with sarcasm (\"Great survival strategy. I know.\", \"Five stars for commitment.\", "
-    "\"Perfect. I'm basically a survival expert.\") are dry and understated, never shouted. Lean on the "
-    "word LEFT in \"what was LEFT of him\". In the item list, leave a short beat before \"And one sock.\" "
-    "The survival tip is brisk and clear. From \"I opened the hatch\" on, get quieter and more careful; "
-    "\"Finally. Quiet.\" is a relieved, soft exhale.")
+    "This is episode 2 of a zombie survival comedy, told in first person by the same narrator as episode 1. "
+    "Keep the same voice through every line, medium-fast and natural, never rushed. Sarcastic lines are dry and "
+    "understated, never shouted. Give the strongest comic emphasis to \"Five stars for commitment.\" and to "
+    "\"Survival expert. Obviously.\" (a beat before \"Obviously.\"). Lean on the word LEFT in \"what was "
+    "LEFT of him\". In the item list, leave a short beat before \"And one sock.\" The survival tip is brisk "
+    "and clear. From \"I opened the hatch\" on, get quieter and more careful; \"Finally. Quiet.\" is a "
+    "relieved, soft exhale.")
 
 
 def take_a_text():

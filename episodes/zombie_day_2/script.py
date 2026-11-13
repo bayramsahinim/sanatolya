@@ -18,7 +18,7 @@ LINES = [
     ("n09", "narrator", "I grabbed my emergency backpack.", "Quick, confident, a bit proud."),
     ("n10", "narrator", "Two cookies. A phone charger. And one sock.",
      "Listing items with growing doubt; tiny pauses between items, the sock lands flat."),
-    ("n11", "narrator", "Perfect. I'm basically a survival expert.", "Fake confidence, obvious sarcasm."),
+    ("n11", "narrator", "Perfect. Survival expert. Obviously.", "Fake confidence, obvious sarcasm."),
     ("n12", "narrator", "Outside, more zombies were gathering.", "Tense, lower."),
     ("n13", "narrator", "I needed another way out.", "Urgent but controlled."),
     ("n14", "narrator",

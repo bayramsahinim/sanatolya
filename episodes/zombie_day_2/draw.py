@@ -18,7 +18,7 @@ HOOD = hexc("#2f7fe3")
 HOOD_D = hexc("#1f5fbf")
 HOOD_DD = hexc("#1a4f9e")
 LEG = hexc("#141414")
-YEL = hexc("#f6c744")
+YEL = hexc("#ffd43b")
 YEL_D = hexc("#3b2a10")
 WHITE = (1, 1, 1, 1)
 
@@ -571,7 +571,7 @@ def zhead(cx, z, hx, hy, R, t, jaw=0.0, look=(0, 0), mood=0.0, blink=0.0, front_
 
 
 def zombie(cx, z, x, gy, s, t, face_dir=1, walking=True, phase=None, jaw=None, look=(0, 0), arms=None, sil=None,
-           head_only=False, holding=None, lost_left=None):
+           head_only=False, holding=None, lost_left=None, head_add=0.0, blink=None):
     """Draw zombie z with an irregular, asymmetric shamble. Returns head (x, y, R).
     phase: gait phase (if None derived from t*speed). sil: flat silhouette colour."""
     if sil is not None:
@@ -652,7 +652,8 @@ def zombie(cx, z, x, gy, s, t, face_dir=1, walking=True, phase=None, jaw=None, l
         return x + px * c - py * sn, hip_y + px * sn + py * c
 
     # head: lolls with irregular motion, lags the body
-    loll = z.tilt0 + noise1(t * 1.1, seed + 21) * 0.22 + (0.08 * math.sin(ph + 0.7) if walking else 0)
+    loll = (z.tilt0 + noise1(t * 1.1, seed + 21) * 0.16 + snaps(t, seed) + head_add
+            + (0.08 * math.sin(ph + 0.7) if walking else 0.05 * math.sin(t * 1.3 + seed)))
     nx, ny = tw(*neck)
     hx = nx + math.sin(loll) * R * 0.85 + face_dir * R * 0.12
     hy = ny - math.cos(loll) * R * 0.78
@@ -696,7 +697,10 @@ def zombie(cx, z, x, gy, s, t, face_dir=1, walking=True, phase=None, jaw=None, l
     if holding:
         holding(cx, hands)
     j = jaw if jaw is not None else 0.4 + 0.4 * max(0, noise1(t * 1.7, seed + 60))
-    zhead(cx, z, hx, hy, R, t, jaw=j, look=look)
+    if blink is None:
+        bp = (t * (0.31 + 0.05 * (seed % 3)) + seed * 0.37) % 1.0
+        blink = 1.0 if bp < 0.06 else 0.0
+    zhead(cx, z, hx, hy, R, t, jaw=j, look=look, blink=blink)
     if z.hat == "mail":
         mail_cap(cx, hx, hy, R, loll)
     if sil is not None:
@@ -704,6 +708,25 @@ def zombie(cx, z, x, gy, s, t, face_dir=1, walking=True, phase=None, jaw=None, l
         src(cx, sil)
         cx.mask(pat)
     return hx, hy, R, hands
+
+
+def snaps(t, seed, period=1.6, amp=0.32, dur=0.07):
+    """Held head angles that change with sudden, jerky snaps at irregular times."""
+    def cell(i):
+        r = random.Random(i * 7919 + seed * 31)
+        return r.uniform(0.15, 0.85), r.uniform(-amp, amp)
+    i = math.floor(t / period)
+    off, tgt = cell(i)
+    ts = (i + off) * period
+    _, prev = cell(i - 1)
+    if t < ts:
+        off2, prev2 = cell(i - 1)
+        _, prev = cell(i - 2)
+        ts2 = (i - 1 + off2) * period
+        x = min(1.0, (t - ts2) / dur)
+        return prev + (prev2 - prev) * x
+    x = min(1.0, (t - ts) / dur)
+    return prev + (tgt - prev) * x
 
 
 def mail_cap(cx, hx, hy, R, tilt):

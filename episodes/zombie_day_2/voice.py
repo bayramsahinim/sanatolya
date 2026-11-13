@@ -14,7 +14,7 @@ from episodes.zombie_day_2.script import LINES, TEXT
 
 
 def estimate(lid):
-    return align.syllables(TEXT[lid]) * 0.19 + 0.2
+    return align.syllables(TEXT[lid]) * 0.165 + 0.15
 
 
 @functools.lru_cache(maxsize=None)
