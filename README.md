@@ -46,3 +46,31 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: "Just Needy — Zombie Apocalypse, Day 1 (Remastered)"
+
+Day 1 rebuilt to match the zombie series' look: a cold, overcast, foggy morning, a lit and shaded hoodie hero,
+an asymmetric infected rig, a restrained science motion graphic and a dark sound design.
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920 native, 30 fps, H.264/AAC) | `output/JUST_NEEDY_ZOMBIE_DAY_1_REMASTERED.mp4` |
+| English subtitles (separate, not burned in) | `output/JUST_NEEDY_ZOMBIE_DAY_1_REMASTERED.srt` |
+
+```
+episodes/zombie_day_1/
+  script.py      approved narration + delivery notes
+  make_voice.py  one Gemini TTS take (channel narrator voice "Puck"), cached
+  world.py       portrait sets, props, lighting, fog, infected rig, typography
+  shots.py       shot list / timeline (26 shots) + on-screen accents
+  render.py      frame render (+ film grain) -> H.264
+  mix.py         narration placement, procedural SFX, drone, ducking, SRT
+  finalize.py    mux + loudness (-14 LUFS) -> output/
+```
+
+```bash
+python -m episodes.zombie_day_1.make_voice
+python -m episodes.zombie_day_1.render          # or: --still 1.0,30.0 for preview stills
+python -m episodes.zombie_day_1.mix
+python -m episodes.zombie_day_1.finalize
+```
