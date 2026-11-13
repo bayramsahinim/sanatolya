@@ -13,7 +13,7 @@ from cinecode.audio import (SR, add, bp, envelope_follow, exp_env, fade, hp, lp,
                             resample, sfx_step, sfx_thud, t_arr)
 from .make_voice import take_path
 from .script import LINES
-from .shots import DURATION
+from .shots import CUT, DURATION, STRIKE
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BUILD = os.path.join(ROOT, "build", "zombie_day_1")
@@ -21,8 +21,6 @@ BUILD = os.path.join(ROOT, "build", "zombie_day_1")
 # where each narration line starts on the picture timeline (s)
 LINE_T = [0.35, 5.1, 9.7, 10.9, 14.5, 16.3, 20.3, 22.6, 25.6, 29.0, 30.9, 33.3, 41.7, 44.5,
           46.0, 48.6, 52.0, 54.3, 55.9, 58.1, 59.6, 62.1]
-STRIKE = 63.6
-CUT = 63.68
 rng = np.random.default_rng(3)
 
 
@@ -174,6 +172,20 @@ def glass_hit():
     return norm(out, 0.95)
 
 
+def glass_slap():
+    """Open palm hitting a window pane: sharp transient, short pane ring, tight low thump."""
+    d = 0.6
+    out = np.zeros(int(d * SR))
+    add(out, hp(noise(0.025, 93), 1200) * exp_env(int(0.025 * SR), 0.004) * 1.0, 0)
+    add(out, bp(noise(0.08, 94), 400, 3000) * exp_env(int(0.08 * SR), 0.015) * 0.7, 0)
+    add(out, sfx_thud(110, 0.25) * 0.8, 0)
+    t = t_arr(0.45)
+    ring = sum(np.sin(2 * np.pi * f * t) * np.exp(-t * dd) for f, dd in
+               [(1210, 22), (1890, 26), (2730, 30), (3570, 34)])
+    add(out, ring * 0.08, 0.004)
+    return norm(lp(out, 7000), 0.95)   # band-limited so the transient survives AAC without overshoot
+
+
 def impact_boom(d=3.0):
     t = t_arr(d)
     f = 55 * np.exp(-t * 0.6) + 28
@@ -257,7 +269,8 @@ def main():
     outside = env_line(n, [(0, 0.45), (5.0, 0.45), (5.1, 1.0), (12.9, 1.0), (13.0, 0.35), (23.3, 0.35), (23.4, 0.9),
                            (25.3, 0.9), (25.4, 0.3), (33.2, 0.3), (33.3, 0.8), (34.6, 0.8), (34.8, 0.25),
                            (48.4, 0.25), (48.5, 0.9), (51.8, 0.8), (51.9, 0.9), (56.7, 0.9), (56.8, 1.0),
-                           (57.9, 1.0), (58.0, 0.3), (CUT, 0.3), (CUT + 0.01, 0.0), (DURATION, 0.0)])
+                           (57.9, 1.0), (58.0, 0.3), (60.8, 0.3), (61.3, 0.1), (CUT, 0.1), (CUT + 0.01, 0.0),
+                           (DURATION, 0.0)])
     inside_lp = lp(w, 450)
     is_out = (outside > 0.6).astype(float)
     is_out = np.convolve(is_out, np.ones(2400) / 2400, mode="same")
@@ -280,7 +293,7 @@ def main():
     # shuffling steps
     add(fx, shuffle_steps(2.0, 1) * 0.12, 10.9)
     add(fx, shuffle_steps(1.2, 2) * 0.2, 56.8)
-    add(fx, shuffle_steps(5.0, 3) * 0.05, 58.0)
+    add(fx, shuffle_steps(3.0, 3) * 0.05, 58.0)
     # gate creak in the wind
     t = t_arr(0.8)
     creak = bp(np.sin(2 * np.pi * np.cumsum(260 + 80 * np.sin(2 * np.pi * 1.3 * t)) / SR) * (1 + 0.5 * np.sign(np.sin(2 * np.pi * 37 * t))), 300, 2400)
@@ -314,11 +327,12 @@ def main():
     # sudden silence + rooster
     add(fx, rooster_crow() * 0.42, 50.3)
     # heartbeat-like low pulses in the last scene
-    for k, tt in enumerate(np.arange(58.2, 63.2, 0.82)):
+    # (stop before the silent beat)
+    for k, tt in enumerate(np.arange(58.2, 60.9, 0.82)):
         add(fx, sfx_thud(52, 0.3) * 0.12 * (0.6 + 0.08 * k), tt)
-    add(fx, lp(noise(0.6, 40), 900) * np.sin(np.pi * t_arr(0.6) / 0.6) * 0.06, 61.0)  # palm on glass squeak/press
-    add(fx, glass_hit() * 0.8, STRIKE)
-    add(fx, impact_boom() * 0.55, CUT + 0.45)
+    # the jump scare: one sharp, short slap on the glass + a brief low hit, nothing lingering
+    add(fx, glass_slap() * 0.8, STRIKE)
+    add(fx, impact_boom(0.9) * 0.25, STRIKE)
 
     # music: low drone, enters after the hook, drops out for silence before the rooster,
     # comes back as the infected react and swells to the hit; total silence after the cut.
@@ -326,7 +340,7 @@ def main():
     dr2 = drone(DURATION, 41.2, 2)
     mus_gain = env_line(n, [(0, 0.0), (1.0, 0.18), (12.0, 0.25), (24.0, 0.18), (28.8, 0.22), (29.6, 0.3),
                             (41.0, 0.3), (45.5, 0.15), (47.0, 0.0), (51.4, 0.0), (52.6, 0.35), (58.0, 0.5),
-                            (63.0, 0.75), (CUT - 0.02, 0.8), (CUT, 0.0), (DURATION, 0.0)])
+                            (59.45, 0.5725), (60.7, 0.62), (61.2, 0.0), (DURATION, 0.0)])
     mus = dr * mus_gain + dr2 * np.clip(mus_gain - 0.3, 0, 1) * 1.2
     # automatic ducking under narration
     ve = envelope_follow(voice, 0.03, 0.45)
@@ -339,7 +353,7 @@ def main():
     mixdown = hp(mixdown, 25)
     # final silence after the end card fades
     mixdown *= env_line(n, [(0, 1), (DURATION - 0.6, 1), (DURATION, 0)])
-    peak = np.max(np.abs(mixdown))
+    peak = 1.7595653640393523          # fixed (v1) gain so everything before the ending is unchanged
     mixdown = mixdown / peak * 0.89
     stereo = np.stack([mixdown, mixdown], axis=1)
     sf.write(os.path.join(BUILD, "mix.wav"), stereo, SR, subtype="PCM_16")

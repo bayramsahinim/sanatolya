@@ -895,46 +895,97 @@ def palm(cx, x, y, s, alpha=1.0, col=hexc("#9FA7A0")):
     cx.restore()
 
 
+# The figure at the window is the (apparently healthy) neighbour from Day 2. In Day 1 they stay a
+# pure black human silhouette: normal proportions, no face, no clothing detail, nothing monstrous.
+STRIKE = 63.05          # open hand hits the glass on "...me"
+CUT = 63.18             # hard cut to black
+SIL = hexc("#040506")
+
+
+def human_silhouette(cx, x, y, k, t, arm=0.0, sway=0.0):
+    """Head-and-shoulders human silhouette standing at (x, y=neck base), scale k.
+    arm 0..1 raises the right arm into an open hand pressed forward."""
+    cx.save()
+    cx.translate(x + sway, y)
+    cx.scale(k, k)
+    src(cx, SIL)
+    # head (slightly taller than wide) + neck
+    ellipse(cx, 0, -112, 58, 72)
+    cx.fill()
+    rrect(cx, -26, -60, 52, 70, 18)
+    cx.fill()
+    # shoulders and torso (natural slope, no ragged edges)
+    cx.move_to(-38, -6)
+    cx.curve_to(-120, 4, -150, 22, -160, 80)
+    cx.line_to(-176, 900)
+    cx.line_to(176, 900)
+    cx.line_to(160, 80)
+    cx.curve_to(150, 22, 120, 4, 38, -6)
+    cx.close_path()
+    cx.fill()
+    if arm > 0:
+        # right forearm rising toward the glass, ending in an open hand
+        sx, sy = -120, 70
+        hx = -60 - 43 * arm
+        hy = 60 - 240 * arm
+        cx.set_line_cap(cairo.LINE_CAP_ROUND)
+        cx.set_line_width(64)
+        cx.move_to(sx, sy + 120)
+        cx.curve_to(sx - 20, sy - 40, hx - 10, hy + 120, hx, hy + 40)
+        cx.stroke()
+        hs = 0.6 + 0.35 * arm
+        cx.save()
+        cx.translate(hx, hy)
+        cx.scale(hs, hs)
+        rrect(cx, -48, -40, 96, 100, 34)
+        cx.fill()
+        for dx, l in ((-36, 70), (-12, 84), (12, 86), (36, 72)):
+            rrect(cx, dx - 11, -40 - l, 22, l + 20, 11)
+            cx.fill()
+        cx.save()
+        cx.translate(-44, 20)
+        cx.rotate(-0.7)
+        rrect(cx, -60, -12, 66, 24, 12)
+        cx.fill()
+        cx.restore()
+        cx.restore()
+    cx.restore()
+
+
 def s22_found(cx, t):
     lt = t - 59.5
-    strike = 63.6
-    sx, sy = hshake(t, strike, 22)
+    sx, sy = hshake(t, STRIKE, 14, 0.2)
     cx.save()
-    cam(cx, 1.0 + 0.12 * ease_io(prog(lt, 0, 4.1)), 640, 1000, dx=sx, dy=sy)
-    rise = ease_out(prog(lt, 0.2, 1.4))
-
-    def figs(c):
-        # big silhouette right behind the glass
-        p = infected_pose(560, 1980 + 1300 * (1 - rise), t, s=5.6, f=1, seed=2, moving=0.0, view="front")
-        p.arm_a, p.arm_b = 10, 10
-        silhouette(c, Z2, p, hexc("#1A2026"), 0.92)
+    cam(cx, 1.0 + 0.12 * ease_io(prog(lt, 0, 3.6)), 640, 1000, dx=sx, dy=sy)
+    wx, wy, ww, wh = 420, 460, 520, 700
+    # the figure fades out of the fog, then stands perfectly still (only the faintest sway)
+    appear = smooth(prog(t, 59.8, 61.0))
+    lunge = ease_in(prog(t, STRIKE - 0.22, STRIKE))
+    settle = prog(t, STRIKE, STRIKE + 0.12)
 
     def outside(c):
-        win_draw = window_outside_generic(t, 420, 460, 520, 700, 0.15, figs)
-        win_draw(c)
+        window_outside_generic(t, wx, wy, ww, wh, 0.15)(c)
+        if appear <= 0:
+            return
+        k = 1.0 + 0.55 * lunge - 0.03 * settle
+        y = 840 + 120 * lunge
+        c.push_group()
+        human_silhouette(c, 690 + 70 * lunge, y, k, t, arm=lunge, sway=math.sin(t * 0.6) * 1.5 * (1 - lunge))
+        c.pop_group_to_source()
+        c.paint_with_alpha(appear)
 
     Wd.room_wall(cx, 1680, t)
-    wx, wy, ww, wh = 420, 460, 520, 700
     Wd.window(cx, wx, wy, ww, wh, t, outside, open_amt=0.9, wind=0.08)
-    # hand pressing against the glass
-    press = ease_out(prog(lt, 1.6, 2.3))
-    if press > 0:
-        pull = ease_in(prog(t, strike - 0.25, strike - 0.03))
-        hit = prog(t, strike - 0.03, strike + 0.02)
-        hs = 1.15 + 0.12 * pull - 0.1 * hit
-        cx.save()
-        rrect(cx, wx, wy, ww, wh, 2)
-        cx.clip()
-        # condensation halo around the palm
-        cx.set_source(rgrad(cx, 690, 760, 0, 160, [(0, hexc("#C9D3D6", 0.25 * press)), (1, hexc("#C9D3D6", 0))]))
-        cx.paint()
-        palm(cx, 690, 780 + 30 * (1 - press), hs, 0.95 * press * (1 - 0.35 * pull + 0.35 * hit))
-        cx.restore()
+    if t >= STRIKE:
+        # the pane flexes: a brief pale flash across the glass
+        fl = 1 - prog(t, STRIKE, STRIKE + 0.13)
+        Wd.paint_rect(cx, (0.85, 0.9, 0.93, 0.1 * fl), wx, wy, ww, wh)
     Wd.light_shaft(cx, [(wx + 100, wy + wh), (wx + ww - 100, wy + wh), (wx + ww + 60, 1900), (wx, 1900)], 0.1, t=t)
-    # protagonist in the foreground, frozen
-    p = hero_pose(250, 2120, t, s=2.6, f=1, view="side", brows="worried", mouth="flat",
-                  eyes="wide" if lt > 1.9 else "open", look=(0.9, -0.35), lean=-6, tilt=-4,
-                  arm_a=-10, elb_a=40, arm_b=20, elb_b=60, blink=lt < 1.6)
+    # protagonist in the foreground, frozen; flinches on the hit
+    flinch = ease_out(prog(t, STRIKE, STRIKE + 0.1))
+    p = hero_pose(250 - 20 * flinch, 2120, t, s=2.6, f=1, view="side", brows="worried", mouth="flat",
+                  eyes="wide" if lt > 1.9 else "open", look=(0.9, -0.35), lean=-6 - 6 * flinch, tilt=-4,
+                  arm_a=-10, elb_a=40, arm_b=20 + 30 * flinch, elb_b=60, blink=lt < 1.6)
     p = breathe(p, t, 0.6 if lt > 2 else 1.8)
     draw_hero(cx, p, TINT_ROOM, 0.4, RIM_COLD, 0.55, 1)
     Wd.paint_rect(cx, (*MIDNIGHT[:3], 0.2), -400, -400, 2000, 3000)
@@ -943,15 +994,12 @@ def s22_found(cx, t):
 
 
 def s23_end(cx, t):
-    lt = t - 63.68
+    lt = t - CUT
     Wd.paint_rect(cx, hexc("#07090C"))
-    a = ease_out(prog(lt, 0.45, 0.9))
-    if a > 0:
-        Wd.title(cx, "THEY FOUND ME", 540, 960, 92, a)
-    b = ease_out(prog(lt, 1.3, 1.7))
+    b = ease_out(prog(lt, 0.55, 0.85)) * (1 - smooth(prog(lt, 1.85, 2.15)))
     if b > 0:
-        Wd.cairo_text(cx, "PART 2", 540, 1080, 36, (*AMBER[:3], b))
-        line(cx, [(440, 1102), (640, 1102)], (*AMBER[:3], 0.6 * b), 2)
+        Wd.cairo_text(cx, "PART 2", 540, 975, 46, (*AMBER[:3], b), spacing=8)
+        line(cx, [(450, 1000), (630, 1000)], (*AMBER[:3], 0.6 * b), 2)
 
 
 # ================================================================ timeline
@@ -980,10 +1028,10 @@ SHOTS = [
     (55.8, 56.8, s19_turn2),
     (56.8, 58.0, s20_approach),
     (58.0, 59.5, s21_stepback),
-    (59.5, 63.68, s22_found),
-    (63.68, 66.4, s23_end),
+    (59.5, CUT, s22_found),
+    (CUT, 65.6, s23_end),
 ]
-DURATION = 66.4
+DURATION = 65.6
 
 # short cinematic accents (text, t0, t1, style)
 ACCENTS = [

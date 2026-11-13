@@ -60,6 +60,9 @@ def render_segment(args):
 def main():
     os.makedirs(BUILD, exist_ok=True)
     args = sys.argv[1:]
+    if args and args[0] == "--tail":
+        render_tail()
+        return
     if args and args[0] == "--still":
         from PIL import Image
         for ts in args[1].split(","):
@@ -79,6 +82,28 @@ def main():
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy",
                     os.path.join(BUILD, "video_silent.mp4")], check=True)
     print("ok", os.path.join(BUILD, "video_silent.mp4"))
+
+
+
+def render_tail(first_frame=1743, kept_segments=21):
+    """Re-render only the frames from `first_frame` to the end (ending revision) and concat them
+    after the untouched seg_000..seg_{kept_segments-1}."""
+    total = int(round(shots.DURATION * FPS))
+    n = total - first_frame
+    parts = 4
+    per = (n + parts - 1) // parts
+    jobs = [(100 + i, first_frame + i * per, min(total, first_frame + (i + 1) * per), 17) for i in range(parts)]
+    with Pool(4) as pool:
+        tail = pool.map(render_segment, jobs)
+    lst = os.path.join(BUILD, "segs_v2.txt")
+    with open(lst, "w") as f:
+        for i in range(kept_segments):
+            f.write(f"file '{os.path.join(BUILD, f'seg_{i:03d}.mp4')}'\n")
+        for o in tail:
+            f.write(f"file '{o}'\n")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy",
+                    os.path.join(BUILD, "video_silent.mp4")], check=True)
+    print("ok tail", os.path.join(BUILD, "video_silent.mp4"))
 
 
 if __name__ == "__main__":
