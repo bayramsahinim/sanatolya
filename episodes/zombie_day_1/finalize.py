@@ -17,7 +17,8 @@ def main():
         "ffmpeg", "-v", "error", "-y",
         "-i", os.path.join(BUILD, "video_silent.mp4"),
         "-i", os.path.join(BUILD, "mix.wav"),
-        "-map", "0:v", "-map", "1:a", "-c:v", "copy",
+        "-map", "0:v", "-map", "1:a", "-c:v", "libx264", "-preset", "slow", "-crf", "21", "-maxrate", "9M", "-bufsize", "18M", "-tune", "grain",
+        "-pix_fmt", "yuv420p", "-r", "30",
         "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "48000",
         "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", out], check=True)
     shutil.copy(os.path.join(BUILD, "day1.srt"), os.path.join(ROOT, "output", NAME + ".srt"))
