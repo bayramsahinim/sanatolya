@@ -236,6 +236,9 @@ def fence(cx, x0, x1, y, t=0.0, broken=None):
     line(cx, [(x0, y - 25), (x1, y - 22)], hexc("#2f2a25"), 7)
 
 
+WIND_BIAS = 0.0
+
+
 class Corn:
     """Cornfield rows with wind sway and an unnatural travelling disturbance."""
 
@@ -257,10 +260,15 @@ class Corn:
             gy0, h0, col = self.rows[ri]
             for (x, gy, h, ph) in self.stalks[ri]:
                 a = 0.04 * math.sin(t * 1.2 + ph) + 0.02 * math.sin(t * 2.7 + ph * 2)
+                a += WIND_BIAS
                 if disturb:
-                    dx, k = disturb
-                    d = math.exp(-((x - dx) / 70) ** 2) * k
-                    a += d * (0.35 * math.sin(t * 9 + ph) + (0.3 if x > dx else -0.3))
+                    dx, k = disturb[0], disturb[1]
+                    against = len(disturb) > 2 and disturb[2]
+                    d = math.exp(-((x - dx) / (110 if against else 70)) ** 2) * k
+                    if against:  # pushed hard the wrong way, against the wind
+                        a += d * (-0.5 - WIND_BIAS * 2 + 0.12 * math.sin(t * 7 + ph))
+                    else:
+                        a += d * (0.35 * math.sin(t * 9 + ph) + (0.3 if x > dx else -0.3))
                 tx, ty = x + math.sin(a) * h, gy - math.cos(a) * h
                 mx, my = x + math.sin(a * 0.5) * h * 0.5, gy - math.cos(a * 0.5) * h * 0.5
                 cx.move_to(x, gy)

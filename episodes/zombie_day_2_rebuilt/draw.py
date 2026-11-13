@@ -613,7 +613,7 @@ def zhead(cx, z, hx, hy, R, t, jaw=0.0, look=(0, 0), mood=0.0, blink=0.0, front_
 
 
 def zombie(cx, z, x, gy, s, t, face_dir=1, walking=True, phase=None, jaw=None, look=(0, 0), arms=None, sil=None,
-           head_only=False, holding=None, lost_left=None, head_add=0.0, blink=None):
+           head_only=False, holding=None, lost_left=None, head_add=0.0, blink=None, still=False):
     """Draw zombie z with an irregular, asymmetric shamble. Returns head (x, y, R).
     phase: gait phase (if None derived from t*speed). sil: flat silhouette colour."""
     if sil is not None:
@@ -630,10 +630,15 @@ def zombie(cx, z, x, gy, s, t, face_dir=1, walking=True, phase=None, jaw=None, l
     swing_r = 0.42
     hitch = math.sin(ph) * 0.5 + 0.5
     drop = (z.limp * 14 * sc * max(0, math.sin(ph))) if walking else 0
-    jerk = noise1(t * 2.3, seed) * 0.08 + noise1(t * 7.0, seed + 5) * 0.03
+    hunch = getattr(z, "hunch", 0.0)
+    thin = getattr(z, "thin", 1.0)
+    arm_k = getattr(z, "arm", 1.0)
+    jerk = 0.0 if still else noise1(t * 2.3, seed) * 0.08 + noise1(t * 7.0, seed + 5) * 0.03
     hip_y = gy - leg + drop - (abs(math.sin(ph)) * 6 * sc if walking else 0)
     lean = face_dir * (0.16 + 0.06 * math.sin(ph * 2 + 1)) + jerk if walking else face_dir * 0.08 + jerk * 0.5
-    shoulder_tilt = (0.12 * z.limp * math.sin(ph) if walking else 0) + noise1(t * 1.3, seed + 11) * 0.06
+    lean += face_dir * hunch * 0.6
+    shoulder_tilt = (0.12 * z.limp * math.sin(ph) if walking else 0) + (0 if still else noise1(t * 1.3, seed + 11) * 0.06)
+    shoulder_tilt += getattr(z, "tilt_sh", 0.0)
     # legs
     for side in (-1, 1):
         hx = x + side * 28 * sc
@@ -657,6 +662,7 @@ def zombie(cx, z, x, gy, s, t, face_dir=1, walking=True, phase=None, jaw=None, l
     cx.rotate(lean)
     sh = -180 * sc
     cx.rotate(shoulder_tilt * 0.5)
+    cx.scale(thin, 1)
     cx.move_to(-62 * sc, sh + 18 * sc)
     cx.curve_to(-62 * sc, sh, -40 * sc, sh, -30 * sc, sh)
     cx.line_to(30 * sc, sh)
@@ -685,8 +691,8 @@ def zombie(cx, z, x, gy, s, t, face_dir=1, walking=True, phase=None, jaw=None, l
         fs(cx, hexc("#2d4f8a"), INK, 3 * sc)
         line(cx, [(-44 * sc, sh + 63 * sc), (-18 * sc, sh + 63 * sc)], hexc("#e6e1cf"), 4 * sc)
     neck = (0, sh - 4 * sc)
-    shl = (-56 * sc, sh + 20 * sc)
-    shr = (56 * sc, sh + 20 * sc)
+    shl = (-56 * sc * thin, sh + 20 * sc)
+    shr = (56 * sc * thin, sh + 20 * sc)
     cx.restore()
     c, sn = math.cos(lean + shoulder_tilt * 0.5), math.sin(lean + shoulder_tilt * 0.5)
 
@@ -694,13 +700,16 @@ def zombie(cx, z, x, gy, s, t, face_dir=1, walking=True, phase=None, jaw=None, l
         return x + px * c - py * sn, hip_y + px * sn + py * c
 
     # head: lolls with irregular motion, lags the body
-    loll = (z.tilt0 + noise1(t * 1.1, seed + 21) * 0.16 + snaps(t, seed) + head_add
-            + (0.08 * math.sin(ph + 0.7) if walking else 0.05 * math.sin(t * 1.3 + seed)))
+    if still:
+        loll = z.tilt0 + head_add
+    else:
+        loll = (z.tilt0 + noise1(t * 1.1, seed + 21) * 0.16 + snaps(t, seed) + head_add
+                + (0.08 * math.sin(ph + 0.7) if walking else 0.05 * math.sin(t * 1.3 + seed)))
     nx, ny = tw(*neck)
-    hx = nx + math.sin(loll) * R * 0.85 + face_dir * R * 0.12
-    hy = ny - math.cos(loll) * R * 0.78
+    hx = nx + math.sin(loll) * R * 0.85 + face_dir * R * (0.12 + 0.35 * hunch)
+    hy = ny - math.cos(loll) * R * 0.78 + R * 0.35 * hunch
     # arms (asymmetric)
-    upper, fore = 70 * sc, 70 * sc
+    upper, fore = 70 * sc * arm_k, 70 * sc * arm_k
     hands = {}
     for side, sp in ((-1, shl), (1, shr)):
         sx, sy = tw(*sp)
@@ -1008,19 +1017,29 @@ def zhead_grim(cx, z, hx, hy, R, t, jaw=0.4, look=(0, 0), blink=0.0):
 
 
 def grim(seed, skin, shirt, pants, **kw):
+    kw["R"] = kw.get("R", 84) * 0.8
     z = Zed(seed, skin, shirt, pants, **kw)
     z.grim = True
     return z
 
 
 INFECTED = [
-    grim(11, "#5f6b62", "#3b3f3a", "#2b2d33", R=84, hair="tuft", limp=0.75, reach=0, speed=0.55, tilt0=0.42),
-    grim(12, "#6b6c60", "#4d3530", "#2f2e2c", R=80, size=1.08, hair="bald", limp=0.3, reach=1, speed=0.45,
-         tilt0=-0.35),
-    grim(13, "#5d6862", "#323c42", "#26282c", R=88, size=0.94, hair="comb", limp=0.9, reach=0, speed=0.65,
-         tilt0=0.55),
-    grim(14, "#6e6a5c", "#4a4538", "#2c2a26", R=82, size=1.02, hair="tuft", limp=0.5, reach=1, speed=0.5,
-         tilt0=-0.2),
-    grim(15, "#5a6461", "#5b2e2c", "#2a2a2e", R=78, size=1.12, hair="bald", limp=0.6, reach=0, speed=0.4,
+    # tall and thin, head hanging at a wrong angle, arms too long
+    grim(11, "#5f6b62", "#3b3f3a", "#2b2d33", R=78, size=1.16, hair="tuft", limp=0.75, reach=0, speed=0.55,
+         tilt0=0.62),
+    # broad, deeply hunched, neck pushed forward
+    grim(12, "#6b6c60", "#4d3530", "#2f2e2c", R=86, size=1.04, hair="bald", limp=0.3, reach=1, speed=0.45,
+         tilt0=-0.3),
+    # dragging leg, one arm hanging dead
+    grim(13, "#5d6862", "#323c42", "#26282c", R=84, size=0.98, hair="comb", limp=0.95, reach=0, speed=0.65,
+         tilt0=0.45),
+    # small and crooked, shoulders twisted
+    grim(14, "#6e6a5c", "#4a4538", "#2c2a26", R=80, size=0.9, hair="tuft", limp=0.5, reach=1, speed=0.5,
+         tilt0=-0.55),
+    # heavy coat, slow, reaching
+    grim(15, "#5a6461", "#5b2e2c", "#2a2a2e", R=80, size=1.1, hair="bald", limp=0.6, reach=1, speed=0.4,
          tilt0=0.3),
 ]
+for _z, (_h, _t, _a, _ts) in zip(INFECTED, ((0.2, 0.72, 1.4, 0.0), (0.6, 1.2, 1.15, 0.1), (0.25, 0.9, 1.3, -0.25),
+                                           (0.4, 0.85, 1.1, 0.35), (0.3, 1.1, 1.25, 0.05))):
+    _z.hunch, _z.thin, _z.arm, _z.tilt_sh = _h, _t, _a, _ts
