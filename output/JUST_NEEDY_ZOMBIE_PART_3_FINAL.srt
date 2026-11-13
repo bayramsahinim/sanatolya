@@ -1,77 +1,76 @@
 1
-00:00:00,120 --> 00:00:02,780
+00:00:00,427 --> 00:00:02,840
 A zombie ran toward my farmhouse.
 
 2
-00:00:02,850 --> 00:00:04,190
+00:00:02,860 --> 00:00:04,257
 Not to attack me.
 
 3
-00:00:04,300 --> 00:00:05,160
+00:00:04,310 --> 00:00:05,240
 To hide.
 
 4
-00:00:06,000 --> 00:00:09,340
+00:00:06,010 --> 00:00:09,387
 Behind it, the cornfield was bending in a straight line.
 
 5
-00:00:09,900 --> 00:00:11,380
+00:00:09,903 --> 00:00:11,447
 But the trees weren't moving.
 
 6
-00:00:12,900 --> 00:00:15,630
+00:00:12,917 --> 00:00:15,640
 Then a glass on my table started shaking.
 
 7
-00:00:16,400 --> 00:00:21,940
-Here's what we know:
-vibrations can travel through soil and into nearby buildings.
+00:00:16,757 --> 00:00:22,033
+Here's what we know: vibrations can travel through soil and into nearby buildings.
 
 8
-00:00:22,200 --> 00:00:25,290
+00:00:22,570 --> 00:00:25,373
 But shaking alone can't tell you the cause.
 
 9
-00:00:25,900 --> 00:00:27,430
+00:00:25,910 --> 00:00:27,513
 I checked the tractor.
 
 10
-00:00:27,800 --> 00:00:29,060
+00:00:28,130 --> 00:00:29,127
 Engine off.
 
 11
-00:00:29,500 --> 00:00:33,150
+00:00:29,830 --> 00:00:33,213
 Outside, the fence posts rattled one after another.
 
 12
-00:00:33,500 --> 00:00:36,560
+00:00:33,510 --> 00:00:36,613
 Whatever was moving, it was heading toward the barn.
 
 13
-00:00:37,400 --> 00:00:38,860
+00:00:37,783 --> 00:00:39,007
 Then I saw it.
 
 14
-00:00:39,300 --> 00:00:40,950
+00:00:39,310 --> 00:00:41,040
 The old maintenance hatch.
 
 15
-00:00:41,600 --> 00:00:43,950
+00:00:41,603 --> 00:00:43,953
 Its rusted handle began turning.
 
 16
-00:00:44,600 --> 00:00:46,050
+00:00:44,603 --> 00:00:46,147
 From underneath.
 
 17
-00:00:49,000 --> 00:00:52,110
+00:00:48,997 --> 00:00:52,140
 My radio crackled for the first time all morning.
 
 18
-00:00:52,600 --> 00:00:54,080
+00:00:52,603 --> 00:00:54,147
 A voice whispered...
 
 19
-00:00:54,900 --> 00:00:56,460
+00:00:55,153 --> 00:00:56,390
 (radio, whispering) Don't let it out.
 

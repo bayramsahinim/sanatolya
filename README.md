@@ -52,7 +52,13 @@ python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.
 | Deliverable | Path |
 |---|---|
 | Final video (1080×1920 vertical, 30 fps, H.264/AAC, 60.5 s) | `output/JUST_NEEDY_ZOMBIE_PART_3_FINAL.mp4` |
-| English subtitles (separate SRT, not burned in) | `output/JUST_NEEDY_ZOMBIE_PART_3_FINAL.srt` |
+| English subtitles (separate SRT, sentence cues) | `output/JUST_NEEDY_ZOMBIE_PART_3_FINAL.srt` |
+| **Captioned version** (word-group captions burned in, mining-reference style) | `output/JUST_NEEDY_ZOMBIE_PART_3_CAPTIONED.mp4` |
+| Captioned SRT (same 1–3 word groups) | `output/JUST_NEEDY_ZOMBIE_PART_3_CAPTIONED.srt` |
+
+Captions use word-level forced alignment against the real narration audio (`captions.py`: espeak-ng
+re-synthesis + MFCC/DTW, boundaries snapped to measured pauses), Montserrat ExtraBold white with a black
+outline, centred at ~70.6 % of frame height, switching instantly between groups.
 
 Part 3 moves Cinecode from flat 2D sets to a **real 3D world** (Three.js / WebGL, rendered headless in
 Chromium at native 1080×1920): a modelled farmhouse with interior, ~25k individually animated corn stalks
@@ -74,5 +80,7 @@ episodes/zombie_part3/
 python -m episodes.zombie_part3.make_voice
 python -m episodes.zombie_part3.soundtrack
 node episodes/zombie_part3/render.js frames build/p3/frames 0 60.5
-episodes/zombie_part3/assemble.sh && python episodes/zombie_part3/qa.py
+python -m episodes.zombie_part3.captions          # word alignment -> captions.ass + SRTs
+episodes/zombie_part3/assemble.sh && episodes/zombie_part3/assemble.sh captioned
+python episodes/zombie_part3/qa.py output/JUST_NEEDY_ZOMBIE_PART_3_CAPTIONED.mp4
 ```
