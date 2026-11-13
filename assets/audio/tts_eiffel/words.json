@@ -1,0 +1,818 @@
+[
+{
+"w": "This",
+"line": 0,
+"start": 0.22,
+"end": 0.59
+},
+{
+"w": "man",
+"line": 0,
+"start": 0.59,
+"end": 1.0
+},
+{
+"w": "sold",
+"line": 0,
+"start": 1.09,
+"end": 1.64
+},
+{
+"w": "the",
+"line": 0,
+"start": 1.64,
+"end": 1.83
+},
+{
+"w": "Eiffel",
+"line": 0,
+"start": 1.83,
+"end": 2.23
+},
+{
+"w": "Tower.",
+"line": 0,
+"start": 2.23,
+"end": 2.73
+},
+{
+"w": "There",
+"line": 1,
+"start": 3.16,
+"end": 3.34
+},
+{
+"w": "was",
+"line": 1,
+"start": 3.34,
+"end": 3.52
+},
+{
+"w": "just",
+"line": 1,
+"start": 3.52,
+"end": 3.73
+},
+{
+"w": "one",
+"line": 1,
+"start": 3.73,
+"end": 4.1
+},
+{
+"w": "problem.",
+"line": 1,
+"start": 4.1,
+"end": 4.65
+},
+{
+"w": "He",
+"line": 2,
+"start": 5.17,
+"end": 5.45
+},
+{
+"w": "didn't",
+"line": 2,
+"start": 5.45,
+"end": 5.91
+},
+{
+"w": "own",
+"line": 2,
+"start": 5.91,
+"end": 6.13
+},
+{
+"w": "it.",
+"line": 2,
+"start": 6.13,
+"end": 6.32
+},
+{
+"w": "Paris,",
+"line": 3,
+"start": 7.17,
+"end": 7.7
+},
+{
+"w": "1925.",
+"line": 3,
+"start": 7.7,
+"end": 8.71
+},
+{
+"w": "Victor",
+"line": 4,
+"start": 9.31,
+"end": 9.62
+},
+{
+"w": "Lustig",
+"line": 4,
+"start": 9.62,
+"end": 10.17
+},
+{
+"w": "spotted",
+"line": 4,
+"start": 10.17,
+"end": 10.61
+},
+{
+"w": "a",
+"line": 4,
+"start": 10.61,
+"end": 10.68
+},
+{
+"w": "newspaper",
+"line": 4,
+"start": 10.68,
+"end": 11.32
+},
+{
+"w": "story",
+"line": 4,
+"start": 11.32,
+"end": 11.81
+},
+{
+"w": "about",
+"line": 4,
+"start": 11.81,
+"end": 12.06
+},
+{
+"w": "the",
+"line": 4,
+"start": 12.06,
+"end": 12.14
+},
+{
+"w": "tower's",
+"line": 4,
+"start": 12.14,
+"end": 12.66
+},
+{
+"w": "expensive",
+"line": 4,
+"start": 12.66,
+"end": 13.35
+},
+{
+"w": "maintenance.",
+"line": 4,
+"start": 13.35,
+"end": 13.99
+},
+{
+"w": "So",
+"line": 5,
+"start": 14.61,
+"end": 14.9
+},
+{
+"w": "he",
+"line": 5,
+"start": 14.9,
+"end": 15.14
+},
+{
+"w": "forged",
+"line": 5,
+"start": 15.14,
+"end": 15.66
+},
+{
+"w": "government",
+"line": 5,
+"start": 15.66,
+"end": 16.05
+},
+{
+"w": "letters",
+"line": 5,
+"start": 16.05,
+"end": 16.48
+},
+{
+"w": "and",
+"line": 5,
+"start": 16.48,
+"end": 16.64
+},
+{
+"w": "summoned",
+"line": 5,
+"start": 16.64,
+"end": 16.97
+},
+{
+"w": "scrap-metal",
+"line": 5,
+"start": 16.97,
+"end": 17.66
+},
+{
+"w": "dealers",
+"line": 5,
+"start": 17.66,
+"end": 18.0
+},
+{
+"w": "to",
+"line": 5,
+"start": 18.0,
+"end": 18.13
+},
+{
+"w": "a",
+"line": 5,
+"start": 18.13,
+"end": 18.16
+},
+{
+"w": "luxury",
+"line": 5,
+"start": 18.16,
+"end": 18.59
+},
+{
+"w": "hotel.",
+"line": 5,
+"start": 18.59,
+"end": 19.18
+},
+{
+"w": "His",
+"line": 6,
+"start": 19.72,
+"end": 19.87
+},
+{
+"w": "announcement?",
+"line": 6,
+"start": 19.87,
+"end": 20.35
+},
+{
+"w": "Paris",
+"line": 7,
+"start": 20.95,
+"end": 21.48
+},
+{
+"w": "was",
+"line": 7,
+"start": 21.48,
+"end": 21.62
+},
+{
+"w": "secretly",
+"line": 7,
+"start": 21.62,
+"end": 22.15
+},
+{
+"w": "dismantling",
+"line": 7,
+"start": 22.15,
+"end": 22.92
+},
+{
+"w": "the",
+"line": 7,
+"start": 22.92,
+"end": 23.0
+},
+{
+"w": "tower.",
+"line": 7,
+"start": 23.0,
+"end": 23.41
+},
+{
+"w": "And",
+"line": 8,
+"start": 23.83,
+"end": 23.98
+},
+{
+"w": "its",
+"line": 8,
+"start": 23.98,
+"end": 24.2
+},
+{
+"w": "seven",
+"line": 8,
+"start": 24.2,
+"end": 24.65
+},
+{
+"w": "thousand",
+"line": 8,
+"start": 24.65,
+"end": 24.98
+},
+{
+"w": "tons",
+"line": 8,
+"start": 24.98,
+"end": 25.26
+},
+{
+"w": "of",
+"line": 8,
+"start": 25.26,
+"end": 25.35
+},
+{
+"w": "iron",
+"line": 8,
+"start": 25.35,
+"end": 25.73
+},
+{
+"w": "were",
+"line": 8,
+"start": 25.73,
+"end": 25.96
+},
+{
+"w": "up",
+"line": 8,
+"start": 25.96,
+"end": 26.13
+},
+{
+"w": "for",
+"line": 8,
+"start": 26.13,
+"end": 26.25
+},
+{
+"w": "sale.",
+"line": 8,
+"start": 26.25,
+"end": 26.65
+},
+{
+"w": "The",
+"line": 9,
+"start": 27.67,
+"end": 27.75
+},
+{
+"w": "dealers",
+"line": 9,
+"start": 27.75,
+"end": 28.15
+},
+{
+"w": "were",
+"line": 9,
+"start": 28.15,
+"end": 28.22
+},
+{
+"w": "told",
+"line": 9,
+"start": 28.22,
+"end": 28.46
+},
+{
+"w": "to",
+"line": 9,
+"start": 28.46,
+"end": 28.54
+},
+{
+"w": "keep",
+"line": 9,
+"start": 28.54,
+"end": 28.8
+},
+{
+"w": "quiet.",
+"line": 9,
+"start": 28.8,
+"end": 29.18
+},
+{
+"w": "One",
+"line": 10,
+"start": 29.88,
+"end": 30.09
+},
+{
+"w": "of",
+"line": 10,
+"start": 30.09,
+"end": 30.17
+},
+{
+"w": "them,",
+"line": 10,
+"start": 30.17,
+"end": 30.41
+},
+{
+"w": "Andr\u00e9",
+"line": 10,
+"start": 30.41,
+"end": 30.84
+},
+{
+"w": "Poisson,",
+"line": 10,
+"start": 30.84,
+"end": 31.34
+},
+{
+"w": "wanted",
+"line": 10,
+"start": 31.67,
+"end": 31.96
+},
+{
+"w": "the",
+"line": 10,
+"start": 31.96,
+"end": 32.04
+},
+{
+"w": "deal\u2014",
+"line": 10,
+"start": 32.04,
+"end": 32.42
+},
+{
+"w": "but",
+"line": 10,
+"start": 32.42,
+"end": 32.92
+},
+{
+"w": "had",
+"line": 10,
+"start": 32.92,
+"end": 33.27
+},
+{
+"w": "doubts.",
+"line": 10,
+"start": 33.27,
+"end": 33.77
+},
+{
+"w": "So",
+"line": 11,
+"start": 34.31,
+"end": 34.46
+},
+{
+"w": "Lustig",
+"line": 11,
+"start": 34.46,
+"end": 34.89
+},
+{
+"w": "hinted",
+"line": 11,
+"start": 34.89,
+"end": 35.29
+},
+{
+"w": "that",
+"line": 11,
+"start": 35.29,
+"end": 35.51
+},
+{
+"w": "a",
+"line": 11,
+"start": 35.51,
+"end": 35.54
+},
+{
+"w": "little",
+"line": 11,
+"start": 35.54,
+"end": 35.91
+},
+{
+"w": "private",
+"line": 11,
+"start": 35.91,
+"end": 36.5
+},
+{
+"w": "payment",
+"line": 11,
+"start": 36.5,
+"end": 36.99
+},
+{
+"w": "could",
+"line": 11,
+"start": 36.99,
+"end": 37.19
+},
+{
+"w": "secure",
+"line": 11,
+"start": 37.19,
+"end": 37.54
+},
+{
+"w": "it.",
+"line": 11,
+"start": 37.54,
+"end": 37.7
+},
+{
+"w": "Poisson",
+"line": 12,
+"start": 38.51,
+"end": 38.83
+},
+{
+"w": "paid.",
+"line": 12,
+"start": 38.83,
+"end": 39.37
+},
+{
+"w": "Lustig",
+"line": 13,
+"start": 39.97,
+"end": 40.42
+},
+{
+"w": "took",
+"line": 13,
+"start": 40.42,
+"end": 40.67
+},
+{
+"w": "the",
+"line": 13,
+"start": 40.67,
+"end": 40.75
+},
+{
+"w": "money",
+"line": 13,
+"start": 40.75,
+"end": 41.13
+},
+{
+"w": "and",
+"line": 13,
+"start": 41.34,
+"end": 41.49
+},
+{
+"w": "disappeared.",
+"line": 13,
+"start": 41.49,
+"end": 42.04
+},
+{
+"w": "Only",
+"line": 14,
+"start": 43.17,
+"end": 43.56
+},
+{
+"w": "then",
+"line": 14,
+"start": 43.56,
+"end": 43.86
+},
+{
+"w": "did",
+"line": 14,
+"start": 43.86,
+"end": 44.06
+},
+{
+"w": "Poisson",
+"line": 14,
+"start": 44.06,
+"end": 44.4
+},
+{
+"w": "realize",
+"line": 14,
+"start": 44.4,
+"end": 44.81
+},
+{
+"w": "the",
+"line": 14,
+"start": 44.81,
+"end": 44.91
+},
+{
+"w": "documents",
+"line": 14,
+"start": 44.91,
+"end": 45.53
+},
+{
+"w": "were",
+"line": 14,
+"start": 45.53,
+"end": 45.69
+},
+{
+"w": "fake.",
+"line": 14,
+"start": 45.69,
+"end": 46.35
+},
+{
+"w": "He",
+"line": 15,
+"start": 47.02,
+"end": 47.11
+},
+{
+"w": "was",
+"line": 15,
+"start": 47.11,
+"end": 47.25
+},
+{
+"w": "so",
+"line": 15,
+"start": 47.25,
+"end": 47.52
+},
+{
+"w": "embarrassed,",
+"line": 15,
+"start": 47.52,
+"end": 48.02
+},
+{
+"w": "he",
+"line": 15,
+"start": 48.02,
+"end": 48.14
+},
+{
+"w": "reportedly",
+"line": 15,
+"start": 48.14,
+"end": 48.81
+},
+{
+"w": "stayed",
+"line": 15,
+"start": 48.81,
+"end": 49.16
+},
+{
+"w": "silent.",
+"line": 15,
+"start": 49.16,
+"end": 49.67
+},
+{
+"w": "And",
+"line": 16,
+"start": 50.45,
+"end": 50.59
+},
+{
+"w": "the",
+"line": 16,
+"start": 50.59,
+"end": 50.65
+},
+{
+"w": "strangest",
+"line": 16,
+"start": 50.65,
+"end": 51.09
+},
+{
+"w": "part?",
+"line": 16,
+"start": 51.09,
+"end": 51.39
+},
+{
+"w": "Lustig",
+"line": 17,
+"start": 52.14,
+"end": 52.61
+},
+{
+"w": "tried",
+"line": 17,
+"start": 52.61,
+"end": 52.94
+},
+{
+"w": "the",
+"line": 17,
+"start": 52.94,
+"end": 53.02
+},
+{
+"w": "same",
+"line": 17,
+"start": 53.02,
+"end": 53.34
+},
+{
+"w": "trick",
+"line": 17,
+"start": 53.34,
+"end": 53.65
+},
+{
+"w": "again.",
+"line": 17,
+"start": 53.78,
+"end": 54.32
+},
+{
+"w": "This",
+"line": 18,
+"start": 55.15,
+"end": 55.33
+},
+{
+"w": "time,",
+"line": 18,
+"start": 55.33,
+"end": 55.66
+},
+{
+"w": "he",
+"line": 18,
+"start": 55.81,
+"end": 55.94
+},
+{
+"w": "failed.",
+"line": 18,
+"start": 55.94,
+"end": 56.31
+},
+{
+"w": "The",
+"line": 19,
+"start": 57.21,
+"end": 57.35
+},
+{
+"w": "Eiffel",
+"line": 19,
+"start": 57.35,
+"end": 57.66
+},
+{
+"w": "Tower",
+"line": 19,
+"start": 57.66,
+"end": 58.06
+},
+{
+"w": "was",
+"line": 19,
+"start": 58.06,
+"end": 58.32
+},
+{
+"w": "never",
+"line": 19,
+"start": 58.32,
+"end": 58.63
+},
+{
+"w": "his",
+"line": 19,
+"start": 58.63,
+"end": 58.88
+},
+{
+"w": "to",
+"line": 19,
+"start": 58.88,
+"end": 58.99
+},
+{
+"w": "sell.",
+"line": 19,
+"start": 58.99,
+"end": 59.31
+}
+]
