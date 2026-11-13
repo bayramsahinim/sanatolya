@@ -4,7 +4,10 @@ import random
 
 import cairo
 
-W, H = 1920, 1080
+import os as _os
+
+# Canvas size: landscape by default; vertical shorts set CINECODE_SIZE=1080x1920 before import.
+W, H = (int(v) for v in _os.environ.get("CINECODE_SIZE", "1920x1080").split("x"))
 FPS = 30
 
 OUTLINE = (0.11, 0.11, 0.14)

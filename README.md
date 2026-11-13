@@ -46,3 +46,26 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Short: "He Survived 60 Hours Underwater" (Harrison Okene, Jascon-4, 2013)
+
+| Deliverable | Path |
+|---|---|
+| Final vertical video (1080×1920, 30 fps, H.264/AAC, 59.3 s, ~-14 LUFS) | `output/HE_SURVIVED_60_HOURS_UNDERWATER_FINAL.mp4` |
+| English subtitles (word-aligned) | `output/HE_SURVIVED_60_HOURS_UNDERWATER_FINAL.srt` |
+
+`episodes/okene_60h/`: script + director's notes (`script.py`), one continuous Gemini TTS take
+(Fenrir, chosen by A/B against the reference narrator) force-aligned word by word with pocketsphinx
+(`cinecode/wordalign.py`) and re-timed into beats (`voice.py`); a lit, graded vertical look with
+spot/point light maps, volumetric beams, fog, bloom, grain (`look.py`); textured steel sets
+(`sets.py`); cast (`cast.py`); 28 shots timed to the spoken words (`shots_a.py`, `shots_b.py`);
+procedural SFX, score and side-chain-ducked mix (`sound.py`).
+
+```bash
+pip install pocketsphinx   # plus the deps above
+python -m episodes.okene_60h.voice          # narration stem + word timings (from cached take)
+python -m episodes.okene_60h.episode video  # render picture (4 processes)
+python -m episodes.okene_60h.sound          # SFX + score + mix
+python -m episodes.okene_60h.episode final  # mux + SRT -> output/
+```
+The canvas size is set per episode through `CINECODE_SIZE` (default 1920x1080).
