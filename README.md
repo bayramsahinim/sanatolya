@@ -46,3 +46,26 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: Plant Poison — English adaptation of the Turkish short
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 24 fps, H.264/AAC, ~49 s, −14.7 LUFS) | `output/JUST_NEEDY_PLANT_POISON_ENGLISH.mp4` |
+| English subtitles (sentence-level SRT) | `output/JUST_NEEDY_PLANT_POISON_ENGLISH.srt` |
+
+Faithful line-by-line adaptation (`episodes/plant_poison/script.py` keeps each Turkish line next
+to its English version and the source caption-block timing). Original visuals and scene order
+are kept; Turkish captions are removed and the picture is reconstructed; English narration is
+the channel Gemini voice (Puck) directed for a Shorts history/science read; captions are 1–3
+word groups (hand-cut in `CAPS`), white Montserrat ExtraBold with a thick black outline at 70%
+height. Background is a procedural ambient bed (the original music/rain can't be separated
+from the Turkish voice).
+
+```bash
+pip install opencv-python-headless soundfile scipy numpy pillow
+python episodes/plant_poison/decaption.py SOURCE_TR.mp4 build/clean.mp4   # remove Turkish text
+python -m episodes.plant_poison.make_voice a        # TTS (cached in assets/audio/tts)
+python -m episodes.plant_poison.voice               # inspect line clips / word timings
+python -m episodes.plant_poison.episode build/clean.mp4 output
+```
