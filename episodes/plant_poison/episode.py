@@ -151,25 +151,73 @@ def narration_track(segs, dur):
     return out
 
 
-def mix(segs, dur):
+# Narrator chain (unchanged since the first delivery): bus compressor + limiter, then a fixed
+# master gain. MASTER_DB was measured on the delivered mix (-13.1 - (-24.64) LUFS) and is frozen
+# so changing the music can never move the voice level.
+VO_CHAIN = ("acompressor=threshold=-20dB:ratio=3:attack=4:release=120:makeup=4dB,"
+            "alimiter=limit=0.6:attack=2:release=40:level=false")
+MASTER_DB = 11.54
+# Music bed, pre-chain linear gains. v1 was 0.20 (gaps) / 0.11 (under voice).
+# v2 (measured against v1 with the old shared-bus compression reconstructed): about -5 dB
+# overall: ~-5 dB in pauses, ~-7 dB under the narrator (ducked 9.5 dB from the pause level).
+MUSIC_TRIM_DB = -2.5
+DUCK_DB = -9.5
+MUSIC_BASE = 0.20
+# the bed used to pass through the voice chain (+4 dB makeup, below threshold) and master gain;
+# it is now added after the chain, so carry that gain over explicitly
+MUSIC_POST_DB = 4.0 + MASTER_DB
+
+
+def duck_envelope(vo, segs, n):
+    """0..1 'narrator is speaking' envelope: from the narration lines plus the voice's own level,
+    opening ~0.15 s before speech, attack ~120 ms, release ~450 ms (no pumping between words)."""
+    act = np.zeros(n, np.float32)
+    for sg in segs:
+        a, b = sg["speech"]
+        act[max(0, int((a - 0.15) * SR)): int((b + 0.05) * SR)] = 1
+    hop = 480
+    m = len(vo) // hop
+    rms = np.sqrt((vo[: m * hop].reshape(m, hop) ** 2).mean(1) + 1e-12)
+    live = np.repeat((20 * np.log10(rms) > -45).astype(np.float32), hop)
+    act[: len(live)] = np.maximum(act[: len(live)], live)
+    # one-pole smoothing with separate attack / release, at 100 Hz control rate
+    ctl = act[::hop]
+    out = np.zeros_like(ctl)
+    ka, kr = 1 - np.exp(-1 / (0.12 * 100)), 1 - np.exp(-1 / (0.45 * 100))
+    y = 0.0
+    for i, x in enumerate(ctl):
+        y += (ka if x > y else kr) * (x - y)
+        out[i] = y
+    env = np.interp(np.arange(n), np.arange(len(out)) * hop, out)
+    return env.astype(np.float32)
+
+
+def stems(segs, dur):
     vo = narration_track(segs, dur)
     vo = vo / (np.max(np.abs(vo)) + 1e-9) * 0.89
-    bed = music.render(dur)
-    # duck the bed under speech (smooth sidechain envelope)
     n = len(vo)
-    act = np.zeros(n, np.float32)
-    for s in segs:
-        a, b = s["speech"]
-        act[int(a * SR): int(b * SR)] = 1
-    k = int(0.35 * SR)
-    act = np.convolve(act, np.ones(k) / k, mode="same")
-    gain = 0.20 - 0.09 * np.clip(act, 0, 1)  # ~-14 dB under voice, ~-20 dB in speech
-    m = vo + bed[:n] * gain
-    return m, vo, bed[:n] * gain
+    bed = music.render(dur)[:n]
+    env = duck_envelope(vo, segs, n)
+    gain_db = MUSIC_TRIM_DB + DUCK_DB * env + MUSIC_POST_DB
+    mus = bed * MUSIC_BASE * 10 ** (gain_db / 20)
+    return vo, mus.astype(np.float32), env
+
+
+def master_audio(segs, dur, out_wav):
+    vo, mus, env = stems(segs, dur)
+    sf.write("build/plant_poison_vo.wav", vo, SR, subtype="FLOAT")
+    ln = f"volume={MASTER_DB:.2f}dB,alimiter=limit={10 ** (-2.6 / 20):.4f}:attack=1:release=50:level=false"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", "build/plant_poison_vo.wav", "-af",
+                    VO_CHAIN + "," + ln, "-c:a", "pcm_f32le", "build/plant_poison_vo_master.wav"], check=True)
+    vom, _ = sf.read("build/plant_poison_vo_master.wav", dtype="float32")
+    sf.write("build/plant_poison_music_stem.wav", mus, SR, subtype="FLOAT")
+    m = vom[: len(mus)] + mus[: len(vom)]
+    sf.write(out_wav, m, SR, subtype="FLOAT")
+    return env
 
 
 # ------------------------------------------------------------------ main
-def main(clean_video, out_dir):
+def main(clean_video, out_dir, mode="all"):
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs("build", exist_ok=True)
     segs = plan()
@@ -180,9 +228,13 @@ def main(clean_video, out_dir):
     print("duration", round(dur, 2))
 
     # audio
-    m, vo, bed = mix(segs, dur)
-    sf.write("build/plant_poison_mix_raw.wav", m, SR, subtype="FLOAT")
-    sf.write("build/plant_poison_vo.wav", vo, SR)
+    master_audio(segs, dur, "build/plant_poison_mix.wav")
+    final = os.path.join(out_dir, NAME + ".mp4")
+    tmp = "build/plant_poison_video.mp4"
+    if mode == "audio":  # re-mix only: keep the delivered picture bit-for-bit
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", final, "-map", "0:v", "-c", "copy", tmp], check=True)
+        mux(tmp, final)
+        return
 
     # captions + SRT
     cs = cues(segs)
@@ -199,7 +251,6 @@ def main(clean_video, out_dir):
             break
         src.append(f)
     sfps = 24.0
-    tmp = "build/plant_poison_video.mp4"
     p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "bgr24", "-s", f"{W}x{H}",
                           "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "slow", "-crf", "17",
                           "-pix_fmt", "yuv420p", tmp], stdin=subprocess.PIPE)
@@ -221,21 +272,13 @@ def main(clean_video, out_dir):
     p.stdin.close()
     p.wait()
 
-    # loudness-normalise and mux
-    final = os.path.join(out_dir, NAME + ".mp4")
-    # gentle bus compression + peak limiting so the -14 LUFS target isn't peak-bound
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", "build/plant_poison_mix_raw.wav", "-af",
-                    "acompressor=threshold=-20dB:ratio=3:attack=4:release=120:makeup=4dB,"
-                    "alimiter=limit=0.6:attack=2:release=40:level=false",
-                    "-c:a", "pcm_f32le", "build/plant_poison_mix_comp.wav"], check=True)
-    meas = subprocess.run(["ffmpeg", "-hide_banner", "-i", "build/plant_poison_mix_comp.wav", "-af",
-                           "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"],
-                          capture_output=True, text=True).stderr
-    j = json.loads(meas[meas.rindex("{"):meas.rindex("}") + 1])
-    gain = -13.1 - float(j["input_i"])  # limiter shaves ~1 dB -> lands near -14 LUFS
-    ln = f"volume={gain:.2f}dB,alimiter=limit={10 ** (-2.6 / 20):.4f}:attack=1:release=50:level=false"
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", tmp, "-i", "build/plant_poison_mix_comp.wav",
-                    "-filter_complex", f"[1:a]{ln},aresample=48000[a]",
+    mux(tmp, final)
+
+
+def mux(video, final):
+    # final safety limiter only (the narrator is already mastered in master_audio)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video, "-i", "build/plant_poison_mix.wav",
+                    "-filter_complex", "[1:a]alimiter=limit=0.7943:attack=1:release=50:level=false[a]",
                     "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
                     "-movflags", "+faststart", "-shortest", final], check=True)
     print("wrote", final)
@@ -271,4 +314,4 @@ def write_srt(segs, path):
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:3])
+    main(*sys.argv[1:4])

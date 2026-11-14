@@ -51,7 +51,7 @@ python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.
 
 | Deliverable | Path |
 |---|---|
-| Final video (1080×1920, 24 fps, H.264/AAC, ~49 s, −14.7 LUFS) | `output/JUST_NEEDY_PLANT_POISON_ENGLISH.mp4` |
+| Final video (1080×1920, 24 fps, H.264/AAC, ~49 s, −14.9 LUFS) | `output/JUST_NEEDY_PLANT_POISON_ENGLISH.mp4` |
 | English subtitles (sentence-level SRT) | `output/JUST_NEEDY_PLANT_POISON_ENGLISH.srt` |
 
 Faithful line-by-line adaptation (`episodes/plant_poison/script.py` keeps each Turkish line next
@@ -67,5 +67,6 @@ pip install opencv-python-headless soundfile scipy numpy pillow
 python episodes/plant_poison/decaption.py SOURCE_TR.mp4 build/clean.mp4   # remove Turkish text
 python -m episodes.plant_poison.make_voice a        # TTS (cached in assets/audio/tts)
 python -m episodes.plant_poison.voice               # inspect line clips / word timings
-python -m episodes.plant_poison.episode build/clean.mp4 output
+python -m episodes.plant_poison.episode build/clean.mp4 output          # full render
+python -m episodes.plant_poison.episode build/clean.mp4 output audio    # re-mix audio only, picture copied
 ```
