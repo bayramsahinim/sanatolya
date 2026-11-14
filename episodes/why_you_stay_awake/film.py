@@ -452,7 +452,10 @@ def write_srt():
     path = os.path.join(OUT, NAME + ".srt")
     with open(path, "w", encoding="utf-8") as f:
         for i, c in enumerate(CAPS, 1):
-            f.write(f"{i}\n{fmt(c['t0'] - LEAD)} --> {fmt(c['t1'])}\n{c['text']}\n\n")
+            end = c["t1"]
+            if i < len(CAPS):
+                end = min(end, CAPS[i]["t0"] - LEAD - 0.001)
+            f.write(f"{i}\n{fmt(c['t0'] - LEAD)} --> {fmt(end)}\n{c['text']}\n\n")
     print(path)
 
 
