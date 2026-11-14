@@ -1,0 +1,1093 @@
+{
+ "h1": {
+  "block": "hook",
+  "take": "assets/audio/tts/spot_the_change/hook_ec09fd6855.wav",
+  "start": 0.0,
+  "end": 1.8,
+  "text": "I'm going to trick your brain.",
+  "groups": [
+   {
+    "text": "I'm going to",
+    "t0": 0.0,
+    "t1": 0.95
+   },
+   {
+    "text": "trick",
+    "t0": 0.95,
+    "t1": 1.2
+   },
+   {
+    "text": "your brain.",
+    "t0": 1.2,
+    "t1": 1.8
+   }
+  ],
+  "words": [
+   [
+    "I'm",
+    0.0,
+    0.24
+   ],
+   [
+    "going",
+    0.24,
+    0.68
+   ],
+   [
+    "to",
+    0.68,
+    0.95
+   ],
+   [
+    "trick",
+    0.95,
+    1.2
+   ],
+   [
+    "your",
+    1.2,
+    1.36
+   ],
+   [
+    "brain.",
+    1.36,
+    1.8
+   ]
+  ]
+ },
+ "h2": {
+  "block": "hook",
+  "take": "assets/audio/tts/spot_the_change/hook_ec09fd6855.wav",
+  "start": 2.04,
+  "end": 4.24,
+  "text": "Right in front of your eyes.",
+  "groups": [
+   {
+    "text": "Right in front",
+    "t0": 0.0,
+    "t1": 1.13
+   },
+   {
+    "text": "of your eyes.",
+    "t0": 1.13,
+    "t1": 2.2
+   }
+  ],
+  "words": [
+   [
+    "Right",
+    0.0,
+    0.36
+   ],
+   [
+    "in",
+    0.36,
+    0.8
+   ],
+   [
+    "front",
+    0.8,
+    1.13
+   ],
+   [
+    "of",
+    1.13,
+    1.31
+   ],
+   [
+    "your",
+    1.31,
+    1.53
+   ],
+   [
+    "eyes.",
+    1.53,
+    2.2
+   ]
+  ]
+ },
+ "t1": {
+  "block": "task",
+  "take": "assets/audio/tts/spot_the_change/task_1d4dece637.wav",
+  "start": 0.0,
+  "end": 1.67,
+  "text": "Count every seagull you see.",
+  "groups": [
+   {
+    "text": "Count",
+    "t0": 0.0,
+    "t1": 0.21
+   },
+   {
+    "text": "every seagull",
+    "t0": 0.21,
+    "t1": 1.17
+   },
+   {
+    "text": "you see.",
+    "t0": 1.17,
+    "t1": 1.67
+   }
+  ],
+  "words": [
+   [
+    "Count",
+    0.0,
+    0.21
+   ],
+   [
+    "every",
+    0.21,
+    0.77
+   ],
+   [
+    "seagull",
+    0.77,
+    1.17
+   ],
+   [
+    "you",
+    1.17,
+    1.4
+   ],
+   [
+    "see.",
+    1.4,
+    1.67
+   ]
+  ]
+ },
+ "t2": {
+  "block": "task",
+  "take": "assets/audio/tts/spot_the_change/task_1d4dece637.wav",
+  "start": 2.01,
+  "end": 2.91,
+  "text": "Only the birds.",
+  "groups": [
+   {
+    "text": "Only",
+    "t0": 0.0,
+    "t1": 0.48
+   },
+   {
+    "text": "the birds.",
+    "t0": 0.48,
+    "t1": 0.9
+   }
+  ],
+  "words": [
+   [
+    "Only",
+    0.0,
+    0.48
+   ],
+   [
+    "the",
+    0.48,
+    0.72
+   ],
+   [
+    "birds.",
+    0.72,
+    0.9
+   ]
+  ]
+ },
+ "t3": {
+  "block": "task",
+  "take": "assets/audio/tts/spot_the_change/task_1d4dece637.wav",
+  "start": 3.33,
+  "end": 3.61,
+  "text": "Ready?",
+  "groups": [
+   {
+    "text": "Ready?",
+    "t0": 0.0,
+    "t1": 0.28
+   }
+  ],
+  "words": [
+   [
+    "Ready?",
+    0.0,
+    0.28
+   ]
+  ]
+ },
+ "t4": {
+  "block": "task",
+  "take": "assets/audio/tts/spot_the_change/task_1d4dece637.wav",
+  "start": 4.09,
+  "end": 4.72,
+  "text": "Go.",
+  "groups": [
+   {
+    "text": "Go.",
+    "t0": 0.0,
+    "t1": 0.63
+   }
+  ],
+  "words": [
+   [
+    "Go.",
+    0.0,
+    0.63
+   ]
+  ]
+ },
+ "r1": {
+  "block": "reveal",
+  "take": "assets/audio/tts/spot_the_change/reveal_61db53674a.wav",
+  "start": 0.29,
+  "end": 1.26,
+  "text": "How many?",
+  "groups": [
+   {
+    "text": "How many?",
+    "t0": 0.0,
+    "t1": 0.97
+   }
+  ],
+  "words": [
+   [
+    "How",
+    0.0,
+    0.27
+   ],
+   [
+    "many?",
+    0.27,
+    0.97
+   ]
+  ]
+ },
+ "r2": {
+  "block": "reveal",
+  "take": "assets/audio/tts/spot_the_change/reveal_61db53674a.wav",
+  "start": 1.68,
+  "end": 2.42,
+  "text": "Nine?",
+  "groups": [
+   {
+    "text": "Nine?",
+    "t0": 0.0,
+    "t1": 0.74
+   }
+  ],
+  "words": [
+   [
+    "Nine?",
+    0.0,
+    0.74
+   ]
+  ]
+ },
+ "r3": {
+  "block": "reveal",
+  "take": "assets/audio/tts/spot_the_change/reveal_61db53674a.wav",
+  "start": 2.94,
+  "end": 4.8,
+  "text": "Now a different question.",
+  "groups": [
+   {
+    "text": "Now",
+    "t0": 0.0,
+    "t1": 0.19
+   },
+   {
+    "text": "a different",
+    "t0": 0.19,
+    "t1": 1.21
+   },
+   {
+    "text": "question.",
+    "t0": 1.21,
+    "t1": 1.86
+   }
+  ],
+  "words": [
+   [
+    "Now",
+    0.0,
+    0.19
+   ],
+   [
+    "a",
+    0.19,
+    0.34
+   ],
+   [
+    "different",
+    0.34,
+    1.21
+   ],
+   [
+    "question.",
+    1.21,
+    1.86
+   ]
+  ]
+ },
+ "r4": {
+  "block": "reveal",
+  "take": "assets/audio/tts/spot_the_change/reveal_61db53674a.wav",
+  "start": 5.5,
+  "end": 6.84,
+  "text": "What color was the ship?",
+  "groups": [
+   {
+    "text": "What color",
+    "t0": 0.0,
+    "t1": 0.54
+   },
+   {
+    "text": "was the ship?",
+    "t0": 0.54,
+    "t1": 1.34
+   }
+  ],
+  "words": [
+   [
+    "What",
+    0.0,
+    0.15
+   ],
+   [
+    "color",
+    0.15,
+    0.54
+   ],
+   [
+    "was",
+    0.54,
+    0.95
+   ],
+   [
+    "the",
+    0.95,
+    1.15
+   ],
+   [
+    "ship?",
+    1.15,
+    1.34
+   ]
+  ]
+ },
+ "p1": {
+  "block": "replay",
+  "take": "assets/audio/tts/spot_the_change/replay_90f4b014e4.wav",
+  "start": 0.3,
+  "end": 2.24,
+  "text": "At first, it was red.",
+  "groups": [
+   {
+    "text": "At first,",
+    "t0": 0.0,
+    "t1": 0.93
+   },
+   {
+    "text": "it was red.",
+    "t0": 0.93,
+    "t1": 1.94
+   }
+  ],
+  "words": [
+   [
+    "At",
+    0.0,
+    0.17
+   ],
+   [
+    "first,",
+    0.17,
+    0.93
+   ],
+   [
+    "it",
+    0.93,
+    1.07
+   ],
+   [
+    "was",
+    1.07,
+    1.5
+   ],
+   [
+    "red.",
+    1.5,
+    1.94
+   ]
+  ]
+ },
+ "p2": {
+  "block": "replay",
+  "take": "assets/audio/tts/spot_the_change/replay_90f4b014e4.wav",
+  "start": 2.82,
+  "end": 7.28,
+  "text": "Then, without a single cut, it slowly turned blue.",
+  "groups": [
+   {
+    "text": "Then,",
+    "t0": 0.0,
+    "t1": 0.45
+   },
+   {
+    "text": "without",
+    "t0": 0.45,
+    "t1": 1.1
+   },
+   {
+    "text": "a single cut,",
+    "t0": 1.1,
+    "t1": 2.33
+   },
+   {
+    "text": "it slowly",
+    "t0": 2.33,
+    "t1": 3.3
+   },
+   {
+    "text": "turned blue.",
+    "t0": 3.3,
+    "t1": 4.46
+   }
+  ],
+  "words": [
+   [
+    "Then,",
+    0.0,
+    0.45
+   ],
+   [
+    "without",
+    0.45,
+    1.1
+   ],
+   [
+    "a",
+    1.1,
+    1.52
+   ],
+   [
+    "single",
+    1.52,
+    2.0
+   ],
+   [
+    "cut,",
+    2.0,
+    2.33
+   ],
+   [
+    "it",
+    2.33,
+    2.89
+   ],
+   [
+    "slowly",
+    2.89,
+    3.3
+   ],
+   [
+    "turned",
+    3.3,
+    4.11
+   ],
+   [
+    "blue.",
+    4.11,
+    4.46
+   ]
+  ]
+ },
+ "s1": {
+  "block": "science",
+  "take": "assets/audio/tts/spot_the_change/science_f151a5d1c5.wav",
+  "start": 0.0,
+  "end": 1.79,
+  "text": "That's gradual change blindness.",
+  "groups": [
+   {
+    "text": "That's",
+    "t0": 0.0,
+    "t1": 0.16
+   },
+   {
+    "text": "gradual",
+    "t0": 0.16,
+    "t1": 0.86
+   },
+   {
+    "text": "change blindness.",
+    "t0": 0.86,
+    "t1": 1.79
+   }
+  ],
+  "words": [
+   [
+    "That's",
+    0.0,
+    0.16
+   ],
+   [
+    "gradual",
+    0.16,
+    0.86
+   ],
+   [
+    "change",
+    0.86,
+    1.12
+   ],
+   [
+    "blindness.",
+    1.12,
+    1.79
+   ]
+  ]
+ },
+ "s2": {
+  "block": "science",
+  "take": "assets/audio/tts/spot_the_change/science_f151a5d1c5.wav",
+  "start": 1.79,
+  "end": 7.2,
+  "text": "When your attention is locked on one task, slow changes elsewhere can slip past you.",
+  "groups": [
+   {
+    "text": "When your attention",
+    "t0": 0.0,
+    "t1": 1.25
+   },
+   {
+    "text": "is locked",
+    "t0": 1.25,
+    "t1": 1.96
+   },
+   {
+    "text": "on one task,",
+    "t0": 1.96,
+    "t1": 2.83
+   },
+   {
+    "text": "slow changes",
+    "t0": 2.83,
+    "t1": 3.5
+   },
+   {
+    "text": "elsewhere",
+    "t0": 3.5,
+    "t1": 4.21
+   },
+   {
+    "text": "can slip",
+    "t0": 4.21,
+    "t1": 4.88
+   },
+   {
+    "text": "past you.",
+    "t0": 4.88,
+    "t1": 5.41
+   }
+  ],
+  "words": [
+   [
+    "When",
+    0.0,
+    0.16
+   ],
+   [
+    "your",
+    0.16,
+    0.45
+   ],
+   [
+    "attention",
+    0.45,
+    1.25
+   ],
+   [
+    "is",
+    1.25,
+    1.45
+   ],
+   [
+    "locked",
+    1.45,
+    1.96
+   ],
+   [
+    "on",
+    1.96,
+    2.25
+   ],
+   [
+    "one",
+    2.25,
+    2.39
+   ],
+   [
+    "task,",
+    2.39,
+    2.83
+   ],
+   [
+    "slow",
+    2.83,
+    3.06
+   ],
+   [
+    "changes",
+    3.06,
+    3.5
+   ],
+   [
+    "elsewhere",
+    3.5,
+    4.21
+   ],
+   [
+    "can",
+    4.21,
+    4.5
+   ],
+   [
+    "slip",
+    4.5,
+    4.88
+   ],
+   [
+    "past",
+    4.88,
+    5.13
+   ],
+   [
+    "you.",
+    5.13,
+    5.41
+   ]
+  ]
+ },
+ "e1": {
+  "block": "examples",
+  "take": "assets/audio/tts/spot_the_change/examples_7f1bf6a3d8.wav",
+  "start": 0.0,
+  "end": 5.65,
+  "text": "Think of a snack bag getting slightly smaller, or changes in routines you hardly notice.",
+  "groups": [
+   {
+    "text": "Think of",
+    "t0": 0.0,
+    "t1": 0.39
+   },
+   {
+    "text": "a snack bag",
+    "t0": 0.39,
+    "t1": 1.3
+   },
+   {
+    "text": "getting",
+    "t0": 1.3,
+    "t1": 1.67
+   },
+   {
+    "text": "slightly smaller,",
+    "t0": 1.67,
+    "t1": 2.74
+   },
+   {
+    "text": "or changes",
+    "t0": 2.74,
+    "t1": 3.35
+   },
+   {
+    "text": "in routines",
+    "t0": 3.35,
+    "t1": 4.44
+   },
+   {
+    "text": "you hardly notice.",
+    "t0": 4.44,
+    "t1": 5.65
+   }
+  ],
+  "words": [
+   [
+    "Think",
+    0.0,
+    0.14
+   ],
+   [
+    "of",
+    0.14,
+    0.39
+   ],
+   [
+    "a",
+    0.39,
+    0.71
+   ],
+   [
+    "snack",
+    0.71,
+    0.99
+   ],
+   [
+    "bag",
+    0.99,
+    1.3
+   ],
+   [
+    "getting",
+    1.3,
+    1.67
+   ],
+   [
+    "slightly",
+    1.67,
+    2.21
+   ],
+   [
+    "smaller,",
+    2.21,
+    2.74
+   ],
+   [
+    "or",
+    2.74,
+    2.9
+   ],
+   [
+    "changes",
+    2.9,
+    3.35
+   ],
+   [
+    "in",
+    3.35,
+    3.63
+   ],
+   [
+    "routines",
+    3.63,
+    4.44
+   ],
+   [
+    "you",
+    4.44,
+    4.52
+   ],
+   [
+    "hardly",
+    4.52,
+    4.9
+   ],
+   [
+    "notice.",
+    4.9,
+    5.65
+   ]
+  ]
+ },
+ "e2": {
+  "block": "examples",
+  "take": "assets/audio/tts/spot_the_change/examples_7f1bf6a3d8.wav",
+  "start": 6.35,
+  "end": 8.32,
+  "text": "Your brain isn't recording every detail.",
+  "groups": [
+   {
+    "text": "Your brain",
+    "t0": 0.0,
+    "t1": 0.45
+   },
+   {
+    "text": "isn't recording",
+    "t0": 0.45,
+    "t1": 0.88
+   },
+   {
+    "text": "every detail.",
+    "t0": 0.88,
+    "t1": 1.97
+   }
+  ],
+  "words": [
+   [
+    "Your",
+    0.0,
+    0.12
+   ],
+   [
+    "brain",
+    0.12,
+    0.45
+   ],
+   [
+    "isn't",
+    0.45,
+    0.64
+   ],
+   [
+    "recording",
+    0.64,
+    0.88
+   ],
+   [
+    "every",
+    0.88,
+    1.55
+   ],
+   [
+    "detail.",
+    1.55,
+    1.97
+   ]
+  ]
+ },
+ "e3": {
+  "block": "examples",
+  "take": "assets/audio/tts/spot_the_change/examples_7f1bf6a3d8.wav",
+  "start": 8.73,
+  "end": 11.16,
+  "text": "It prioritizes what matters right now.",
+  "groups": [
+   {
+    "text": "It prioritizes",
+    "t0": 0.0,
+    "t1": 1.0
+   },
+   {
+    "text": "what matters",
+    "t0": 1.0,
+    "t1": 1.97
+   },
+   {
+    "text": "right now.",
+    "t0": 1.97,
+    "t1": 2.43
+   }
+  ],
+  "words": [
+   [
+    "It",
+    0.0,
+    0.12
+   ],
+   [
+    "prioritizes",
+    0.12,
+    1.0
+   ],
+   [
+    "what",
+    1.0,
+    1.48
+   ],
+   [
+    "matters",
+    1.48,
+    1.97
+   ],
+   [
+    "right",
+    1.97,
+    2.05
+   ],
+   [
+    "now.",
+    2.05,
+    2.43
+   ]
+  ]
+ },
+ "n1": {
+  "block": "ending",
+  "take": "assets/audio/tts/spot_the_change/ending_f897abca51.wav",
+  "start": 0.0,
+  "end": 1.94,
+  "text": "And if you spotted the color?",
+  "groups": [
+   {
+    "text": "And if you",
+    "t0": 0.0,
+    "t1": 0.65
+   },
+   {
+    "text": "spotted",
+    "t0": 0.65,
+    "t1": 1.25
+   },
+   {
+    "text": "the color?",
+    "t0": 1.25,
+    "t1": 1.94
+   }
+  ],
+  "words": [
+   [
+    "And",
+    0.0,
+    0.19
+   ],
+   [
+    "if",
+    0.19,
+    0.58
+   ],
+   [
+    "you",
+    0.58,
+    0.65
+   ],
+   [
+    "spotted",
+    0.65,
+    1.25
+   ],
+   [
+    "the",
+    1.25,
+    1.33
+   ],
+   [
+    "color?",
+    1.33,
+    1.94
+   ]
+  ]
+ },
+ "n2": {
+  "block": "ending",
+  "take": "assets/audio/tts/spot_the_change/ending_f897abca51.wav",
+  "start": 2.12,
+  "end": 2.87,
+  "text": "Nice catch.",
+  "groups": [
+   {
+    "text": "Nice catch.",
+    "t0": 0.0,
+    "t1": 0.75
+   }
+  ],
+  "words": [
+   [
+    "Nice",
+    0.0,
+    0.27
+   ],
+   [
+    "catch.",
+    0.27,
+    0.75
+   ]
+  ]
+ },
+ "n3": {
+  "block": "ending",
+  "take": "assets/audio/tts/spot_the_change/ending_f897abca51.wav",
+  "start": 3.28,
+  "end": 4.01,
+  "text": "Watch it again.",
+  "groups": [
+   {
+    "text": "Watch it",
+    "t0": 0.0,
+    "t1": 0.42
+   },
+   {
+    "text": "again.",
+    "t0": 0.42,
+    "t1": 0.73
+   }
+  ],
+  "words": [
+   [
+    "Watch",
+    0.0,
+    0.22
+   ],
+   [
+    "it",
+    0.22,
+    0.42
+   ],
+   [
+    "again.",
+    0.42,
+    0.73
+   ]
+  ]
+ },
+ "n4": {
+  "block": "ending",
+  "take": "assets/audio/tts/spot_the_change/ending_f897abca51.wav",
+  "start": 4.43,
+  "end": 6.71,
+  "text": "How many seconds did it take you to notice?",
+  "groups": [
+   {
+    "text": "How many seconds",
+    "t0": 0.0,
+    "t1": 0.88
+   },
+   {
+    "text": "did it take you",
+    "t0": 0.88,
+    "t1": 1.5
+   },
+   {
+    "text": "to notice?",
+    "t0": 1.5,
+    "t1": 2.28
+   }
+  ],
+  "words": [
+   [
+    "How",
+    0.0,
+    0.08
+   ],
+   [
+    "many",
+    0.08,
+    0.62
+   ],
+   [
+    "seconds",
+    0.62,
+    0.88
+   ],
+   [
+    "did",
+    0.88,
+    1.13
+   ],
+   [
+    "it",
+    1.13,
+    1.23
+   ],
+   [
+    "take",
+    1.23,
+    1.42
+   ],
+   [
+    "you",
+    1.42,
+    1.5
+   ],
+   [
+    "to",
+    1.5,
+    1.9
+   ],
+   [
+    "notice?",
+    1.9,
+    2.28
+   ]
+  ]
+ }
+}

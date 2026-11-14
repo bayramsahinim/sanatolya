@@ -1,0 +1,6 @@
+{
+  "name": "spot-the-change-renderer",
+  "private": true,
+  "description": "Three.js renderer for the Just Needy Short 'Can You Spot the Change?'",
+  "dependencies": { "three": "0.170.0" }
+}

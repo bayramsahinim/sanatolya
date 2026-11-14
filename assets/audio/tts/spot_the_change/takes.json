@@ -1,0 +1,9 @@
+{
+ "ending": "assets/audio/tts/spot_the_change/ending_f897abca51.wav",
+ "examples": "assets/audio/tts/spot_the_change/examples_7f1bf6a3d8.wav",
+ "hook": "assets/audio/tts/spot_the_change/hook_ec09fd6855.wav",
+ "replay": "assets/audio/tts/spot_the_change/replay_90f4b014e4.wav",
+ "reveal": "assets/audio/tts/spot_the_change/reveal_61db53674a.wav",
+ "science": "assets/audio/tts/spot_the_change/science_f151a5d1c5.wav",
+ "task": "assets/audio/tts/spot_the_change/task_1d4dece637.wav"
+}
