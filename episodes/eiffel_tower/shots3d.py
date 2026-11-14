@@ -59,7 +59,7 @@ def city_world(m, lit=False):
 
 
 # ---------------------------------------------------------------- shots
-@reg(res=(720, 1280), samples=20, fg=True)
+@reg(res=(540, 960), samples=12, fg=True)
 def s01_deal(m, C):
     _salon(m, docs=False)
     b3d.use_collection(bpy.data.collections["FG"])
@@ -146,7 +146,7 @@ def s06_cafe(m, C):
     C.anchors = {"lustig": (417.72, 22.35, 0.63), "table": (417.1, 22.3, 0.91)}
 
 
-@reg(res=(720, 1280), samples=14)
+@reg(res=(540, 960), samples=12)
 def s07_headline(m, C):
     h = _cafe_common(m)
     b3d.add_haze(hexrgb("#efc996"), *h)
@@ -171,11 +171,11 @@ def s08_idea(m, C):
 
 def _forge_letter(m):
     S.forge_desk(m)
-    let = S.paper("letter", S.T("letter"), 0.21, 0.29, (0.0, -0.06, 0.7695))
+    let = S.paper("letter", S.T("letter"), 0.21, 0.29, (0.0, -0.06, 0.7712))
     return let
 
 
-@reg(res=(720, 1280), samples=24)
+@reg(res=(540, 960), samples=12)
 def s09_forge(m, C):
     let = _forge_letter(m)
     pen = S.fountain_pen("pen", m)
@@ -185,7 +185,7 @@ def s09_forge(m, C):
         u = i / 59
         px = 620 + u * 330
         py = 1220 - 40 * math.sin(u * 14) * (1 - u * 0.5) - u * 30
-        pts.append(((px / 1100 - 0.5) * 0.21, (0.5 - py / 1500) * 0.29 - 0.06, 0.7702))
+        pts.append(((px / 1100 - 0.5) * 0.21, (0.5 - py / 1500) * 0.29 - 0.06, 0.7718))
     cd = bpy.data.curves.new("sig", "CURVE")
     cd.dimensions = "3D"
     cd.bevel_depth = 0.0009
@@ -199,7 +199,7 @@ def s09_forge(m, C):
 
     def anim(t):
         u = min(1, max(0, (t - 0.0) / 0.45))
-        let.location = (0.25 * (1 - b3d.ease_io(u)), -0.06, 0.7695)
+        let.location = (0.25 * (1 - b3d.ease_io(u)), -0.06, 0.7712)
         s = min(1, max(0, (t - 0.6) / 1.1))
         cd.bevel_factor_end = max(0.001, s)
         k = min(len(pts) - 1, int(s * (len(pts) - 1)))
@@ -216,11 +216,11 @@ def s09_forge(m, C):
     C.dof = ("pen_tip", 2.8)
 
 
-@reg(res=(720, 1280), samples=24)
+@reg(res=(540, 960), samples=12)
 def s10_stamp(m, C):
-    let = S.paper("letter", S.T("letter_signed"), 0.21, 0.29, (0.0, -0.06, 0.7695))
+    let = S.paper("letter", S.T("letter_signed"), 0.21, 0.29, (0.0, -0.06, 0.7712))
     S.forge_desk(m)
-    mark = S.paper("mark", S.T("stamp_mark"), 0.07, 0.07, (-0.05, -0.155, 0.7705))
+    mark = S.paper("mark", S.T("stamp_mark"), 0.07, 0.07, (-0.05, -0.155, 0.7719))
     _alpha_mat(mark)
     st = S.rubber_stamp("stamp", m)
 
@@ -232,7 +232,7 @@ def s10_stamp(m, C):
             z = 0.0
         else:
             z = 0.2 * b3d.ease_io(min(1, (t - 0.6) / 0.35))
-        st.location = (-0.05, -0.155, 0.7705 + z)
+        st.location = (-0.05, -0.155, 0.7722 + z)
         mark.hide_render = t < 0.4
     C.anim = anim
     C.cam_keys = [(0, (0.2, -0.62, 1.12, -0.04, -0.13, 0.82, 38)), (1.1, (0.18, -0.58, 1.1, -0.04, -0.14, 0.82, 40))]
@@ -247,7 +247,7 @@ def _alpha_mat(ob):
     nt.links.new(tex.outputs["Alpha"], b.inputs["Alpha"])
 
 
-@reg(res=(720, 1280), samples=20, fg=True)
+@reg(res=(540, 960), samples=12, fg=True)
 def s11_letters(m, C):
     fgc = b3d.collection("FG")
     S.office(m)
@@ -380,7 +380,7 @@ def s19_glance(m, C):
     C.anchors = dict(SALON_SEATS, lustig=(-0.72, 1.3, 0.0))
 
 
-@reg(res=(720, 1280), samples=20, fg=True)
+@reg(res=(540, 960), samples=12, fg=True)
 def s20_paid(m, C):
     _salon(m, docs=False)
     b3d.use_collection(bpy.data.collections["FG"])
@@ -395,7 +395,7 @@ def s20_paid(m, C):
         env.location = (0.1 - 0.62 * v, 0.45 + 0.05 * v, 0.812)
         env.rotation_euler = (0, 0, -0.2 + 0.25 * v)
     C.anim = anim
-    C.cam_keys = [(0, (0.0, -0.3, 0.98, -0.18, 0.5, 0.84, 34)), (1.5, (-0.08, -0.26, 0.97, -0.25, 0.5, 0.84, 36))]
+    C.cam_keys = [(0, (-0.18, -0.2, 1.3, -0.2, 0.5, 0.8, 24)), (1.5, (-0.24, -0.15, 1.27, -0.24, 0.5, 0.8, 25))]
     C.anchors = {"env": lambda t: tuple(env.matrix_world.translation), "cash": lambda t: tuple(cash.matrix_world.translation),
                  "lustig": (-0.72, 1.3, 0.0), "poisson": (0.15, 1.02, 0.47)}
     C.dof = ("env", 2.8)

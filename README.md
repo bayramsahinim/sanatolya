@@ -46,3 +46,34 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: "The Man Who Sold the Eiffel Tower" (Crazy But True, YouTube Short)
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC, ~60 s) | `output/JUST_NEEDY_EIFFEL_TOWER_FINAL.mp4` |
+| English subtitles (word-aligned) | `output/JUST_NEEDY_EIFFEL_TOWER_FINAL.srt` |
+
+Pipeline (2D characters over 3D environments, like the channel reference):
+
+```
+cinecode/b3d.py                       Blender/Cycles helpers (materials, lattice meshes, haze, projection of 3D anchors)
+episodes/eiffel_tower/
+  script.py / make_voice.py           narration script + Gemini TTS takes
+  make_narration.py / align_voice.py  final narration (beats + gentle 0.95 tempo), pocketsphinx word alignment
+  textures.py / sets3d.py             procedural textures; 3D Paris, Eiffel Tower lattice, hotel salon, lobby, office, station
+  shots3d.py                          per-shot camera paths / animated props -> build/frames/<shot>/bg,fg + anchors.json
+  cast.py / compose.py                1920s stick-figure cast; per-shot character animation, captions, grade -> MP4
+  soundtrack.py / srt.py              procedural score + sound design + ducked mix; SRT
+```
+
+```bash
+pip install bpy==5.3.0 pycairo numpy scipy soundfile pillow librosa pocketsphinx
+python -m episodes.eiffel_tower.make_narration
+python -m episodes.eiffel_tower.textures
+for s in $(python -c "from episodes.eiffel_tower.timeline import SHOTS;print(' '.join(x[0] for x in SHOTS))"); do
+  python -m episodes.eiffel_tower.shots3d $s; done
+python -m episodes.eiffel_tower.soundtrack && python -m episodes.eiffel_tower.srt
+python -m episodes.eiffel_tower.compose render
+python -m episodes.eiffel_tower.finalize
+```

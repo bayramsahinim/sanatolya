@@ -143,7 +143,7 @@ def hand_line(cx, pts, ppm, sleeve=None, col=K.SuitStyle.limb):
         line(cx, pts[1:], col, lw)
     else:
         line(cx, pts, col, lw)
-    circle(cx, pts[-1][0], pts[-1][1], 0.014 * ppm)
+    circle(cx, pts[-1][0], pts[-1][1], 0.0105 * ppm)
     fs(cx, col, None, 0)
 
 
@@ -164,8 +164,8 @@ def steam(cx, x, y, t, scale=1.0, seed=0, n=10, drift=(-60, -160), alpha=0.75):
         py = y + drift[1] * ph * scale * 2.2
         a = alpha * (1 - ph) * min(1, ph * 6)
         g = cairo.RadialGradient(px, py, 0, px, py, r)
-        g.add_color_stop_rgba(0, 0.97, 0.95, 0.92, a)
-        g.add_color_stop_rgba(1, 0.97, 0.95, 0.92, 0)
+        g.add_color_stop_rgba(0, 0.82, 0.8, 0.78, a)
+        g.add_color_stop_rgba(1, 0.82, 0.8, 0.78, 0)
         cx.arc(px, py, r, 0, 2 * math.pi)
         cx.set_source(g)
         cx.fill()
@@ -248,8 +248,8 @@ def _reading(cx, t, A, low, fig=None, look=(0, 0.6), **kw):
     s = p.s
     hx, hy = J["head"]
     top = hy + (-40 + low * 250) * s
-    hgt = 420 * s * (1 - 0.5 * low)
-    wdt = 190 * s
+    hgt = 290 * s * (1 - 0.45 * low)
+    wdt = 128 * s
     img = _load(os.path.join(ROOT, "build", "tex", "newspaper.png"), (700, 950))
     sf, keep = surf_from(img.copy())
     cx.save()
@@ -274,7 +274,7 @@ def _s06(cx, t, A):
 @d("s07_headline")
 def _s07(cx, t, A):
     for k, side in (("paper_l", -1), ("paper_r", 1)):
-        x, y, ppm = A[k]
+        x, y, ppm = A[k][:3]
         hand_line(cx, arm_to(x, y, ppm, side * 0.12, 0.45, side * 0.05, 0.02), ppm, sleeve=K.LUSTIG_STYLE.suit)
 
 
@@ -320,12 +320,13 @@ def _s10(cx, t, A):
 def _s11(cx, t, A):
     p = sit(K.POISSON, A, "poisson", t, view="front", mouth="o" if t > 0.5 else "flat",
             brows="up" if t > 0.5 else "neutral", eyes="wide" if t > 0.5 else "open", look=(0, 0.7))
-    p = p.but(arm_a=30, elb_a=70, arm_b=30, elb_b=70, lean=6 * win(t, 0.5, 0.8))
+    p = p.but(arm_a=18, elb_a=-75, arm_b=18, elb_b=-75, lean=6 * win(t, 0.5, 0.8))
     K.POISSON.draw(cx, breathe(p, t))
 
 
 @d("s12_lobby")
 def _s12(cx, t, A):
+    A = dict(A, lustig=[A["lustig"][0] - 0.28 * W, A["lustig"][1], A["lustig"][2] * 1.05, 0])
     p = stand(K.LUSTIG, A, "lustig", t, view="side", f=1, mouth="smirk", brows="neutral")
     p = walk(p, t, speed=1.0, amp=0.8)
     s = p.s
@@ -342,7 +343,7 @@ def _salon_people(cx, t, A, lustig=True, talk_win=None, lean=0.0, poisson_kw=Non
         if name == "poisson" and poisson_kw:
             kw.update(poisson_kw)
         p = sit(fig, A, name, t, **kw)
-        p = p.but(arm_a=35, elb_a=60, arm_b=35, elb_b=60, lean=lean)
+        p = p.but(arm_a=18, elb_a=-75, arm_b=18, elb_b=-75, lean=lean)
         out[name] = fig.draw(cx, breathe(p, t + k))
     if "d4" in A and dealers is K.DEALERS:
         p = sit(K.DEALERS[3], A, "d4", t, view="side", f=-1, mouth="flat", brows="neutral", look=(-0.5, 0))
@@ -388,11 +389,11 @@ def _s15(cx, t, A):
 @d("s16_poisson", push=(1.0, 1.1, 0.5, 0.45))
 def _s16(cx, t, A):
     p = sit(K.POISSON, A, "poisson", t, view="front", mouth="flat", brows="up", eyes="open", look=(-0.5, 0.3))
-    p = p.but(arm_a=30, elb_a=80, arm_b=30, elb_b=80, lean=4)
+    p = p.but(arm_a=18, elb_a=-75, arm_b=18, elb_b=-75, lean=4)
     K.POISSON.draw(cx, breathe(p, t))
     for name, fig, kk in (("d1", K.DEALERS[0], 0), ("d3", K.DEALERS[2], 2)):
         q = sit(fig, A, name, t, view="front", mouth="flat", look=(-0.6, 0.2))
-        fig.draw(cx, breathe(q.but(arm_a=35, elb_a=60, arm_b=35, elb_b=60), t + kk))
+        fig.draw(cx, breathe(q.but(arm_a=18, elb_a=-75, arm_b=18, elb_b=-75), t + kk))
 
 
 @d("s17_doubts", push=(1.02, 1.12, 0.5, 0.42))
@@ -409,7 +410,7 @@ def _s17(cx, t, A):
 @d("s18_hint", push=(1.0, 1.08, 0.4, 0.42))
 def _s18(cx, t, A):
     p = sit(K.POISSON, A, "poisson", t, view="front", mouth="flat", brows="worried", look=(-0.8, -0.2))
-    p = p.but(arm_a=35, elb_a=60, arm_b=35, elb_b=60)
+    p = p.but(arm_a=18, elb_a=-75, arm_b=18, elb_b=-75)
     K.POISSON.draw(cx, breathe(p, t))
     lean = 16 * win(t, 0.1, 0.6)
     q = stand(K.LUSTIG, A, "lustig", t, view="side", f=1, mouth="smirk", brows="skeptic", eyes="half", look=(0.8, 0.3))
@@ -430,7 +431,7 @@ def _s19(cx, t, A):
     nod = math.sin(max(0, ph - 1.3) * 9) * 4 * win(ph, 1.3, 1.4) * (1 - win(ph, 1.8, 2.0))
     p = sit(K.POISSON, A, "poisson", t, view="front", mouth="flat", brows="worried", look=p_look,
             sweat=0.6)
-    p = p.but(arm_a=35, elb_a=60, arm_b=35, elb_b=60, head_dy=nod)
+    p = p.but(arm_a=18, elb_a=-75, arm_b=18, elb_b=-75, head_dy=nod)
     K.POISSON.draw(cx, breathe(p, t))
     q = stand(K.LUSTIG, A, "lustig", t, view="side", f=1, mouth="smirk", brows="skeptic", eyes="half",
               look=(0.9, 0.3) if ph < 1.1 else (0.8, 0.5))
@@ -450,8 +451,8 @@ def _s20_hands(cx, t, A):
     hand_line(cx, arm_to(tgt[0], tgt[1], ppm, 0.28, -0.42, 0.08, 0.0), ppm, sleeve=K.POISSON_STYLE.suit)
     a = win(t, 0.95, 1.35)
     lx, ly = env[0] - 0.1 * ppm, env[1] - 0.01 * ppm
-    sx, sy = lx - 0.35 * ppm, ly - 0.55 * ppm
-    cur = (sx + (lx - sx) * (0.4 + 0.6 * a), sy + (ly - sy) * (0.4 + 0.6 * a))
+    rest = (0.16 * W, ly + 0.02 * ppm)
+    cur = (rest[0] + (lx - rest[0]) * a, rest[1] + (ly - rest[1]) * a)
     hand_line(cx, arm_to(cur[0], cur[1], ppm, -0.3, -0.45, -0.08, 0.0), ppm, sleeve=K.LUSTIG_STYLE.suit)
 
 
@@ -496,7 +497,7 @@ def _s23(cx, t, A):
             brows="worried" if real > 0.5 else "neutral", eyes="wide" if real > 0.5 else "open",
             look=(0.3, 0.8) if t < 1.2 else (0.0, 0.0), sweat=win(t, 1.6, 2.2))
     shake = math.sin(t * 40) * 1.5 * real
-    p = p.but(arm_a=30, elb_a=95, arm_b=30, elb_b=95, lean=8 - 6 * real, head_dy=shake)
+    p = p.but(arm_a=18, elb_a=-75, arm_b=18, elb_b=-75, lean=8 - 6 * real, head_dy=shake)
     K.POISSON.draw(cx, breathe(p, t))
 
 
@@ -507,7 +508,7 @@ def _s25(cx, t, A):
     # pulls the bowler down over his eyes, then a finger to the lips
     pull = win(t, 1.0, 1.5)
     shh = win(t, 2.2, 2.6)
-    p = p.but(arm_b=170 * pull * (1 - shh) + 150 * shh, elb_b=-30 * pull * (1 - shh) + 40 * shh, arm_a=30, elb_a=70,
+    p = p.but(arm_b=170 * pull * (1 - shh) + 150 * shh, elb_b=-30 * pull * (1 - shh) + 40 * shh, arm_a=18, elb_a=-75,
               head_dy=5 * pull)
     K.POISSON.draw(cx, breathe(p, t))
 
@@ -553,7 +554,7 @@ def _s28(cx, t, A):
     fig.draw(cx, breathe(p, t))
     for name, f2, k in (("d1", K.NEW_DEALERS[1], 0), ("d3", K.NEW_DEALERS[2], 1)):
         q = sit(f2, A, name, t, view="front", mouth="o" if t > 0.6 else "flat", brows="up", look=(0.3, 0) if t > 0.6 else (-0.7, 0))
-        f2.draw(cx, breathe(q.but(arm_a=35, elb_a=60, arm_b=35, elb_b=60), t + k))
+        f2.draw(cx, breathe(q.but(arm_a=18, elb_a=-75, arm_b=18, elb_b=-75), t + k))
     drop = win(t, 0.6, 0.9)
     q = stand(K.LUSTIG, A, "lustig", t, view="side", f=1, mouth="flat" if drop > 0.5 else "smile",
               brows="worried" if drop > 0.5 else "neutral", look=(0.8, 0) if t < 1.2 else (-0.9, 0), sweat=win(t, 1.0, 1.4),
