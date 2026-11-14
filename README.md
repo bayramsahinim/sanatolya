@@ -46,3 +46,25 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: "Can You Spot the Change?" (YouTube Short)
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC, 61.6 s) | `output/JUST_NEEDY_CAN_YOU_SPOT_THE_CHANGE.mp4` |
+| English subtitles | `output/JUST_NEEDY_CAN_YOU_SPOT_THE_CHANGE.srt` |
+
+A gradual change blindness experiment. The 3D sets are rendered with Three.js in headless Chromium
+(`episodes/spot_the_change/web`): one locked harbour shot, nine gulls, and a ferry whose hull material
+is interpolated red → navy over 12 s.
+
+```bash
+(cd episodes/spot_the_change/web && npm install)
+python -m episodes.spot_the_change.make_voice      # Gemini TTS (cached in assets/audio/tts/spot_the_change)
+python -m episodes.spot_the_change.align_voice     # sentence + word timings
+python -m episodes.spot_the_change.timeline        # timeline.json + SRT
+python -m episodes.spot_the_change.mix             # soundtrack
+(cd episodes/spot_the_change/web && node render.js video ../../../build/spot_the_change/video_silent.mp4 \
+   && node render.js qabirds ../../../build/spot_the_change/qa_birds.json)
+python -m episodes.spot_the_change.qa assemble && python -m episodes.spot_the_change.qa check
+```
