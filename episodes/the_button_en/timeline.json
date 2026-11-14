@@ -1,0 +1,1833 @@
+{
+ "plan": {
+  "segments": [
+   {
+    "i": 0,
+    "src0": 0.0,
+    "src1": 3.5900000000000003,
+    "out0": 0.0,
+    "ext": 0.5,
+    "hold_frame": 6
+   },
+   {
+    "i": 1,
+    "src0": 3.5900000000000003,
+    "src1": 5.63,
+    "out0": 4.09,
+    "ext": 0.0,
+    "hold_frame": 161
+   },
+   {
+    "i": 2,
+    "src0": 5.63,
+    "src1": 7.28,
+    "out0": 6.129999999999999,
+    "ext": 0.0,
+    "hold_frame": 184
+   },
+   {
+    "i": 3,
+    "src0": 7.28,
+    "src1": 9.03,
+    "out0": 7.779999999999999,
+    "ext": 0.0,
+    "hold_frame": 261
+   },
+   {
+    "i": 4,
+    "src0": 9.03,
+    "src1": 10.319999999999999,
+    "out0": 9.529999999999998,
+    "ext": 0.13333333333333333,
+    "hold_frame": 295
+   },
+   {
+    "i": 5,
+    "src0": 10.319999999999999,
+    "src1": 17.599999999999998,
+    "out0": 10.95333333333333,
+    "ext": 0.0,
+    "hold_frame": 521
+   },
+   {
+    "i": 6,
+    "src0": 17.599999999999998,
+    "src1": 21.759999999999998,
+    "out0": 18.233333333333327,
+    "ext": 0.0,
+    "hold_frame": 646
+   },
+   {
+    "i": 7,
+    "src0": 21.759999999999998,
+    "src1": 24.32,
+    "out0": 22.393333333333327,
+    "ext": 0.0,
+    "hold_frame": 723
+   },
+   {
+    "i": 8,
+    "src0": 24.32,
+    "src1": 28.939999999999998,
+    "out0": 24.95333333333333,
+    "ext": 0.0,
+    "hold_frame": 856
+   },
+   {
+    "i": 9,
+    "src0": 28.939999999999998,
+    "src1": 33.080000000000005,
+    "out0": 29.573333333333327,
+    "ext": 0.0,
+    "hold_frame": 982
+   },
+   {
+    "i": 10,
+    "src0": 33.080000000000005,
+    "src1": 37.45,
+    "out0": 33.71333333333334,
+    "ext": 0.0,
+    "hold_frame": 1117
+   },
+   {
+    "i": 11,
+    "src0": 37.45,
+    "src1": 40.440000000000005,
+    "out0": 38.083333333333336,
+    "ext": 0.8,
+    "hold_frame": 1206
+   },
+   {
+    "i": 12,
+    "src0": 40.440000000000005,
+    "src1": 43.81,
+    "out0": 41.873333333333335,
+    "ext": 0.5333333333333333,
+    "hold_frame": 1219
+   },
+   {
+    "i": 13,
+    "src0": 43.81,
+    "src1": 46.2,
+    "out0": 45.776666666666664,
+    "ext": 0.0,
+    "hold_frame": 1376
+   },
+   {
+    "i": 14,
+    "src0": 46.2,
+    "src1": 50.99,
+    "out0": 48.166666666666664,
+    "ext": 0.0,
+    "hold_frame": 1499
+   },
+   {
+    "i": 15,
+    "src0": 50.99,
+    "src1": 53.330000000000005,
+    "out0": 52.95666666666666,
+    "ext": 0.5,
+    "hold_frame": 1593
+   },
+   {
+    "i": 16,
+    "src0": 53.330000000000005,
+    "src1": 57.150000000000006,
+    "out0": 55.79666666666667,
+    "ext": 0.0,
+    "hold_frame": 1704
+   },
+   {
+    "i": 17,
+    "src0": 57.150000000000006,
+    "src1": 62.040000000000006,
+    "out0": 59.61666666666667,
+    "ext": 0.0,
+    "hold_frame": 1843
+   },
+   {
+    "i": 18,
+    "src0": 62.040000000000006,
+    "src1": 64.84,
+    "out0": 64.50666666666666,
+    "ext": 0.0,
+    "hold_frame": 1939
+   },
+   {
+    "i": 19,
+    "src0": 64.84,
+    "src1": 67.15,
+    "out0": 67.30666666666666,
+    "ext": 0.13333333333333333,
+    "hold_frame": 2008
+   },
+   {
+    "i": 20,
+    "src0": 67.15,
+    "src1": 68.72,
+    "out0": 69.75,
+    "ext": 0.26666666666666666,
+    "hold_frame": 2020
+   },
+   {
+    "i": 21,
+    "src0": 68.72,
+    "src1": 70.19,
+    "out0": 71.58666666666666,
+    "ext": 0.5,
+    "hold_frame": 2099
+   },
+   {
+    "i": 22,
+    "src0": 70.19,
+    "src1": 72.12,
+    "out0": 73.55666666666666,
+    "ext": 0.0,
+    "hold_frame": 2114
+   },
+   {
+    "i": 23,
+    "src0": 72.12,
+    "src1": 75.72,
+    "out0": 75.48666666666666,
+    "ext": 0.0,
+    "hold_frame": 2264
+   },
+   {
+    "i": 24,
+    "src0": 75.72,
+    "src1": 84.04,
+    "out0": 79.08666666666666,
+    "ext": 0.3333333333333333,
+    "hold_frame": 2281
+   },
+   {
+    "i": 25,
+    "src0": 84.04,
+    "src1": 87.27,
+    "out0": 87.74,
+    "ext": 0.26666666666666666,
+    "hold_frame": 2612
+   },
+   {
+    "i": 26,
+    "src0": 87.27,
+    "src1": 89.56,
+    "out0": 91.23666666666665,
+    "ext": 0.4,
+    "hold_frame": 2680
+   },
+   {
+    "i": 27,
+    "src0": 89.56,
+    "src1": 90.85000000000001,
+    "out0": 93.92666666666666,
+    "ext": 0.0,
+    "hold_frame": 2719
+   },
+   {
+    "i": 28,
+    "src0": 90.85000000000001,
+    "src1": 94.56,
+    "out0": 95.21666666666667,
+    "ext": 0.0,
+    "hold_frame": 2831
+   },
+   {
+    "i": 29,
+    "src0": 94.56,
+    "src1": 97.51,
+    "out0": 98.92666666666666,
+    "ext": 0.0,
+    "hold_frame": 2843
+   },
+   {
+    "i": 30,
+    "src0": 97.51,
+    "src1": 103.23,
+    "out0": 101.87666666666667,
+    "ext": 0.13333333333333333,
+    "hold_frame": 3052
+   },
+   {
+    "i": 31,
+    "src0": 103.23,
+    "src1": 105.60000000000001,
+    "out0": 107.73,
+    "ext": 1.1666666666666667,
+    "hold_frame": 3161
+   },
+   {
+    "i": 32,
+    "src0": 105.60000000000001,
+    "src1": 112.5,
+    "out0": 111.26666666666668,
+    "ext": 1.0333333333333334,
+    "hold_frame": 3365
+   },
+   {
+    "i": 33,
+    "src0": 112.5,
+    "src1": 114.39,
+    "out0": 119.2,
+    "ext": 1.0333333333333334,
+    "hold_frame": 3394
+   },
+   {
+    "i": 34,
+    "src0": 114.39,
+    "src1": 116.84,
+    "out0": 122.12333333333333,
+    "ext": 0.26666666666666666,
+    "hold_frame": 3461
+   },
+   {
+    "i": 35,
+    "src0": 116.84,
+    "src1": 118.03,
+    "out0": 124.84,
+    "ext": 1.2666666666666666,
+    "hold_frame": 3532
+   },
+   {
+    "i": 36,
+    "src0": 118.03,
+    "src1": 119.60000000000001,
+    "out0": 127.29666666666667,
+    "ext": 0.03333333333333333,
+    "hold_frame": 3548
+   },
+   {
+    "i": 37,
+    "src0": 119.60000000000001,
+    "src1": 120.86,
+    "out0": 128.9,
+    "ext": 0.0,
+    "hold_frame": 3598
+   },
+   {
+    "i": 38,
+    "src0": 120.86,
+    "src1": 124.42,
+    "out0": 130.16,
+    "ext": 0.2,
+    "hold_frame": 3727
+   },
+   {
+    "i": 39,
+    "src0": 124.42,
+    "src1": 128.54,
+    "out0": 133.92,
+    "ext": 0.0,
+    "hold_frame": 3739
+   },
+   {
+    "i": 40,
+    "src0": 128.54,
+    "src1": 139.2,
+    "out0": 138.03999999999996,
+    "ext": 1.2,
+    "hold_frame": 4101
+   }
+  ],
+  "lines": [
+   {
+    "i": 0,
+    "start": 0.06,
+    "end": 3.9715833333333332,
+    "text": "If you press the button in front of you, you'll win fifty thousand dollars."
+   },
+   {
+    "i": 1,
+    "start": 4.14,
+    "end": 5.8189166666666665,
+    "text": "But someone you don't know will die."
+   },
+   {
+    "i": 2,
+    "start": 6.179999999999999,
+    "end": 7.356208333333332,
+    "text": "You won't see who it is."
+   },
+   {
+    "i": 3,
+    "start": 7.829999999999999,
+    "end": 9.07025,
+    "text": "You won't even learn their name."
+   },
+   {
+    "i": 4,
+    "start": 9.579999999999998,
+    "end": 10.832166666666666,
+    "text": "Would you press it?"
+   },
+   {
+    "i": 5,
+    "start": 11.00333333333333,
+    "end": 17.486749999999997,
+    "text": "Richard Matheson's story \"Button, Button,\" published in 1970, puts you face to face with exactly this kind of offer."
+   },
+   {
+    "i": 6,
+    "start": 18.283333333333328,
+    "end": 21.664499999999993,
+    "text": "A package is left at the door of Norma and Arthur, who live in New York."
+   },
+   {
+    "i": 7,
+    "start": 22.443333333333328,
+    "end": 24.352583333333328,
+    "text": "Inside is a small wooden box."
+   },
+   {
+    "i": 8,
+    "start": 25.00333333333333,
+    "end": 28.65033333333333,
+    "text": "On top of the box, under a locked glass cover, there's a single button."
+   },
+   {
+    "i": 9,
+    "start": 29.623333333333328,
+    "end": 32.59783333333333,
+    "text": "The note next to it says a Mr. Steward will come by at eight p.m."
+   },
+   {
+    "i": 10,
+    "start": 33.763333333333335,
+    "end": 37.650958333333335,
+    "text": "When Steward arrives, he leaves the key on the table and explains his offer."
+   },
+   {
+    "i": 11,
+    "start": 38.13333333333333,
+    "end": 41.74191666666667,
+    "text": "If they press the button, they'll get fifty thousand dollars."
+   },
+   {
+    "i": 12,
+    "start": 41.92333333333333,
+    "end": 45.66345833333333,
+    "text": "And somewhere in the world, a person they don't know will die."
+   },
+   {
+    "i": 13,
+    "start": 45.82666666666666,
+    "end": 47.591583333333325,
+    "text": "But who he works for, he won't say."
+   },
+   {
+    "i": 14,
+    "start": 48.21666666666666,
+    "end": 52.21966666666666,
+    "text": "Arthur ends the conversation, sends the man away, and tears up the card he left behind."
+   },
+   {
+    "i": 15,
+    "start": 53.00666666666666,
+    "end": 55.66229166666666,
+    "text": "But Norma can't stop thinking about the box."
+   },
+   {
+    "i": 16,
+    "start": 55.846666666666664,
+    "end": 59.186375,
+    "text": "The next day, she pieces the card back together and calls Steward."
+   },
+   {
+    "i": 17,
+    "start": 59.666666666666664,
+    "end": 63.823375,
+    "text": "The man repeats that they won't know the person who dies, and they won't see them die."
+   },
+   {
+    "i": 18,
+    "start": 64.55666666666666,
+    "end": 67.03220833333333,
+    "text": "That evening, the package shows up at their door again."
+   },
+   {
+    "i": 19,
+    "start": 67.35666666666665,
+    "end": 69.63125,
+    "text": "Norma takes the box and hides it in the cabinet."
+   },
+   {
+    "i": 20,
+    "start": 69.8,
+    "end": 71.47449999999999,
+    "text": "At dinner, she brings it up."
+   },
+   {
+    "i": 21,
+    "start": 71.63666666666666,
+    "end": 73.42983333333332,
+    "text": "What if the offer is real?"
+   },
+   {
+    "i": 22,
+    "start": 73.60666666666665,
+    "end": 75.23208333333332,
+    "text": "For Arthur, the answer doesn't change."
+   },
+   {
+    "i": 23,
+    "start": 75.53666666666666,
+    "end": 77.94562499999999,
+    "text": "Not knowing the victim won't change what they'd be doing."
+   },
+   {
+    "i": 24,
+    "start": 79.13666666666666,
+    "end": 87.63316666666665,
+    "text": "Norma, though, thinks about everything she's put off for years: the trip to Europe, the little house on the island, the chance of having a child someday."
+   },
+   {
+    "i": 25,
+    "start": 87.79316666666665,
+    "end": 91.10308333333332,
+    "text": "The next morning, once Arthur leaves for work, she takes out the box."
+   },
+   {
+    "i": 26,
+    "start": 91.28666666666665,
+    "end": 93.80662499999998,
+    "text": "She opens the glass cover and presses the button."
+   },
+   {
+    "i": 27,
+    "start": 93.97666666666666,
+    "end": 94.78604166666666,
+    "text": "Nothing happens."
+   },
+   {
+    "i": 28,
+    "start": 95.26666666666667,
+    "end": 98.34579166666667,
+    "text": "Norma decides it's all nonsense and throws the box in the trash."
+   },
+   {
+    "i": 29,
+    "start": 98.97666666666666,
+    "end": 101.259625,
+    "text": "But that evening, a call comes from a hospital."
+   },
+   {
+    "i": 30,
+    "start": 101.92666666666666,
+    "end": 107.600625,
+    "text": "In the crowd on a subway platform, Arthur was pushed in front of a train, and he lost his life."
+   },
+   {
+    "i": 31,
+    "start": 107.78,
+    "end": 111.15575,
+    "text": "In that moment, Norma remembers the insurance."
+   },
+   {
+    "i": 32,
+    "start": 111.31666666666668,
+    "end": 119.08820833333334,
+    "text": "Her husband's twenty-five-thousand-dollar life insurance pays double for accidental death: exactly fifty thousand dollars."
+   },
+   {
+    "i": 33,
+    "start": 119.25,
+    "end": 122.01720833333333,
+    "text": "She pulls the box out of the trash and breaks it open."
+   },
+   {
+    "i": 34,
+    "start": 122.17720833333333,
+    "end": 124.73362499999999,
+    "text": "There are no wires inside, and no mechanism."
+   },
+   {
+    "i": 35,
+    "start": 124.89362499999999,
+    "end": 127.18149999999999,
+    "text": "The box is completely empty."
+   },
+   {
+    "i": 36,
+    "start": 127.34666666666666,
+    "end": 128.79129166666667,
+    "text": "The phone rings again."
+   },
+   {
+    "i": 37,
+    "start": 128.95129166666666,
+    "end": 129.986125,
+    "text": "It's Steward."
+   },
+   {
+    "i": 38,
+    "start": 130.20999999999998,
+    "end": 133.80866666666665,
+    "text": "Norma screams that they told her she wouldn't know the person who'd die."
+   },
+   {
+    "i": 39,
+    "start": 133.96999999999997,
+    "end": 137.13441666666662,
+    "text": "Steward asks her whether she ever really knew her husband."
+   },
+   {
+    "i": 40,
+    "start": 138.08999999999997,
+    "end": 146.828625,
+    "text": "For Norma, the person who would pay the price was a distant, nameless stranger. But every stranger was someone else's nearest and dearest."
+   }
+  ],
+  "duration": 149.89999999999995
+ },
+ "captions": [
+  {
+   "line": 0,
+   "start": 0.02,
+   "end": 0.646,
+   "text": "If you press"
+  },
+  {
+   "line": 0,
+   "start": 0.646,
+   "end": 1.218,
+   "text": "the button"
+  },
+  {
+   "line": 0,
+   "start": 1.218,
+   "end": 1.635,
+   "text": "in front"
+  },
+  {
+   "line": 0,
+   "start": 1.635,
+   "end": 2.154,
+   "text": "of you,"
+  },
+  {
+   "line": 0,
+   "start": 2.154,
+   "end": 2.73,
+   "text": "you'll win"
+  },
+  {
+   "line": 0,
+   "start": 2.73,
+   "end": 4.08,
+   "text": "$50,000."
+  },
+  {
+   "line": 1,
+   "start": 4.1,
+   "end": 4.652,
+   "text": "But someone"
+  },
+  {
+   "line": 1,
+   "start": 4.652,
+   "end": 5.257,
+   "text": "you don't know"
+  },
+  {
+   "line": 1,
+   "start": 5.257,
+   "end": 5.92,
+   "text": "will die."
+  },
+  {
+   "line": 2,
+   "start": 6.19,
+   "end": 6.75,
+   "text": "You won't see"
+  },
+  {
+   "line": 2,
+   "start": 6.75,
+   "end": 7.57,
+   "text": "who it is."
+  },
+  {
+   "line": 3,
+   "start": 7.79,
+   "end": 8.478,
+   "text": "You won't even"
+  },
+  {
+   "line": 3,
+   "start": 8.478,
+   "end": 8.662,
+   "text": "learn"
+  },
+  {
+   "line": 3,
+   "start": 8.662,
+   "end": 9.29,
+   "text": "their name."
+  },
+  {
+   "line": 4,
+   "start": 9.6,
+   "end": 10.275,
+   "text": "Would you press"
+  },
+  {
+   "line": 4,
+   "start": 10.275,
+   "end": 10.963,
+   "text": "it?"
+  },
+  {
+   "line": 5,
+   "start": 10.963,
+   "end": 11.35,
+   "text": "Richard"
+  },
+  {
+   "line": 5,
+   "start": 11.35,
+   "end": 11.901,
+   "text": "Matheson's"
+  },
+  {
+   "line": 5,
+   "start": 11.901,
+   "end": 12.288,
+   "text": "story"
+  },
+  {
+   "line": 5,
+   "start": 12.288,
+   "end": 13.403,
+   "text": "\"Button, Button,\""
+  },
+  {
+   "line": 5,
+   "start": 13.403,
+   "end": 13.862,
+   "text": "published"
+  },
+  {
+   "line": 5,
+   "start": 13.862,
+   "end": 14.306,
+   "text": "in 1970,"
+  },
+  {
+   "line": 5,
+   "start": 14.306,
+   "end": 14.973,
+   "text": "puts you face"
+  },
+  {
+   "line": 5,
+   "start": 14.973,
+   "end": 15.417,
+   "text": "to face"
+  },
+  {
+   "line": 5,
+   "start": 15.417,
+   "end": 16.28,
+   "text": "with exactly"
+  },
+  {
+   "line": 5,
+   "start": 16.28,
+   "end": 16.725,
+   "text": "this kind"
+  },
+  {
+   "line": 5,
+   "start": 16.725,
+   "end": 17.593,
+   "text": "of offer."
+  },
+  {
+   "line": 6,
+   "start": 18.293,
+   "end": 18.773,
+   "text": "A package"
+  },
+  {
+   "line": 6,
+   "start": 18.773,
+   "end": 19.123,
+   "text": "is left"
+  },
+  {
+   "line": 6,
+   "start": 19.123,
+   "end": 19.648,
+   "text": "at the door"
+  },
+  {
+   "line": 6,
+   "start": 19.648,
+   "end": 20.128,
+   "text": "of Norma"
+  },
+  {
+   "line": 6,
+   "start": 20.128,
+   "end": 20.863,
+   "text": "and Arthur,"
+  },
+  {
+   "line": 6,
+   "start": 20.863,
+   "end": 21.098,
+   "text": "who live"
+  },
+  {
+   "line": 6,
+   "start": 21.098,
+   "end": 21.883,
+   "text": "in New York."
+  },
+  {
+   "line": 7,
+   "start": 22.403,
+   "end": 22.845,
+   "text": "Inside"
+  },
+  {
+   "line": 7,
+   "start": 22.845,
+   "end": 23.607,
+   "text": "is a small"
+  },
+  {
+   "line": 7,
+   "start": 23.607,
+   "end": 24.563,
+   "text": "wooden box."
+  },
+  {
+   "line": 8,
+   "start": 24.963,
+   "end": 25.346,
+   "text": "On top"
+  },
+  {
+   "line": 8,
+   "start": 25.346,
+   "end": 25.92,
+   "text": "of the box,"
+  },
+  {
+   "line": 8,
+   "start": 25.92,
+   "end": 26.778,
+   "text": "under a locked"
+  },
+  {
+   "line": 8,
+   "start": 26.778,
+   "end": 27.513,
+   "text": "glass cover,"
+  },
+  {
+   "line": 8,
+   "start": 27.513,
+   "end": 27.937,
+   "text": "there's a"
+  },
+  {
+   "line": 8,
+   "start": 27.937,
+   "end": 28.863,
+   "text": "single button."
+  },
+  {
+   "line": 9,
+   "start": 29.583,
+   "end": 30.149,
+   "text": "The note next"
+  },
+  {
+   "line": 9,
+   "start": 30.149,
+   "end": 30.715,
+   "text": "to it says"
+  },
+  {
+   "line": 9,
+   "start": 30.715,
+   "end": 31.421,
+   "text": "a Mr. Steward"
+  },
+  {
+   "line": 9,
+   "start": 31.421,
+   "end": 31.799,
+   "text": "will come"
+  },
+  {
+   "line": 9,
+   "start": 31.799,
+   "end": 32.813,
+   "text": "by at 8 p.m."
+  },
+  {
+   "line": 10,
+   "start": 33.773,
+   "end": 34.242,
+   "text": "When Steward"
+  },
+  {
+   "line": 10,
+   "start": 34.242,
+   "end": 34.893,
+   "text": "arrives,"
+  },
+  {
+   "line": 10,
+   "start": 34.893,
+   "end": 35.225,
+   "text": "he leaves"
+  },
+  {
+   "line": 10,
+   "start": 35.225,
+   "end": 35.567,
+   "text": "the key"
+  },
+  {
+   "line": 10,
+   "start": 35.567,
+   "end": 36.456,
+   "text": "on the table"
+  },
+  {
+   "line": 10,
+   "start": 36.456,
+   "end": 36.925,
+   "text": "and explains"
+  },
+  {
+   "line": 10,
+   "start": 36.925,
+   "end": 37.863,
+   "text": "his offer."
+  },
+  {
+   "line": 11,
+   "start": 38.093,
+   "end": 38.834,
+   "text": "If they press"
+  },
+  {
+   "line": 11,
+   "start": 38.834,
+   "end": 39.583,
+   "text": "the button,"
+  },
+  {
+   "line": 11,
+   "start": 39.583,
+   "end": 40.254,
+   "text": "they'll get"
+  },
+  {
+   "line": 11,
+   "start": 40.254,
+   "end": 41.883,
+   "text": "$50,000."
+  },
+  {
+   "line": 12,
+   "start": 41.883,
+   "end": 42.652,
+   "text": "And somewhere"
+  },
+  {
+   "line": 12,
+   "start": 42.652,
+   "end": 43.343,
+   "text": "in the world,"
+  },
+  {
+   "line": 12,
+   "start": 43.343,
+   "end": 43.989,
+   "text": "a person"
+  },
+  {
+   "line": 12,
+   "start": 43.989,
+   "end": 45.182,
+   "text": "they don't know"
+  },
+  {
+   "line": 12,
+   "start": 45.182,
+   "end": 45.787,
+   "text": "will die."
+  },
+  {
+   "line": 13,
+   "start": 45.787,
+   "end": 46.447,
+   "text": "But who he"
+  },
+  {
+   "line": 13,
+   "start": 46.447,
+   "end": 46.887,
+   "text": "works for,"
+  },
+  {
+   "line": 13,
+   "start": 46.887,
+   "end": 47.807,
+   "text": "he won't say."
+  },
+  {
+   "line": 14,
+   "start": 48.177,
+   "end": 48.909,
+   "text": "Arthur ends the"
+  },
+  {
+   "line": 14,
+   "start": 48.909,
+   "end": 49.539,
+   "text": "conversation,"
+  },
+  {
+   "line": 14,
+   "start": 49.539,
+   "end": 50.126,
+   "text": "sends the man"
+  },
+  {
+   "line": 14,
+   "start": 50.126,
+   "end": 50.467,
+   "text": "away,"
+  },
+  {
+   "line": 14,
+   "start": 50.467,
+   "end": 51.053,
+   "text": "and tears up"
+  },
+  {
+   "line": 14,
+   "start": 51.053,
+   "end": 51.445,
+   "text": "the card"
+  },
+  {
+   "line": 14,
+   "start": 51.445,
+   "end": 52.437,
+   "text": "he left behind."
+  },
+  {
+   "line": 15,
+   "start": 52.967,
+   "end": 53.962,
+   "text": "But Norma can't"
+  },
+  {
+   "line": 15,
+   "start": 53.962,
+   "end": 54.611,
+   "text": "stop thinking"
+  },
+  {
+   "line": 15,
+   "start": 54.611,
+   "end": 55.807,
+   "text": "about the box."
+  },
+  {
+   "line": 16,
+   "start": 55.807,
+   "end": 56.474,
+   "text": "The next day,"
+  },
+  {
+   "line": 16,
+   "start": 56.474,
+   "end": 57.084,
+   "text": "she pieces"
+  },
+  {
+   "line": 16,
+   "start": 57.084,
+   "end": 57.529,
+   "text": "the card"
+  },
+  {
+   "line": 16,
+   "start": 57.529,
+   "end": 58.304,
+   "text": "back together"
+  },
+  {
+   "line": 16,
+   "start": 58.304,
+   "end": 58.749,
+   "text": "and calls"
+  },
+  {
+   "line": 16,
+   "start": 58.749,
+   "end": 59.397,
+   "text": "Steward."
+  },
+  {
+   "line": 17,
+   "start": 59.627,
+   "end": 60.378,
+   "text": "The man repeats"
+  },
+  {
+   "line": 17,
+   "start": 60.378,
+   "end": 60.98,
+   "text": "that they won't"
+  },
+  {
+   "line": 17,
+   "start": 60.98,
+   "end": 61.731,
+   "text": "know the person"
+  },
+  {
+   "line": 17,
+   "start": 61.731,
+   "end": 62.137,
+   "text": "who dies,"
+  },
+  {
+   "line": 17,
+   "start": 62.137,
+   "end": 62.844,
+   "text": "and they won't"
+  },
+  {
+   "line": 17,
+   "start": 62.844,
+   "end": 64.037,
+   "text": "see them die."
+  },
+  {
+   "line": 18,
+   "start": 64.517,
+   "end": 65.18,
+   "text": "That evening,"
+  },
+  {
+   "line": 18,
+   "start": 65.18,
+   "end": 65.702,
+   "text": "the package"
+  },
+  {
+   "line": 18,
+   "start": 65.702,
+   "end": 66.083,
+   "text": "shows up"
+  },
+  {
+   "line": 18,
+   "start": 66.083,
+   "end": 66.655,
+   "text": "at their door"
+  },
+  {
+   "line": 18,
+   "start": 66.655,
+   "end": 67.247,
+   "text": "again."
+  },
+  {
+   "line": 19,
+   "start": 67.317,
+   "end": 67.893,
+   "text": "Norma takes"
+  },
+  {
+   "line": 19,
+   "start": 67.893,
+   "end": 68.225,
+   "text": "the box"
+  },
+  {
+   "line": 19,
+   "start": 68.225,
+   "end": 68.844,
+   "text": "and hides it"
+  },
+  {
+   "line": 19,
+   "start": 68.844,
+   "end": 69.76,
+   "text": "in the cabinet."
+  },
+  {
+   "line": 20,
+   "start": 69.76,
+   "end": 70.3,
+   "text": "At dinner,"
+  },
+  {
+   "line": 20,
+   "start": 70.3,
+   "end": 71.009,
+   "text": "she brings"
+  },
+  {
+   "line": 20,
+   "start": 71.009,
+   "end": 71.597,
+   "text": "it up."
+  },
+  {
+   "line": 21,
+   "start": 71.597,
+   "end": 72.393,
+   "text": "What if the"
+  },
+  {
+   "line": 21,
+   "start": 72.393,
+   "end": 73.567,
+   "text": "offer is real?"
+  },
+  {
+   "line": 22,
+   "start": 73.567,
+   "end": 74.16,
+   "text": "For Arthur,"
+  },
+  {
+   "line": 22,
+   "start": 74.16,
+   "end": 74.754,
+   "text": "the answer"
+  },
+  {
+   "line": 22,
+   "start": 74.754,
+   "end": 75.447,
+   "text": "doesn't change."
+  },
+  {
+   "line": 23,
+   "start": 75.497,
+   "end": 76.07,
+   "text": "Not knowing"
+  },
+  {
+   "line": 23,
+   "start": 76.07,
+   "end": 76.642,
+   "text": "the victim"
+  },
+  {
+   "line": 23,
+   "start": 76.642,
+   "end": 77.061,
+   "text": "won't change"
+  },
+  {
+   "line": 23,
+   "start": 77.061,
+   "end": 77.479,
+   "text": "what they'd"
+  },
+  {
+   "line": 23,
+   "start": 77.479,
+   "end": 78.157,
+   "text": "be doing."
+  },
+  {
+   "line": 24,
+   "start": 79.097,
+   "end": 79.437,
+   "text": "Norma,"
+  },
+  {
+   "line": 24,
+   "start": 79.437,
+   "end": 79.633,
+   "text": "though,"
+  },
+  {
+   "line": 24,
+   "start": 79.633,
+   "end": 80.17,
+   "text": "thinks about"
+  },
+  {
+   "line": 24,
+   "start": 80.17,
+   "end": 80.8,
+   "text": "everything"
+  },
+  {
+   "line": 24,
+   "start": 80.8,
+   "end": 81.192,
+   "text": "she's put"
+  },
+  {
+   "line": 24,
+   "start": 81.192,
+   "end": 82.079,
+   "text": "off for years:"
+  },
+  {
+   "line": 24,
+   "start": 82.079,
+   "end": 82.901,
+   "text": "the trip"
+  },
+  {
+   "line": 24,
+   "start": 82.901,
+   "end": 83.807,
+   "text": "to Europe,"
+  },
+  {
+   "line": 24,
+   "start": 83.807,
+   "end": 84.104,
+   "text": "the little"
+  },
+  {
+   "line": 24,
+   "start": 84.104,
+   "end": 84.299,
+   "text": "house"
+  },
+  {
+   "line": 24,
+   "start": 84.299,
+   "end": 85.457,
+   "text": "on the island,"
+  },
+  {
+   "line": 24,
+   "start": 85.457,
+   "end": 85.723,
+   "text": "the chance"
+  },
+  {
+   "line": 24,
+   "start": 85.723,
+   "end": 86.259,
+   "text": "of having"
+  },
+  {
+   "line": 24,
+   "start": 86.259,
+   "end": 86.651,
+   "text": "a child"
+  },
+  {
+   "line": 24,
+   "start": 86.651,
+   "end": 87.753,
+   "text": "someday."
+  },
+  {
+   "line": 25,
+   "start": 87.753,
+   "end": 88.167,
+   "text": "The next"
+  },
+  {
+   "line": 25,
+   "start": 88.167,
+   "end": 88.526,
+   "text": "morning,"
+  },
+  {
+   "line": 25,
+   "start": 88.526,
+   "end": 89.093,
+   "text": "once Arthur"
+  },
+  {
+   "line": 25,
+   "start": 89.093,
+   "end": 89.453,
+   "text": "leaves"
+  },
+  {
+   "line": 25,
+   "start": 89.453,
+   "end": 89.866,
+   "text": "for work,"
+  },
+  {
+   "line": 25,
+   "start": 89.866,
+   "end": 90.64,
+   "text": "she takes out"
+  },
+  {
+   "line": 25,
+   "start": 90.64,
+   "end": 91.247,
+   "text": "the box."
+  },
+  {
+   "line": 26,
+   "start": 91.247,
+   "end": 91.76,
+   "text": "She opens"
+  },
+  {
+   "line": 26,
+   "start": 91.76,
+   "end": 92.53,
+   "text": "the glass cover"
+  },
+  {
+   "line": 26,
+   "start": 92.53,
+   "end": 93.243,
+   "text": "and presses"
+  },
+  {
+   "line": 26,
+   "start": 93.243,
+   "end": 93.937,
+   "text": "the button."
+  },
+  {
+   "line": 27,
+   "start": 93.937,
+   "end": 94.337,
+   "text": "Nothing"
+  },
+  {
+   "line": 27,
+   "start": 94.337,
+   "end": 94.997,
+   "text": "happens."
+  },
+  {
+   "line": 28,
+   "start": 95.277,
+   "end": 96.061,
+   "text": "Norma decides"
+  },
+  {
+   "line": 28,
+   "start": 96.061,
+   "end": 96.433,
+   "text": "it's all"
+  },
+  {
+   "line": 28,
+   "start": 96.433,
+   "end": 96.756,
+   "text": "nonsense"
+  },
+  {
+   "line": 28,
+   "start": 96.756,
+   "end": 97.368,
+   "text": "and throws"
+  },
+  {
+   "line": 28,
+   "start": 97.368,
+   "end": 97.739,
+   "text": "the box"
+  },
+  {
+   "line": 28,
+   "start": 97.739,
+   "end": 98.557,
+   "text": "in the trash."
+  },
+  {
+   "line": 29,
+   "start": 98.937,
+   "end": 99.388,
+   "text": "But that"
+  },
+  {
+   "line": 29,
+   "start": 99.388,
+   "end": 99.812,
+   "text": "evening,"
+  },
+  {
+   "line": 29,
+   "start": 99.812,
+   "end": 100.154,
+   "text": "a call"
+  },
+  {
+   "line": 29,
+   "start": 100.154,
+   "end": 100.622,
+   "text": "comes from"
+  },
+  {
+   "line": 29,
+   "start": 100.622,
+   "end": 101.477,
+   "text": "a hospital."
+  },
+  {
+   "line": 30,
+   "start": 101.887,
+   "end": 102.448,
+   "text": "In the crowd"
+  },
+  {
+   "line": 30,
+   "start": 102.448,
+   "end": 103.149,
+   "text": "on a subway"
+  },
+  {
+   "line": 30,
+   "start": 103.149,
+   "end": 103.475,
+   "text": "platform,"
+  },
+  {
+   "line": 30,
+   "start": 103.475,
+   "end": 104.161,
+   "text": "Arthur"
+  },
+  {
+   "line": 30,
+   "start": 104.161,
+   "end": 104.764,
+   "text": "was pushed"
+  },
+  {
+   "line": 30,
+   "start": 104.764,
+   "end": 105.139,
+   "text": "in front"
+  },
+  {
+   "line": 30,
+   "start": 105.139,
+   "end": 106.277,
+   "text": "of a train,"
+  },
+  {
+   "line": 30,
+   "start": 106.277,
+   "end": 106.962,
+   "text": "and he lost"
+  },
+  {
+   "line": 30,
+   "start": 106.962,
+   "end": 107.74,
+   "text": "his life."
+  },
+  {
+   "line": 31,
+   "start": 107.74,
+   "end": 109.01,
+   "text": "In that moment,"
+  },
+  {
+   "line": 31,
+   "start": 109.01,
+   "end": 110.137,
+   "text": "Norma remembers"
+  },
+  {
+   "line": 31,
+   "start": 110.137,
+   "end": 111.337,
+   "text": "the insurance."
+  },
+  {
+   "line": 32,
+   "start": 111.337,
+   "end": 112.04,
+   "text": "Her husband's"
+  },
+  {
+   "line": 32,
+   "start": 112.04,
+   "end": 113.882,
+   "text": "$25,000 life"
+  },
+  {
+   "line": 32,
+   "start": 113.882,
+   "end": 114.925,
+   "text": "insurance pays"
+  },
+  {
+   "line": 32,
+   "start": 114.925,
+   "end": 115.372,
+   "text": "double"
+  },
+  {
+   "line": 32,
+   "start": 115.372,
+   "end": 116.814,
+   "text": "for accidental"
+  },
+  {
+   "line": 32,
+   "start": 116.814,
+   "end": 117.071,
+   "text": "death:"
+  },
+  {
+   "line": 32,
+   "start": 117.071,
+   "end": 117.707,
+   "text": "exactly"
+  },
+  {
+   "line": 32,
+   "start": 117.707,
+   "end": 119.21,
+   "text": "$50,000."
+  },
+  {
+   "line": 33,
+   "start": 119.21,
+   "end": 119.643,
+   "text": "She pulls"
+  },
+  {
+   "line": 33,
+   "start": 119.643,
+   "end": 120.293,
+   "text": "the box out"
+  },
+  {
+   "line": 33,
+   "start": 120.293,
+   "end": 120.943,
+   "text": "of the trash"
+  },
+  {
+   "line": 33,
+   "start": 120.943,
+   "end": 121.376,
+   "text": "and breaks"
+  },
+  {
+   "line": 33,
+   "start": 121.376,
+   "end": 122.137,
+   "text": "it open."
+  },
+  {
+   "line": 34,
+   "start": 122.137,
+   "end": 122.835,
+   "text": "There are no"
+  },
+  {
+   "line": 34,
+   "start": 122.835,
+   "end": 123.645,
+   "text": "wires inside,"
+  },
+  {
+   "line": 34,
+   "start": 123.645,
+   "end": 124.11,
+   "text": "and no"
+  },
+  {
+   "line": 34,
+   "start": 124.11,
+   "end": 124.854,
+   "text": "mechanism."
+  },
+  {
+   "line": 35,
+   "start": 124.854,
+   "end": 125.394,
+   "text": "The box"
+  },
+  {
+   "line": 35,
+   "start": 125.394,
+   "end": 126.664,
+   "text": "is completely"
+  },
+  {
+   "line": 35,
+   "start": 126.664,
+   "end": 127.377,
+   "text": "empty."
+  },
+  {
+   "line": 36,
+   "start": 127.377,
+   "end": 127.82,
+   "text": "The phone"
+  },
+  {
+   "line": 36,
+   "start": 127.82,
+   "end": 128.911,
+   "text": "rings again."
+  },
+  {
+   "line": 37,
+   "start": 128.911,
+   "end": 130.17,
+   "text": "It's Steward."
+  },
+  {
+   "line": 38,
+   "start": 130.17,
+   "end": 130.827,
+   "text": "Norma screams"
+  },
+  {
+   "line": 38,
+   "start": 130.827,
+   "end": 131.546,
+   "text": "that they told"
+  },
+  {
+   "line": 38,
+   "start": 131.546,
+   "end": 132.025,
+   "text": "her she"
+  },
+  {
+   "line": 38,
+   "start": 132.025,
+   "end": 132.504,
+   "text": "wouldn't know"
+  },
+  {
+   "line": 38,
+   "start": 132.504,
+   "end": 133.161,
+   "text": "the person"
+  },
+  {
+   "line": 38,
+   "start": 133.161,
+   "end": 133.93,
+   "text": "who'd die."
+  },
+  {
+   "line": 39,
+   "start": 133.93,
+   "end": 134.562,
+   "text": "Steward asks"
+  },
+  {
+   "line": 39,
+   "start": 134.562,
+   "end": 135.194,
+   "text": "her whether"
+  },
+  {
+   "line": 39,
+   "start": 135.194,
+   "end": 135.826,
+   "text": "she ever"
+  },
+  {
+   "line": 39,
+   "start": 135.826,
+   "end": 136.458,
+   "text": "really knew"
+  },
+  {
+   "line": 39,
+   "start": 136.458,
+   "end": 137.35,
+   "text": "her husband."
+  },
+  {
+   "line": 40,
+   "start": 138.05,
+   "end": 138.9,
+   "text": "For Norma,"
+  },
+  {
+   "line": 40,
+   "start": 138.9,
+   "end": 139.448,
+   "text": "the person"
+  },
+  {
+   "line": 40,
+   "start": 139.448,
+   "end": 140.137,
+   "text": "who would pay"
+  },
+  {
+   "line": 40,
+   "start": 140.137,
+   "end": 140.596,
+   "text": "the price"
+  },
+  {
+   "line": 40,
+   "start": 140.596,
+   "end": 141.38,
+   "text": "was a distant,"
+  },
+  {
+   "line": 40,
+   "start": 141.38,
+   "end": 142.214,
+   "text": "nameless"
+  },
+  {
+   "line": 40,
+   "start": 142.214,
+   "end": 142.99,
+   "text": "stranger."
+  },
+  {
+   "line": 40,
+   "start": 142.99,
+   "end": 143.813,
+   "text": "But every"
+  },
+  {
+   "line": 40,
+   "start": 143.813,
+   "end": 144.213,
+   "text": "stranger"
+  },
+  {
+   "line": 40,
+   "start": 144.213,
+   "end": 144.842,
+   "text": "was someone"
+  },
+  {
+   "line": 40,
+   "start": 144.842,
+   "end": 145.641,
+   "text": "else's nearest"
+  },
+  {
+   "line": 40,
+   "start": 145.641,
+   "end": 147.04,
+   "text": "and dearest."
+  }
+ ]
+}

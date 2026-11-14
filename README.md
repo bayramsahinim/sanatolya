@@ -46,3 +46,31 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: "The Button" — English adaptation (9:16)
+
+Faithful English version of the Turkish short about Richard Matheson's "Button, Button" (same story,
+scenes, order and ending). The source animation is kept; Turkish captions are removed by masking + inpainting.
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC, 2:30) | `output/JUST_NEEDY_THE_BUTTON_ENGLISH.mp4` |
+| English subtitles | `output/JUST_NEEDY_THE_BUTTON_ENGLISH.srt` |
+
+```
+episodes/the_button_en/
+  script.py        Turkish transcript + line-by-line English translation, narration takes
+  tr_segments.json where each Turkish sentence is spoken in the source
+  make_voice.py / align_voice.py   Gemini TTS narration, split into per-line clips (verified by re-transcription)
+  clean.py         caption-band mask + inpaint (Turkish subtitle removal)
+  build.py         timeline (holds only where English needs room), score/SFX/mix, captions, render, SRT
+  qa.py            container/caption/narration checks + scene-by-scene contact sheet
+```
+
+```bash
+export BUTTON_SRC=source.mp4 BUTTON_WORK=/tmp/button BUTTON_CLEAN=/tmp/button/clean.mp4
+python -m episodes.the_button_en.make_voice && python -m episodes.the_button_en.align_voice
+python -m episodes.the_button_en.clean $BUTTON_SRC $BUTTON_CLEAN 0 4176
+python -m episodes.the_button_en.build all
+python -m episodes.the_button_en.qa output/JUST_NEEDY_THE_BUTTON_ENGLISH.mp4
+```
