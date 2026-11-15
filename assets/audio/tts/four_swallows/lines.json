@@ -1,0 +1,114 @@
+{
+ "hook": {
+  "file": "assets/audio/tts/four_swallows/line_hook.wav",
+  "dur": 2.75,
+  "src": [
+   0.0,
+   2.63
+  ]
+ },
+ "easy": {
+  "file": "assets/audio/tts/four_swallows/line_easy.wav",
+  "dur": 1.19,
+  "src": [
+   3.2,
+   4.21
+  ]
+ },
+ "try": {
+  "file": "assets/audio/tts/four_swallows/line_try.wav",
+  "dur": 1.76,
+  "src": [
+   4.83,
+   6.41
+  ]
+ },
+ "c1": {
+  "file": "assets/audio/tts/four_swallows/line_c1.wav",
+  "dur": 0.53,
+  "src": [
+   7.05,
+   7.4
+  ]
+ },
+ "c2": {
+  "file": "assets/audio/tts/four_swallows/line_c2.wav",
+  "dur": 0.55,
+  "src": [
+   8.46,
+   8.83
+  ]
+ },
+ "c3": {
+  "file": "assets/audio/tts/four_swallows/line_c3.wav",
+  "dur": 0.53,
+  "src": [
+   9.93,
+   10.28
+  ]
+ },
+ "c4": {
+  "file": "assets/audio/tts/four_swallows/line_c4.wav",
+  "dur": 0.63,
+  "src": [
+   11.23,
+   11.68
+  ]
+ },
+ "stuck": {
+  "file": "assets/audio/tts/four_swallows/line_stuck.wav",
+  "dur": 1.89,
+  "src": [
+   12.62,
+   14.33
+  ]
+ },
+ "reflex": {
+  "file": "assets/audio/tts/four_swallows/line_reflex.wav",
+  "dur": 2.69,
+  "src": [
+   15.13,
+   17.64
+  ]
+ },
+ "kicks": {
+  "file": "assets/audio/tts/four_swallows/line_kicks.wav",
+  "dur": 2.71,
+  "src": [
+   18.38,
+   20.91
+  ]
+ },
+ "saliva": {
+  "file": "assets/audio/tts/four_swallows/line_saliva.wav",
+  "dur": 3.13,
+  "src": [
+   21.84,
+   24.79
+  ]
+ },
+ "nothing": {
+  "file": "assets/audio/tts/four_swallows/line_nothing.wav",
+  "dur": 1.31,
+  "src": [
+   25.21,
+   26.34
+  ]
+ },
+ "harder": {
+  "file": "assets/audio/tts/four_swallows/line_harder.wav",
+  "dur": 2.22,
+  "src": [
+   27.16,
+   29.2
+  ]
+ },
+ "again": {
+  "file": "assets/audio/tts/four_swallows/line_again.wav",
+  "dur": 1.221,
+  "src": [
+   30.04,
+   31.2
+  ]
+ }
+}

@@ -46,3 +46,17 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Short: "Can You Swallow Four Times?" (English adaptation)
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC, 28.7 s) | `output/JUST_NEEDY_FOUR_SWALLOWS_ENGLISH.mp4` |
+| English subtitles | `output/JUST_NEEDY_FOUR_SWALLOWS_ENGLISH.srt` |
+
+```bash
+python -m episodes.four_swallows.make_voice      # one TTS take, split into lines (cached)
+python -m episodes.four_swallows.timing          # print timeline + caption groups
+python -m episodes.four_swallows.episode stills  # QA stills -> build/four_swallows/stills
+python -m episodes.four_swallows.episode video   # mix, SRT, render, mux -> output/
+```
