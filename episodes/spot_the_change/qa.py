@@ -15,19 +15,31 @@ import numpy as np
 from episodes.spot_the_change.script import BLOCKS, plain
 from episodes.spot_the_change.timeline import BUILD, NAME, OUT, ROOT
 
-FINAL = os.path.join(OUT, NAME + ".mp4")
-SRT = os.path.join(OUT, NAME + ".srt")
+REV = "JUST_NEEDY_SPOT_THE_CHANGE_FINAL_REVISED"
+FINAL = os.path.join(OUT, REV + ".mp4")
+SRT = os.path.join(OUT, REV + ".srt")
+VIDEO = os.path.join(BUILD, "video_silent_rev.mp4")
+
+
+def _loudnorm_args(a):
+    """Two-pass linear loudness normalisation (-14 LUFS, -1.5 dBTP ceiling, no dynamic pumping)."""
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-i", a, "-af", "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"],
+                       capture_output=True, text=True).stderr
+    m = json.loads(r[r.rindex("{"):r.rindex("}") + 1])
+    return (f"loudnorm=I=-14:TP=-1.5:LRA=11:linear=true:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
+            f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}")
 
 
 def assemble():
-    v = os.path.join(BUILD, "video_silent.mp4")
     a = os.path.join(BUILD, "soundtrack.wav")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", v, "-i", a, "-map", "0:v", "-map", "1:a",
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", VIDEO, "-i", a, "-map", "0:v", "-map", "1:a",
                     "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-r", "30",
                     "-profile:v", "high", "-movflags", "+faststart",
-                    "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "48000", "-c:a", "aac", "-b:a", "192k",
+                    "-af", _loudnorm_args(a) + ",alimiter=limit=0.84:level=false", "-ar", "48000", "-c:a", "aac", "-b:a", "192k",
                     "-shortest", FINAL], check=True)
-    print("wrote", FINAL)
+    import shutil
+    shutil.copy(os.path.join(OUT, NAME + ".srt"), SRT)
+    print("wrote", FINAL, "and", SRT)
 
 
 def frames(path, t0, t1, fps, w=270, h=480):
@@ -89,9 +101,21 @@ def check():
         q = json.load(open(bc))
         rep("exactly nine gulls, none before 'Go'", q["before"] == 0 and q["end"] == 9 and q["max"] == 9 and q["extra"] == 0,
             f"visible before test {q['before']}, max during test {q['max']}, at end {q['end']}, other birds in test {q['extra']}; entries at {q['entries']}")
+        rep("opening gulls gone before the instruction", q.get("hookGullFramesNearInstruction", 0) == 0,
+            f"last opening gull on screen at {q.get('hookGullsLastOnScreen')} s (instruction starts later)")
         rep("every gull enters within the test", all(0 <= e <= 12 for e in q["entries"]) and all(l <= 12 for l in q["landings"]),
             f"landings at {q['landings']}")
-    # 4) narration matches the approved script
+    # 4) loudness / true peak of the delivered file
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-i", FINAL, "-af", "ebur128=peak=true", "-f", "null", "-"], capture_output=True, text=True).stderr
+    I = float(re.findall(r"I:\s+(-?[\d.]+) LUFS", r)[-1]); TP = float(re.findall(r"Peak:\s+(-?[\d.]+) dBFS", r)[-1])
+    rep("true-peak headroom >= 1 dB", TP <= -1.0, f"integrated {I:.1f} LUFS, true peak {TP:.2f} dBTP")
+    mr = os.path.join(BUILD, "mix_report.json")
+    if os.path.exists(mr):
+        m = json.load(open(mr))
+        rep("ocean ambience -6..-8 dB under narration", -8.5 <= m["water_change_under_narration_db"] <= -5.5, f"{m['water_change_under_narration_db']} dB vs previous mix")
+        rep("ocean ambience -3..-4 dB during the test", -4.5 <= m["water_change_in_test_db"] <= -2.5, f"{m['water_change_in_test_db']} dB vs previous mix")
+        rep("gull calls quieter and never over narration", m["gulls_overlapping_narration"] == 0, f"level {m['gull_level_change_db']} dB; voice-to-ambience {m['voice_to_ambience_before_db']} -> {m['voice_to_ambience_under_narration_db']} dB")
+    # 5) narration matches the approved script
     mp3 = os.path.join(BUILD, "qa_audio.mp3")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", FINAL, "-vn", "-ac", "1", "-b:a", "96k", mp3], check=True)
     try:
@@ -106,7 +130,7 @@ def check():
         print("      transcript:", tr.strip()[:400])
     except Exception as e:  # transcription service unavailable
         print("[SKIP] transcription:", e)
-    # 5) captions off during the test (the overlay never draws there; verify SRT too)
+    # 6) captions off during the test (the overlay never draws there; verify SRT too)
     srt = open(SRT).read()
     times = re.findall(r"(\d\d):(\d\d):(\d\d),(\d\d\d) --> (\d\d):(\d\d):(\d\d),(\d\d\d)", srt)
     inside = [x for x in times if T0 + 0.8 < int(x[0]) * 3600 + int(x[1]) * 60 + int(x[2]) + int(x[3]) / 1000 < T1]

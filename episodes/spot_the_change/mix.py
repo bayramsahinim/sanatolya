@@ -95,18 +95,46 @@ def main():
         t = np.arange(n) / SR
         return np.clip((t - a) / fi + 1, 0, 1) * np.clip((b - t) / fo + 1, 0, 1) * ((t >= a - fi) & (t <= b + fo))
 
-    # ---- harbour ambience (constant through hook/test/reveal, science, ending)
+    # ---- narration gate: 1 while the narrator speaks, smooth ramps, short gaps bridged (no pumping)
+    t_ax = np.arange(n) / SR
+    spans = sorted((d["t0"] - 0.25, d["t1"] + 0.35) for d in L.values())
+    merged = []
+    for a0, a1 in spans:
+        if merged and a0 - merged[-1][1] < 0.9:
+            merged[-1][1] = max(merged[-1][1], a1)
+        else:
+            merged.append([a0, a1])
+    gate = np.zeros(n)
+    for a0, a1 in merged:
+        gate[max(0, int(a0 * SR)):min(n, int(a1 * SR))] = 1.0
+    k = int(0.35 * SR)
+    ker = np.ones(k) / k
+    gate = np.convolve(np.convolve(gate, ker, "same"), ker, "same")   # ~0.7 s S-curve ramps
+
+    # ---- harbour ambience
+    NARR_DUCK_DB, TEST_DB, GULL_DB = -7.0, -3.5, -4.0
     wa = water_amb(dur)
-    harbour = env_between(0, ba, 0.01, 0.3) + env_between(sci, ex1, 0.3, 0.25) * 0.6 + env_between(end, dur, 0.25, 0.01)
-    amb += wa * np.clip(harbour, 0, 1) * 0.30
-    # distant gulls: fixed, sparse, unrelated to the hull animation
+    harbour = np.clip(env_between(0, ba, 0.01, 0.3) + env_between(sci, ex1, 0.3, 0.25) * 0.6 + env_between(end, dur, 0.25, 0.01), 0, 1)
+    test_env = env_between(T0, T1, 0.6, 0.6)
+    narr_gain = 1 - gate * (1 - 10 ** (NARR_DUCK_DB / 20))
+    test_gain = 1 - np.clip(test_env, 0, 1) * (1 - 10 ** (TEST_DB / 20))
+    water_old = wa * harbour * 0.30
+    water_new = water_old * narr_gain * test_gain
+    # distant gulls: fixed, sparse, unrelated to the hull animation; now only between narration lines
     rng = np.random.default_rng(77)
+    gulls_old, gulls_new = np.zeros(n), np.zeros(n)
     tg = 0.8
     while tg < dur:
         in_h = tg < ba or (end < tg)
         if in_h:
-            place(amb, gull_call(int(tg * 100), dist=0.75 + 0.25 * rng.random()), tg, 0.04 + 0.02 * rng.random())
+            call = gull_call(int(tg * 100), dist=0.75 + 0.25 * rng.random())
+            gain = 0.04 + 0.02 * rng.random()
+            place(gulls_old, call, tg, gain)
+            seg = gate[int(tg * SR):int((tg + 1.6) * SR)]
+            if seg.size and seg.max() < 0.05:
+                place(gulls_new, call, tg, gain * 10 ** (GULL_DB / 20))
         tg += 2.6 + rng.random() * 2.8
+    amb += water_new + gulls_new
     # interior beds for the example sets
     room = A.amb_loop("room")
     rt = np.tile(room, n // len(room) + 1)[:n]
@@ -131,27 +159,41 @@ def main():
     # ---- SFX
     for t in (sci, ex1, ex2, ex3, end, ba, replay):
         place(sfx, A.lp(A.sfx_whoosh(), 2500), t - 0.12, 0.15 if t == replay else 0.2)
-    r0, r1 = L["r1"]["t0"] + 0.55, L["r2"]["t1"] + 0.05
+    r0, r1 = L["r1"]["t0"] + 0.35, L["r2"]["t0"] + 0.12
     for i in range(9):
         place(sfx, A.sfx_pop(), r0 + (r1 - r0) * i / 8, 0.16)
-    place(sfx, A.sfx_flashlight(), sci + 1.0, 0.3)
+    place(sfx, A.sfx_flashlight(), L["s2"]["t0"] - 0.05, 0.22)
+    place(sfx, A.lp(A.sfx_flap(), 3000), 1.25, 0.05)          # opening flyby, very soft
     place(sfx, A.sfx_flashlight(), L["e3"]["t0"], 0.18)
     place(sfx, A.fade(A.lp(A.sfx_rewind(), 3500), 0.04, 0.1), L["n3"]["t0"] + 0.02, 0.15)
     place(sfx, A.sfx_ding(), L["n2"]["t0"] + 0.05, 0.12)
     for k in range(4):     # calendar page flips
         place(sfx, A.sfx_swish(), ex1 + 0.4 + k * 0.62, 0.08)
 
-    mix = voice * 1.0 + amb + music * 0.22 + sfx
-    mix = np.tanh(mix * 1.1) / 1.1
+    mix = voice * 1.0 + amb + music * 0.22 + sfx           # linear: no clipper; peak control at the master stage
     fo = int(0.25 * SR)
     mix[-fo:] *= np.linspace(1, 0, fo)
+    mix *= 10 ** (-3 / 20) / (np.max(np.abs(mix)) + 1e-9)    # -3 dBFS sample peak before loudness normalisation
     out = os.path.join(BUILD, "soundtrack.wav")
     sf.write(out, np.stack([mix, mix], 1).astype(np.float32), SR, subtype="FLOAT")
-    # quick report
-    def lvl(a, b):
-        s = mix[int(a * SR):int(b * SR)]
-        return 20 * np.log10(np.sqrt(np.mean(s ** 2)) + 1e-9)
-    print(f"wrote {out}  {len(mix) / SR:.2f}s  test-window RMS {lvl(T0, T1):.1f} dB  narration RMS {lvl(L['s2']['t0'], L['s2']['t1']):.1f} dB")
+
+    def db(x, mask):
+        return 20 * np.log10(np.sqrt(np.mean(x[mask] ** 2)) + 1e-12)
+    harb = harbour > 0.99
+    narr_m = (gate > 0.95) & harb & ~((t_ax > T0) & (t_ax < T1))
+    test_m = (t_ax > T0 + 0.7) & (t_ax < T1 - 0.7)
+    rep = {
+        "water_change_under_narration_db": round(db(water_new, narr_m) - db(water_old, narr_m), 2),
+        "water_change_in_test_db": round(db(water_new, test_m) - db(water_old, test_m), 2),
+        "gull_calls_old": int(np.sum(np.diff((np.abs(gulls_old) > 1e-4).astype(int)) == 1)),
+        "gull_level_change_db": round(db(gulls_new, np.abs(gulls_new) > 1e-6) - db(gulls_old, np.abs(gulls_old) > 1e-6), 2) if np.any(gulls_new) else None,
+        "gulls_overlapping_narration": int(np.sum((np.abs(gulls_new) > 1e-4) & (gate > 0.05))),
+        "voice_to_ambience_under_narration_db": round(db(voice, narr_m) - db(amb, narr_m), 2),
+        "voice_to_ambience_before_db": round(db(voice, narr_m) - db(water_old + gulls_old, narr_m), 2),
+    }
+    json.dump(rep, open(os.path.join(BUILD, "mix_report.json"), "w"), indent=1)
+    print(f"wrote {out}  {len(mix) / SR:.2f}s")
+    print(json.dumps(rep, indent=1))
 
 
 if __name__ == "__main__":

@@ -33,8 +33,8 @@ const cam = new THREE.PerspectiveCamera(50, W / H, 0.05, 6000);
 // ------------------------------------------------------------------ key times
 const K = {
   hookEnd: T0,
-  revealNums: [Ln.r1.t0 + 0.55, Ln.r2.t1 + 0.05],
-  numsOut: Ln.r3.t0 + 0.25,
+  revealNums: [Ln.r1.t0 + 0.35, Ln.r2.t0 + 0.12],   // badge 9 lands as "Nine?" is spoken
+  numsOut: Ln.r3.t0 + 0.3,
   pushStart: Ln.r3.t0 + 0.45, pushEnd: Ln.r4.t0 + 0.55,
   ba: Ln.p1.t0 - 0.05,
   replay: Ln.p2.t0 + 0.2,
@@ -49,7 +49,7 @@ const K = {
   dur: TL.duration,
 };
 const REPLAY_SPEED = 3;
-const HOOK_START = { pos: [-0.9, 5.6, 11.0], look: [0.6, -1.4, -92], fov: 52 };
+const HOOK_START = { pos: [-1.5, 3.3, 23.0], look: [1.2, 1.2, -92], fov: 44 };
 
 // ------------------------------------------------------------------ camera helpers
 function setCam(pos, look, fov, aspect = W / H, roll = 0) {
@@ -167,11 +167,34 @@ function harborFrame(t, tt, camSpec, { hull = null, hideBirds = false, vp = null
 const LOCK = [LOCK_CAM.pos, LOCK_CAM.look, LOCK_CAM.fov];
 
 // ------------------------------------------------------------------ shots
+// opening gulls: one close flyby + two distant gliders. All are off-screen by HOOK_GULLS_OUT,
+// i.e. before the narrator says "Count every seagull", so they never mix with the nine counted birds.
+const HOOK_GULLS_OUT = 4.1;
+const HOOK_FLIGHTS = [
+  { t0: 0.35, t1: 2.75, a: [8.5, 7.4, 6.5], m: [0.5, 6.4, 7.6], b: [-9.5, 7.2, 8.5], flap: 3.4 },
+  { t0: 0.0, t1: 3.9, a: [-26, 21, -48], m: [-2, 24, -52], b: [24, 22.5, -56], flap: 2.6 },
+  { t0: 0.0, t1: 3.9, a: [-30, 17, -60], m: [-6, 19.5, -63], b: [21, 18.5, -66], flap: 2.8 },
+];
+function hookGulls(t) {
+  HOOK_FLIGHTS.forEach((f, i) => {
+    const gl = harbor.demo[i];
+    const u = prog(t, f.t0, f.t1);
+    gl.group.visible = t >= f.t0 && t <= f.t1;
+    if (!gl.group.visible) return;
+    const P = (u) => { const A = new THREE.Vector3(...f.a), M = new THREE.Vector3(...f.m), B = new THREE.Vector3(...f.b);
+      return A.multiplyScalar((1 - u) * (1 - u)).add(M.multiplyScalar(2 * u * (1 - u))).add(B.multiplyScalar(u * u)); };
+    gl.group.position.copy(P(u)); gl.group.lookAt(P(Math.min(1, u + 0.02)).add(new THREE.Vector3(0, 0, 0.0001)));
+    const glide = i === 0 ? smooth(prog(u, 0.35, 0.6)) * (1 - smooth(prog(u, 0.7, 0.9))) : 0.5 + 0.5 * Math.sin(t * 1.3 + i);
+    gl.fly(2 * Math.PI * f.flap * t + i * 1.7, lerp(0.8, 0.15, glide), { bank: i === 0 ? 0.25 : -0.1 });
+  });
+}
 function shotHook(t) {
   const x = easeIO(prog(t, 0, T0 - 0.5));
   const c = camLerp(HOOK_START, LOCK_CAM, x);
   harbor.setDim(1);
+  hookGulls(t);
   harborFrame(t, 0, c);
+  for (const gl of harbor.demo) gl.group.visible = false;
   g.clearRect(0, 0, W, H); vignette();
   const a = Math.min(win(t, Ln.t1.t0 - 0.1, Ln.t1.t0 + 0.25), 1 - win(t, T0 - 0.45, T0 - 0.1));
   pill('COUNT THE SEAGULLS', W / 2, 230, 44, { alpha: a });
@@ -191,19 +214,36 @@ function shotReveal(t) {
   harbor.setDim(1);
   harborFrame(t, tt, c);
   g.clearRect(0, 0, W, H); vignette();
-  // number the nine gulls in the order they arrived
+  // number the nine gulls in the order they arrived (drawn after captions so nothing can hide a badge)
   const [n0, n1] = K.revealNums;
   const out = 1 - smooth(prog(t, K.numsOut, K.numsOut + 0.3));
+  const marks = [];
   for (let i = 0; i < 9; i++) {
     const ti = n0 + (n1 - n0) * i / 8;
     if (t < ti) continue;
     const b = harbor.birds[i].group;
-    const [sx, sy] = project(b.position.clone().add(new THREE.Vector3(0, 0.25, 0)));
-    const off = i === 2 ? [-46, -70] : i === 6 ? [46, -84] : harbor.plans[i].perch === 'water' ? [0, -78] : [0, -84];
+    const [sx, sy] = project(b.position.clone().add(new THREE.Vector3(0, harbor.plans[i].perch === 'water' ? 0.05 : -0.05, 0)));
     const k = prog(t, ti, ti + 0.22);
-    numberBadge(i + 1, sx + off[0], sy + off[1], Math.min(1, k * 2) * out, 0.6 + 0.4 * backOut(k));
+    marks.push({ n: i + 1, sx, sy, off: BADGE_OFF[i], a: Math.min(1, k * 2) * out, s: 0.6 + 0.4 * backOut(k), ring: 34 + 10 * (1 - easeOut(k)) });
   }
+  POST = () => {
+    for (const m of marks) {
+      const bx = m.sx + m.off[0], by = m.sy + m.off[1];
+      g.save(); g.globalAlpha = m.a;
+      g.lineWidth = 9; g.strokeStyle = 'rgba(15,15,18,0.75)';
+      const d = Math.hypot(m.off[0], m.off[1]), ux = m.off[0] / d, uy = m.off[1] / d;
+      g.beginPath(); g.arc(m.sx, m.sy, m.ring, 0, Math.PI * 2); g.moveTo(m.sx + ux * m.ring, m.sy + uy * m.ring); g.lineTo(bx - ux * 30, by - uy * 30); g.stroke();
+      g.lineWidth = 4.5; g.strokeStyle = '#ffffff';
+      g.beginPath(); g.arc(m.sx, m.sy, m.ring, 0, Math.PI * 2); g.moveTo(m.sx + ux * m.ring, m.sy + uy * m.ring); g.lineTo(bx - ux * 30, by - uy * 30); g.stroke();
+      g.restore();
+      numberBadge(m.n, bx, by, m.a, m.s);
+    }
+  };
 }
+// badge offsets (px) per gull: chosen so each badge sits in open space next to its own bird,
+// away from the ferry hull and from the caption line (gull 9 floats just below the captions -> badge below it)
+const BADGE_OFF = [[-92, -40], [96, -36], [-96, -60], [-92, 40], [92, -64], [0, -96], [84, -88], [104, 18], [0, 110]];
+let POST = null;
 
 function panelBG(rects, a = 1) {
   g.save();
@@ -272,8 +312,8 @@ function demoBirds(t) {
   const out = [];
   harbor.demo.forEach((gl, i) => {
     const ph = t * (0.52 + i * 0.07) + i * 2.1;
-    const cx = [-1.5, 3.5, -5][i], cz = [-30, -40, -46][i], cy = [12.5, 15.5, 17][i];
-    const rx = [5.5, 6.5, 5][i], rz = [3, 4, 3][i];
+    const cx = [-0.5, 3.5, -5][i], cz = [-30, -40, -46][i], cy = [12.5, 15.5, 17][i];
+    const rx = [4.0, 6.5, 5][i], rz = [3, 4, 3][i];
     const p = new THREE.Vector3(cx + Math.cos(ph) * rx, cy + Math.sin(ph * 2) * 0.6, cz + Math.sin(ph) * rz);
     const q = new THREE.Vector3(cx + Math.cos(ph + 0.05) * rx, cy + Math.sin((ph + 0.05) * 2) * 0.6, cz + Math.sin(ph + 0.05) * rz);
     gl.group.visible = true; gl.group.position.copy(p); gl.group.lookAt(q);
@@ -284,18 +324,34 @@ function demoBirds(t) {
   return out;
 }
 
+// screen box of the painted hull band
+function hullBox() {
+  const ship = harbor.ship; ship.updateMatrixWorld();
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  for (const [x, y, z] of [[-19.6, 0.6, 4.8], [19.5, 0.6, 1.0], [-19.6, 5.2, 4.8], [19.9, 5.4, 1.0], [0, 0.6, 4.9], [0, 4.6, 4.9]]) {
+    const [sx, sy] = project(ship.localToWorld(new THREE.Vector3(x, y, z)));
+    x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
+  }
+  return [x0 - 14, y0 - 12, x1 - x0 + 28, y1 - y0 + 24];
+}
+
 function shotScience(t) {
+  const wLocked = wordT('s2', 'locked'), wSlow = wordT('s2', 'slow'), wSlip = wordT('s2', 'slip'), wPast = wordT('s2', 'past');
   const dim = 1 - 0.55 * smooth(prog(t, K.sci + 0.6, K.sci + 1.4));
   harbor.setDim(dim);
-  const x = easeIO(prog(t, K.sci, K.ex1));
   const w = whip(t, K.sci);
-  const a = { pos: [2.0, 4.2, 6], look: [0.0, 2.0, -92], fov: 50 }, b = { pos: [1.2, 4.6, -2], look: [0.0, 2.2, -92], fov: 50 };
-  const c = camLerp(a, b, x);
+  // three purposeful camera beats: establish -> settle on the birds -> ease back toward the ferry
+  const A = { pos: [2.0, 4.2, 6], look: [0.0, 2.0, -92], fov: 50 };
+  const B = { pos: [1.0, 4.4, 0], look: [0.0, 3.4, -92], fov: 48 };
+  const C = { pos: [0.6, 5.0, -5], look: [0.0, 1.6, -92], fov: 48 };
+  const c = t < wSlow - 0.4 ? camLerp(A, B, easeIO(prog(t, K.sci, wSlow - 0.4))) : camLerp(B, C, easeIO(prog(t, wSlow - 0.4, K.ex1)));
   c[0][0] += w.dx; c.push(w.roll);
-  // hull: red again, then a slow change while attention is on the birds
-  const hm = smooth(prog(t, Ln.s2.t0 - 0.2, Ln.s2.t1 - 0.1)) * 0.5 + prog(t, Ln.s2.t0 - 0.2, Ln.s2.t1 - 0.1) * 0.5;
+  // hull: red again, then a slow change *while* the light stays on the birds ("slow changes elsewhere")
+  const h0 = wSlow - 0.9, h1 = wPast;
+  const hm = smooth(prog(t, h0, h1)) * 0.5 + prog(t, h0, h1) * 0.5;
   harbor.update(t);
   harbor.setTest(0, t);
+  harbor.hideBirds();
   harbor.setHull(hm);
   const birds = demoBirds(t);
   setCam(c[0], c[1], c[2], W / H, c[3]);
@@ -306,13 +362,18 @@ function shotScience(t) {
   const ta = Math.min(win(t, K.sci + 0.05, K.sci + 0.35), 1 - win(t, Ln.s2.t0 - 0.1, Ln.s2.t0 + 0.3));
   textOutlined('GRADUAL', W / 2, 250, 92, { alpha: ta, scale: 0.94 + 0.06 * ta });
   textOutlined('CHANGE BLINDNESS', W / 2, 352, 80, { alpha: ta, scale: 0.94 + 0.06 * ta, fill: '#ffd166' });
-  // attention spotlight (metaphor)
-  const sa = smooth(prog(t, K.sci + 1.0, K.sci + 1.6));
+  // attention spotlight (metaphor): sweeps in on "When your attention", locks on "locked"
+  const on = Ln.s2.t0 - 0.05;
+  const sa = smooth(prog(t, on, on + 0.35));
   if (sa > 0) {
     const [bx, by] = project(birds[0]);
-    const sx = bx, sy = by, R = 165;
+    const sweep = easeIO(prog(t, on, wLocked - 0.1));
+    const start = [W * 0.82, 420];
+    let sx = lerp(start[0], bx, sweep), sy = lerp(start[1], by, sweep);
+    const iris = easeIO(prog(t, K.ex1 - 0.42, K.ex1));
+    let R = lerp(lerp(230, 165, smooth(prog(t, wLocked - 0.2, wLocked + 0.25))), 1500, iris);
     g.save();
-    g.globalAlpha = sa;
+    g.globalAlpha = sa * (1 - iris * 0.7);
     g.fillStyle = 'rgba(4,8,16,0.55)'; g.fillRect(0, 0, W, H);
     g.globalCompositeOperation = 'destination-out';
     const hole = g.createRadialGradient(sx, sy, R * 0.55, sx, sy, R);
@@ -327,11 +388,22 @@ function shotScience(t) {
     const ang = Math.atan2(sy - fy, sx - fx), perp = ang + Math.PI / 2;
     const beam = g.createLinearGradient(fx, fy, sx, sy);
     beam.addColorStop(0, 'rgba(255,236,190,0.30)'); beam.addColorStop(1, 'rgba(255,236,190,0.05)');
+    g.globalAlpha = sa * (1 - iris);
     g.fillStyle = beam; g.beginPath();
-    g.moveTo(fx + Math.cos(perp) * 22, fy + Math.sin(perp) * 22); g.lineTo(sx + Math.cos(perp) * R * 0.8, sy + Math.sin(perp) * R * 0.8);
-    g.lineTo(sx - Math.cos(perp) * R * 0.8, sy - Math.sin(perp) * R * 0.8); g.lineTo(fx - Math.cos(perp) * 22, fy - Math.sin(perp) * 22); g.closePath(); g.fill();
+    g.moveTo(fx + Math.cos(perp) * 22, fy + Math.sin(perp) * 22); g.lineTo(sx + Math.cos(perp) * Math.min(R, 200) * 0.8, sy + Math.sin(perp) * Math.min(R, 200) * 0.8);
+    g.lineTo(sx - Math.cos(perp) * Math.min(R, 200) * 0.8, sy - Math.sin(perp) * Math.min(R, 200) * 0.8); g.lineTo(fx - Math.cos(perp) * 22, fy - Math.sin(perp) * 22); g.closePath(); g.fill();
     g.globalCompositeOperation = 'source-over';
+    // lock-on brackets around the bird
+    const lk = smooth(prog(t, wLocked - 0.05, wLocked + 0.3)) * (1 - iris);
+    if (lk > 0) {
+      const r = lerp(120, 62, easeOut(prog(t, wLocked - 0.05, wLocked + 0.3)));
+      g.globalAlpha = lk; g.strokeStyle = '#ffd166'; g.lineWidth = 6; g.lineCap = 'round';
+      for (const [dx, dy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+        g.beginPath(); g.moveTo(sx + dx * r, sy + dy * (r - 26)); g.lineTo(sx + dx * r, sy + dy * r); g.lineTo(sx + dx * (r - 26), sy + dy * r); g.stroke();
+      }
+    }
     // flashlight
+    g.globalAlpha = sa * (1 - iris);
     g.translate(fx, fy); g.rotate(ang + Math.PI / 2);
     const body = g.createLinearGradient(-26, 0, 26, 0); body.addColorStop(0, '#5b636b'); body.addColorStop(0.5, '#c8d0d6'); body.addColorStop(1, '#4a5157');
     g.fillStyle = body; g.strokeStyle = '#0f0f12'; g.lineWidth = 5;
@@ -340,8 +412,17 @@ function shotScience(t) {
     g.fillStyle = '#fff6da'; g.fillRect(-30, -26, 60, 8);
     g.fillStyle = '#e0533d'; rrect(g, -8, 50, 16, 26, 4); g.fill();
     g.restore();
-    pill('ATTENTION', fx - 330, 1700, 36, { alpha: sa, bg: 'rgba(255,209,102,0.95)', fg: '#16130d' });
-    textOutlined('(a simplified metaphor)', fx - 330, 1772, 30, { alpha: sa * 0.95, sw: 0.12 });
+    // the ferry, outside the light: a faint dashed outline while it changes, fading as the change "slips past"
+    const ha = smooth(prog(t, wSlow - 0.15, wSlow + 0.3)) * (1 - smooth(prog(t, wPast - 0.1, wPast + 0.45))) * (1 - iris);
+    if (ha > 0) {
+      const [hx, hy, hw, hh] = hullBox();
+      g.save(); g.globalAlpha = ha * 0.85; g.setLineDash([18, 14]); g.lineDashOffset = -t * 40; g.lineWidth = 4; g.strokeStyle = '#cfd8e3';
+      rrect(g, hx, hy, hw, hh, 16); g.stroke(); g.restore();
+      pill('OUTSIDE THE SPOTLIGHT', hx + hw / 2, hy + hh + 46, 28, { alpha: ha * 0.9, bg: 'rgba(12,16,22,0.7)', fg: '#cfd8e3' });
+    }
+    const la = sa * (1 - iris);
+    pill('ATTENTION', fx - 330, 1700, 36, { alpha: la, bg: 'rgba(255,209,102,0.95)', fg: '#16130d' });
+    textOutlined('(a simplified metaphor)', fx - 330, 1772, 30, { alpha: la * 0.95, sw: 0.12 });
   }
 }
 
@@ -429,8 +510,10 @@ const SHOTS = [
 
 window.renderFrame = (t) => {
   renderer.setClearColor('#000000');
+  POST = null;
   for (const [a, b, fn] of SHOTS) if (t >= a && t < b) { fn(t); break; }
   captions(t);
+  if (POST) POST();
 };
 window.DURATION = TL.duration;
 window.SHOTS = SHOTS.map(([a, b, f]) => [a, b, f.name]);
@@ -440,11 +523,22 @@ window.qaBirds = () => {
   const vis = () => harbor.birds.filter((b) => b.group.visible).length;
   const extra = () => harbor.demo.filter((b) => b.group.visible).length;
   let before = 0, mx = 0, ex = 0;
-  for (let t = 0; t < T0; t += 1 / 30) { harbor.setTest(0, t); before = Math.max(before, vis()); }
+  let hookOnScreenAfter = 0, hookLast = 0;
+  for (let t = 0; t < T0; t += 1 / 30) {
+    harbor.setTest(0, t); before = Math.max(before, vis());
+    hookGulls(t);
+    const x = easeIO(prog(t, 0, T0 - 0.5)); const c = camLerp(HOOK_START, LOCK_CAM, x); setCam(c[0], c[1], c[2]);
+    for (const gl of harbor.demo) {
+      if (!gl.group.visible) continue;
+      const [sx, sy, sz] = project(gl.group.position);
+      if (sx > -60 && sx < W + 60 && sy > -60 && sy < H + 60 && sz < 1) { hookLast = t; if (t >= Ln.t1.t0 - 0.3) hookOnScreenAfter++; }
+    }
+    for (const gl of harbor.demo) gl.group.visible = false;
+  }
   window.renderFrame(T0 + 1); ex = extra();
   for (let tt = 0; tt <= TEST_LEN; tt += 1 / 30) { harbor.setTest(tt, T0 + tt); mx = Math.max(mx, vis()); }
   harbor.setTest(TEST_LEN, T1); const end = vis();
-  return { before, max: mx, end, extra: ex, entries: harbor.plans.map((p) => p.te), landings: harbor.plans.map((p) => +(p.te + p.dur).toFixed(2)) };
+  return { before, hookGullsLastOnScreen: +hookLast.toFixed(2), hookGullFramesNearInstruction: hookOnScreenAfter, max: mx, end, extra: ex, entries: harbor.plans.map((p) => p.te), landings: harbor.plans.map((p) => +(p.te + p.dur).toFixed(2)) };
 };
 await document.fonts.load(`80px ${FONT}`);
 window.renderFrame(0);
