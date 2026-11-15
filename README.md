@@ -46,3 +46,30 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Short: "What If We Divided Everything on Earth?" (English adaptation)
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, ~58 s, H.264/AAC) | `output/JUST_NEEDY_EVERYTHING_DIVIDED_ENGLISH.mp4` |
+| English subtitles | `output/JUST_NEEDY_EVERYTHING_DIVIDED_ENGLISH.srt` |
+| Production note (transcript, translation, number checks) | `output/JUST_NEEDY_EVERYTHING_DIVIDED_ENGLISH_PRODUCTION_NOTE.md` |
+
+```
+episodes/everything_divided/
+  script.py        narration lines + 1-3 word caption groups
+  make_voice.py    TTS take (cached in assets/audio/tts_everything)
+  voice.py         word alignment (cinecode/wordalign.py) + pause tightening -> timing.json
+  earth.py, art_*.py   Earth texture, cake + knife, island world, galaxy
+  scene_*.py       cake / island (land, trees, birds, gold, ants) / space + recap
+  render.py        compositor, captions, rewind outro
+  episode.py       sound design, mix, SRT, parallel render + mux
+  qa.py            delivery checks (format, loudness, voice margin, caption-sync spot check)
+```
+
+```bash
+python -m episodes.everything_divided.voice
+python -m episodes.everything_divided.episode audio
+python -m episodes.everything_divided.episode video
+python -m episodes.everything_divided.qa output/JUST_NEEDY_EVERYTHING_DIVIDED_ENGLISH.mp4 --sync 16
+```
