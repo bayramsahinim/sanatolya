@@ -46,3 +46,22 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Short: "Check Your Lungs" (vertical, 1080×1920, 30 fps, 52 s)
+
+| Deliverable | Path |
+|---|---|
+| Final video (H.264/AAC, −14 LUFS) | `output/JUST_NEEDY_CHECK_YOUR_LUNGS_FINAL.mp4` |
+| English subtitles | `output/JUST_NEEDY_CHECK_YOUR_LUNGS_FINAL.srt` |
+
+Faithful adaptation of the breathing-challenge format: a single fixed shot with a vertical track, four
+checkpoints, four lung illustrations and an emoji indicator. 0–8 s breathe-in sweep, rise back to the
+top, then 9.6–48.6 s one continuous constant-speed hold descent. Entertainment only: the lungs are
+progression markers, not diagnostic categories, and a safety note is shown at the start.
+
+```bash
+python -m episodes.check_your_lungs.make_voice      # one narrator take (cached)
+python -m episodes.check_your_lungs.short audio     # voice split, music, sfx, mix, SRT
+python -m episodes.check_your_lungs.short video     # render + mux
+python -m episodes.check_your_lungs.short still 30  # preview frame
+```
