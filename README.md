@@ -56,6 +56,7 @@ with original art, voice and score.
 |---|---|
 | Final video (1080×1920, 30 fps, 68 s, H.264/AAC, −14 LUFS) | `output/JUST_NEEDY_JAPAN_DISAPPEARANCE_ENGLISH.mp4` |
 | English subtitles | `output/JUST_NEEDY_JAPAN_DISAPPEARANCE_ENGLISH.srt` |
+| Revised-hook final (new 0:00–0:03.34, rest unchanged) | `output/JUST_NEEDY_JAPAN_DISAPPEARANCE_HOOK_FINAL.mp4` |
 
 ```
 episodes/japan_johatsu/
@@ -67,6 +68,8 @@ episodes/japan_johatsu/
   shots.py      26 shots keyed to the narration
   render.py     frames + bloom + captions -> silent video
   mix.py        procedural score, ambience, SFX, voice mix; SRT
+  hook.py       revised opening: counting yen -> gloved hand takes it -> he leaves, door shuts -> empty room
+  hook_splice.py splices the new opening into the approved export (video frames 0-100, audio delta only)
 ```
 
 ```bash

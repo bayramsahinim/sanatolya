@@ -1253,8 +1253,10 @@ def shot_end(cx, t, d, T):
         cx.fill()
 
 
+from episodes.japan_johatsu.hook import HOOK_SHOTS  # noqa: E402
+
 SHOTS = [
-    (0.00, 3.34, shot_hook, 0),
+    *HOOK_SHOTS,  # 0.00-3.34 (revised opening; shot_hook above is the original)
     (3.34, 6.86, shot_neon, 0),
     (6.86, 7.93, shot_lostjob, 0),
     (7.93, 9.26, shot_debt, 0),

@@ -159,12 +159,39 @@ def tone(f, d, amp=0.2, att=0.005, rel=0.1, kind="sine"):
     return A.fade(x * amp, att, rel)
 
 
+def hook_sfx(add):
+    """Revised opening (0-3.34 s): counting notes -> payment -> footsteps, door latch."""
+    from episodes.japan_johatsu.hook import CARRY, FLICKS
+    for k, f in enumerate(FLICKS):
+        snap = noise_burst(0.06, 2500, 9000, 0.010, 400 + k) + noise_burst(0.06, 700, 2500, 0.006, 410 + k) * 0.6
+        add(snap, max(0.0, f + 0.01), -20)                      # note peeled off the stack
+        add(A.lp(A.noise(0.08, 420 + k), 1800) * A.exp_env(int(0.08 * SR), 0.015), f + CARRY, -27)  # lands
+    d = 0.42
+    sl = A.bp(A.noise(d, 430), 1200, 5000) * np.sin(np.linspace(0, np.pi, int(d * SR))) ** 1.5
+    add(sl * 0.5, 0.82, -19)                                    # stack slid across the wood
+    add(A.bp(A.noise(0.12, 431), 300, 1400) * A.exp_env(int(0.12 * SR), 0.04), 1.42, -22)   # glove grabs
+    add(A.sfx_whoosh(0.3, 400, 1800), 1.47, -30)
+    for k, (tt, g) in enumerate(((1.76, -24), (1.97, -25), (2.19, -27), (2.42, -29), (2.64, -31))):
+        add(A.sfx_step(k + 20), tt, g)                          # quiet footsteps
+    add(A.bp(A.noise(0.25, 432), 150, 700) * np.sin(np.linspace(0, np.pi, int(0.25 * SR))), 2.22, -30)
+    add(A.sfx_click(), 2.46, -15)                               # latch
+    add(A.sfx_thud(95, 0.25), 2.46, -21)
+
+
+AMB_DIP = (2.46, 2.95, -7.0)  # brief drop in ambience after the door shuts
+
+
+def amb_dip():
+    t = np.arange(N) / SR
+    a, b, g = AMB_DIP
+    k = np.clip(np.minimum((t - a) / 0.05, (b - t) / 0.25), 0, 1)
+    return 1 - (1 - db(g)) * k
+
+
 def sfx_bed():
     fx = np.zeros(N + SR * 4)
     add = lambda x, t, g=0.0: A.add(fx, x * db(g), t)
-    # hook: vanish
-    add(A.sfx_whoosh(0.7, 200, 3000), 2.05, -16)
-    add(A.lp(A.noise(0.8, 5), 1200) * np.sin(np.linspace(0, np.pi, int(0.8 * SR))) ** 2, 2.15, -20)
+    hook_sfx(add)
     # neon flicker + card
     for k, tt in enumerate((3.4, 3.48, 3.62)):
         add(noise_burst(0.05, 1500, 6000, 0.01, 40 + k), tt, -26)
@@ -277,17 +304,20 @@ def voice():
     return out
 
 
-def mix(out_wav):
+def stems_st(sfx_fn=None, dip=True):
+    """Stereo mix before the final peak normalisation (shared by mix() and the hook splice)."""
     v = voice()
     mus = score()
     amb = amb_bed()
-    fx = sfx_bed()
+    fx = (sfx_fn or sfx_bed)()
     # duck music under the voice
     venv = A.envelope_follow(v, 0.05, 0.6)
     duck = 1 - 0.45 * np.clip(venv / (np.percentile(venv, 90) + 1e-9), 0, 1)
     v = v / (np.percentile(np.abs(v), 99.5) + 1e-9) * 0.62
     mus = mus / (np.percentile(np.abs(mus), 99.5) + 1e-9) * 0.62 * db(-15) * duck
     amb = amb / (np.percentile(np.abs(amb), 99.5) + 1e-9) * db(-27)
+    if dip:
+        amb = amb * amb_dip()
     fx = fx / (np.max(np.abs(fx)) + 1e-9) * db(-11)
     dry = v + mus + amb + fx
     # stereo: music/amb slightly wide, voice centred
@@ -295,7 +325,11 @@ def mix(out_wav):
     wide_r = np.roll(mus + amb, int(0.011 * SR))
     L = v + fx + wide_l
     R = v + fx + wide_r
-    st = np.stack([L, R], 1)
+    return np.stack([L, R], 1)
+
+
+def mix(out_wav):
+    st = stems_st()
     st = st / (np.max(np.abs(st)) + 1e-9) * 0.89
     # tail fade
     t = np.arange(N) / SR
