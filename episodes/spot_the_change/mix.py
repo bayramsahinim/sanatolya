@@ -108,8 +108,12 @@ def main():
     for a0, a1 in merged:
         gate[max(0, int(a0 * SR)):min(n, int(a1 * SR))] = 1.0
     k = int(0.35 * SR)
-    ker = np.ones(k) / k
-    gate = np.convolve(np.convolve(gate, ker, "same"), ker, "same")   # ~0.7 s S-curve ramps
+
+    def boxcar(x):          # centred moving average via cumulative sum (O(n))
+        c = np.concatenate([[0.0], np.cumsum(x)])
+        lo = np.clip(np.arange(len(x)) - k // 2, 0, len(x)); hi = np.clip(lo + k, 0, len(x))
+        return (c[hi] - c[lo]) / k
+    gate = boxcar(boxcar(gate))                                         # ~0.7 s S-curve ramps
 
     # ---- harbour ambience
     NARR_DUCK_DB, TEST_DB, GULL_DB = -7.0, -3.5, -4.0
