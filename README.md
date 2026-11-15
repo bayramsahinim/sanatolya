@@ -46,3 +46,33 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: "Japan's Vanishing People" (vertical short)
+
+English adaptation of a Turkish short about jōhatsu and *yonige-ya* (night movers): same hook, beats and ending,
+with original art, voice and score.
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, 68 s, H.264/AAC, −14 LUFS) | `output/JUST_NEEDY_JAPAN_DISAPPEARANCE_ENGLISH.mp4` |
+| English subtitles | `output/JUST_NEEDY_JAPAN_DISAPPEARANCE_ENGLISH.srt` |
+
+```
+episodes/japan_johatsu/
+  script.py     Turkish source transcript, English lines, factual notes
+  make_voice.py one-take Gemini TTS narration (cached in assets/audio/tts/johatsu)
+  timing.py     pause-cut pieces -> word timings -> 1-3 word caption groups
+  art.py        2.5D kit: shaded round-head rig, glows, contact shadows, camera, grain/vignette
+  sets.py       apartment, alley, street, van, phone, Japan map ...
+  shots.py      26 shots keyed to the narration
+  render.py     frames + bloom + captions -> silent video
+  mix.py        procedural score, ambience, SFX, voice mix; SRT
+```
+
+```bash
+python -m episodes.japan_johatsu.render video build/johatsu_silent.mp4
+python -m episodes.japan_johatsu.mix build/johatsu_mix.wav output/JUST_NEEDY_JAPAN_DISAPPEARANCE_ENGLISH.srt
+ffmpeg -i build/johatsu_silent.mp4 -i build/johatsu_mix.wav -map 0:v -map 1:a -c:v libx264 -preset slow \
+  -crf 23 -tune film -pix_fmt yuv420p -af "loudnorm=I=-14:TP=-1.5:LRA=11" -ar 48000 -c:a aac -b:a 192k \
+  -movflags +faststart -shortest output/JUST_NEEDY_JAPAN_DISAPPEARANCE_ENGLISH.mp4
+```
