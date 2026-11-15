@@ -57,6 +57,50 @@ def water_amb(d, seed=3):
     return A.norm(x, 0.5)
 
 
+def clean_take_edges(a, sr=24000):
+    """Some TTS takes start with a ~10 ms burst and end with a ~160 ms burst of loud noise (RMS ~0.5) that jumps
+    straight out of the noise floor after the speech has finished. Only the outermost segment beyond >=60 ms of
+    noise floor (RMS < 2e-3) is removed, and only if it is short (<=250 ms) and loud. Speech is untouched."""
+    hop = int(0.010 * sr)
+    n = len(a) // hop
+    rms = np.sqrt((a[: n * hop].reshape(n, hop) ** 2).mean(axis=1))
+    zero = rms < 2e-3                                             # noise floor (~3e-4) counts as quiet
+    f = int(0.005 * sr)
+    removed = []
+
+    def runs(mask):
+        out, i = [], 0
+        while i < len(mask):
+            if mask[i]:
+                j = i
+                while j < len(mask) and mask[j]:
+                    j += 1
+                out.append((i, j))
+                i = j
+            else:
+                i += 1
+        return out
+    edge = 50                                                     # outer 0.5 s
+    tail_runs = [r for r in runs(zero) if r[1] - r[0] >= 6 and r[1] >= n - edge]
+    if tail_runs:
+        e = tail_runs[-1][1]
+        seg = rms[e:]
+        if 0 < len(seg) <= 25 and seg.max() > 0.3:
+            a[e * hop:] = 0
+            removed.append(("tail", round(len(seg) * 0.01, 2)))
+    head_runs = [r for r in runs(zero) if r[1] - r[0] >= 6 and r[0] <= edge]
+    if head_runs:
+        s0 = head_runs[0][0]
+        seg = rms[:s0]
+        if 0 < len(seg) <= 25 and seg.max() > 0.1:
+            a[: s0 * hop] = 0
+            removed.append(("head", round(len(seg) * 0.01, 2)))
+    a[:f] *= np.linspace(0, 1, f)
+    a[-f:] *= np.linspace(1, 0, f)
+    clean_take_edges.log = removed
+    return a
+
+
 def main():
     tl = json.load(open(os.path.join(BUILD, "timeline.json")))
     L = tl["lines"]
@@ -72,11 +116,7 @@ def main():
     takes = json.load(open(os.path.join(ROOT, "assets", "audio", "tts", "spot_the_change", "takes.json")))
     for name, st in tl["blocks"].items():
         a = tts.read_wav(os.path.join(ROOT, takes[name])).copy()
-        # some TTS takes carry a ~1 ms full-scale burst at the very first/last samples (encoder artefact):
-        # silence 2 ms at each edge and fade 10 ms. Speech starts/ends well inside, so timing is unchanged.
-        e, f = int(0.002 * 24000), int(0.010 * 24000)
-        a[:e] = 0; a[-e:] = 0
-        a[e:e + f] *= np.linspace(0, 1, f); a[-e - f:-e] *= np.linspace(1, 0, f)
+        a = clean_take_edges(a)
         a = A.resample(a.astype(np.float64), 24000, SR)
         a = A.hp(a, 75)
         # gentle level matching per take (speech RMS)

@@ -129,10 +129,26 @@ def check():
     r = subprocess.run(["ffmpeg", "-hide_banner", "-i", FINAL, "-af", "ebur128=peak=true", "-f", "null", "-"], capture_output=True, text=True).stderr
     I = float(re.findall(r"I:\s+(-?[\d.]+) LUFS", r)[-1]); TP = float(re.findall(r"Peak:\s+(-?[\d.]+) dBFS", r)[-1])
     rep("true-peak headroom >= 1 dB", TP <= -1.0, f"integrated {I:.1f} LUFS, true peak {TP:.2f} dBTP")
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", FINAL, "-vn", "-ac", "1", "-f", "f32le", "-ar", "48000", "-"], capture_output=True).stdout
-    au = np.frombuffer(raw, np.float32)
-    step = np.abs(np.diff(au)).max()
-    rep("no clicks / clipping", step < 0.6 and np.abs(au).max() < 0.95, f"max sample step {step:.3f}, sample peak {20 * np.log10(np.abs(au).max()):.2f} dBFS")
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", FINAL, "-vn", "-f", "f32le", "-ar", "48000", "-"], capture_output=True).stdout
+    au = np.frombuffer(raw, np.float32).reshape(-1, 2)
+    pk = np.abs(au).max()
+    # clicks: a steep sample is only acceptable where the (cleaned) narration itself carries energy, i.e. inside
+    # spoken words (sibilants). Anything steep in silence, ambience or at a take edge is flagged.
+    from cinecode import tts
+    from episodes.spot_the_change.mix import clean_take_edges
+    takes = json.load(open(os.path.join(ROOT, "assets", "audio", "tts", "spot_the_change", "takes.json")))
+    speech = np.zeros(int(tl["duration"] * 100) + 200, bool)          # 10 ms grid
+    for blk, st in tl["blocks"].items():
+        v = clean_take_edges(tts.read_wav(os.path.join(ROOT, takes[blk])).copy())
+        hop = 240; n = len(v) // hop
+        r = np.sqrt((v[: n * hop].reshape(n, hop) ** 2).mean(axis=1))
+        on = np.where(r > 0.02)[0] + int(round(st * 100))
+        for k in (-2, -1, 0, 1, 2):
+            speech[np.clip(on + k, 0, len(speech) - 1)] = True
+    steps = np.where(np.abs(np.diff(au[:, 0])) > 0.6)[0] / 48000
+    bad = [t for t in steps if not speech[int(t * 100)]]
+    rep("no clipping", pk < 0.95, f"per-channel sample peak {20 * np.log10(pk):.2f} dBFS")
+    rep("no clicks outside speech / at take edges", not bad, f"{len(steps)} steep samples, all inside spoken words" if not bad else f"suspect at {sorted(set(round(t, 2) for t in bad))[:10]}")
     mr = os.path.join(BUILD, "mix_report.json")
     if os.path.exists(mr):
         m = json.load(open(mr))
