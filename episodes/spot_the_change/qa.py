@@ -21,21 +21,41 @@ SRT = os.path.join(OUT, REV + ".srt")
 VIDEO = os.path.join(BUILD, "video_silent_rev.mp4")
 
 
-def _loudnorm_args(a):
-    """Two-pass linear loudness normalisation (-14 LUFS, -1.5 dBTP ceiling, no dynamic pumping)."""
-    r = subprocess.run(["ffmpeg", "-hide_banner", "-i", a, "-af", "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"],
-                       capture_output=True, text=True).stderr
-    m = json.loads(r[r.rindex("{"):r.rindex("}") + 1])
-    return (f"loudnorm=I=-14:TP=-1.5:LRA=11:linear=true:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
-            f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}")
+def master(src, dst, target=-14.0, ceiling_dbtp=-2.0):
+    """BS.1770 loudness to `target` LUFS, then a look-ahead limiter on a 4x-oversampled (true-peak) detector."""
+    import pyloudnorm as pyln
+    import soundfile as sf
+    from scipy.ndimage import minimum_filter1d
+    from scipy.signal import resample_poly
+    x, sr = sf.read(src)
+    mono = x.mean(axis=1) if x.ndim > 1 else x
+    gain = 10 ** ((target - pyln.Meter(sr).integrated_loudness(np.stack([mono, mono], 1))) / 20)   # measured as delivered (dual-mono stereo)
+    y = mono * gain
+    ceil = 10 ** (ceiling_dbtp / 20)
+    tp = np.abs(resample_poly(y, 4, 1))[: len(y) * 4].reshape(-1, 4).max(axis=1)      # per-sample true-peak estimate
+    need = np.minimum(1.0, ceil / np.maximum(tp, 1e-9))
+    look = int(0.005 * sr)
+    need = minimum_filter1d(need, size=2 * look + 1)                                      # look-ahead (attack)
+    g = np.empty_like(need); v = 1.0; rel = np.exp(-1 / (0.08 * sr))
+    for i, nv in enumerate(need):                                                        # instant attack, 80 ms release
+        v = nv if nv < v else nv + (v - nv) * rel
+        g[i] = v
+    y = y * g
+    sf.write(dst, np.stack([y, y], 1).astype(np.float32), sr, subtype="FLOAT")
+    gr = 20 * np.log10(g.min())
+    print(f"master: gain {20 * np.log10(gain):+.2f} dB, max limiter reduction {gr:.2f} dB, "
+          f"{np.mean(g < 0.99) * 100:.2f}% of samples limited")
+    return y
 
 
 def assemble():
     a = os.path.join(BUILD, "soundtrack.wav")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", VIDEO, "-i", a, "-map", "0:v", "-map", "1:a",
+    m = os.path.join(BUILD, "soundtrack_master.wav")
+    master(a, m)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", VIDEO, "-i", m, "-map", "0:v", "-map", "1:a",
                     "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-r", "30",
                     "-profile:v", "high", "-movflags", "+faststart",
-                    "-af", _loudnorm_args(a) + ",alimiter=limit=0.84:level=false", "-ar", "48000", "-c:a", "aac", "-b:a", "192k",
+                    "-ar", "48000", "-c:a", "aac", "-b:a", "256k",
                     "-shortest", FINAL], check=True)
     import shutil
     shutil.copy(os.path.join(OUT, NAME + ".srt"), SRT)
@@ -109,6 +129,10 @@ def check():
     r = subprocess.run(["ffmpeg", "-hide_banner", "-i", FINAL, "-af", "ebur128=peak=true", "-f", "null", "-"], capture_output=True, text=True).stderr
     I = float(re.findall(r"I:\s+(-?[\d.]+) LUFS", r)[-1]); TP = float(re.findall(r"Peak:\s+(-?[\d.]+) dBFS", r)[-1])
     rep("true-peak headroom >= 1 dB", TP <= -1.0, f"integrated {I:.1f} LUFS, true peak {TP:.2f} dBTP")
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", FINAL, "-vn", "-ac", "1", "-f", "f32le", "-ar", "48000", "-"], capture_output=True).stdout
+    au = np.frombuffer(raw, np.float32)
+    step = np.abs(np.diff(au)).max()
+    rep("no clicks / clipping", step < 0.6 and np.abs(au).max() < 0.95, f"max sample step {step:.3f}, sample peak {20 * np.log10(np.abs(au).max()):.2f} dBFS")
     mr = os.path.join(BUILD, "mix_report.json")
     if os.path.exists(mr):
         m = json.load(open(mr))

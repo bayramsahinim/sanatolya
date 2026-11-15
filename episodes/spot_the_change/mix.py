@@ -71,7 +71,12 @@ def main():
     # ---- narration (whole block takes keep their natural pauses)
     takes = json.load(open(os.path.join(ROOT, "assets", "audio", "tts", "spot_the_change", "takes.json")))
     for name, st in tl["blocks"].items():
-        a = tts.read_wav(os.path.join(ROOT, takes[name]))
+        a = tts.read_wav(os.path.join(ROOT, takes[name])).copy()
+        # some TTS takes carry a ~1 ms full-scale burst at the very first/last samples (encoder artefact):
+        # silence 2 ms at each edge and fade 10 ms. Speech starts/ends well inside, so timing is unchanged.
+        e, f = int(0.002 * 24000), int(0.010 * 24000)
+        a[:e] = 0; a[-e:] = 0
+        a[e:e + f] *= np.linspace(0, 1, f); a[-e - f:-e] *= np.linspace(1, 0, f)
         a = A.resample(a.astype(np.float64), 24000, SR)
         a = A.hp(a, 75)
         # gentle level matching per take (speech RMS)
