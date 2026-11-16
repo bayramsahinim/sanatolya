@@ -54,11 +54,17 @@ if __name__ == "__main__":
 # ---------------------------------------------------------------- single-take mode
 # The whole script in ONE request (one model, one performance => one consistent voice),
 # later split into lines at the pauses (episodes.count_the_jumps.split_take).
-TAKE_MODELS = ["gemini-2.5-pro-preview-tts", "gemini-2.5-flash-preview-tts"]
-TAKE_STYLE = ("Read the following script aloud exactly as written, adding nothing. Voice: young adult "
-              "American male, natural accent, confident and conversational, slightly playful and curious, "
-              "medium-fast pace, clean pronunciation. Not deep, not booming, not a kids-show voice, no fake "
-              "excitement. Leave a clear pause of about one second between lines.\n\n")
+TAKE_MODELS = ["gemini-2.5-flash-preview-tts", "gemini-2.5-pro-preview-tts"]
+# Revision 2: new narrator. Voice "Umbriel" (easy-going young male), chosen against the
+# "How Mine Salting Worked" reference by measured pace (~210 wpm), low pause ratio and pitch range.
+TAKE_VOICE = "Umbriel"
+TAKE_STYLE = ("Read the following script aloud exactly as written, adding nothing. You are the narrator of a "
+              "witty YouTube Shorts storytelling channel. Voice: young adult American man, natural accent. "
+              "Delivery: effortless and medium-fast (around 210 words per minute), crisp and clear "
+              "pronunciation, natural conversational rhythm like telling a friend a great story, subtle "
+              "curiosity and dry humor, steady energy from first line to last. Flow straight through each "
+              "line with no artificial pauses inside it. Not robotic, not theatrical, no fake excitement, "
+              "not a kids'-show voice. Leave a short half-second beat between lines.\n\n")
 
 
 def take_text():
@@ -66,7 +72,7 @@ def take_text():
 
 
 def take_path(model):
-    return os.path.join(OUT, f"take_{model}_{tts.text_hash(take_text(), CFG['voice'])}.wav")
+    return os.path.join(OUT, f"take_{TAKE_VOICE}_{model}_{tts.text_hash(take_text(), TAKE_VOICE)}.wav")
 
 
 def make_take():
@@ -75,7 +81,7 @@ def make_take():
         if os.path.exists(p):
             return p
         try:
-            a = tts.synth(take_text(), p, model, voice=CFG["voice"], retries=2)
+            a = tts.synth(take_text(), p, model, voice=TAKE_VOICE, retries=2)
             print(f"take: {len(a)/tts.SR:.1f}s ({model})")
             return p
         except RuntimeError as e:

@@ -33,7 +33,7 @@ def split(verify=False):
     os.makedirs(LINES_DIR, exist_ok=True)
     meta = {}
     for (lid, text), (s, e) in zip(LINES, segs):
-        clip = align.trim(a, s, e, pre=0.04, post=0.10)
+        clip = align.trim(a, s, e, pre=0.12, post=0.12)
         tts.write_wav(os.path.join(LINES_DIR, f"{lid}.wav"), clip)
         meta[lid] = {"take": os.path.relpath(f, OUT), "start": round(s, 3), "end": round(e, 3), "text": text}
         if verify:

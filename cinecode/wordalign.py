@@ -41,7 +41,14 @@ def spoken_words(text):
 
 def align_words(audio, sr, text):
     """Return [(word, t0, t1)] in seconds relative to `audio` (already trimmed to speech)."""
-    y = librosa.resample(np.asarray(audio, np.float32), orig_sr=sr, target_sr=SR)
+    y_full = librosa.resample(np.asarray(audio, np.float32), orig_sr=sr, target_sr=SR)
+    # align only the speech: clips may carry silent margins, which would drag the first/last word
+    rms = librosa.feature.rms(y=y_full, frame_length=320, hop_length=HOP)[0]
+    db = 20 * np.log10(rms + 1e-9)
+    on = np.where(db > db.max() - 40)[0]
+    s0, s1 = on[0] * HOP, min(len(y_full), (on[-1] + 2) * HOP)
+    y = y_full[s0:s1]
+    offset = s0 / SR
     words = spoken_words(text)
     with tempfile.TemporaryDirectory() as tmp:
         pieces = [_espeak(re.sub(r"[.,?!]", "", w).replace("-", " "), tmp) for w in words]
@@ -76,7 +83,7 @@ def align_words(audio, sr, text):
         out[k][1] = max(out[k][1], out[k - 1][1] + 0.05)
         out[k - 1][2] = out[k][1]
     out[-1][2] = dur
-    return [tuple(x) for x in out]
+    return [(w, a + offset, b + offset) for w, a, b in out]
 
 
 def group_words(words, max_words=3, max_chars=18):

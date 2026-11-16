@@ -30,10 +30,10 @@ from episodes.count_the_jumps.script import LINES, TEXT
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BUILD = os.path.join(ROOT, "build", "count_the_jumps")
 OUT = os.path.join(ROOT, "output")
-NAME = "JUST_NEEDY_COUNT_THE_JUMPS_FINAL"
+NAME = "JUST_NEEDY_COUNT_THE_JUMPS_REVISED"
 TITLE = "Can You Count the Jumps? | Just Needy"
 W, H, FPS = sc.W, sc.H, 30
-TEMPO = 1.05            # narration playback speed (formant-preserving), keeps the Short ~46 s
+TEMPO = 1.0            # narration playback speed (formant-preserving), keeps the Short ~46 s
 PRE, POST = 0.03, 0.08  # natural margins kept around each take's speech
 CAP_Y = 690             # subtitle centre line (above the jumpers' heads, never over them)
 CAP_SIZE = 76
@@ -52,8 +52,10 @@ def load_clips():
     """lid -> (float32 @48k narration clip, [(word, t0, t1)] relative to clip start). Cached."""
     from cinecode.wordalign import align_words
     os.makedirs(BUILD, exist_ok=True)
-    cache = os.path.join(BUILD, f"clips_{TEMPO}.npz")
-    wcache = os.path.join(BUILD, f"words_{TEMPO}.json")
+    meta = json.load(open(os.path.join(LINES_DIR, "lines.json")))
+    key = tts.text_hash(json.dumps(meta, sort_keys=True), str(TEMPO))   # new take/split -> new cache
+    cache = os.path.join(BUILD, f"clips_{key}.npz")
+    wcache = os.path.join(BUILD, f"words_{key}.json")
     if os.path.exists(cache) and os.path.exists(wcache):
         z = np.load(cache)
         words = json.load(open(wcache))
@@ -76,7 +78,7 @@ class Timeline:
 
     def __init__(self, durs):
         m = {}
-        t = 0.10
+        t = 0.0
         m["hook"] = (t, t + durs["hook"])
         t = m["hook"][1] + 0.10
         m["go"] = (t, t + durs["go"])
@@ -87,31 +89,31 @@ class Timeline:
         m["stop"] = (t, t + durs["stop"])
         t = m["stop"][1] + 0.30
         m["answer"] = (t, t + durs["answer"])
-        self.R0 = m["answer"][1] + 0.30          # rewind
+        self.R0 = m["answer"][1] + 0.70          # rewind
         self.R1 = self.R0 + 0.50                 # replay of the penguin starts
         t = self.R0 + 0.35
         m["penguin"] = (t, t + durs["penguin"])
-        t = max(m["penguin"][1] + 0.25, self.R1 + 1.9)
+        t = max(m["penguin"][1] + 0.25, self.R1 + 2.6)
         self.SKY = t
         m["sky"] = (t, t + durs["sky"])
-        t = m["sky"][1] + 0.20
+        t = m["sky"][1] + 0.35
         self.SWAP = t
         m["swap"] = (t, t + durs["swap"])
-        t = m["swap"][1] + 0.35
+        t = m["swap"][1] + 0.50
         self.SPOT = t
         m["spot"] = (t, t + durs["spot"])
         t = m["spot"][1] + 0.15
         m["name"] = (t, t + durs["name"])
-        t = m["name"][1] + 0.35
+        t = m["name"][1] + 0.55
         self.STUDY = t
         m["study"] = (t, t + durs["study"])
-        t = m["study"][1] + 0.40
+        t = m["study"][1] + 0.80
         self.ASK = t
         m["ask"] = (t, t + durs["ask"])
-        self.END = m["ask"][1] + 0.80
+        self.END = m["ask"][1] + 1.20
         self.m = m
-        # penguin replay: start 2.6 s into its walk (it is crossing behind the jumpers)
-        self.REPLAY_FROM = sc.PENG_T0 + 2.4
+        # penguin replay: from just after it enters until it has crossed the whole lineup
+        self.REPLAY_FROM = sc.PENG_T0 + 0.45
 
     @property
     def duration(self):
@@ -530,7 +532,7 @@ def _replay(cx, t, tl):
     pill(cx, 170, 140, "REPLAY", size=34, rec=True)
     if "penguin" in a:
         px, py = a["penguin"]
-        ring(cx, px - 10, py - 25, 175, 250, t, tl.R1 + 0.1, lw=8)
+        ring(cx, px - 8, py - 10, 140, 205, t, tl.R1 + 0.1, lw=8)
 
 
 def _split(cx, t, tl, left_t, right_t, wipe):
@@ -605,7 +607,7 @@ def _swap(cx, t, tl):
 
 def _spot(cx, t, tl, words):
     lt = t - tl.SPOT
-    st = sc.PENG_T0 + 0.6 + lt                 # the count again, penguin crossing in the dark
+    st = sc.PENG_T0 - 1.0 + lt                 # the count again, penguin crossing in the dark
     sc.draw_background(cx, st)
     a = sc.draw_lineup(cx, st)
     amt = smooth(prog(lt, 0.0, 0.6))
@@ -617,7 +619,7 @@ def _spot(cx, t, tl, words):
         px, py = a["penguin"]
         cx.save()
         cx.set_dash([18, 14], t * 40)
-        ring(cx, px - 10, py - 25, 175, 250, t, word_time(words, "spot", "Whatever"), color=hexc("#B9B2E8"),
+        ring(cx, px - 8, py - 10, 140, 205, t, word_time(words, "spot", "Whatever"), color=hexc("#B9B2E8"),
              lw=5)
         cx.restore()
     # term card
@@ -773,10 +775,10 @@ def mix_audio():
         A.add(fx, sfx_land(i) * 0.45, tb + per * 0.28)
     # --- stop / answer / reveal
     A.add(fx, A.get_sfx("whoosh") * 0.25, tl.m["stop"][0] - 0.05)
-    A.add(fx, A.get_sfx("ding") * 0.55, tl.m["answer"][0])
+    A.add(fx, A.get_sfx("ding") * 0.38, tl.m["answer"][0] + 0.05)
     A.add(fx, A.get_sfx("rewind") [: int(0.55 * A.SR)] * 0.5, tl.R0)
     dun = A.music_sting("dun")
-    A.add(fx, dun * 0.42, word_time(words, "penguin", "penguin") - 0.05)   # the one dramatic accent
+    A.add(fx, dun * 0.30, word_time(words, "penguin", "penguin") - 0.05)   # the one dramatic accent
     A.add(fx, A.get_sfx("whoosh") * 0.25, tl.SKY)
     A.add(fx, A.get_sfx("pop") * 0.35, tl.SWAP + 0.15)
     # --- explanation: gentle atmospheric bed
@@ -792,7 +794,7 @@ def mix_audio():
     t3 = word_time(words, "ask", "three")
     for i in range(4):
         t_i = tz + (t3 - tz) * i / 3 if i else tz
-        A.add(fx, sfx_soft_pop(620 + 90 * i) * 0.5, t_i)
+        A.add(fx, sfx_soft_pop(620 + 90 * i) * 0.28, t_i)
     A.add(fx, A.get_sfx("pop") * 0.3, word_time(words, "ask", "comments") - 0.1)
     # --- mix: music ducks under the voice, voice stays on top
     env = A.envelope_follow(voice, 0.03, 0.4)
@@ -803,10 +805,10 @@ def mix_audio():
     raw = os.path.join(BUILD, "mix_raw.wav")
     sf.write(raw, total[: int(tl.END * A.SR)].astype(np.float32), A.SR, subtype="FLOAT")
     r = subprocess.run(["ffmpeg", "-hide_banner", "-i", raw, "-af",
-                        "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"],
+                        "loudnorm=I=-16:TP=-2.5:LRA=11:print_format=json", "-f", "null", "-"],
                        capture_output=True, text=True)
     m = json.loads(r.stderr[r.stderr.rfind("{"):r.stderr.rfind("}") + 1])
-    af = (f"loudnorm=I=-14:TP=-1.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
+    af = (f"loudnorm=I=-16:TP=-2.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:"
           f"linear=true")
     out = os.path.join(BUILD, "mix.wav")

@@ -63,7 +63,7 @@ def set_go(t):
     assert N_JUMPS == 21
     # tricks (all happen during the count, none highlighted until the reveal)
     SKY_T0, SKY_T1 = GO_T + 1.2, COUNT_END - 0.6      # purple -> orange, slow and continuous
-    PENG_T0, PENG_T1 = GO_T + 2.0, GO_T + 9.6         # penguin walks right -> left behind the line
+    PENG_T0, PENG_T1 = GO_T + 4.0, GO_T + 7.3         # penguin waddles right -> left IN FRONT of the line
     SWAP_T = LEVEL_START[2] + 0.02                    # left rope turner swapped as LEVEL 3 badge pops
 
 
@@ -474,11 +474,12 @@ def draw_rope(cx, pts, alpha=1.0, w=8.0):
 
 
 # ------------------------------------------------------------------ penguin
-PENG_S = 1.4
+PENG_S = 1.15     # ~0.62 of a stick figure's height: a normal penguin next to a person
+PENG_FEET = FLOOR_Y + 78   # a step closer to the camera than the lineup -> drawn in the foreground
 
 
 def penguin_x(t):
-    return 1250 - (1250 + 190) * prog(t, PENG_T0, PENG_T1)
+    return W + 170 - (W + 340) * prog(t, PENG_T0, PENG_T1)
 
 
 def draw_penguin(cx, x, y, t, s=1.0, walking=True, alpha=1.0):
@@ -564,11 +565,6 @@ def draw_lineup(cx, t, *, ang=None, lift=None, sq=None, penguin=True, swapped=No
     swapped = (t >= SWAP_T) if swapped is None else swapped
     pt = t if penguin_t is None else penguin_t
     anchors = {}
-    # penguin walks behind the line
-    if penguin and PENG_T0 <= pt <= PENG_T1:
-        px = penguin_x(pt)
-        draw_penguin(cx, px, FLOOR_Y - 40, pt, s=PENG_S)
-        anchors["penguin"] = (px, FLOOR_Y - 40 - 160 * PENG_S)
     # turners' hands give rope ends (compute with a dry pass)
     oth_a = 1 - dim_others
     tmp = cairo.Context(cairo.ImageSurface(cairo.FORMAT_ARGB32, 1, 1))
@@ -590,4 +586,9 @@ def draw_lineup(cx, t, *, ang=None, lift=None, sq=None, penguin=True, swapped=No
                 alpha=oth_a * 0.6 + 0.4 if dim_others else 1, look=(-0.6, 0))
     if show_rope and front > 0:
         draw_rope(cx, pts, oth_a * 0.85 + 0.15)
+    # the penguin walks in the FOREGROUND: drawn last, nearer the camera, with its own floor shadow
+    if penguin and PENG_T0 <= pt <= PENG_T1:
+        px = penguin_x(pt)
+        draw_penguin(cx, px, PENG_FEET, pt, s=PENG_S)
+        anchors["penguin"] = (px, PENG_FEET - 150 * PENG_S)
     return anchors
