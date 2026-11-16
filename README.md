@@ -46,3 +46,19 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Short: "Can Your Arms Move on Their Own?" (Kohnstamm phenomenon, 9:16)
+
+English adaptation of the Turkish doorway-experiment short. 1080×1920, 30 fps, 54.97 s.
+
+| Deliverable | Path |
+|---|---|
+| Final video | `output/JUST_NEEDY_KOHNSTAMM_ARM_CHALLENGE_ENGLISH.mp4` |
+| English subtitles | `output/JUST_NEEDY_KOHNSTAMM_ARM_CHALLENGE_ENGLISH.srt` |
+
+```bash
+python -m episodes.kohnstamm_short.make_voice     # one narration take, split into lines (cached)
+python -m episodes.kohnstamm_short.episode video  # SRT + soundtrack + final render
+```
+
+The countdown is frame-exact: "30" appears on frame 300 (10.00 s) and "0" on frame 1200 (40.00 s).

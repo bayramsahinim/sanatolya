@@ -771,7 +771,7 @@ def draw_face(cx, J, p, R, st):
     f = p.f if p.view == "side" else 0.0
     off = f * R * 0.22
     eyes = p.eyes
-    if p.blink and eyes in ("open", "wide", "half", "tiny", "angry") and is_blinking(p.t, p.blink_seed):
+    if p.blink and eyes in ("open", "wide", "half", "tiny", "angry", "dot", "dotwide", "dotfocus") and is_blinking(p.t, p.blink_seed):
         eyes = "closed"
     ex = R * 0.34
     ey = -R * 0.06
@@ -847,6 +847,21 @@ def _eye(cx, x, y, kind, lx, ly, side, st, p):
     elif kind == "x":
         line(cx, [(x - 8, y - 8), (x + 8, y + 8)], OUTLINE, 4)
         line(cx, [(x + 8, y - 8), (x - 8, y + 8)], OUTLINE, 4)
+    elif kind in ("dot", "dotwide", "dotfocus"):
+        # small solid black oval eyes (Shorts model of the hero)
+        rx, ry = (7.5, 11.0) if kind != "dotwide" else (9.5, 14.0)
+        px, py = x + lx * 3, y + ly * 3
+        ellipse(cx, px, py, rx, ry)
+        fs(cx, OUTLINE, None, 0)
+        if kind == "dotfocus":
+            # upper lid pressed down: concentrating
+            cx.save()
+            cx.rectangle(px - rx - 2, py - ry - 2, 2 * rx + 4, ry * 0.75)
+            src(cx, st.skin)
+            cx.fill()
+            cx.restore()
+        circle(cx, px - rx * 0.3, py - ry * 0.35, rx * 0.28)
+        fs(cx, (1, 1, 1, 1), None, 0)
 
 
 def _brows(cx, off, ex, ey, kind, side_f=0):
