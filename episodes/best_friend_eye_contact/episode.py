@@ -104,11 +104,14 @@ def write_srt():
     from episodes.best_friend_eye_contact.scenes import PHRASES
     os.makedirs(OUT, exist_ok=True)
     rows = []
+    prev_end = 0.0
     for i, p in enumerate(PHRASES):
         nxt = PHRASES[i + 1]["t0"] if i + 1 < len(PHRASES) else DUR
         end = min(nxt - 0.02, p["t1"] + (0.55 if p["last_in_line"] else 0.15))
         text = " ".join(w for w, _, _ in p["words"])
-        rows.append(f"{i + 1}\n{fmt(max(0, p['t0'] - 0.05))} --> {fmt(end)}\n{text}\n")
+        start = max(0.0, p["t0"] - 0.05, prev_end + 0.001)
+        rows.append(f"{i + 1}\n{fmt(start)} --> {fmt(end)}\n{text}\n")
+        prev_end = end
     open(SRT, "w").write("\n".join(rows))
     return SRT
 

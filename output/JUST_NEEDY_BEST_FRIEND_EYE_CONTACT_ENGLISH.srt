@@ -3,35 +3,35 @@
 Why do you and your best friend
 
 2
-00:00:01,540 --> 00:00:03,570
+00:00:01,571 --> 00:00:03,570
 get each other with just one look?
 
 3
-00:00:03,540 --> 00:00:04,540
+00:00:03,571 --> 00:00:04,540
 A crowded table.
 
 4
-00:00:04,510 --> 00:00:06,270
+00:00:04,541 --> 00:00:06,270
 Someone says something ridiculous...
 
 5
-00:00:06,240 --> 00:00:07,163
+00:00:06,271 --> 00:00:07,163
 And the two of you
 
 6
-00:00:07,133 --> 00:00:09,010
+00:00:07,164 --> 00:00:09,010
 lock eyes at the exact same moment.
 
 7
-00:00:08,980 --> 00:00:09,990
+00:00:09,011 --> 00:00:09,990
 Not a single word.
 
 8
-00:00:09,960 --> 00:00:11,180
+00:00:09,991 --> 00:00:11,180
 But in that one second,
 
 9
-00:00:11,150 --> 00:00:12,940
+00:00:11,181 --> 00:00:12,940
 everything got said.
 
 10
@@ -39,15 +39,15 @@ everything got said.
 This isn't telepathy.
 
 11
-00:00:14,490 --> 00:00:15,171
+00:00:14,521 --> 00:00:15,171
 Close friends' brains
 
 12
-00:00:15,141 --> 00:00:16,040
+00:00:15,172 --> 00:00:16,040
 react to the world
 
 13
-00:00:16,010 --> 00:00:18,760
+00:00:16,041 --> 00:00:18,760
 in surprisingly similar ways.
 
 14
@@ -55,19 +55,19 @@ in surprisingly similar ways.
 You've laughed at the same things,
 
 15
-00:00:20,380 --> 00:00:22,270
+00:00:20,411 --> 00:00:22,270
 gotten annoyed by the same people,
 
 16
-00:00:22,240 --> 00:00:24,040
+00:00:22,271 --> 00:00:24,040
 built a shared archive.
 
 17
-00:00:24,010 --> 00:00:24,899
+00:00:24,041 --> 00:00:24,899
 So the tiniest lift
 
 18
-00:00:24,869 --> 00:00:26,310
+00:00:24,900 --> 00:00:26,310
 of their eyebrow...
 
 19
@@ -75,7 +75,7 @@ of their eyebrow...
 opens in your head
 
 20
-00:00:27,250 --> 00:00:28,830
+00:00:27,281 --> 00:00:28,830
 like a giant ZIP file.
 
 21
@@ -83,9 +83,9 @@ like a giant ZIP file.
 So that look is no coincidence.
 
 22
-00:00:31,610 --> 00:00:33,223
+00:00:31,641 --> 00:00:33,223
 That's the person who sees
 
 23
-00:00:33,193 --> 00:00:35,350
+00:00:33,224 --> 00:00:35,350
 the world through your eyes.
