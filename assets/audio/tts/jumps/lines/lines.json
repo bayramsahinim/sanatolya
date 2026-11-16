@@ -1,0 +1,68 @@
+{
+ "hook": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 0.29,
+  "end": 3.56,
+  "text": "Count the blue hoodie's jumps. Bet you get it wrong."
+ },
+ "go": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 4.21,
+  "end": 4.49,
+  "text": "Go!"
+ },
+ "stop": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 6.08,
+  "end": 8.15,
+  "text": "Stop! How many did you count?"
+ },
+ "answer": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 9.53,
+  "end": 10.3,
+  "text": "Twenty-one."
+ },
+ "penguin": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 11.02,
+  "end": 12.51,
+  "text": "But did you notice the penguin?"
+ },
+ "sky": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 13.68,
+  "end": 16.34,
+  "text": "Or the sky turning from purple to orange?"
+ },
+ "swap": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 17.6,
+  "end": 19.81,
+  "text": "Or that one of the rope turners got swapped?"
+ },
+ "spot": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 21.37,
+  "end": 26.36,
+  "text": "Attention works like a spotlight. Whatever falls outside it can slip right past you."
+ },
+ "name": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 27.55,
+  "end": 29.79,
+  "text": "It's called inattentional blindness."
+ },
+ "study": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 30.95,
+  "end": 37.97,
+  "text": "In a famous 1999 study, about half the people counting basketball passes missed a person in a gorilla suit."
+ },
+ "ask": {
+  "take": "take_gemini-2.5-flash-preview-tts_47799a6d31.wav",
+  "start": 39.34,
+  "end": 43.63,
+  "text": "How many tricks did you catch? Zero to three. Tell me in the comments."
+ }
+}

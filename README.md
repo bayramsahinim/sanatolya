@@ -46,3 +46,21 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: "Can You Count the Jumps?" (Short, 9:16)
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC, ~47 s) | `output/JUST_NEEDY_COUNT_THE_JUMPS_FINAL.mp4` |
+| English subtitles | `output/JUST_NEEDY_COUNT_THE_JUMPS_FINAL.srt` |
+
+Code: `episodes/count_the_jumps/` (`scene.py` deterministic 21-jump schedule, rope, penguin;
+`episode.py` edit, overlays, mix, SRT; `qa.py` pixel-level jump count and delivery checks).
+Narration is one TTS take (`assets/audio/tts/jumps/`) split into lines; captions use
+word-level alignment from `cinecode/wordalign.py`.
+
+```bash
+python -m episodes.count_the_jumps.split_take          # take -> per-line clips
+python -m episodes.count_the_jumps.episode all         # timeline, mix, SRT, 1080x1920 render
+python -m episodes.count_the_jumps.qa output/JUST_NEEDY_COUNT_THE_JUMPS_FINAL.mp4
+```
