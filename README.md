@@ -46,3 +46,20 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Short: "Best Friend Eye Contact" (9:16, strict visual remake)
+
+English localization + Just Needy visual redesign of a Turkish reference Short. Narration lines are
+placed at the reference's own sentence start times (`episodes/best_friend_eye_contact/script.py`
+holds the Turkish source, its measured timings and the English line for each).
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, 36.0 s, H.264/AAC) | `output/JUST_NEEDY_BEST_FRIEND_EYE_CONTACT_FINAL.mp4` |
+| English subtitles | `output/JUST_NEEDY_BEST_FRIEND_EYE_CONTACT_ENGLISH.srt` |
+
+```bash
+python -m episodes.best_friend_eye_contact.make_voice   # TTS take (cached)
+python -m episodes.best_friend_eye_contact.voice        # print line placement vs. source timing
+python -m episodes.best_friend_eye_contact.episode all  # mix + SRT + render + mux
+```
