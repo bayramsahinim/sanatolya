@@ -266,13 +266,120 @@ AMB = {"amb_room", "amb_street", "amb_subway", "amb_shop", "amb_office", "amb_vo
        "amb_cafe", "rain", "crickets", "clock", "flashback", "kids"}
 
 
+# ------------------------------------------------------------------ mix
+VOICE_GAIN = 1.0
+FX_GAIN = 0.8
+MUSIC_GAIN = 0.55 * 10 ** (-10 / 20)   # music bed 10 dB lower than the first cut (was 0.55)
+DUCK_DB = -4.0                          # extra dip under narration
+DUCK_ATTACK = 0.15                      # s, fade down when narration starts
+DUCK_RELEASE = 0.7                      # s, gentle rise in pauses
+DUCK_HOLD = 0.25                        # s, stay ducked through short gaps between words
+DUCK_LOOKAHEAD = 0.12                   # s, start ducking just before the first syllable
+CTRL = 100                              # control rate (Hz)
+
+
+def duck_curve(voice):
+    """Smooth per-sample gain: 1.0 in pauses, DUCK_DB under narration, no jumps."""
+    hop = SR // CTRL
+    nfr = len(voice) // hop + 1
+    v = np.pad(voice, (0, nfr * hop - len(voice)))
+    rms = np.sqrt((v.reshape(nfr, hop) ** 2).mean(axis=1))
+    active = rms > 0.008
+    # lookahead + hold
+    la, hold = int(DUCK_LOOKAHEAD * CTRL), int(DUCK_HOLD * CTRL)
+    act = active.copy()
+    idx = np.where(active)[0]
+    for i in idx:
+        act[max(0, i - la):i + hold + 1] = True
+    target = np.where(act, 10 ** (DUCK_DB / 20), 1.0)
+    g = np.empty(nfr)
+    cur = 1.0
+    ka = 1 - np.exp(-1 / (DUCK_ATTACK * CTRL))
+    kr = 1 - np.exp(-1 / (DUCK_RELEASE * CTRL))
+    for i in range(nfr):
+        k = ka if target[i] < cur else kr
+        cur += (target[i] - cur) * k
+        g[i] = cur
+    return np.interp(np.arange(len(voice)), np.arange(nfr) * hop, g)
+
+
+def write_mono(path, x):
+    import wave
+    pcm = (np.clip(x, -1, 1) * 32767).astype("<i2")
+    with wave.open(path, "wb") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(SR)
+        w.writeframes(pcm.tobytes())
+
+
+def normalize(src_path, out, target=-16.0):
+    """One constant gain to the target loudness, then a look-ahead peak limiter (-1.5 dBFS ceiling,
+    latency compensated so A/V sync is exact) that only shaves short consonant peaks. -16 LUFS keeps the
+    limiter nearly idle on the narration (raw TTS speech is very peaky); no dynamic loudness riding."""
+    import json
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-i", src_path, "-af", "loudnorm=print_format=json", "-f", "null", "-"],
+                       capture_output=True, text=True, check=True)
+    m = json.loads(r.stderr[r.stderr.rindex("{"):r.stderr.rindex("}") + 1])
+    gain = target - float(m["input_i"])
+    af = f"volume={gain:.2f}dB,alimiter=limit=0.84:attack=5:release=80:level=false:latency=1"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src_path, "-af", af, "-ar", "48000", "-ac", "2", out], check=True)
+    print(f"normalize: input {m['input_i']} LUFS / {m['input_tp']} dBTP, gain {gain:+.2f} dB, "
+          f"pre-limiter peak {float(m['input_tp']) + gain:+.2f} dBTP")
+
+
+def report_levels(voice, music, fx, mix):
+    """Music level relative to narration, during speech and in pauses (dB)."""
+    hop = SR // 10
+    nfr = len(voice) // hop
+    rv = np.sqrt((voice[:nfr * hop].reshape(nfr, hop) ** 2).mean(axis=1))
+    speech = rv > 0.02
+    quiet = rv < 0.002
+    pause = np.convolve(quiet.astype(float), np.ones(11) / 11, mode="same") > 0.999  # >=1.1 s without narration
+
+    def db(x, mask):
+        r = np.sqrt((x[:nfr * hop].reshape(nfr, hop) ** 2).mean(axis=1))[mask]
+        return 20 * np.log10(np.sqrt((r ** 2).mean()) + 1e-9)
+    old = music * (1.0 - 0.45 * np.clip(np.convolve(np.abs(voice), np.ones(SR // 4) / (SR // 4), "same") / 0.03, 0, 1)) * 0.55
+    new = music * duck_curve(voice) * MUSIC_GAIN
+    v = db(voice, speech)
+    print(f"music vs narration during speech: old {db(old, speech) - v:+.1f} dB  new {db(new, speech) - v:+.1f} dB")
+    print(f"music level in pauses:            old {db(old, pause):+.1f} dBFS new {db(new, pause):+.1f} dBFS")
+
+
+def strip_end_glitch(a, sr=24000):
+    """Silence a TTS end-of-take glitch: a loud burst that follows >=0.1 s of near-silence at the very end
+    of a clip (the speech has already finished). Clip length is unchanged, so timing is unchanged."""
+    w = int(0.02 * sr)
+    n = len(a) // w
+    if n < 12:
+        return a
+    rms = np.sqrt((a[:n * w].reshape(n, w) ** 2).mean(axis=1))
+    db = 20 * np.log10(rms + 1e-9)
+    tail = n - 1
+    while tail > 0 and db[tail] > -40 or (tail > 0 and db[tail] < -100):
+        tail -= 1                      # walk back over the burst (incl. its digital-zero frames)
+    quiet = 0
+    k = tail
+    while k > 0 and db[k] < -55:
+        quiet += 1
+        k -= 1
+    if quiet >= 5 and tail < n - 1:   # >=100 ms of silence, then a burst: cut from mid-silence
+        cut = (k + 1 + quiet // 2) * w
+        a = a.copy()
+        f = min(int(0.02 * sr), cut)
+        a[cut - f:cut] *= np.linspace(1, 0, f)
+        a[cut:] = 0.0
+    return a
+
+
 def mixdown(shots, film_end, total, cues):
     n = int((total + 0.5) * SR)
     voice = np.zeros(n)
     fx = np.zeros(n)
     for sh in shots:
         for lid in sh.lines:
-            a = tts.read_wav(line_path(lid))
+            a = strip_end_glitch(tts.read_wav(line_path(lid)))
             a = resample_poly(a, 2, 1)
             add(voice, a, sh.t0 + sh.T[lid][0])
         for (lt, name, vol) in sh.sfx():
@@ -286,26 +393,16 @@ def mixdown(shots, film_end, total, cues):
     lift = next(s.t0 for s in shots if type(s).__name__ == "S21Coffee")
     music = np.zeros(n)
     add(music, score(total + 0.3, lift, 6.0), 0.0)
-    # duck music under narration
-    venv = np.abs(voice)
-    k = int(0.25 * SR)
-    venv = np.convolve(venv, np.ones(k) / k, mode="same")
-    duck = 1.0 - 0.45 * np.clip(venv / 0.03, 0, 1)
-    music *= duck
-    mix = voice * 1.0 + music * 0.55 + fx * 0.8
-    mix = np.tanh(mix * 1.1) / 1.1
+    mix = voice * VOICE_GAIN + music * duck_curve(voice) * MUSIC_GAIN + fx * FX_GAIN
+    report_levels(voice, music, fx, mix)
     os.makedirs(BUILD, exist_ok=True)
     raw = os.path.join(BUILD, "mix_raw.wav")
-    pcm = (np.clip(mix, -1, 1) * 32767).astype("<i2")
-    import wave
-    with wave.open(raw, "wb") as w:
-        w.setnchannels(1)
-        w.setsampwidth(2)
-        w.setframerate(SR)
-        w.writeframes(pcm.tobytes())
+    peak = np.abs(mix).max()
+    if peak > 0.98:                     # keep the float mix clean before writing 16-bit
+        mix *= 0.98 / peak
+    write_mono(raw, mix)
     out = os.path.join(BUILD, "mix.wav")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
-                    "-ar", "48000", "-ac", "2", out], check=True)
+    normalize(raw, out)
     from .frame import srt
     os.makedirs(os.path.join(ROOT, "output"), exist_ok=True)
     srt(cues, os.path.join(ROOT, "output", "The_Number_Above_Their_Head.en.srt"))
