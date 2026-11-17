@@ -601,25 +601,30 @@ def zip_over_head(cx, t):
 
 
 # ------------------------------------------------------------------ captions (screen space)
-CAP_Y = 300
-CAP_SIZE = 66
-CAP_MAXW = 940
+CAP_Y = 300          # unchanged position (clear of every face and overlay)
+CAP_SIZE = 74        # bold, mobile-readable (reference style)
+CAP_MAXW = 920
+CAP_OUTLINE = 3.0    # very thin dark outline
+CAP_DARK = hexc("#14141A")
 
 
 def _wrap(cx, words):
-    lines, cur = [], []
-    for w in words:
-        test = " ".join([x[0] for x in cur + [w]])
-        if cx.text_extents(test).x_advance > CAP_MAXW and cur:
-            lines.append(cur)
-            cur = [w]
-        else:
-            cur.append(w)
-    if cur:
-        lines.append(cur)
-    if len(lines) == 2 and len(lines[1]) == 1 and len(lines[0]) > 2:  # avoid orphans
-        lines[1].insert(0, lines[0].pop())
-    return lines
+    """At most two lines; when two are needed, split where the lines are most even."""
+    full = " ".join(w[0] for w in words)
+    if cx.text_extents(full).x_advance <= CAP_MAXW or len(words) < 2:
+        return [words]
+    best = None
+    for k in range(1, len(words)):
+        a = cx.text_extents(" ".join(w[0] for w in words[:k])).x_advance
+        b = cx.text_extents(" ".join(w[0] for w in words[k:])).x_advance
+        if max(a, b) > CAP_MAXW:
+            continue
+        weak = words[k - 1][0].lower().strip(",.?!") in ("the", "a", "an", "and", "of", "to", "at", "by", "in", "with")
+        score = abs(a - b) + (40 if len(words[k:]) == 1 else 0) + (400 if weak else 0)
+        if best is None or score < best[0]:
+            best = (score, k)
+    assert best, f"caption needs more than two lines: {full}"
+    return [words[:best[1]], words[best[1]:]]
 
 
 def draw_captions(cx, t):
@@ -633,34 +638,40 @@ def draw_captions(cx, t):
     if not cur:
         return
     p, hold_end = cur
+    # same on/off times as before; whole phrase fades in/out softly, no per-word colour changes
     a = smooth(prog(t, p["t0"] - 0.05, p["t0"] + 0.06)) * (1 - smooth(prog(t, hold_end - 0.08, hold_end)))
     cx.select_font_face("Montserrat ExtraBold", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     cx.set_font_size(CAP_SIZE)
     lines = _wrap(cx, p["words"])
-    lh = CAP_SIZE * 1.18
+    lh = CAP_SIZE * 1.16
     y0 = CAP_Y - (len(lines) - 1) * lh / 2
+    cx.save()
+    cx.new_path()
     for li, ws in enumerate(lines):
         s = " ".join(w[0] for w in ws)
         e = cx.text_extents(s)
-        x = W / 2 - e.x_advance / 2
-        y = y0 + li * lh + CAP_SIZE * 0.35
-        for w, w0, _ in ws:
-            spoken = t >= w0 - 0.04
-            cx.move_to(x, y)
-            cx.text_path(w)
-            # outline + soft shadow
-            cx.save()
-            cx.translate(0, 5)
-            src(cx, (0, 0, 0, 0.35 * a))
-            cx.fill_preserve()
-            cx.restore()
-            src(cx, hexc("#1B1B22", a))
-            cx.set_line_width(13)
-            cx.set_line_join(cairo.LINE_JOIN_ROUND)
-            cx.stroke_preserve()
-            src(cx, hexc("#FFFFFF", a * (1.0 if spoken else 0.5)))
-            cx.fill()
-            x += cx.text_extents(w + " ").x_advance
+        cx.move_to(W / 2 - e.x_advance / 2, y0 + li * lh + CAP_SIZE * 0.35)
+        cx.text_path(s)
+    path = cx.copy_path()
+    cx.new_path()
+    cx.set_line_join(cairo.LINE_JOIN_ROUND)
+    # soft drop shadow: layered low-alpha strokes approximate a blur
+    cx.save()
+    cx.translate(0, 4)
+    for wdt, al in ((18, 0.06), (12, 0.09), (7, 0.13), (3, 0.18)):
+        cx.append_path(path)
+        src(cx, (0, 0, 0, al * a))
+        cx.set_line_width(wdt)
+        cx.stroke()
+    cx.restore()
+    # very thin dark outline, then solid white fill
+    cx.append_path(path)
+    src(cx, CAP_DARK, a)
+    cx.set_line_width(CAP_OUTLINE * 2)
+    cx.stroke_preserve()
+    src(cx, hexc("#FFFFFF", a))
+    cx.fill()
+    cx.restore()
 
 
 PHRASES = phrases()
