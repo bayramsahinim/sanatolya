@@ -4,6 +4,29 @@
 vector characters and sets drawn with Cairo, procedural sound design and music, Gemini TTS
 narration, and ffmpeg assembly. Every frame and sound is reproducible from this repository.
 
+## Episode: "The Number Above Their Head" (vertical short)
+
+Just Needy adaptation of a reference short: same story, scene order and message (numbers above
+people's heads = how many more times you'll see them), retold with the blue-hoodie hero in a
+monochrome "glow-line" look with blue accents.
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, 2:58.6, H.264/AAC) | `output/The_Number_Above_Their_Head.mp4` |
+| English subtitles (burned in + SRT) | `output/The_Number_Above_Their_Head.en.srt` |
+
+Code: `episodes/numbers_above/` (`script.py` narration, `look.py` palette/bloom/numbers, `cast.py`
+characters, `sets.py` line-art sets + phone UI, `shots_a.py`/`shots_b.py` 25 shots, `frame.py`
+timeline + subtitles, `mixdown.py` score/SFX/mix, `episode.py` driver).
+
+```bash
+python -m episodes.numbers_above.make_voice          # TTS takes (cached in assets/audio/tts_numbers)
+python -m episodes.numbers_above.make_voice split    # split takes into per-line clips
+python -m episodes.numbers_above.episode audio       # soundtrack + SRT
+python -m episodes.numbers_above.episode video       # render (then 2-pass re-encode to <100 MB, see below)
+```
+Final file was re-encoded with `ffmpeg -c:v libx264 -preset slow -b:v 3900k` (2-pass) to stay under GitHub's 100 MB limit.
+
 ## Episode: "I Got Stuck in Ancient Rome for 7 Days"
 
 | Deliverable | Path |
