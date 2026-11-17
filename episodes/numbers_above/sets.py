@@ -3,7 +3,7 @@ import math
 
 import cairo
 
-from .look import (BLUE, GLOW_BLUE, GREY1, GREY2, GREY3, GREY4, H, INK, LINE, LINE_DIM, PANEL, PANEL2, W,
+from .look import (BLUE, GLOW_BLUE, GREY1, GREY2, GREY3, GREY4, H, INK, LINE, LINE_DIM, PANEL, PANEL2, W, land,
                    WHITE, ellipse, font, gcircle, gline, glow_blob, grect, hexc, rrect, src, text, text_w)
 
 
@@ -113,7 +113,7 @@ def subway(f, t, a=1.0, sway=0.0):
     room(f, back=(300, 430, 780, 1010), a=a, floor_lines=5)
     # windows along the side walls (perspective strips)
     for side in (-1, 1):
-        for i in range(3):
+        for i in (range(-3, 3) if land() else range(3)):
             k0 = 0.15 + i * 0.28
             k1 = k0 + 0.2
             def P(k, yy):
@@ -208,8 +208,8 @@ def city(f, t, a=1.0, nums=None, seed=7, rows=1.0, scroll=0.0):
     """Night skyline of buildings with lit windows. nums: draw tiny numbers in some windows."""
     import random
     rng = random.Random(seed)
-    xs = 0
-    while xs < W + 100:
+    xs = -1000 if land() else 0
+    while xs < (W + 1000 if land() else W + 100):
         bw = rng.randint(150, 260)
         bh = rng.randint(700, 1500)
         x0 = xs - 40

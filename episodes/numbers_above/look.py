@@ -13,8 +13,21 @@ from PIL import Image, ImageFilter
 
 from cinecode.core import back_out, clamp, ease_io, ease_out, hexc, lerp, mix, prog, smooth  # noqa: F401
 
-W, H = 1080, 1920
+W, H = 1080, 1920          # design space: every shot is drawn in these (vertical) coordinates
 FPS = 30
+XL, XR = -1700, W + 1700  # horizontal extent for "full width" set lines (wide enough for 16:9 framing)
+
+# Output mode. Vertical renders design space 1:1. Landscape renders 1920x1080 through a per-shot
+# view (design-space centre + scale), so the same shots are reframed for widescreen.
+MODE = {"land": False}
+
+
+def land():
+    return MODE["land"]
+
+
+def out_size():
+    return (1920, 1080) if MODE["land"] else (W, H)
 GS = 0.25  # glow layer scale
 
 # ---------------------------------------------------------------- palette
@@ -45,15 +58,23 @@ FONT_UI = "Inter"
 class Frame:
     """Main canvas + glow layer. Use f.cx for normal drawing, f.gx for glow emitters."""
 
-    def __init__(self):
-        self.surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, W, H)
-        self.gsurf = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(W * GS), int(H * GS))
+    def __init__(self, view=None):
+        self.ow, self.oh = out_size()
+        self.surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, self.ow, self.oh)
+        self.gsurf = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(self.ow * GS), int(self.oh * GS))
         self.cx = cairo.Context(self.surf)
         self.gx = cairo.Context(self.gsurf)
         self.gx.scale(GS, GS)
         for c in (self.cx, self.gx):
             c.set_line_join(cairo.LINE_JOIN_ROUND)
             c.set_line_cap(cairo.LINE_CAP_ROUND)
+        if view is not None:
+            # landscape: design-space point (vx, vy) at the output centre, scaled by s
+            vx, vy, sc = view
+            for c in (self.cx, self.gx):
+                c.translate(self.ow / 2, self.oh / 2)
+                c.scale(sc, sc)
+                c.translate(-vx, -vy)
 
     def save(self):
         self.cx.save()
@@ -77,13 +98,14 @@ class Frame:
             c.translate(-x, -y)
 
     def to_rgb(self, glow=1.0, grain=None):
-        a = np.ndarray((H, W, 4), np.uint8, self.surf.get_data()).astype(np.float32)
-        g = np.ndarray((int(H * GS), int(W * GS), 4), np.uint8, self.gsurf.get_data())
+        W_, H_ = self.ow, self.oh
+        a = np.ndarray((H_, W_, 4), np.uint8, self.surf.get_data()).astype(np.float32)
+        g = np.ndarray((int(H_ * GS), int(W_ * GS), 4), np.uint8, self.gsurf.get_data())
         gi = Image.fromarray(g[:, :, :3][:, :, ::-1].copy())
         g1 = gi.filter(ImageFilter.GaussianBlur(3.0))
         g2 = gi.filter(ImageFilter.GaussianBlur(12.0))
-        g1 = np.asarray(g1.resize((W, H), Image.BILINEAR), np.float32)
-        g2 = np.asarray(g2.resize((W, H), Image.BILINEAR), np.float32)
+        g1 = np.asarray(g1.resize((W_, H_), Image.BILINEAR), np.float32)
+        g2 = np.asarray(g2.resize((W_, H_), Image.BILINEAR), np.float32)
         rgb = a[:, :, :3][:, :, ::-1]
         out = rgb + (g1 * 0.8 + g2 * 1.1) * glow
         if grain is not None:
@@ -136,6 +158,20 @@ def bg(f, top=BG_TOP, bot=BG_BOT, spot=None, spot_r=900, spot_a=0.10):
 
 def vignette(f, k=0.55):
     c = f.cx
+    if land():
+        # widescreen vignette in output space (independent of the shot's framing)
+        c.save()
+        c.identity_matrix()
+        ow, oh = f.ow, f.oh
+        c.translate(ow / 2, oh * 0.48)
+        c.scale(ow / oh, 1.0)
+        rg = cairo.RadialGradient(0, 0, oh * 0.32, 0, 0, oh * 0.82)
+        rg.add_color_stop_rgba(0, 0, 0, 0, 0)
+        rg.add_color_stop_rgba(1, 0, 0, 0, k)
+        c.set_source(rg)
+        c.paint()
+        c.restore()
+        return
     rg = cairo.RadialGradient(W / 2, H * 0.48, H * 0.25, W / 2, H * 0.48, H * 0.78)
     rg.add_color_stop_rgba(0, 0, 0, 0, 0)
     rg.add_color_stop_rgba(1, 0, 0, 0, k)
@@ -259,9 +295,10 @@ def count(t, t0, t1, v0, v1, ease=ease_io):
 # ---------------------------------------------------------------- grain
 def make_grain(n=6, amp=2.5, seed=3):
     rng = np.random.default_rng(seed)
+    ow, oh = out_size()
     out = []
     for _ in range(n):
-        g = rng.normal(0, amp, (H // 2, W // 2, 1)).astype(np.float32)
+        g = rng.normal(0, amp, (oh // 2, ow // 2, 1)).astype(np.float32)
         g = np.repeat(np.repeat(g, 2, axis=0), 2, axis=1)
         out.append(g)
     return out

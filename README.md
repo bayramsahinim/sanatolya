@@ -14,6 +14,7 @@ monochrome "glow-line" look with blue accents.
 |---|---|
 | Final video (1080×1920, 30 fps, 2:58.6, H.264/AAC) | `output/The_Number_Above_Their_Head.mp4` |
 | English subtitles (burned in + SRT) | `output/The_Number_Above_Their_Head.en.srt` |
+| Landscape YouTube version (1920×1080, 30 fps, same film reframed for 16:9) | `output/The_Number_Above_Their_Head_16x9.mp4` |
 
 Code: `episodes/numbers_above/` (`script.py` narration, `look.py` palette/bloom/numbers, `cast.py`
 characters, `sets.py` line-art sets + phone UI, `shots_a.py`/`shots_b.py` 25 shots, `frame.py`
@@ -25,6 +26,9 @@ python -m episodes.numbers_above.make_voice split    # split takes into per-line
 python -m episodes.numbers_above.episode audio       # soundtrack + SRT
 python -m episodes.numbers_above.episode video       # render (then 2-pass re-encode to <100 MB, see below)
 ```
+Landscape: `python -m episodes.numbers_above.episode video --land` renders the same shots through per-shot
+16:9 views (`landscape.py`), with widened sets and a few side-by-side recompositions; audio and subtitles are shared.
+
 Final file was re-encoded with `ffmpeg -c:v libx264 -preset slow -b:v 3900k` (2-pass) to stay under GitHub's 100 MB limit.
 
 ## Episode: "I Got Stuck in Ancient Rome for 7 Days"

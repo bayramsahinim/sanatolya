@@ -70,6 +70,15 @@ def _word_times(lid):
 SUB_Y = 1420
 SUB_SIZE = 50
 SUB_MAXW = 900
+# landscape: lower third, slightly smaller type, wider line
+SUB_LAND = dict(y=968, size=46, maxw=1400)
+
+
+def _sub_params():
+    from .look import land
+    if land():
+        return SUB_LAND["y"], SUB_LAND["size"], SUB_LAND["maxw"]
+    return SUB_Y, SUB_SIZE, SUB_MAXW
 
 
 def chunks(lid):
@@ -125,7 +134,8 @@ def subtitle_cues(shots):
     return cues
 
 
-def _layout(c, words, size):
+def _layout(c, words, size, maxw=None):
+    SUB_MAXW = maxw or _sub_params()[2]
     font(c, "Inter", "bold", size)
     sp = c.text_extents(" ").x_advance
     lines, cur, w = [], [], 0
@@ -138,8 +148,9 @@ def _layout(c, words, size):
         w = ww if len(cur) == 1 else w + sp + ww
     if cur:
         lines.append((cur, w))
-    # balance two lines
-    if len(lines) == 1 and lines[0][1] > SUB_MAXW * 0.72 and len(words) > 3:
+    # balance two lines (vertical only; widescreen keeps one line whenever it fits)
+    from .look import land
+    if not land() and len(lines) == 1 and lines[0][1] > SUB_MAXW * 0.72 and len(words) > 3:
         tot = lines[0][1]
         acc, cut = 0, 1
         for i, (wd, ww) in enumerate(lines[0][0]):
@@ -159,7 +170,9 @@ def draw_subtitle(c, gt, cues):
             continue
         a = clamp(min((gt - st + 0.12) / 0.16, (en + 0.12 - gt) / 0.16))
         rise = (1 - clamp((gt - st + 0.12) / 0.22)) * 10
-        lines, sp = _layout(c, words, SUB_SIZE)
+        SUB_Y, SUB_SIZE, SUB_MAXW = _sub_params()
+        ow = c.get_target().get_width()
+        lines, sp = _layout(c, words, SUB_SIZE, SUB_MAXW)
         lh = SUB_SIZE * 1.28
         y0 = SUB_Y - (len(lines) - 1) * lh / 2 + rise
         # soft dark band so text stays readable over any scene
@@ -168,7 +181,7 @@ def draw_subtitle(c, gt, cues):
         bh = len(lines) * lh + 70
         cy = y0 - SUB_SIZE * 0.35 + (len(lines) - 1) * lh / 2
         c.save()
-        c.translate(W / 2, cy)
+        c.translate(ow / 2, cy)
         c.scale(bw / 2, bh / 2)
         g = cairo.RadialGradient(0, 0, 0, 0, 0, 1)
         g.add_color_stop_rgba(0, 0, 0, 0, 0.55 * a)
@@ -180,7 +193,7 @@ def draw_subtitle(c, gt, cues):
         c.restore()
         k = 0
         for li, (ln, lw_) in enumerate(lines):
-            x = W / 2 - lw_ / 2
+            x = ow / 2 - lw_ / 2
             y = y0 + li * lh
             for wd, ww in ln:
                 spoken = gt >= wt[k] - 0.05

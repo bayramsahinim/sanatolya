@@ -4,7 +4,7 @@ import random
 
 from .cast import (COWORKER, CROWD, DAD, DAUGHTER, FRIEND, HERO, MOM, Arms, Face, blink_at, bust, person)
 from .frame import Shot
-from .look import (BLUE, BLUE_L, GLOW_BLUE, GREY1, GREY2, GREY3, H, INK, LINE, LINE_DIM, W, WHITE, bg, clamp,
+from .look import (BLUE, BLUE_L, GLOW_BLUE, GREY1, GREY2, GREY3, H, INK, LINE, LINE_DIM, W, WHITE, XL, XR, bg, clamp, land,
                    ease_io, ease_out, gcircle, gline, glow_blob, grect, hexc, lerp, number, prog, rrect, smooth,
                    src, text, text_w, vignette, fmt)
 from .shots_a import back_face, mom_door, mirror_scene, num_pop, push, rolling
@@ -24,8 +24,8 @@ class S13City(Shot):
         bg(f, top=hexc("#10131a"), bot=hexc("#07080b"))
         # moon + faint stars
         rng = random.Random(2)
-        for i in range(60):
-            x, y = rng.random() * W, rng.random() * 700
+        for i in range(130 if land() else 60):
+            x, y = (XL * 0.6 + rng.random() * (XR - XL) * 0.6) if land() else rng.random() * W, rng.random() * 700
             f.cx.arc(x, y, 1.6, 0, 6.3)
             src(f.cx, WHITE, 0.25 + 0.2 * math.sin(t * 2 + i))
             f.cx.fill()
@@ -89,7 +89,7 @@ class S14Daughter(Shot):
         # --- daughter growing up (fades back when L20 starts)
         f.save()
         f.cam(540, 960, lerp(1.0, 0.82, ease_io(in20)))
-        gline(f, [(0, 1180), (W, 1180)], LINE_DIM, 2, 0.5)
+        gline(f, [(XL, 1180), (XR, 1180)], LINE_DIM, 2, 0.5)
         grow = ease_io(prog(t, self.s("L18", 0.55), self.e("L19")))
         R = lerp(50, 70, grow)
         si = 0 if t < self.s("L19") else 1 + min(2, int((t - self.s("L19")) / max(0.1, (self.e("L19") - self.s("L19")) / 3)))
@@ -120,8 +120,11 @@ class S14Daughter(Shot):
             a = smooth(in20)
             c = f.cx
             # couch
-            grect(f, 90, 1160, 900, 260, 40, LINE, 3, a, fillc=hexc("#1d2129"))
-            grect(f, 60, 1060, 120, 360, 30, LINE, 3, a, fillc=hexc("#22262f"))
+            cx0, cw = (-160, 1150) if land() else (90, 900)
+            grect(f, cx0, 1160, cw, 260, 40, LINE, 3, a, fillc=hexc("#1d2129"))
+            grect(f, cx0 - 30, 1060, 120, 360, 30, LINE, 3, a, fillc=hexc("#22262f"))
+            if land():
+                S.window(f, 1150, 640, 300, 360, a * 0.7, light=0.1)
             fc = Face(look=(0.15, 0.75), eyes="half", brows="neutral", mouth="flat", blink=blink_at(t, 1))
             bust(f, 400, 1110, 95, HERO, fc, Arms(phone=True), a=a, T=230)
             glow_blob(f, 440, 1080, 170, hexc("#9cc0ff"), 0.35 * a)
@@ -317,7 +320,7 @@ class S18Friend(Shot):
             grect(f, nx - 22, ny - 16, 44, 32, 4, WHITE, 2.4, 0.9, glow=0.4, fillc=hexc("#e9eaee"))
             vignette(f)
             # flashback tint
-            f.cx.rectangle(0, 0, W, H)
+            f.cx.rectangle(XL, -2000, XR - XL, H + 4000)
             src(f.cx, hexc("#d9d0b8"), 0.04)
             f.cx.fill()
             return
@@ -325,9 +328,9 @@ class S18Friend(Shot):
         if t < p30:
             # adults, drifting apart; life fills the space between
             apart = ease_io(prog(t, p29, p29 + (self.e("L29") - p29) * 0.9))
-            gline(f, [(0, 1250), (W, 1250)], LINE_DIM, 2, 0.5)
+            gline(f, [(XL, 1250), (XR, 1250)], LINE_DIM, 2, 0.5)
             for side, sp in ((-1, HERO), (1, FRIEND)):
-                x = 540 + side * lerp(120, 360, apart)
+                x = 540 + side * lerp(120, 560 if land() else 360, apart)
                 fc = Face(look=(-side * 0.4 * (1 - apart) + side * 0.5 * apart, 0), mouth="smile" if apart < 0.2 else "flat",
                           blink=blink_at(t, side + 2))
                 person(f, x, 1250, 80, sp, fc)
@@ -335,7 +338,18 @@ class S18Friend(Shot):
                 t0 = self.s("L29", fr)
                 a = smooth(prog(t, t0, t0 + 0.3))
                 if a > 0:
-                    S.icon(f, kind, 540 + (j % 2 - 0.5) * 70, yy - (1 - a) * 30, 90, a)
+                    S.icon(f, kind, 540 + (j % 2 - 0.5) * (220 if land() else 70), yy - (1 - a) * 30, 90, a)
+        elif land():
+            # widescreen split: Jake on the left, you on the right
+            k = smooth(prog(t, p30, p30 + 0.4))
+            gline(f, [(540, 420), (540, 1400)], LINE_DIM, 2, 0.5 * k)
+            fc = Face(look=(0.2, 0.5), mouth="smile", eyes="open", blink=blink_at(t, 5))
+            bust(f, 160, 1010, 90, FRIEND, fc, Arms(phone=True), a=k, T=420)
+            glow_blob(f, 190, 990, 150, hexc("#dfe8ff"), 0.25 * k)
+            S.window(f, 1080, 600, 260, 320, k * 0.6, light=0.1)
+            fc2 = Face(look=(-0.4, 0.3), mouth="sad", brows="sad", eyes="half", blink=blink_at(t, 2))
+            bust(f, 860, 1010, 90, HERO, fc2, a=k, T=420)
+            number(f, "0", 1180, 790, 70, a=0.35 * k, glow=0.3)
         else:
             # Jake, happy in his own life; you, alone with the 0
             k = smooth(prog(t, p30, p30 + 0.4))
@@ -366,17 +380,22 @@ class S19Nine(Shot):
         bg(f, top=hexc("#0d0f14"), bot=hexc("#050608"))
         f.save()
         k = ease_io(prog(t, 0, self.s("L31", 0.3)))
-        f.cam(540, lerp(830, 560, k), lerp(1.0, 1.15, k))
+        if land():
+            f.cam(lerp(540, 820, k), 830, lerp(1.0, 1.1, k))
+        else:
+            f.cam(540, lerp(830, 560, k), lerp(1.0, 1.15, k))
         contacts(f, t, 640, hl="Jake", hl_a=1.0, dim_others=0.8)
         f.restore()
         # icons for the few remaining times: weddings and chance meetings, with "9" big
         a9 = smooth(prog(t, self.s("L31", 0.12), self.s("L31", 0.35)))
-        number(f, "9", 540, 330, 200, a=a9, glow=1.0)
-        for j, (kind, fr, x) in enumerate((("ring", 0.4, 330), ("ring", 0.5, 470), ("star", 0.66, 610), ("star", 0.74, 750))):
+        nx, ny, iy, ix0 = (1150, 760, 960, 940) if land() else (540, 330, 520, 330)
+        number(f, "9", nx, ny, 200, a=a9, glow=1.0)
+        for j, (kind, fr) in enumerate((("ring", 0.4), ("ring", 0.5), ("star", 0.66), ("star", 0.74))):
+            x = ix0 + j * 140
             t0 = self.s("L31", fr)
             a = smooth(prog(t, t0, t0 + 0.3)) * (1 - 0.6 * smooth(prog(t, self.s("L31", 0.88), self.e("L31"))))
             if a > 0:
-                S.icon(f, kind, x, 520, 70, a)
+                S.icon(f, kind, x, iy, 70, a)
         vignette(f)
 
 
@@ -443,7 +462,10 @@ class S20Chat(Shot):
         if t > tt:
             a = smooth(prog(t, tt, tt + 0.3)) * (1 - smooth(prog(t, self.s("L33", 0.55), self.s("L33", 0.65))))
             secs = int(rolling(t, tt, tt + 1.1, 0, 30))
-            number(f, f"0:{secs:02d}", 540, 220, 110, a=a, glow=0.8)
+            if land():
+                number(f, f"0:{secs:02d}", 1240, 760, 130, a=a, glow=0.8)
+            else:
+                number(f, f"0:{secs:02d}", 540, 220, 110, a=a, glow=0.8)
         if reply_typing:
             S.bubble(f, sx + 110, sy + 680, 120, 64, 1.0, tail=-1, glow=0.2)
             for d in range(3):
@@ -524,8 +546,8 @@ class S22NotFate(Shot):
         bg(f, spot=(540, 900), spot_a=0.06)
         rng = random.Random(9)
         change = prog(t, self.s("L36", 0.4), self.e("L36"))
-        for i in range(34):
-            x = rng.random() * W
+        for i in range(70 if land() else 34):
+            x = (-760 + rng.random() * 2600) if land() else rng.random() * W
             y0 = rng.random() * 1300 + 100
             v0 = rng.choice([1, 2, 3, 5, 7, 9, 11, 14, 16, 22, 41, 64, 120])
             v1 = v0 * rng.choice([3, 4, 6, 8, 10])
@@ -558,18 +580,30 @@ class S23CallMom(Shot):
         up = prog(t, self.s("L37", 0.55), self.e("L37"))
         mf = Face(mouth="big" if up > 0.2 else "smile", eyes="happy" if up > 0.5 else "open", brows="raised",
                   blink=blink_at(t, 6), look=(-0.2, 0))
+        L = land()
         f.save()
         for c in (f.cx, f.gx):
-            c.translate(540, 360)
-            c.scale(0.75, 0.75)
-            c.translate(-540, -760)
+            if L:
+                c.translate(1000, 900)
+                c.scale(0.85, 0.85)
+                c.translate(-540, -880)
+            else:
+                c.translate(540, 360)
+                c.scale(0.75, 0.75)
+                c.translate(-540, -760)
         mom_door(f, t, 1.0, 1.0, mf, num=None, hero=False)
         f.restore()
         v = 16 if up <= 0 else rolling(t, self.s("L37", 0.55), self.e("L37"), 16, 39)
-        number(f, v, 540, 290, 100, glow=1.0 + up * 0.6)
-        fc = Face(look=(0.0, 0.0), mouth="big" if t > self.s("L37", 0.4) else "smile", eyes="open", brows="soft",
-                  blink=blink_at(t, 1))
-        bust(f, 540, 1230, 100, HERO, fc, Arms(phone=True), T=400)
+        if L:
+            number(f, v, 983, 650, 100, glow=1.0 + up * 0.6)
+        else:
+            number(f, v, 540, 290, 100, glow=1.0 + up * 0.6)
+        fc = Face(look=(0.25, 0.0) if L else (0.0, 0.0), mouth="big" if t > self.s("L37", 0.4) else "smile", eyes="open",
+                  brows="soft", blink=blink_at(t, 1))
+        if L:
+            bust(f, 120, 1150, 100, HERO, fc, Arms(phone=True), T=400)
+        else:
+            bust(f, 540, 1230, 100, HERO, fc, Arms(phone=True), T=400)
         f.restore()
         vignette(f)
 
@@ -655,8 +689,12 @@ def end_card(f, t, dur):
     bg(f, spot=(540, 860), spot_a=0.06)
     a = smooth(prog(t, 0.0, 0.5)) * (1 - smooth(prog(t, dur - 0.5, dur)))
     fc = Face(mouth="smile", brows="neutral", look=(0.25, 0.0), blink=blink_at(t, 3))
-    bust(f, 540, 1080, 120, HERO, fc, a=a, T=420)
-    text(f, "JUST NEEDY", 540, 1560, 54, WHITE, a, glow=0.4)
+    if land():
+        bust(f, 300, 1150, 130, HERO, fc, a=a, T=500)
+        text(f, "JUST NEEDY", 860, 1090, 72, WHITE, a, glow=0.4)
+    else:
+        bust(f, 540, 1080, 120, HERO, fc, a=a, T=420)
+        text(f, "JUST NEEDY", 540, 1560, 54, WHITE, a, glow=0.4)
     vignette(f)
 
 

@@ -17,7 +17,8 @@ from multiprocessing import Pool
 import numpy as np
 
 from .frame import draw_subtitle, srt, subtitle_cues
-from .look import FPS, H, W, Frame, make_grain
+from . import look
+from .look import FPS, H, W, Frame, make_grain, out_size
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BUILD = os.path.join(ROOT, "build", "numbers")
@@ -75,15 +76,23 @@ def total():
     return FILM_END + END_CARD
 
 
+def _view(name):
+    if not look.land():
+        return None
+    from .landscape import VIEWS
+    return VIEWS[name]
+
+
 def render_frame(gt, subs=True):
     _init()
-    f = Frame()
     if gt >= FILM_END:
+        f = Frame(_view("END"))
         from .shots_b import end_card
         end_card(f, gt - FILM_END, END_CARD)
         bright = 1.0
     else:
         sh = next(s for s in SHOTS if s.t0 <= gt < s.t0 + s.dur) if gt < FILM_END else SHOTS[-1]
+        f = Frame(_view(type(sh).__name__))
         lt = gt - sh.t0
         f.save()
         sh.draw(f, lt)
@@ -91,7 +100,10 @@ def render_frame(gt, subs=True):
         bright = min(1.0, (lt / sh.fade_in) if sh.fade_in else 1.0, ((sh.dur - lt) / sh.fade_out) if sh.fade_out else 1.0)
         bright = max(0.0, bright) ** 1.5
     if subs:
+        f.cx.save()
+        f.cx.identity_matrix()   # subtitles live in output space
         draw_subtitle(f.cx, gt, CUES)
+        f.cx.restore()
     grain = GRAIN[int(gt * FPS) % len(GRAIN)]
     rgb = f.to_rgb(grain=grain)
     if bright < 1.0:
@@ -100,8 +112,11 @@ def render_frame(gt, subs=True):
 
 
 def _render_range(args):
-    i, f0, f1, path, crf = args
-    cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
+    i, f0, f1, path, crf, land = args
+    if land:
+        look.MODE["land"] = True
+    ow, oh = out_size()
+    cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{ow}x{oh}", "-r", str(FPS),
            "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", str(crf), "-pix_fmt", "yuv420p", path]
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     for fi in range(f0, f1):
@@ -115,22 +130,24 @@ def _render_range(args):
 
 def video(draft=False, workers=4):
     _init()
-    os.makedirs(BUILD, exist_ok=True)
+    land = look.land()
+    build = os.path.join(BUILD, "land") if land else BUILD
+    os.makedirs(build, exist_ok=True)
     n = int(math.ceil(total() * FPS))
     seg = 8
     bounds = [round(n * k / seg) for k in range(seg + 1)]
     crf = 26 if draft else 21
-    jobs = [(k, bounds[k], bounds[k + 1], os.path.join(BUILD, f"seg_{k:02d}.mp4"), crf) for k in range(seg)]
+    jobs = [(k, bounds[k], bounds[k + 1], os.path.join(build, f"seg_{k:02d}.mp4"), crf, land) for k in range(seg)]
     with Pool(workers) as pool:
         parts = pool.map(_render_range, jobs)
-    lst = os.path.join(BUILD, "segs.txt")
+    lst = os.path.join(build, "segs.txt")
     with open(lst, "w") as fh:
         for p in parts:
             fh.write(f"file '{p}'\n")
-    silent = os.path.join(BUILD, "video_silent.mp4")
+    silent = os.path.join(build, "video_silent.mp4")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", silent], check=True)
     os.makedirs(OUT, exist_ok=True)
-    final = os.path.join(OUT, NAME + ("_draft" if draft else "") + ".mp4")
+    final = os.path.join(OUT, NAME + ("_16x9" if land else "") + ("_draft" if draft else "") + ".mp4")
     mix = os.path.join(BUILD, "mix.wav")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", silent, "-i", mix, "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
                     "-shortest", "-movflags", "+faststart", final], check=True)
@@ -154,19 +171,27 @@ def still(name, t, out):
 def sheet(out, frac=0.7, cols=6):
     _init()
     from PIL import Image
+    tw, th_ = (480, 270) if look.land() else (270, 480)
+    if look.land():
+        cols = 5
     thumbs = []
     for s in SHOTS:
         rgb = render_frame(s.t0 + s.dur * frac)
-        thumbs.append(Image.fromarray(rgb).resize((270, 480)))
+        thumbs.append(Image.fromarray(rgb).resize((tw, th_)))
+    rgb = render_frame(FILM_END + END_CARD * 0.5)
+    thumbs.append(Image.fromarray(rgb).resize((tw, th_)))
     rows = (len(thumbs) + cols - 1) // cols
-    im = Image.new("RGB", (cols * 270, rows * 480))
+    im = Image.new("RGB", (cols * tw, rows * th_))
     for i, th in enumerate(thumbs):
-        im.paste(th, ((i % cols) * 270, (i // cols) * 480))
+        im.paste(th, ((i % cols) * tw, (i // cols) * th_))
     im.save(out)
 
 
 if __name__ == "__main__":
     a = sys.argv[1:]
+    if "--land" in a:          # 16:9 1920x1080 render of the same film
+        look.MODE["land"] = True
+        a.remove("--land")
     if a[0] == "plan":
         plan()
     elif a[0] == "still":

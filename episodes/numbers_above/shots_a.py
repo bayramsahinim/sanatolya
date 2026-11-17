@@ -3,7 +3,7 @@ import math
 
 from .cast import (BAKER, COWORKER, CROWD, HERO, MOM, Arms, Face, blink_at, bust, person)
 from .frame import Shot
-from .look import (BLUE, GLOW_BLUE, GREY1, GREY2, H, LINE, LINE_DIM, W, WHITE, back_out, bg, clamp, count,
+from .look import (BLUE, GLOW_BLUE, GREY1, GREY2, H, LINE, LINE_DIM, W, WHITE, XL, XR, back_out, bg, clamp, count, land,
                    ease_io, ease_out, gline, glow_blob, grect, hexc, lerp, number, prog, rrect, smooth,
                    src, text, vignette)
 from . import sets as S
@@ -110,7 +110,11 @@ class S02Numbers(Shot):
         kpush = ease_io(prog(t, self.s("L04") - 0.2, self.e("L04")))
         f.cam(540, lerp(960, 860, kpush), lerp(1.0, 1.16, kpush))
         # street: faint buildings + pavement lines
-        for i, (bx, bw, bh) in enumerate(((-20, 260, 900), (250, 230, 720), (490, 300, 1000), (800, 300, 820))):
+        blds = ((-20, 260, 900), (250, 230, 720), (490, 300, 1000), (800, 300, 820))
+        if land():
+            blds = ((-1060, 280, 860), (-770, 250, 980), (-500, 240, 760), (-270, 260, 940)) + blds + \
+                   ((1110, 270, 940), (1390, 240, 780), (1640, 300, 900), (1950, 260, 820))
+        for i, (bx, bw, bh) in enumerate(blds):
             grect(f, bx, 1000 - bh, bw, bh, 4, LINE_DIM, 2.2, 0.8, glow=0.25, fillc=hexc("#12151b"))
             for r in range(int(bh / 110)):
                 for k in range(int(bw / 80)):
@@ -118,21 +122,28 @@ class S02Numbers(Shot):
                         f.cx.rectangle(bx + 25 + k * 80, 1000 - bh + 40 + r * 110, 40, 55)
                         src(f.cx, hexc("#e7ecf7"), 0.18)
                         f.cx.fill()
-        gline(f, [(0, 1000), (W, 1000)], LINE, 2.4, 0.9)
-        for i in range(-6, 7):
+        gline(f, [(XL, 1000), (XR, 1000)], LINE, 2.4, 0.9)
+        for i in range(-14 if land() else -6, 15 if land() else 7):
             gline(f, [(540 + i * 60, 1000), (540 + i * 260, 1600)], LINE_DIM, 1.4, 0.35, glow=0)
         # crowd: back row then front row
         pos = [(120, 1110, 46), (330, 1100, 46), (540, 1105, 46), (750, 1100, 46), (960, 1110, 46),
                (225, 1290, 60), (435, 1300, 60), (645, 1295, 60), (855, 1290, 60)]
         t_num = self.s("L02", 0.25)
-        for i, ((x, g, R), sp) in enumerate(zip(pos, CROWD * 2)):
+        nums = list(CROWD_NUMS)
+        if land():
+            # widescreen: the crowd continues to both sides (numbers pop with the same ticks)
+            pos = [(-300, 1105, 46), (-90, 1110, 46), (1170, 1105, 46), (1380, 1110, 46),
+                   (-405, 1295, 60), (15, 1290, 60), (1065, 1295, 60), (1485, 1290, 60)] + pos
+            nums = [62, 3, 920, 15, 2310, 8, 140, 27] + nums
+        order = list(range(len(pos)))
+        for i, ((x, g, R), sp) in enumerate(zip(pos, CROWD * 4)):
             sw = math.sin(t * 1.3 + i) * 3
             fc = Face(look=(math.sin(t * 0.4 + i * 1.7) * 0.4, 0), mouth=["small", "flat", "smile"][i % 3],
                       blink=blink_at(t, i + 3))
             hx, hy = person(f, x + sw, g, R, sp, fc)
             # numbers: L03 dims them to grey "labels", L04 brightens
             dim = 1.0 - 0.45 * (prog(t, self.s("L03"), self.s("L03") + 0.3) - prog(t, self.s("L04") - 0.2, self.s("L04") + 0.3))
-            num_pop(f, CROWD_NUMS[i], hx, hy - R * 1.75, 44 if R < 55 else 52, t, t_num + i * 0.17, a=dim,
+            num_pop(f, nums[i], hx, hy - R * 1.75, 44 if R < 55 else 52, t, t_num + (i % 9) * 0.17, a=dim,
                     glow=0.8 + 0.6 * kpush)
         # L03: "not their age / not their IQ" strike tags
         for k, (lab, xx, yy, frac) in enumerate((("AGE", 330, 560, 0.0), ("IQ", 740, 600, 0.5))):
@@ -230,12 +241,15 @@ class S04Subway(Shot):
         leave = smooth(prog(t, self.s("L07", 0.55), self.e("L07") + 0.3))
         people = [(300, 1120, 46, CROWD[1]), (430, 1110, 44, CROWD[0]), (650, 1110, 44, CROWD[3]),
                   (780, 1120, 46, CROWD[2]), (120, 1330, 66, CROWD[5]), (960, 1330, 66, CROWD[4])]
+        if land():
+            people = [(-330, 1330, 66, CROWD[6]), (-120, 1120, 46, CROWD[7]), (1200, 1120, 46, CROWD[0]),
+                      (1410, 1330, 66, CROWD[3])] + people
         for i, (x, g, R, sp) in enumerate(people):
             a = 1 - leave * (0.85 if i % 2 == 0 else 1.0)
             fc = Face(look=(0.5 if x < 540 else -0.5, 0.2), mouth="flat", eyes="half" if i % 3 == 0 else "open",
                       blink=blink_at(t, i))
             hx, hy = person(f, x + sway * (1 + i % 2), g, R, sp, fc, a=a)
-            num_pop(f, "1", hx, hy - R * 1.7, 64 if R > 55 else 54, t, tn + i * 0.06, a=a, glow=1.0 + 0.5 * k)
+            num_pop(f, "1", hx, hy - R * 1.7, 64 if R > 55 else 54, t, tn + (i % 6) * 0.06, a=a, glow=1.0 + 0.5 * k)
         # hero standing, holding the pole, front view, looking around
         fc = Face(look=(math.sin(t * 0.9) * 0.7, -0.2), brows="raised", mouth="flat", blink=blink_at(t, 5))
         person(f, 540 + sway * 2, 1330, 80, HERO, fc, Arms(l=(8, 0), r=(150, 20)))
@@ -261,7 +275,7 @@ class S05Baker(Shot):
         fc = Face(mouth="big" if (t % 1.6) < 0.8 else "smile", brows="raised", eyes="happy" if t > self.s("L08", 0.6) else "open",
                   blink=blink_at(t, 7), look=(0.2, 0.1))
         hx, hy = person(f, 540, 1200, 92, BAKER, fc, Arms(l=(25, 30), r=(30, 40)))
-        S.counter(f, 120, 1080, 840, 330)
+        S.counter(f, -380 if land() else 120, 1080, 1840 if land() else 840, 330)
         # bread on counter
         for i, bx in enumerate((300, 780)):
             from .look import ellipse
@@ -323,7 +337,7 @@ class S07Chosen(Shot):
         f.save()
         k = ease_io(prog(t, 0, self.dur))
         f.cam(540, 930, lerp(1.12, 1.0, k))
-        gline(f, [(0, 1110), (W, 1110)], LINE_DIM, 2, 0.6)
+        gline(f, [(XL, 1110), (XR, 1110)], LINE_DIM, 2, 0.6)
         people = [(220, 1110, 56, CROWD[1], "1", 0.55), (540, 1110, 70, BAKER, "2,140", 0.85), (860, 1110, 76, COWORKER, "3,900", 1.0)]
         for i, (x, g, R, sp, n, br) in enumerate(people):
             fc = Face(look=(0, 0), mouth="smile" if i else "flat", blink=blink_at(t, i + 4))
@@ -392,8 +406,13 @@ def mom_door(f, t, openk, light, mom_face, num=None, num_a=1.0, hero=True, hero_
     bg(f, top=hexc("#121419"), bot=hexc("#07080a"))
     # house wall
     for i in range(14):
-        gline(f, [(0, 260 + i * 80), (W, 260 + i * 80)], LINE_DIM, 1.2, 0.18, glow=0)
+        x0, x1 = (XL, XR) if land() else (0, W)
+        gline(f, [(x0, 260 + i * 80), (x1, 260 + i * 80)], LINE_DIM, 1.2, 0.18, glow=0)
     S.wall_lamp(f, 200, 520, on=light)
+    if land():
+        S.wall_lamp(f, 880, 520, on=light)
+        S.window(f, -420, 560, 300, 360, 0.6, light=0.25 * light)
+        S.window(f, 1200, 560, 300, 360, 0.6, light=0.25 * light)
     S.door(f, 330, 470, 420, 820, openk=openk, inside_light=light * openk)
     if openk > 0.3:
         a = smooth(prog(openk, 0.3, 0.8)) * mom_a
@@ -441,10 +460,15 @@ class S10Math(Shot):
         bg(f, spot=(540, 820), spot_a=0.05)
         f.save()
         push(f, t, self.dur, 1.04, 1.0, cy=900)
-        # Mom faint in the background
-        person(f, 540, 1500, 120, MOM, Face(mouth="smile", blink=blink_at(t, 2)), a=0.25)
+        if land():
+            # widescreen: Mom beside the card instead of behind it
+            hx, hy = person(f, 1120, 1240, 110, MOM, Face(mouth="smile", look=(-0.3, 0), blink=blink_at(t, 2)), a=0.85)
+            x, y, w, h = -230, 300, 840, 900
+        else:
+            # Mom faint in the background
+            person(f, 540, 1500, 120, MOM, Face(mouth="smile", blink=blink_at(t, 2)), a=0.25)
+            x, y, w, h = 120, 300, 840, 900
         # glass card
-        x, y, w, h = 120, 300, 840, 900
         rrect(f.cx, x, y, w, h, 40)
         src(f.cx, hexc("#151821"), 0.88)
         f.cx.fill()
