@@ -46,3 +46,27 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: "Why Does Coke Taste Better From a Glass Bottle?" (Short)
+
+Strict visual remake + English localization of the Turkish master reference (same hook, order, ending, ~45 s).
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920 native, 30 fps, H.264/AAC, 45.0 s) | `output/JUST_NEEDY_GLASS_BOTTLE_COLA_FINAL.mp4` |
+| English subtitles | `output/JUST_NEEDY_GLASS_BOTTLE_COLA_ENGLISH.srt` |
+
+```
+episodes/glass_bottle_cola/
+  script.py    Turkish transcript -> English lines (+ Turkish beat times, caption chunks)
+  timing.py    places each English line on its Turkish beat (Whisper word timestamps)
+  art.py       bottles, can, molecules, cross-sections, tongue, calendar, mascot
+  scenes.py    shot list + burned-in captions
+  episode.py   audio mix, SRT, native 1080x1920 render
+assets/audio/tts_cola/   narration take (Gemini TTS, channel narrator config) + word timings
+```
+
+```bash
+pip install faster-whisper   # only needed to regenerate words.json
+python -m episodes.glass_bottle_cola.episode all
+```
