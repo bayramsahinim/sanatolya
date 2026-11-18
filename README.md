@@ -53,6 +53,7 @@ python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.
 |---|---|
 | Final video (1080×1920, 24 fps, H.264/AAC, ~49 s, −14.9 LUFS) | `output/JUST_NEEDY_PLANT_POISON_ENGLISH.mp4` |
 | English subtitles (sentence-level SRT) | `output/JUST_NEEDY_PLANT_POISON_ENGLISH.srt` |
+| **Final fixed** (1080×1920, 30 fps, 49.7 s): the Just Needy character replaces the farmer and waters the plants himself; observer mascot removed; audio, subtitles and everything outside the farm shot identical to revision 2 | `output/JUST_NEEDY_PLANT_POISON_FINAL_FIXED.mp4` / `.srt` |
 | **Revision 2** (1080×1920, 30 fps, ~49.7 s, ≈−15 LUFS): new crisper narration take, music −5 dB with ducking, "BECAME" overlay removed, blue-hoodie mascot in the farm shot | `output/JUST_NEEDY_PLANT_POISON_REVISED_FINAL.mp4` / `.srt` |
 
 Faithful line-by-line adaptation (`episodes/plant_poison/script.py` keeps each Turkish line next
@@ -77,3 +78,9 @@ from a clean plate; `mascot.py` builds/animates the mascot from `assets/characte
 `farm_mascot.py` tracks the farm shot's camera and keeps plants, can and spray in front of him.
 The source animation is 720×1280; it is upscaled to 1080×1920, while captions and the mascot are
 drawn natively at 1080×1920.
+
+Final fix notes: `farm_replace.py` removes the farmer (background rebuilt by `farm_bg.py`), draws the
+character from the official turnaround (3/4 view, vector, `jn_character.py`) holding and tilting
+the redrawn watering can on the original's measured timing, with water from the spout, and
+reproduces the shot's entry/exit dissolves and the farmer's fade. Rendering reuses the approved
+audio stream unchanged (`python -m episodes.plant_poison.episode build/clean.mp4 output`).

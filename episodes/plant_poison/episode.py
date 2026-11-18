@@ -19,7 +19,7 @@ import soundfile as sf
 from PIL import Image, ImageDraw, ImageFont
 from scipy.signal import resample_poly
 
-from episodes.plant_poison import farm_mascot, music
+from episodes.plant_poison import farm_replace, music
 from episodes.plant_poison.script import CAPS, LINES
 from episodes.plant_poison.voice import SR as VSR, clips, words_timing
 
@@ -31,7 +31,9 @@ FONT = "assets/fonts/Montserrat-ExtraBold.ttf"
 CAP_SIZE = 76
 CAP_STROKE = 8
 CAP_Y = int(H * 0.70)
-NAME = "JUST_NEEDY_PLANT_POISON_REVISED_FINAL"
+NAME = "JUST_NEEDY_PLANT_POISON_FINAL_FIXED"
+# audio of the approved revision, carried over bit-for-bit
+AUDIO_FROM = "output/JUST_NEEDY_PLANT_POISON_REVISED_FINAL.mp4"
 
 
 # ------------------------------------------------------------------ timing plan
@@ -259,11 +261,13 @@ def main(clean_video, out_dir, mode="all"):
               f"slow x{1 / s['rate']:.2f}  {s['text']}")
     print("duration", round(dur, 2))
 
-    # audio
-    master_audio(segs, dur, "build/plant_poison_mix.wav")
+    # audio: re-master only on request; by default reuse the approved mix untouched
     final = os.path.join(out_dir, NAME + ".mp4")
     tmp = "build/plant_poison_video.mp4"
+    if mode == "remaster":
+        master_audio(segs, dur, "build/plant_poison_mix.wav")
     if mode == "audio":  # re-mix only: keep the delivered picture bit-for-bit
+        master_audio(segs, dur, "build/plant_poison_mix.wav")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", final, "-map", "0:v", "-c", "copy", tmp], check=True)
         mux(tmp, final)
         return
@@ -286,8 +290,7 @@ def main(clean_video, out_dir, mode="all"):
     p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "bgr24", "-s", f"{W}x{H}",
                           "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "slow", "-crf", "17",
                           "-pix_fmt", "yuv420p", tmp], stdin=subprocess.PIPE)
-    an = farm_mascot.analyse(src)
-    t_farm = None  # output time at which the farm shot (and the mascot) appears
+    an = farm_replace.analyse(src)
     cache = {}
     nfr = int(round(dur * FPS))
     for k in range(nfr):
@@ -298,10 +301,8 @@ def main(clean_video, out_dir, mode="all"):
             cache.clear()
             cache[idx] = cv2.resize(src[idx], (W, H), interpolation=cv2.INTER_LANCZOS4)
         fr = cache[idx].copy()
-        if farm_mascot.FIRST <= idx <= farm_mascot.LAST:
-            if t_farm is None:
-                t_farm = T
-            farm_mascot.draw(fr, src[idx], idx, T - t_farm, an, scale_out=W / 720, seed=k)
+        if farm_replace.FIRST <= idx <= farm_replace.LAST:
+            farm_replace.render(fr, src, idx, st, an, seed=k)
         for c in cs:
             if c["t0"] <= T < c["t1"]:
                 composite(fr, cap_cached(c["text"]))
@@ -310,15 +311,18 @@ def main(clean_video, out_dir, mode="all"):
     p.stdin.close()
     p.wait()
 
-    mux(tmp, final)
+    mux(tmp, final, None if mode == "remaster" else AUDIO_FROM)
 
 
-def mux(video, final):
-    # audio is fully mastered in master_audio
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video, "-i", "build/plant_poison_mix.wav",
-                    "-filter_complex", "[1:a]anull[a]",
-                    "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
-                    "-movflags", "+faststart", "-shortest", final], check=True)
+def mux(video, final, audio_from=None):
+    if audio_from:   # copy the approved AAC stream untouched
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video, "-i", audio_from,
+                        "-map", "0:v", "-map", "1:a", "-c", "copy", "-movflags", "+faststart", "-shortest", final],
+                       check=True)
+    else:            # audio is fully mastered in master_audio
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video, "-i", "build/plant_poison_mix.wav",
+                        "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+                        "-movflags", "+faststart", "-shortest", final], check=True)
     print("wrote", final)
 
 
