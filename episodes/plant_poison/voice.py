@@ -11,9 +11,16 @@ import numpy as np
 from cinecode import align, tts
 from episodes.plant_poison.script import LINES
 
-TAKE = "assets/audio/tts/plant_poison_a_3910928469.wav"
-BOUNDS = [2.00, 4.14, 7.13, 12.18, 14.05, 17.06, 19.46, 23.27, 26.15, 28.45, 31.05, 32.48,
-          34.25, 37.38, 39.95, 41.52, 44.20]
+# Revision 2 narration: take "c" (crisper, more forward, medium-fast; chosen over "a"/"b" by a
+# blind listening comparison against the delivery reference). Boundaries were read off the
+# take's pause map (line content x expected duration); each is snapped to the quietest
+# 0.12 s inside its +-window.
+TAKE = "assets/audio/tts/plant_poison_c_b8625b7d3f.wav"
+BOUNDS = [(2.40, 0.3), (4.80, 0.4), (7.90, 0.2), (12.40, 0.4), (14.30, 0.3), (18.80, 0.7),
+          (21.50, 0.2), (25.30, 0.25), (28.20, 0.5), (30.60, 0.06), (33.50, 0.4), (35.30, 0.15),
+          (37.20, 0.6), (40.25, 0.2), (42.90, 0.3), (45.00, 0.5), (47.80, 0.3)]
+# Revision 1 (take "a"): Gemini-estimated boundaries, +-0.6 s snap
+# TAKE = "assets/audio/tts/plant_poison_a_3910928469.wav"
 SR = tts.SR
 HOP = 240
 
@@ -25,8 +32,8 @@ def env(a):
 
 
 def snap(db, t, win=0.6, width=0.12):
-    i0, i1 = int((t - win) * 100), int((t + win) * 100)
     w = int(width * 100)
+    i0, i1 = int((t - win) * 100), max(int((t + win) * 100), int((t - win) * 100) + 1)
     k = np.convolve(db, np.ones(w) / w, mode="same")
     j = i0 + int(np.argmin(k[i0:i1]))
     return j / 100
@@ -36,7 +43,7 @@ def clips():
     a = tts.read_wav(TAKE)
     db = env(a)
     thr = np.percentile(db, 95) - 35
-    cuts = [0.0] + [snap(db, b) for b in BOUNDS] + [len(a) / SR]
+    cuts = [0.0] + [snap(db, b, w) for b, w in BOUNDS] + [len(a) / SR]
     out = []
     for i in range(len(LINES)):
         s, e = cuts[i], cuts[i + 1]
@@ -46,11 +53,48 @@ def clips():
         off = s + (v[-1] + 1) / 100 + 0.06
         on, off = max(on, s), min(off, e)
         x = a[int(on * SR): int(off * SR)].copy()
+        x = tighten(x, keep=0.5 if i == len(LINES) - 1 else 0.28)
         n = int(0.008 * SR)
         x[:n] *= np.linspace(0, 1, n)
         x[-n:] *= np.linspace(1, 0, n)
         out.append(x)
     return out
+
+
+def tighten(x, keep=0.28, longer=0.32):
+    """Shorten internal silences longer than `longer` s to `keep` s (crossfaded), so the read
+    keeps a medium-fast pace without touching the words themselves."""
+    db = env(x)
+    thr = np.percentile(db, 95) - 32
+    quiet = db < thr
+    runs, i = [], 0
+    while i < len(quiet):
+        if quiet[i]:
+            j = i
+            while j < len(quiet) and quiet[j]:
+                j += 1
+            if i > 0 and j < len(quiet) and (j - i) / 100 > longer:
+                runs.append((i, j))
+            i = j
+        else:
+            i += 1
+    out, pos = [], 0
+    fade = int(0.01 * SR)
+    for i, j in runs:
+        mid = (i + j) / 2 / 100
+        cut0, cut1 = int((mid - keep / 2) * SR), int((mid + keep / 2) * SR)
+        drop0, drop1 = int(i / 100 * SR) + int(keep / 2 * SR), int(j / 100 * SR) - int(keep / 2 * SR)
+        seg = x[pos:drop0].copy()
+        if out:
+            seg[:fade] *= np.linspace(0, 1, fade)
+        seg[-fade:] *= np.linspace(1, 0, fade)
+        out.append(seg)
+        pos = drop1
+    tail = x[pos:].copy()
+    if out:
+        tail[:fade] *= np.linspace(0, 1, fade)
+    out.append(tail)
+    return np.concatenate(out)
 
 
 def syl(w):

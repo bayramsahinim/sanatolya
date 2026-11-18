@@ -53,6 +53,7 @@ python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.
 |---|---|
 | Final video (1080×1920, 24 fps, H.264/AAC, ~49 s, −14.9 LUFS) | `output/JUST_NEEDY_PLANT_POISON_ENGLISH.mp4` |
 | English subtitles (sentence-level SRT) | `output/JUST_NEEDY_PLANT_POISON_ENGLISH.srt` |
+| **Revision 2** (1080×1920, 30 fps, ~49.7 s, ≈−15 LUFS): new crisper narration take, music −5 dB with ducking, "BECAME" overlay removed, blue-hoodie mascot in the farm shot | `output/JUST_NEEDY_PLANT_POISON_REVISED_FINAL.mp4` / `.srt` |
 
 Faithful line-by-line adaptation (`episodes/plant_poison/script.py` keeps each Turkish line next
 to its English version and the source caption-block timing). Original visuals and scene order
@@ -65,8 +66,14 @@ from the Turkish voice).
 ```bash
 pip install opencv-python-headless soundfile scipy numpy pillow
 python episodes/plant_poison/decaption.py SOURCE_TR.mp4 build/clean.mp4   # remove Turkish text
-python -m episodes.plant_poison.make_voice a        # TTS (cached in assets/audio/tts)
+python -m episodes.plant_poison.make_voice c        # TTS take used by revision 2 (cached in assets/audio/tts)
 python -m episodes.plant_poison.voice               # inspect line clips / word timings
 python -m episodes.plant_poison.episode build/clean.mp4 output          # full render
 python -m episodes.plant_poison.episode build/clean.mp4 output audio    # re-mix audio only, picture copied
 ```
+
+Revision 2 notes: `decaption.py` also restores the sky under the "BECAME" overlay (frames 103–117)
+from a clean plate; `mascot.py` builds/animates the mascot from `assets/characters/just_needy_mascot.png`;
+`farm_mascot.py` tracks the farm shot's camera and keeps plants, can and spray in front of him.
+The source animation is 720×1280; it is upscaled to 1080×1920, while captions and the mascot are
+drawn natively at 1080×1920.

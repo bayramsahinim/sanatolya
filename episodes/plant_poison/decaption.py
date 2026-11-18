@@ -84,8 +84,29 @@ def full(b):
 
 p = subprocess.Popen(["ffmpeg","-v","error","-y","-f","rawvideo","-pix_fmt","bgr24","-s","720x1280","-r","24","-i","-",
     "-c:v","libx264","-crf","12","-preset","medium","-pix_fmt","yuv420p",out], stdin=subprocess.PIPE)
+# "BECAME" branding overlay (frames 103-117, 4.29-4.88 s) over static sky: restore from a clean
+# plate (median of the 8 frames just before it appears). Checked: nothing else in the frame moves
+# in that area (max diff 2/255) and the logo never appears anywhere else in the timeline.
+LOGO = range(103, 118)
+LOGO_BOX = (330, 470, 120, 620)   # y0, y1, x0, x1
+plate = None
+
+
+def remove_logo(img, plate):
+    y0, y1, x0, x1 = LOGO_BOX
+    reg = img[y0:y1, x0:x1].astype(np.int16)
+    pl = plate[y0:y1, x0:x1]
+    d = (np.abs(reg - pl).max(2) > 6).astype(np.uint8)
+    d = cv2.dilate(d, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (13, 13)))
+    a = np.clip(cv2.GaussianBlur(d.astype(np.float32), (9, 9), 0) * 1.5, 0, 1)[..., None]
+    out = img.copy()
+    out[y0:y1, x0:x1] = (pl * a + reg * (1 - a)).astype(np.uint8)
+    return out
+
+
 prev = prev_raw = None
 KER = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 21))
+cleaned_plate_src = []
 for k, f in enumerate(frames):
     u = masks[k].copy()
     for j in range(k + 1, min(len(frames), k + 1 + LOOK)): u |= masks[j]
@@ -115,6 +136,12 @@ for k, f in enumerate(frames):
                         outf = (warped * mm + f * (1 - mm)).astype(np.uint8)
             except cv2.error:
                 pass
+    if k in range(LOGO.start - 8, LOGO.start):
+        cleaned_plate_src.append(outf.astype(np.float32))
+        if k == LOGO.start - 1:
+            plate = np.median(np.stack(cleaned_plate_src), 0).astype(np.uint8)
+    if k in LOGO:
+        outf = remove_logo(outf, plate)
     prev, prev_raw = outf, f
     p.stdin.write(outf.tobytes())
 p.stdin.close(); p.wait()

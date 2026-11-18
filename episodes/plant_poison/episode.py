@@ -19,11 +19,11 @@ import soundfile as sf
 from PIL import Image, ImageDraw, ImageFont
 from scipy.signal import resample_poly
 
-from episodes.plant_poison import music
+from episodes.plant_poison import farm_mascot, music
 from episodes.plant_poison.script import CAPS, LINES
 from episodes.plant_poison.voice import SR as VSR, clips, words_timing
 
-W, H, FPS = 1080, 1920, 24
+W, H, FPS = 1080, 1920, 30
 SR = 48000
 LEAD = 0.10        # speech starts this long after its scene block begins
 TAIL = 0.22        # minimum breathing room after a line
@@ -31,7 +31,7 @@ FONT = "assets/fonts/Montserrat-ExtraBold.ttf"
 CAP_SIZE = 76
 CAP_STROKE = 8
 CAP_Y = int(H * 0.70)
-NAME = "JUST_NEEDY_PLANT_POISON_ENGLISH"
+NAME = "JUST_NEEDY_PLANT_POISON_REVISED_FINAL"
 
 
 # ------------------------------------------------------------------ timing plan
@@ -42,13 +42,16 @@ def plan():
     durs = [len(x) / VSR for x in xs]
     units, i = [], 0
     while i < len(LINES):
-        lead = 0.15 if i == 0 else LEAD
-        need = lead + durs[i] + TAIL
-        a, b = LINES[i][2], LINES[i][3]
-        if need / (b - a) > 1.12 and i + 1 < len(LINES):
-            units.append([i, i + 1]); i += 2
-        else:
-            units.append([i]); i += 1
+        u = [i]
+        while True:
+            lead = 0.15 if u[0] == 0 else LEAD
+            need = lead + sum(durs[k] for k in u) + 0.30 * (len(u) - 1) + TAIL
+            span = LINES[u[-1]][3] - LINES[u[0]][2]
+            if need / span <= 1.12 or len(u) == 3 or u[-1] + 1 >= len(LINES):
+                break
+            u.append(u[-1] + 1)
+        units.append(u)
+        i = u[-1] + 1
     segs, t = [], 0.0
     for u in units:
         a, b = LINES[u[0]][2], LINES[u[-1]][3]
@@ -151,21 +154,35 @@ def narration_track(segs, dur):
     return out
 
 
-# Narrator chain (unchanged since the first delivery): bus compressor + limiter, then a fixed
-# master gain. MASTER_DB was measured on the delivered mix (-13.1 - (-24.64) LUFS) and is frozen
-# so changing the music can never move the voice level.
-VO_CHAIN = ("acompressor=threshold=-20dB:ratio=3:attack=4:release=120:makeup=4dB,"
-            "alimiter=limit=0.6:attack=2:release=40:level=false")
-MASTER_DB = 11.54
-# Music bed, pre-chain linear gains. v1 was 0.20 (gaps) / 0.11 (under voice).
-# v2 (measured against v1 with the old shared-bus compression reconstructed): about -5 dB
-# overall: ~-5 dB in pauses, ~-7 dB under the narrator (ducked 9.5 dB from the pause level).
-MUSIC_TRIM_DB = -2.5
-DUCK_DB = -9.5
-MUSIC_BASE = 0.20
-# the bed used to pass through the voice chain (+4 dB makeup, below threshold) and master gain;
-# it is now added after the chain, so carry that gain over explicitly
-MUSIC_POST_DB = 4.0 + MASTER_DB
+# ---- Revision 2 mastering -------------------------------------------------------------
+# Narrator: the old chain (3:1 bus compressor + two brick-wall limiters, ~8-10 dB of peak
+# squash) made the voice dull. Now: de-mud/presence EQ, light 2:1 compression, gain to target,
+# and a limiter that only catches the odd peak.
+VO_EQ = ("highpass=f=85:poles=2,"
+         "equalizer=f=280:t=q:w=1.0:g=-2.5,"        # less low-mid mud / boom
+         "equalizer=f=3300:t=q:w=0.9:g=2.5,"        # presence / articulation
+         "highshelf=f=7500:g=2,"                    # air
+         "acompressor=threshold=-24dB:ratio=2:attack=10:release=160:knee=6,"
+         "deesser=i=0.25")
+MIX_TARGET_LUFS = -13.6   # lands at ~-15 LUFS after fast peak limiting (TTS voice is very peaky;
+                          # pushing to -14 would need audible limiting)
+LIMIT_DB = -2.4
+# Music: v2 sat 8.4 dB (pauses) / 14.2 dB (under speech) below the narrator's speech RMS.
+# Revision 2: a further 5 dB down -> 13.4 / 19.2 dB below, with a gentle 2.5 kHz carve so the
+# pads never sit on top of the voice's articulation band.
+MUSIC_BELOW_GAP_DB = 13.4
+MUSIC_BELOW_SPEECH_DB = 19.2
+MUSIC_EQ = "equalizer=f=2500:t=q:w=1.0:g=-3,equalizer=f=250:t=q:w=1.0:g=-1.5"
+
+
+def _ff(inp, out, af):
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", inp, "-af", af, "-c:a", "pcm_f32le", out], check=True)
+
+
+def _lufs(path):
+    e = subprocess.run(["ffmpeg", "-hide_banner", "-i", path, "-af", "loudnorm=print_format=json", "-f", "null", "-"],
+                       capture_output=True, text=True).stderr
+    return json.loads(e[e.rindex("{"):e.rindex("}") + 1])
 
 
 def duck_envelope(vo, segs, n):
@@ -192,27 +209,42 @@ def duck_envelope(vo, segs, n):
     return env.astype(np.float32)
 
 
-def stems(segs, dur):
-    vo = narration_track(segs, dur)
-    vo = vo / (np.max(np.abs(vo)) + 1e-9) * 0.89
-    n = len(vo)
-    bed = music.render(dur)[:n]
-    env = duck_envelope(vo, segs, n)
-    gain_db = MUSIC_TRIM_DB + DUCK_DB * env + MUSIC_POST_DB
-    mus = bed * MUSIC_BASE * 10 ** (gain_db / 20)
-    return vo, mus.astype(np.float32), env
+def _rms_db(x):
+    return 20 * np.log10(np.sqrt(np.mean(x ** 2)) + 1e-12)
 
 
 def master_audio(segs, dur, out_wav):
-    vo, mus, env = stems(segs, dur)
+    vo = narration_track(segs, dur)
+    vo = vo / (np.max(np.abs(vo)) + 1e-9) * 0.89
+    n = len(vo)
     sf.write("build/plant_poison_vo.wav", vo, SR, subtype="FLOAT")
-    ln = f"volume={MASTER_DB:.2f}dB,alimiter=limit={10 ** (-2.6 / 20):.4f}:attack=1:release=50:level=false"
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", "build/plant_poison_vo.wav", "-af",
-                    VO_CHAIN + "," + ln, "-c:a", "pcm_f32le", "build/plant_poison_vo_master.wav"], check=True)
-    vom, _ = sf.read("build/plant_poison_vo_master.wav", dtype="float32")
+    _ff("build/plant_poison_vo.wav", "build/plant_poison_vo_eq.wav", VO_EQ)
+    vom = sf.read("build/plant_poison_vo_eq.wav", dtype="float32")[0][:n]
+    vom = np.pad(vom, (0, n - len(vom)))
+    # music: EQ carve, then level it against the mastered voice
+    bed = music.render(dur)[:n]
+    sf.write("build/plant_poison_bed.wav", bed, SR, subtype="FLOAT")
+    _ff("build/plant_poison_bed.wav", "build/plant_poison_bed_eq.wav", MUSIC_EQ)
+    bed = sf.read("build/plant_poison_bed_eq.wav", dtype="float32")[0][:n]
+    bed = np.pad(bed, (0, n - len(bed)))
+    env = duck_envelope(vo, segs, n)
+    body = np.zeros(n, bool)
+    body[int(1.5 * SR): int((dur - 3.0) * SR)] = True       # skip the music's fade in/out
+    sp, gp = (env > 0.9), (env < 0.3) & body
+    V = _rms_db(vom[sp])
+    g_gap = V - MUSIC_BELOW_GAP_DB - _rms_db(bed[gp])
+    g_sp = V - MUSIC_BELOW_SPEECH_DB - _rms_db(bed[sp])
+    gain_db = g_gap + (g_sp - g_gap) * env
+    mus = (bed * 10 ** (gain_db / 20)).astype(np.float32)
     sf.write("build/plant_poison_music_stem.wav", mus, SR, subtype="FLOAT")
-    m = vom[: len(mus)] + mus[: len(vom)]
-    sf.write(out_wav, m, SR, subtype="FLOAT")
+    sf.write("build/plant_poison_mix_pre.wav", vom + mus, SR, subtype="FLOAT")
+    # one gain stage + one peak limiter on the whole mix (voice/music ratio untouched)
+    m = _lufs("build/plant_poison_mix_pre.wav")
+    gain = MIX_TARGET_LUFS - float(m["input_i"])
+    _ff("build/plant_poison_mix_pre.wav", out_wav,
+        f"volume={gain:.2f}dB,alimiter=limit={10 ** (LIMIT_DB / 20):.4f}:attack=0.5:release=15:level=false")
+    print(f"mix gain {gain:+.1f} dB; music {_rms_db(mus[gp]) - V:+.1f} dB (pauses) / "
+          f"{_rms_db(mus[sp]) - V:+.1f} dB (under voice) relative to the narrator")
     return env
 
 
@@ -254,6 +286,8 @@ def main(clean_video, out_dir, mode="all"):
     p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "bgr24", "-s", f"{W}x{H}",
                           "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "slow", "-crf", "17",
                           "-pix_fmt", "yuv420p", tmp], stdin=subprocess.PIPE)
+    an = farm_mascot.analyse(src)
+    t_farm = None  # output time at which the farm shot (and the mascot) appears
     cache = {}
     nfr = int(round(dur * FPS))
     for k in range(nfr):
@@ -264,6 +298,10 @@ def main(clean_video, out_dir, mode="all"):
             cache.clear()
             cache[idx] = cv2.resize(src[idx], (W, H), interpolation=cv2.INTER_LANCZOS4)
         fr = cache[idx].copy()
+        if farm_mascot.FIRST <= idx <= farm_mascot.LAST:
+            if t_farm is None:
+                t_farm = T
+            farm_mascot.draw(fr, src[idx], idx, T - t_farm, an, scale_out=W / 720, seed=k)
         for c in cs:
             if c["t0"] <= T < c["t1"]:
                 composite(fr, cap_cached(c["text"]))
@@ -276,9 +314,9 @@ def main(clean_video, out_dir, mode="all"):
 
 
 def mux(video, final):
-    # final safety limiter only (the narrator is already mastered in master_audio)
+    # audio is fully mastered in master_audio
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video, "-i", "build/plant_poison_mix.wav",
-                    "-filter_complex", "[1:a]alimiter=limit=0.7943:attack=1:release=50:level=false[a]",
+                    "-filter_complex", "[1:a]anull[a]",
                     "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
                     "-movflags", "+faststart", "-shortest", final], check=True)
     print("wrote", final)
