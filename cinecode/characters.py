@@ -791,8 +791,43 @@ def draw_face(cx, J, p, R, st):
     cx.restore()
 
 
+def _dot_eye(cx, x, y, kind, lx, ly, side, st):
+    """Official Just Needy eyes: simple solid black ovals (with a tiny glint)."""
+    rx, ry = (8.6, 12.4) if kind == "wide" else (7.0, 10.6)
+    x += lx * 3.0
+    y += ly * 3.0
+    ellipse(cx, x, y, rx, ry)
+    src(cx, OUTLINE)
+    cx.fill()
+    ellipse(cx, x - rx * 0.32, y - ry * 0.42, rx * 0.3, ry * 0.22)
+    src(cx, (1, 1, 1, 0.9))
+    cx.fill()
+    if kind in ("half", "angry"):
+        cx.save()
+        ellipse(cx, x, y, rx + 1.5, ry + 1.5)
+        cx.clip()
+        if kind == "half":
+            cx.rectangle(x - rx - 3, y - ry - 3, 2 * rx + 6, ry + 2)
+            line_y = (y - 1, y - 1)
+        else:
+            cx.move_to(x - rx - 3, y - ry - 3 + (0 if side < 0 else 14))
+            cx.line_to(x + rx + 3, y - ry - 3 + (14 if side < 0 else 0))
+            cx.line_to(x + rx + 3, y - ry - 8)
+            cx.line_to(x - rx - 3, y - ry - 8)
+            cx.close_path()
+            line_y = None
+        src(cx, st.skin)
+        cx.fill()
+        cx.restore()
+        if line_y:
+            line(cx, [(x - rx - 1, line_y[0]), (x + rx + 1, line_y[1])], OUTLINE, 3.6)
+
+
 def _eye(cx, x, y, kind, lx, ly, side, st, p):
     rx, ry = 11.5, 15.0
+    if getattr(st, "dot_eyes", False) and kind in ("open", "angry", "half", "wide", "spiral"):
+        _dot_eye(cx, x, y, kind, lx, ly, side, st)
+        return
     if kind in ("open", "angry", "half", "wide", "spiral"):
         if kind == "wide":
             rx, ry = 14.5, 19

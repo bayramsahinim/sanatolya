@@ -46,3 +46,24 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode (Short): "The Prisoner Who Escaped With Dry Peas"
+
+Strict visual adaptation of the Turkish short *"Bu Mahkum Kuru Bezelyeyle Hapisten Kaçtı"*: same hook,
+scene order, humour and ending; Just Needy plays the prisoner in an orange prison uniform; narration
+translated line-for-line (`episodes/dry_peas_escape/script.py` keeps the Turkish next to each English line).
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC stereo, 69.9 s) | `output/JUST_NEEDY_DRY_PEAS_PRISON_ESCAPE_FINAL.mp4` |
+| English subtitles (SRT) | `output/JUST_NEEDY_DRY_PEAS_PRISON_ESCAPE_ENGLISH.srt` |
+| QA sheet (reference above, ours below, same beats) | `output/JUST_NEEDY_DRY_PEAS_QA_reference_vs_final.png` |
+
+Every English line starts at its Turkish line's timestamp (or right after the previous line), so the comic
+beats land where the source puts them. Rebuild:
+
+```bash
+python -m episodes.dry_peas_escape.make_voice      # Gemini TTS, channel narrator (cached)
+python -m episodes.dry_peas_escape.align_voice     # lines + word timing
+python -m episodes.dry_peas_escape.episode all     # mix, SRT, 1080x1920 render
+```

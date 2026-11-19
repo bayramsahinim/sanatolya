@@ -1,10 +1,15 @@
 """Cinecode core: canvas helpers, easing, keyframes, camera."""
 import math
+import os
 import random
 
 import cairo
 
-W, H = 1920, 1080
+# Canvas. Episodes for Shorts/Reels set CINECODE_FORMAT=vertical before importing cinecode.
+if os.environ.get("CINECODE_FORMAT") == "vertical":
+    W, H = 1080, 1920
+else:
+    W, H = 1920, 1080
 FPS = 30
 
 OUTLINE = (0.11, 0.11, 0.14)
