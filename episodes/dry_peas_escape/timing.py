@@ -12,11 +12,15 @@ from episodes.dry_peas_escape.script import LINES
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LINES_JSON = os.path.join(ROOT, "assets", "audio", "tts", "dry_peas", "lines.json")
 
-TEMPO = 1.08            # medium-fast delivery; also brings the cut to the source's ~68 s
+# The picture is the source video (68.33 s), so every line must land on its original visual beat.
+TEMPO = 1.12            # medium-fast delivery
+TEMPO_LINE = {"L01": 1.22, "L02": 1.16, "L03": 1.16, "L04": 1.16}   # the long opening lines catch up
+LEAD = 0.35             # a line may start up to this much before its Turkish counterpart
 CLIP_PRE, CLIP_POST = 0.05, 0.10
-GAP_MIN = 0.16          # shortest breath between two lines
+GAP_MIN = 0.10          # shortest breath between two lines
 JOINED = {"L05"}        # read as the continuation of the previous line
-TAIL = 1.0              # final hold after the last word
+VIDEO_END = 68.33       # source duration
+TAIL = 0.35             # minimum hold after the last word
 
 _meta = json.load(open(LINES_JSON))
 
@@ -26,15 +30,14 @@ def _build():
     t = 0.0
     for lid, src_t, _, _ in LINES:
         m = _meta[lid]
-        dur = (m["end"] - m["start"] + CLIP_PRE + CLIP_POST) / TEMPO
-        st = t if lid in JOINED else max(src_t, t + GAP_MIN)
-        if lid == "L01":
-            st = 0.25
+        tempo = TEMPO_LINE.get(lid, TEMPO)
+        dur = (m["end"] - m["start"] + CLIP_PRE + CLIP_POST) / tempo
+        st = t if lid in JOINED else max(src_t - LEAD, t + GAP_MIN, 0.12)
         sched[lid] = (st, st + dur)
         clip0 = m["start"] - CLIP_PRE
-        words[lid] = [(w, st + (a - clip0) / TEMPO, st + (b - clip0) / TEMPO) for w, a, b in m["words"]]
+        words[lid] = [(w, st + (a - clip0) / tempo, st + (b - clip0) / tempo) for w, a, b in m["words"]]
         t = st + dur
-    return sched, words, t + TAIL
+    return sched, words, max(VIDEO_END, t + TAIL)
 
 
 SCHED, WORDS, TOTAL = _build()

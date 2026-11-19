@@ -67,3 +67,28 @@ python -m episodes.dry_peas_escape.make_voice      # Gemini TTS, channel narrato
 python -m episodes.dry_peas_escape.align_voice     # lines + word timing
 python -m episodes.dry_peas_escape.episode all     # mix, SRT, 1080x1920 render
 ```
+
+### Visual-fix version (source picture, new main character)
+
+Per the director's correction, this version keeps the **original reference video's picture**: backgrounds,
+guards, warden, camera, effects and timing are the source frames themselves. Only the main prisoner changes.
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC stereo, 68.8 s) | `output/JUST_NEEDY_PRISON_ESCAPE_VISUAL_FIXED.mp4` |
+| English subtitles (SRT) | `output/JUST_NEEDY_PRISON_ESCAPE_VISUAL_FIXED_ENGLISH.srt` |
+| QA sheet (source above, fixed below) | `output/JUST_NEEDY_PRISON_ESCAPE_VISUAL_FIXED_QA_source_vs_fixed.png` |
+
+Pipeline (`episodes/dry_peas_escape/vfx/`): Gemini finds the prisoner's head/body/arms on keyframes
+(`detect.py`, `detect_arms.py`; results in `assets/vfx/dry_peas/*.json`), SAM 2.1 tracks them through every
+shot (`track.py`; masks in `assets/vfx/dry_peas/masks/`), `compose.py` swaps the egg head + cap for Just Needy's
+round white head (lit to match each shot), recolours the striped uniform orange using the source's own
+shading, removes the burned-in Turkish text and sets English captions; `finish.py` lays the English narration
+over the source's own music/effects (Turkish voice removed with Demucs).
+
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu && pip install sam2 opencv-python-headless demucs
+# frames: ffmpeg -i SOURCE.mp4 -q:v 2 -start_number 0 build/dry_peas_vfx/jpg/%05d.jpg ; masks -> build/dry_peas_vfx/masks
+python -m episodes.dry_peas_escape.vfx.compose geom
+python -m episodes.dry_peas_escape.vfx.finish all
+```
