@@ -1,100 +1,56 @@
 1
-00:00:00,250 --> 00:00:03,528
+00:00:00,200 --> 00:00:03,478
 Your brain can't stop reading. Let me prove it.
 
 2
-00:00:03,548 --> 00:00:06,963
+00:00:03,498 --> 00:00:07,063
 Don't read the word. Say the color of the letters.
 
 3
-00:00:06,983 --> 00:00:11,849
-This says red... but the letters are green. So you say: green.
-
-4
-00:00:11,899 --> 00:00:13,280
-Sounds easy.
-
-5
-00:00:13,300 --> 00:00:17,046
-People have been failing this test since 1935.
-
-6
-00:00:17,066 --> 00:00:19,866
-Three levels. Each one faster than the last.
-
-7
-00:00:19,886 --> 00:00:22,907
-Say every color out loud, before the bar runs out.
-
-8
-00:00:22,927 --> 00:00:25,373
+00:00:07,363 --> 00:00:09,809
 Level one. Go!
 
-9
-00:00:33,773 --> 00:00:36,603
+4
+00:00:19,359 --> 00:00:22,189
 Easy, right? That's because two of them matched.
 
-10
-00:00:36,623 --> 00:00:39,752
-Here's the trap: you can't stop reading.
-
-11
-00:00:39,772 --> 00:00:41,887
+5
+00:00:22,209 --> 00:00:24,324
 Level two. Faster.
 
-12
-00:00:41,907 --> 00:00:44,280
+6
+00:00:24,344 --> 00:00:26,716
 None of them match. Go!
 
-13
-00:00:51,280 --> 00:00:54,285
+7
+00:00:34,766 --> 00:00:37,772
 Did you feel that tiny pause before every color?
 
-14
-00:00:54,305 --> 00:00:57,876
-Reading is automatic. Naming a color isn't.
+8
+00:00:37,792 --> 00:00:41,760
+Reading is so automatic that it can interfere with naming colors.
 
-15
-00:00:57,896 --> 00:01:00,177
-So reading always gets there first.
+9
+00:00:41,780 --> 00:00:44,574
+Final round. Ignore my voice. Only trust the color you see.
 
-16
-00:01:00,197 --> 00:01:04,503
-In 1935, people were almost twice as slow when the word lied.
+10
+00:00:44,594 --> 00:00:45,588
+Go!
 
-17
-00:01:04,523 --> 00:01:07,033
-And it only works because you can read.
-
-18
-00:01:07,053 --> 00:01:09,761
-Little kids who can't read yet? They don't fall for it.
-
-19
-00:01:09,781 --> 00:01:12,223
-Final level. The fastest.
-
-20
-00:01:12,243 --> 00:01:15,047
-And this time... I'll read the words to you. Go!
-
-21
-00:01:15,197 --> 00:01:22,647
-Red. Green. Brown. Blue. Purple. Red. Blue. Green.
-
-22
-00:01:23,047 --> 00:01:23,692
+11
+00:00:54,138 --> 00:00:54,783
 Stop!
 
-23
-00:01:23,712 --> 00:01:25,970
+12
+00:00:54,803 --> 00:00:57,061
 How many did you get right? Be honest.
 
-24
-00:01:25,990 --> 00:01:27,486
+13
+00:00:57,081 --> 00:00:58,577
 Drop your score in the comments!
 
-25
-00:01:27,506 --> 00:01:31,252
+14
+00:00:58,597 --> 00:01:02,343
 Nineteen out of nineteen? I don't believe you.
 

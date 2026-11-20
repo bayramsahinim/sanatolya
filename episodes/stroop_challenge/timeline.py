@@ -13,8 +13,8 @@ from episodes.stroop_challenge.script import LEVELS, LINES
 
 TEMPO = 1.10        # light speed-up of the narration (pitch preserved, ffmpeg atempo)
 GAP = 0.12          # default breath between lines
-GO_TO_CARD = 0.30   # "Go!" end -> first card
-END_PAD = 2.0       # hold after the last line
+GO_TO_CARD = 0.45   # "Go!" end -> first card
+END_PAD = 2.5       # hold after the last line
 SR = tts.SR
 
 
@@ -24,7 +24,13 @@ def take(lid):
     import os
     import subprocess
     import tempfile
-    a = mv.load(lid)
+    if lid == "go3":
+        g = mv.load("go1")
+        segs = [x for x in _segments(g, min_gap=0.12) if x[1] - x[0] > 0.05]
+        s0 = [x for x in segs if x[0] > segs[0][1]][0][0]   # first phrase after "Level one."
+        a = g[max(0, int((s0 - 0.04) * SR)):]
+    else:
+        a = mv.load(lid)
     if TEMPO == 1.0:
         return a
     os.makedirs("build/tempo", exist_ok=True)
@@ -110,14 +116,14 @@ def build():
             start = max(at, cur)
         else:
             start = cur + GAP
-        if lid == "easy":
-            start = cur + 0.30           # let the demo land
+        if lid == "go1":
+            start = cur + 0.55           # let the GREEN example land
         d = len(a) / SR
         T["lines"][lid] = dict(start=start, end=start + d, text=text,
                                words=[start + w for w in word_times(text, a)])
         cur = start + d
         # cards follow the "Go!" lines
-        go_lines = {"go1": 0, "go2": 1, "readyou": 2}
+        go_lines = {"go1": 0, "go2": 1, "go3": 2}
         if lid in go_lines:
             li = go_lines[lid]
             L = LEVELS[li]
@@ -151,19 +157,14 @@ def scenes():
     marks = [
         ("hook", 0.0),
         ("rule", L["rule"]["start"] - 0.15),
-        ("y1935", L["easy"]["start"] - 0.1),
-        ("levels", L["levels"]["start"] - 0.1),
         ("intro1", L["go1"]["start"] - 0.1),
         ("play1", lv[0]["start"]),
         ("matched", lv[0]["end"]),
-        ("trap", L["trap"]["start"] - 0.1),
         ("intro2", L["lvl2"]["start"] - 0.1),
         ("play2", lv[1]["start"]),
         ("pause", lv[1]["end"]),
-        ("race", L["auto"]["start"] - 0.1),
-        ("stats", L["slow"]["start"] - 0.1),
-        ("kids", L["canread"]["start"] - 0.1),
-        ("intro3", L["lvl3"]["start"] - 0.1),
+        ("race", L["interfere"]["start"] - 0.1),
+        ("intro3", L["final3"]["start"] - 0.1),
         ("play3", lv[2]["start"]),
         ("end", lv[2]["end"]),
     ]

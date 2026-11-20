@@ -9,8 +9,7 @@ import math
 import cairo
 
 from cinecode.characters import HERO, Pose, talk
-from cinecode.core import (back_out, clamp, ease_in, ease_io, ease_out, ellipse, hexc, mix, rrect,
-                           smooth, smooth_poly, src)
+from cinecode.core import clamp, ease_in, ease_io, ease_out, hexc, mix, rrect, src
 from episodes.stroop_challenge import timeline as tl
 from episodes.stroop_challenge.script import INK, LEVELS, TOTAL
 
@@ -30,7 +29,7 @@ DIM = hexc("#8E9BBE")
 OK_G = hexc("#1E9E4A")
 BAD_R = hexc("#E5352B")
 
-CARD_Y, CARD_H, CARD_X, CARD_W = 640, 330, 70, 940
+CARD_Y, CARD_H, CARD_X, CARD_W = 625, 360, 45, 990
 TOP_CAP_Y = 300
 
 
@@ -154,7 +153,10 @@ def speaker_icon(cx, x, y, s, c):
 
 
 def pill(cx, x, y, label, bg, fg=WHITE, size=40, icon=None, a=1.0, scale=1.0):
-    """Centered pill; returns its width."""
+    """Centered pill; returns its width. `scale` is an appear progress (0..1+): the pill
+    fades in while growing from 92% to 100% - no overshoot, no hard pop."""
+    a *= clamp(scale)
+    scale = 0.92 + 0.08 * clamp(scale)
     font(cx, size)
     w = cx.text_extents(label).x_advance
     iw = size * 1.15 if icon else 0
@@ -219,7 +221,7 @@ def timer_bar(cx, frac, c, a=1.0, y=585):
         glow(cx, x0 + fw, y + h / 2, 26, mix(c, (1, 1, 1), 0.5), 0.8 * a)
 
 
-def tiles(cx, states, y=1160, size=62, gap=22, accent=HUD, pulse=0.0):
+def tiles(cx, states, y=1175, size=62, gap=22, accent=HUD, pulse=0.0):
     """states: list of 'locked' | 'active' | 'done' for levels 1..3."""
     n = len(states)
     total = n * size + (n - 1) * gap
@@ -253,7 +255,7 @@ def tiles(cx, states, y=1160, size=62, gap=22, accent=HUD, pulse=0.0):
 
 # ============================================================ cards
 def card(cx, word, ink, x=CARD_X, y=CARD_Y, w=CARD_W, h=CARD_H, scale=1.0, a=1.0, bg=None,
-         word_c=None, word_a=1.0, glow_word=0.0, max_size=200):
+         word_c=None, word_a=1.0, glow_word=0.0, max_size=205):
     cx.save()
     cx.translate(x + w / 2, y + h / 2)
     cx.scale(scale, scale)
@@ -397,21 +399,19 @@ def sc_hook(cx, t, t0, t1):
 
 
 def sc_rule(cx, t, t0, t1):
-    k = back_out(P(t, t0, t0 + 0.35))
+    k = ease_out(P(t, t0, t0 + 0.3))
     header(cx, "SAY THE COLOR", HUD)
     timer_bar(cx, 1.0, HUD)
-    card(cx, "RED", "GREEN", scale=0.85 + 0.15 * k, a=P(t, t0, t0 + 0.2))
+    card(cx, "RED", "GREEN", scale=0.95 + 0.05 * k, a=k)
     tiles(cx, ["locked"] * 3)
-    # demo badges: RED x when "red" is said, then GREEN check on the final "green"
-    t_red = word_t("demo", 2)
-    t_green = word_t("demo", 11)
+    # quick example: RED is crossed out on "word", GREEN is confirmed on "color"
+    t_red = word_t("rule", 3)
+    t_green = word_t("rule", 6)
     if t >= t_red:
-        kk = back_out(P(t, t_red, t_red + 0.25))
-        a = 1 - P(t, t_green - 0.25, t_green)
-        pill(cx, W / 2, 1040, "RED", BAD_R, icon="cross", a=a, scale=kk)
+        a = 1 - P(t, t_green - 0.2, t_green)
+        pill(cx, W / 2, 1075, "RED", BAD_R, icon="cross", size=54, a=a, scale=P(t, t_red, t_red + 0.25))
         if t < t_green:
-            # strike-through on the card word
-            pr = ease_out(P(t, t_red + 0.1, t_red + 0.45))
+            pr = ease_out(P(t, t_red + 0.05, t_red + 0.4))
             cx.move_to(W / 2 - 230, CARD_Y + CARD_H / 2)
             cx.line_to(W / 2 - 230 + 460 * pr, CARD_Y + CARD_H / 2)
             src(cx, BAD_R, 0.85 * a)
@@ -419,137 +419,7 @@ def sc_rule(cx, t, t0, t1):
             cx.set_line_cap(cairo.LINE_CAP_ROUND)
             cx.stroke()
     if t >= t_green:
-        kk = back_out(P(t, t_green, t_green + 0.3))
-        pill(cx, W / 2, 1040, "GREEN", OK_G, icon="check", scale=kk)
-    # rule underline: "COLOR" of the letters emphasis
-    t_col = word_t("rule", 7)
-    if t_col <= t < t_red:
-        u = ease_out(P(t, t_col, t_col + 0.3))
-        cx.move_to(W / 2 - 170, CARD_Y + CARD_H - 70)
-        cx.line_to(W / 2 - 170 + 340 * u, CARD_Y + CARD_H - 70)
-        src(cx, hexc(INK["GREEN"]))
-        cx.set_line_width(10)
-        cx.set_line_cap(cairo.LINE_CAP_ROUND)
-        cx.stroke()
-
-
-# ---- 1935 sheet (Stroop's original card): fixed incongruent grid
-SHEET = [
-    ("BROWN", "PURPLE"), ("RED", "BLUE"), ("BLUE", "RED"), ("GREEN", "PURPLE"),
-    ("RED", "GREEN"), ("GREEN", "BLUE"), ("BLUE", "RED"), ("RED", "BROWN"),
-    ("RED", "BROWN"), ("BROWN", "GREEN"), ("GREEN", "BLUE"), ("GREEN", "RED"),
-    ("RED", "PURPLE"), ("BROWN", "RED"), ("RED", "GREEN"), ("BROWN", "PURPLE"),
-    ("BROWN", "RED"), ("PURPLE", "BLUE"), ("PURPLE", "GREEN"), ("GREEN", "BROWN"),
-    ("RED", "GREEN"), ("BROWN", "BLUE"), ("PURPLE", "RED"), ("GREEN", "PURPLE"),
-    ("PURPLE", "GREEN"), ("RED", "BROWN"), ("BROWN", "PURPLE"), ("RED", "BLUE"),
-    ("GREEN", "BLUE"), ("PURPLE", "BROWN"), ("BLUE", "RED"), ("GREEN", "PURPLE"),
-]
-SHEET_X = [1, 4, 6, 14, 17, 25, 30]  # cells that get crossed out
-
-
-def sheet_1935(cx, cxp, cyp, scale, t, stamp_t, cross_t0=None, cross_dt=0.28, a=1.0):
-    w, h = 560, 640
-    cx.save()
-    cx.translate(cxp, cyp)
-    cx.scale(scale, scale)
-    cx.rotate(-0.025)
-    cx.push_group()
-    shadow_rrect(cx, -w / 2, -h / 2, w, h, 6, a=0.6)
-    cx.rectangle(-w / 2, -h / 2, w, h)
-    g = cairo.LinearGradient(-w / 2, -h / 2, w / 2, h / 2)
-    g.add_color_stop_rgb(0, *hexc("#F0DFB4")[:3])
-    g.add_color_stop_rgb(1, *hexc("#DDC38C")[:3])
-    cx.set_source(g)
-    cx.fill()
-    cols, rows = 4, 8
-    cw, rh = (w - 60) / cols, (h - 90) / rows
-    for i, (wd, ink) in enumerate(SHEET):
-        r, c = divmod(i, cols)
-        x = -w / 2 + 30 + cw * (c + 0.5)
-        y = -h / 2 + 70 + rh * (r + 0.5)
-        ctext(cx, wd, x, y + 10, min(30, fit_size(cx, wd, cw * 0.86, 30)), hexc(INK[ink]))
-    if cross_t0 is not None:
-        for j, i in enumerate(SHEET_X):
-            k = P(t, cross_t0 + j * cross_dt, cross_t0 + j * cross_dt + 0.2)
-            if k > 0:
-                r, c = divmod(i, cols)
-                x = -w / 2 + 30 + cw * (c + 0.5)
-                y = -h / 2 + 70 + rh * (r + 0.5)
-                cx.save()
-                cx.translate(x, y)
-                for dx in (-1, 1):
-                    cx.move_to(-40 * dx, -26)
-                    cx.line_to(-40 * dx + 80 * dx * min(1, k * 2 - (0 if dx < 0 else 1) if dx > 0 else k * 2), 26)
-                src(cx, hexc("#D02A2A"), 0.9)
-                cx.set_line_width(6)
-                cx.set_line_cap(cairo.LINE_CAP_ROUND)
-                cx.stroke()
-                cx.restore()
-    if t >= stamp_t:
-        k = P(t, stamp_t, stamp_t + 0.18)
-        sc = 1.6 - 0.6 * ease_out(k)
-        cx.save()
-        cx.translate(w / 2 - 120, -h / 2 + 52)
-        cx.rotate(-0.16)
-        cx.scale(sc, sc)
-        rrect(cx, -95, -40, 190, 80, 10)
-        src(cx, hexc("#D02A2A"), 0.9 * k)
-        cx.set_line_width(7)
-        cx.stroke()
-        ctext(cx, "1935", 0, 20, 56, hexc("#D02A2A"), 0.9 * k)
-        cx.restore()
-    cx.pop_group_to_source()
-    cx.paint_with_alpha(a)
-    cx.restore()
-
-
-def sc_y1935(cx, t, t0, t1):
-    k = ease_out(P(t, t0, t0 + 0.4))
-    t_year = word_t("y1935", 6)
-    t_fail = word_t("y1935", 3)
-    sheet_1935(cx, W / 2, 830 + (1 - k) * 80, 0.95, t, t_year, cross_t0=t_fail, a=k)
-
-
-def sc_levels(cx, t, t0, t1):
-    L = tlines()
-    header(cx, "3 LEVELS", HUD)
-    tb = L["bar"]
-    # timer bar fills while "before the bar runs out" is said, then drains a little to demo it
-    fill = ease_io(P(t, tb["start"], tb["start"] + 0.8))
-    drain = P(t, word_t("bar", 6), tb["end"] + 0.3)
-    timer_bar(cx, fill * (1 - 0.55 * drain), HUD)
-    # big tiles + speed bars underneath
-    size, gap = 170, 50
-    x0 = W / 2 - (3 * size + 2 * gap) / 2
-    for i in range(3):
-        ti = t0 + 0.15 + i * 0.12 if i == 0 else word_t("levels", 2) + (i - 1) * 0.15
-        kk = back_out(P(t, ti, ti + 0.35))
-        if kk <= 0:
-            continue
-        cx.save()
-        cx.translate(x0 + size / 2 + i * (size + gap), 800)
-        cx.scale(kk, kk)
-        rrect(cx, -size / 2, -size / 2, size, size, 28)
-        src(cx, hexc("#121B38"))
-        cx.fill_preserve()
-        src(cx, HUD3 if i == 2 else hexc("#3A4876"))
-        cx.set_line_width(6)
-        cx.stroke()
-        ctext(cx, str(i + 1), -14, 34, 96, WHITE)
-        lock_icon(cx, 44, 36, 40, hexc("#B9C3DE"))
-        # speed bar: shorter = less time per card
-        bw = [130, 90, 55][i]
-        rrect(cx, -65, size / 2 + 30, 130, 12, 6)
-        src(cx, TRACK)
-        cx.fill()
-        rrect(cx, -65, size / 2 + 30, bw, 12, 6)
-        src(cx, [HUD, HUD, HUD3][i])
-        cx.fill()
-        cx.restore()
-    t_loud = word_t("bar", 3)
-    if t >= t_loud:
-        pill(cx, W / 2, 1110, "SAY IT OUT LOUD", hexc("#1C2B5E"), icon="speaker", size=38,
-             scale=back_out(P(t, t_loud, t_loud + 0.3)))
+        pill(cx, W / 2, 1075, "GREEN", OK_G, icon="check", size=54, scale=P(t, t_green, t_green + 0.25))
 
 
 def level_intro(cx, t, t0, t1, li):
@@ -557,8 +427,8 @@ def level_intro(cx, t, t0, t1, li):
     header(cx, LEVELS[li]["name"], acc)
     timer_bar(cx, ease_out(P(t, t0, t0 + 0.6)), acc)
     # pulsing "get ready" glow in the card slot (reference: soft light orb)
-    pulse = 0.5 + 0.5 * math.sin(t * 6)
-    glow(cx, W / 2, CARD_Y + CARD_H / 2, 150 + 20 * pulse, mix(acc, (1, 1, 1), 0.6), 0.45)
+    pulse = 0.5 + 0.5 * math.sin(t * 3)
+    glow(cx, W / 2, CARD_Y + CARD_H / 2, 150 + 15 * pulse, mix(acc, (1, 1, 1), 0.6), 0.35)
     glow(cx, W / 2, CARD_Y + CARD_H / 2, 40, (1, 1, 1), 0.9)
     ctext(cx, LEVELS[li]["label"], W / 2, CARD_Y + CARD_H / 2 + 150 + 40, 34, mix(acc, (1, 1, 1), 0.3),
           P(t, t0 + 0.2, t0 + 0.5), spacing=6)
@@ -577,12 +447,10 @@ def sc_intro2(cx, t, t0, t1):
     else:
         level_intro(cx, t, t0, t1, 1)
         tg = L["go2"]["start"]
-        k = back_out(P(t, tg, tg + 0.3))
-        pill(cx, W / 2, 1040, "NONE OF THEM MATCH", hexc("#1C2B5E"), size=36, scale=k)
+        pill(cx, W / 2, 1075, "NONE OF THEM MATCH", hexc("#1C2B5E"), size=46, scale=P(t, tg, tg + 0.25))
 
 
 def sc_intro3(cx, t, t0, t1):
-    L = tlines()
     acc = HUD3
     header(cx, "LEVEL 3", acc)
     timer_bar(cx, ease_out(P(t, t0, t0 + 0.6)), acc)
@@ -593,9 +461,8 @@ def sc_intro3(cx, t, t0, t1):
         cx.save()
         cx.translate(x0 + size / 2 + i * (size + gap), 800)
         if i == 2:
-            pulse = 0.5 + 0.5 * math.sin(t * 7)
-            glow(cx, 0, 0, 170 + 20 * pulse, acc, 0.45)
-            cx.scale(1.0 + 0.04 * pulse, 1.0 + 0.04 * pulse)
+            pulse = 0.5 + 0.5 * math.sin(t * 3)
+            glow(cx, 0, 0, 170 + 12 * pulse, acc, 0.35)
         rrect(cx, -size / 2, -size / 2, size, size, 28)
         src(cx, hexc("#3A1410") if i == 2 else hexc("#121B38"))
         cx.fill_preserve()
@@ -609,10 +476,13 @@ def sc_intro3(cx, t, t0, t1):
             cx.fill()
             check_mark(cx, size * 0.42, -size * 0.42, 30, hexc("#121B38"), 8)
         cx.restore()
-    tr = word_t("readyou", 3)
-    if t >= tr:
-        pill(cx, W / 2, 1060, "I'LL READ THEM TO YOU", hexc("#B8361F"), icon="speaker", size=36,
-             scale=back_out(P(t, tr, tr + 0.3)))
+    ti = word_t("final3", 2)            # "ignore"
+    tt = word_t("final3", 5)            # "only trust..."
+    if t >= ti:
+        pill(cx, W / 2, 1060, "IGNORE MY VOICE", hexc("#B8361F"), icon="speaker", size=48,
+             scale=P(t, ti, ti + 0.25))
+    if t >= tt:
+        pill(cx, W / 2, 1195, "TRUST THE COLOR", OK_G, icon="check", size=48, scale=P(t, tt, tt + 0.25))
 
 
 def play(cx, t, t0, t1, li):
@@ -632,14 +502,14 @@ def play(cx, t, t0, t1, li):
         frac = 0
     timer_bar(cx, frac, acc)
     word, ink = L["cards"][k]
-    pop = back_out(P(t, a, a + 0.14), 2.2)
+    pop = ease_out(P(t, a, a + 0.14))
     # previous card flicks out to the left
     if k > 0 and t < a + 0.12:
         pw, pink = L["cards"][k - 1]
         q = ease_in(P(t, a, a + 0.12))
-        card(cx, pw, pink, x=CARD_X - 260 * q, a=1 - q, scale=1 - 0.1 * q)
-    card(cx, word, ink, scale=0.9 + 0.1 * pop, a=clamp(P(t, a, a + 0.08)))
-    ctext(cx, f"{k + 1} / {n}", W / 2, 1052, 38, hexc("#C9D2EA"))
+        card(cx, pw, pink, x=CARD_X - 200 * q, a=1 - q, scale=1 - 0.04 * q)
+    card(cx, word, ink, scale=0.96 + 0.04 * pop, a=clamp(P(t, a, a + 0.08)))
+    ctext(cx, f"{k + 1} / {n}", W / 2, 1072, 40, hexc("#C9D2EA"))
     st = ["done"] * li + ["active"] + ["locked"] * (2 - li)
     tiles(cx, st)
 
@@ -670,28 +540,15 @@ def sc_matched(cx, t, t0, t1):
         y = y0 + i * (h + gap) + (1 - k) * 40
         mini_card(cx, wd, ink, W / 2 - w / 2, y, w, h, a=k, dim=dim)
         if match and t >= t_two:
-            kk = back_out(P(t, t_two + i * 0.08, t_two + i * 0.08 + 0.3))
+            kk = ease_out(P(t, t_two + i * 0.08, t_two + i * 0.08 + 0.25))
             cx.save()
             cx.translate(W / 2 + w / 2 + 50, y + h / 2)
-            cx.scale(kk, kk)
+            cx.scale(max(kk, 1e-3), max(kk, 1e-3))
             cx.arc(0, 0, 30, 0, 2 * math.pi)
             src(cx, OK_G)
             cx.fill()
             check_mark(cx, 0, 0, 30, WHITE, 7)
             cx.restore()
-    tiles(cx, ["done", "locked", "locked"], y=1160)
-
-
-def sc_trap(cx, t, t0, t1):
-    """'You can't stop reading': card lights up gold as the word grabs your attention."""
-    t_cant = word_t("trap", 3)
-    k = back_out(P(t, t0, t0 + 0.3))
-    g = ease_io(P(t, t_cant, t_cant + 0.35))
-    bg = mix(CREAM, hexc("#F5B323"), g)
-    wc = mix(hexc(INK["BLUE"]), (1, 1, 1), g)
-    card(cx, "RED", "BLUE", bg=bg, word_c=wc, glow_word=g, scale=0.9 + 0.1 * k)
-    if g > 0:
-        glow(cx, W / 2, CARD_Y + CARD_H / 2, 560, hexc("#F5B323"), 0.22 * g)
     tiles(cx, ["done", "locked", "locked"])
 
 
@@ -699,13 +556,9 @@ def sc_pause(cx, t, t0, t1):
     """Last level-2 card stays; a tiny 'hitch' appears before the answer."""
     word, ink = LEVELS[1]["cards"][-1]
     t_tiny = word_t("pause", 4)
-    jit = 0.0
+    card(cx, word, ink)
     if t >= t_tiny:
-        jit = math.sin(t * 40) * 6 * (1 - P(t, t_tiny + 0.5, t_tiny + 0.8))
-    card(cx, word, ink, x=CARD_X + jit)
-    if t >= t_tiny:
-        k = back_out(P(t, t_tiny, t_tiny + 0.3))
-        pill(cx, W / 2, 1040, "...", hexc("#1C2B5E"), size=44, scale=k)
+        pill(cx, W / 2, 1075, "...", hexc("#1C2B5E"), size=44, scale=P(t, t_tiny, t_tiny + 0.25))
     tiles(cx, ["done", "done", "locked"])
 
 
@@ -715,7 +568,7 @@ def sc_race(cx, t, t0, t1):
     word, ink = LEVELS[1]["cards"][-1]          # RED in brown
     k = ease_out(P(t, t0, t0 + 0.4))
     card(cx, word, ink, x=W / 2 - 230, y=470, w=460, h=170, a=k)
-    t_start = L["auto"]["start"] + 0.3
+    t_start = L["interfere"]["start"] + 0.3
     lanes = [("READING", "RED", WHITE, hexc("#1A1F33"), 1.25), ("NAMING THE COLOR", "BROWN", hexc(INK["BROWN"]), WHITE, 2.6)]
     x0, x1 = 150, 900
     for i, (lab, chip, chip_bg, chip_fg, dur) in enumerate(lanes):
@@ -739,12 +592,12 @@ def sc_race(cx, t, t0, t1):
         cx.fill()
         ctext(cx, chip, cxp, y + 19, 32, chip_fg, a)
         if i == 0:
-            tf = L["first"]["start"]
+            tf = t_start + 1.35
             if t >= tf:
-                kk = back_out(P(t, tf, tf + 0.3))
+                kk = ease_out(P(t, tf, tf + 0.25))
                 cx.save()
                 cx.translate(cxp + cwid / 2 - 6, y - 26)
-                cx.scale(kk, kk)
+                cx.scale(max(kk, 1e-3), max(kk, 1e-3))
                 cx.arc(0, 0, 30, 0, 2 * math.pi)
                 src(cx, HUD)
                 cx.fill()
@@ -753,72 +606,12 @@ def sc_race(cx, t, t0, t1):
     tiles(cx, ["done", "done", "locked"])
 
 
-def sc_stats(cx, t, t0, t1):
-    """Stroop 1935: color patches 63 s vs. lying words 110 s."""
-    k = ease_out(P(t, t0, t0 + 0.4))
-    sheet_1935(cx, W / 2, 640, 0.6, t, t0 - 1, a=k)
-    t_slow = word_t("slow", 6)
-    rows = [("COLOR PATCHES", 63, HUD, t0 + 0.4), ("WORDS THAT LIE", 110, HUD3, t_slow - 0.3)]
-    x0, wmax = 150, 620
-    for i, (lab, secs, c, ts) in enumerate(rows):
-        y = 960 + i * 130
-        a = P(t, ts - 0.2, ts)
-        if a <= 0:
-            continue
-        ctext(cx, lab, x0 + 140, y - 18, 30, mix(DIM, WHITE, 0.5), a)
-        pr = ease_out(P(t, ts, ts + 1.0))
-        rrect(cx, x0, y, wmax, 30, 15)
-        src(cx, TRACK, a)
-        cx.fill()
-        rrect(cx, x0, y, max(30, wmax * secs / 110 * pr), 30, 15)
-        src(cx, c, a)
-        cx.fill()
-        font(cx, 36)
-        cx.move_to(x0 + wmax * secs / 110 * pr + 24, y + 28)
-        src(cx, c, a)
-        cx.show_text(f"{int(round(secs * pr))} sec")
-    t_twice = word_t("slow", 4)
-    if t >= t_twice + 0.6:
-        pill(cx, W / 2, 1290, "ALMOST 2x SLOWER", HUD3, size=36, scale=back_out(P(t, t_twice + 0.6, t_twice + 0.9)))
-
-
-def blob_path(cx, x, y, r, t):
-    pts = []
-    for i in range(10):
-        a = i / 10 * 2 * math.pi
-        rr = r * (1 + 0.12 * math.sin(a * 3 + 1.3) + 0.07 * math.sin(a * 2 + t * 1.5))
-        pts.append((x + math.cos(a) * rr * 1.45, y + math.sin(a) * rr * 0.75))
-    smooth_poly(cx, pts)
-
-
-def sc_kids(cx, t, t0, t1):
-    """Kids can't read yet -> they just see a blob of blue."""
-    t_kids = tlines()["kids"]["start"]
-    m = ease_io(P(t, t_kids + 0.2, t_kids + 0.9))
-    k = ease_out(P(t, t0, t0 + 0.3))
-    card(cx, "RED", "BLUE", word_a=1 - m, a=k)
-    if m > 0:
-        cx.save()
-        cx.translate(W / 2, CARD_Y + CARD_H / 2)
-        cx.scale(0.4 + 0.6 * m, 0.4 + 0.6 * m)
-        blob_path(cx, 0, 0, 110, t)
-        src(cx, hexc(INK["BLUE"]), m)
-        cx.fill()
-        cx.restore()
-    t_fall = word_t("kids", 8)
-    if t >= t_fall:
-        pill(cx, W / 2, 1040, "BLUE", hexc(INK["BLUE"]), icon="check", scale=back_out(P(t, t_fall, t_fall + 0.3)))
-    tiles(cx, ["done", "done", "locked"])
-
-
 def sc_end(cx, t, t0, t1):
+    """STOP on the frozen last card, then a clean three-element score screen."""
     L = tlines()
     ts = L["stop"]["start"]
-    th = L["howmany"]["start"]
     tc = L["comment"]["start"]
-    tb = L["believe"]["start"]
-    # STOP flash on the frozen last card, cross-fading into the score grid
-    tg = L["stop"]["end"] + 0.05          # grid starts building
+    tg = L["stop"]["end"] + 0.05
     xf = P(t, tg, tg + 0.3)
 
     def stop_state():
@@ -827,74 +620,50 @@ def sc_end(cx, t, t0, t1):
         header(cx, "LEVEL 3", HUD3)
         timer_bar(cx, 0, HUD3)
         if t >= ts:
-            k = back_out(P(t, ts, ts + 0.2), 2.5)
-            pill(cx, W / 2, 1040, "STOP!", BAD_R, size=60, scale=k)
+            pill(cx, W / 2, 1075, "STOP!", BAD_R, size=60, scale=P(t, ts, ts + 0.15))
         tiles(cx, ["done", "done", "done"])
 
     if xf < 1:
         group(cx, 1 - xf, stop_state)
     if t < tg:
         return
-    th = tg
-    # grid of all 19 challenges
-    allc = [c for lv in LEVELS for c in lv["cards"]]
-    cols, w, h, gx, gy = 5, 178, 66, 14, 14
-    x0 = W / 2 - (cols * w + (cols - 1) * gx) / 2
-    y0 = 450
-    for i, (wd, ink) in enumerate(allc):
-        r, c = divmod(i, cols)
-        ti = th + i * 0.02
-        k = ease_out(P(t, ti, ti + 0.25))
-        mini_card(cx, wd, ink, x0 + c * (w + gx), y0 + r * (h + gy) + (1 - k) * 30, w, h, a=k)
-    # question + score
-    qk = ease_out(P(t, th + 0.1, th + 0.4))
-    ctext(cx, "HOW MANY DID", W / 2, 860, 64, WHITE, qk)
-    ctext(cx, "YOU GET RIGHT?", W / 2, 936, 64, WHITE, qk)
-    sk = back_out(P(t, th + 0.35, th + 0.7))
+    # 1) big question
+    for i, row in enumerate(["HOW MANY", "DID YOU GET", "RIGHT?"]):
+        k = ease_out(P(t, tg + 0.05 + i * 0.08, tg + 0.4 + i * 0.08))
+        ctext(cx, row, W / 2, 560 + i * 118 + (1 - k) * 24, 104, WHITE, k)
+    # 2) ? / 19
+    sk = ease_out(P(t, tg + 0.35, tg + 0.7))
     cx.save()
-    cx.translate(W / 2, 1050)
-    cx.scale(sk, sk)
-    rrect(cx, -170, -62, 340, 124, 62)
+    cx.translate(W / 2, 1000)
+    cx.scale(0.92 + 0.08 * sk, 0.92 + 0.08 * sk)
+    cx.push_group()
+    rrect(cx, -250, -100, 500, 200, 100)
     src(cx, hexc("#121B38"))
     cx.fill_preserve()
     src(cx, HUD)
-    cx.set_line_width(7)
+    cx.set_line_width(9)
     cx.stroke()
-    blink = 0.65 + 0.35 * math.sin(t * 5)
-    font(cx, 76)
-    q = "?"
-    rest = f" / {TOTAL}"
+    font(cx, 128)
+    q, rest = "?", f" / {TOTAL}"
     wq = cx.text_extents(q).x_advance
     wr = cx.text_extents(rest).x_advance
-    cx.move_to(-(wq + wr) / 2, 27)
-    src(cx, HUD, blink)
+    cx.move_to(-(wq + wr) / 2, 46)
+    src(cx, HUD, 0.75 + 0.25 * math.sin(t * 3))
     cx.show_text(q)
-    cx.move_to(-(wq + wr) / 2 + wq, 27)
+    cx.move_to(-(wq + wr) / 2 + wq, 46)
     src(cx, WHITE)
     cx.show_text(rest)
+    cx.pop_group_to_source()
+    cx.paint_with_alpha(sk)
     cx.restore()
+    # 3) call to action
     if t >= tc:
-        kk = back_out(P(t, tc, tc + 0.3))
-        pill(cx, W / 2, 1180, "DROP YOUR SCORE IN THE COMMENTS!", hexc("#1E5EE6"), size=34, scale=kk)
-    if t >= tb + 1.1:
-        k = P(t, tb + 1.1, tb + 1.28)
-        sc = 1.7 - 0.7 * ease_out(k)
-        cx.save()
-        cx.translate(W / 2, 640)
-        cx.rotate(-0.09)
-        cx.scale(sc, sc)
-        rrect(cx, -380, -58, 760, 116, 14)
-        src(cx, hexc("#D02A2A"), 0.92 * k)
-        cx.set_line_width(9)
-        cx.stroke()
-        ctext(cx, "I DON'T BELIEVE YOU", 0, 20, 52, hexc("#E23B3B"), 0.95 * k)
-        cx.restore()
+        pill(cx, W / 2, 1215, "COMMENT YOUR SCORE!", hexc("#1E5EE6"), size=54, scale=P(t, tc, tc + 0.3))
 
 
 SCENES = {
-    "hook": sc_hook, "rule": sc_rule, "y1935": sc_y1935, "levels": sc_levels, "intro1": sc_intro1,
-    "play1": sc_play1, "matched": sc_matched, "trap": sc_trap, "intro2": sc_intro2, "play2": sc_play2,
-    "pause": sc_pause, "race": sc_race, "stats": sc_stats, "kids": sc_kids, "intro3": sc_intro3,
+    "hook": sc_hook, "rule": sc_rule, "intro1": sc_intro1, "play1": sc_play1, "matched": sc_matched,
+    "intro2": sc_intro2, "play2": sc_play2, "pause": sc_pause, "race": sc_race, "intro3": sc_intro3,
     "play3": sc_play3, "end": sc_end,
 }
 # scenes that cut hard (gameplay must be crisp); others cross-fade
@@ -910,10 +679,10 @@ def mascot_state(t):
     lv = T["levels"]
     plans = [
         # (t_in, t_out, kwargs)
-        (0.0, L["demo"]["end"] + 0.2, dict(brows="neutral", mouth="smirk")),
-        (lv[0]["end"] + 0.15, L["trap"]["end"] + 0.1, dict(brows="skeptic", mouth="grin")),
-        (lv[1]["end"] + 0.15, L["pause"]["end"] + 0.2, dict(brows="skeptic", mouth="smirk")),
-        (L["lvl3"]["start"], L["readyou"]["end"] - 0.2, dict(brows="angry", mouth="smirk")),
+        (0.0, L["rule"]["end"] + 0.2, dict(brows="neutral", mouth="smirk")),
+        (lv[0]["end"] + 0.15, L["matched"]["end"], dict(brows="skeptic", mouth="grin")),
+        (lv[1]["end"] + 0.15, L["pause"]["end"] + 0.1, dict(brows="skeptic", mouth="smirk")),
+        (L["final3"]["start"], L["go3"]["start"] - 0.2, dict(brows="angry", mouth="smirk")),
         (L["howmany"]["start"] + 0.4, T["end"] + 1, dict(brows="skeptic", mouth="smirk")),
     ]
     for a, b, kw in plans:
@@ -966,7 +735,9 @@ def frame(cx, t):
     else:
         SCENES[n](cx, t, a, b)
     draw_mascot(cx, t)
-    caption(cx, t)
+    L = tlines()
+    if not (L["howmany"]["start"] - 0.05 <= t < L["believe"]["start"] - 0.05):
+        caption(cx, t)
     # global fade in/out
     T = tl.build()
     fo = P(t, T["end"] - 0.25, T["end"])

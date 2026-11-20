@@ -27,7 +27,9 @@ def path_for(lid, text, extra):
 
 
 def jobs():
-    out = [(lid, text, DIRECTION) for lid, _, text in LINES]
+    # "go3" is not synthesised: TTS degenerates on one-word input, so timeline.take()
+    # slices the "Go!" out of the go1 take instead (same voice, same delivery).
+    out = [(lid, text, DIRECTION) for lid, _, text in LINES if lid != "go3"]
     out.append(("l3read", L3_READ, L3_DIRECTION))
     return out
 
