@@ -10,7 +10,9 @@ import sys
 from episodes.ancestry_en import render as R
 from episodes.ancestry_en.script import CAPTION, LINES
 
-TURKISH = re.compile(r"[çğıöşüÇĞİÖŞÜ]|\b(ve|bir|yıl|önce|ata|kuşak|akraba|nüfus|hepimiz|soy|dünya)\b", re.I)
+# case-sensitive char class: with re.I Python folds the dotless "ı" onto i/I
+TURKISH_CHARS = re.compile(r"[çğıöşüÇĞİÖŞÜ]")
+TURKISH_WORDS = re.compile(r"\b(ve|bir|yil|once|ata|kusak|akraba|nufus|hepimiz|soy|dunya|sen)\b", re.I)
 
 
 def probe(path):
@@ -43,7 +45,7 @@ def main(path):
             texts.append(e[3])
     texts += [n for n, *_ in R.LABELS] + [n for n, *_ in R.PINS] + ["JUST NEEDY", "Mitochondrial Eve", "Y-chromosomal Adam",
                                                                       "ANCESTOR SLOTS NEEDED", "PEOPLE ALIVE IN THE 1200s", "AFRICA"]
-    bad = [t for t in texts if t and TURKISH.search(t)]
+    bad = [t for t in texts if t and (TURKISH_CHARS.search(t) or TURKISH_WORDS.search(t))]
     check(not bad, f"no Turkish text on screen ({len(texts)} strings checked){' -> ' + str(bad) if bad else ''}")
     check("1,073,741,824" in " ".join(texts) or R.fmt(2 ** 30) == "1,073,741,824", "30-generation figure is 1,073,741,824")
     check(any("doubling model" in (t or "") for t in texts), "30-generation figure labelled as positions in a doubling model")
