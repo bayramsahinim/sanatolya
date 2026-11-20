@@ -167,7 +167,7 @@ def polish_voice(x):
     sf.write(a, x.astype(np.float32), SR)
     chain = ("highpass=f=75,equalizer=f=250:t=q:w=1.0:g=-1.5,equalizer=f=3200:t=q:w=1.2:g=2.5,"
              "highshelf=f=7500:g=2,acompressor=threshold=-20dB:ratio=2.5:attack=8:release=140:makeup=2,"
-             "alimiter=limit=0.89:attack=3:release=60")
+             "alimiter=limit=0.89:attack=3:release=60:level=disabled")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", a, "-af", chain, "-ar", str(SR), b], check=True)
     y, _ = sf.read(b)
     return y
