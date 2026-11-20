@@ -1,176 +1,176 @@
 1
-00:00:00,380 --> 00:00:02,974
+00:00:00,280 --> 00:00:02,334
 There are over 8 billion people on Earth.
 
 2
-00:00:02,974 --> 00:00:05,065
+00:00:02,334 --> 00:00:03,998
 But what if we're all related?
 
 3
-00:00:05,065 --> 00:00:06,928
+00:00:03,998 --> 00:00:05,875
 Let's climb our friend's family tree.
 
 4
-00:00:06,928 --> 00:00:09,504
+00:00:05,875 --> 00:00:07,892
 He has 2 parents, 4 grandparents,
 
 5
-00:00:09,504 --> 00:00:11,124
+00:00:07,892 --> 00:00:09,178
 and 8 great-grandparents.
 
 6
-00:00:11,124 --> 00:00:13,710
+00:00:09,178 --> 00:00:11,309
 Every generation back, the number doubles!
 
 7
-00:00:13,710 --> 00:00:16,568
+00:00:11,309 --> 00:00:14,299
 30 generations back, about 800 years ago,
 
 8
-00:00:16,568 --> 00:00:17,514
+00:00:14,299 --> 00:00:15,359
 his tree has over
 
 9
-00:00:17,514 --> 00:00:19,622
+00:00:15,359 --> 00:00:17,678
 a billion ancestor slots. But back then,
 
 10
-00:00:19,622 --> 00:00:21,249
+00:00:17,678 --> 00:00:19,612
 the whole world had only about
 
 11
-00:00:21,249 --> 00:00:23,746
+00:00:19,612 --> 00:00:21,966
 400 million people. So the same people
 
 12
-00:00:23,746 --> 00:00:25,893
+00:00:21,966 --> 00:00:23,807
 fill many slots, again and again.
 
 13
-00:00:25,893 --> 00:00:27,229
+00:00:23,807 --> 00:00:25,086
 And everyone's family trees
 
 14
-00:00:27,229 --> 00:00:29,262
+00:00:25,086 --> 00:00:26,992
 start to overlap. One model suggests
 
 15
-00:00:29,262 --> 00:00:31,603
+00:00:26,992 --> 00:00:29,605
 everyone alive today may share an ancestor
 
 16
-00:00:31,603 --> 00:00:33,864
+00:00:29,605 --> 00:00:31,854
 from just a few thousand years ago.
 
 17
-00:00:33,864 --> 00:00:36,013
+00:00:31,854 --> 00:00:33,289
 Now let's rewind much further.
 
 18
-00:00:36,013 --> 00:00:37,342
-Your family tree covers
+00:00:33,289 --> 00:00:34,889
+Your family tree includes
 
 19
-00:00:37,342 --> 00:00:38,751
+00:00:34,889 --> 00:00:36,580
 everyone you descend from.
 
 20
-00:00:38,751 --> 00:00:39,788
-Your DNA carries pieces
+00:00:36,580 --> 00:00:39,070
+But your DNA comes from only some of them.
 
 21
-00:00:39,788 --> 00:00:42,017
-from only some of them. DNA passed from
+00:00:39,070 --> 00:00:40,963
+DNA passed from mother to child
 
 22
-00:00:42,017 --> 00:00:43,522
-mother to child traces back to
+00:00:40,963 --> 00:00:43,765
+traces back to one woman in Africa,
 
 23
-00:00:43,522 --> 00:00:46,821
-one woman in Africa, about 150,000–200,000
+00:00:43,765 --> 00:00:46,841
+roughly 150,000–200,000 years ago.
 
 24
-00:00:46,821 --> 00:00:48,603
-years ago. Scientists call her
+00:00:46,841 --> 00:00:49,059
+Scientists call her Mitochondrial Eve.
 
 25
-00:00:48,603 --> 00:00:51,038
-Mitochondrial Eve. DNA passed from
+00:00:49,059 --> 00:00:50,872
+DNA passed from father to son
 
 26
-00:00:51,038 --> 00:00:53,164
-father to son traces men back to one man:
+00:00:50,872 --> 00:00:52,459
+traces men back to one man:
 
 27
-00:00:53,164 --> 00:00:55,825
+00:00:52,459 --> 00:00:55,552
 Y-chromosomal Adam. They weren't a couple,
 
 28
-00:00:55,825 --> 00:00:56,790
+00:00:55,552 --> 00:00:56,773
 and probably didn't even
 
 29
-00:00:56,790 --> 00:00:57,920
+00:00:56,773 --> 00:00:57,935
 live at the same time.
 
 30
-00:00:57,920 --> 00:00:58,559
+00:00:57,935 --> 00:00:58,724
 Scientists can trace
 
 31
-00:00:58,559 --> 00:00:59,836
+00:00:58,724 --> 00:01:00,303
 certain genetic lineages
 
 32
-00:00:59,836 --> 00:01:00,953
+00:01:00,303 --> 00:01:01,684
 back to common ancestors.
 
 33
-00:01:00,953 --> 00:01:02,580
+00:01:01,684 --> 00:01:03,740
 But these weren't the only people
 
 34
-00:01:02,580 --> 00:01:04,561
+00:01:03,740 --> 00:01:05,925
 alive at the time. Their lines are simply
 
 35
-00:01:04,561 --> 00:01:06,201
+00:01:05,925 --> 00:01:07,491
 the ones that never broke.
 
 36
-00:01:06,201 --> 00:01:08,009
+00:01:07,491 --> 00:01:09,470
 Later, people moved out of Africa
 
 37
-00:01:08,009 --> 00:01:09,235
+00:01:09,470 --> 00:01:10,740
 and spread across the globe,
 
 38
-00:01:09,235 --> 00:01:10,756
+00:01:10,740 --> 00:01:12,273
 into Asia, Europe, Australia,
 
 39
-00:01:10,756 --> 00:01:13,399
+00:01:12,273 --> 00:01:14,757
 and the Americas. Just think about it.
 
 40
-00:01:13,399 --> 00:01:15,671
+00:01:14,757 --> 00:01:16,970
 Everyone watching this, in Japan, Brazil,
 
 41
-00:01:15,671 --> 00:01:18,516
+00:01:16,970 --> 00:01:19,621
 or Turkey, is your distant relative.
 
 42
-00:01:18,516 --> 00:01:20,317
+00:01:19,621 --> 00:01:21,458
 8 billion people. Billions of
 
 43
-00:01:20,317 --> 00:01:22,115
+00:01:21,458 --> 00:01:23,426
 family stories. And a past that's
 
 44
-00:01:22,115 --> 00:01:24,225
+00:01:23,426 --> 00:01:25,865
 far more connected than you think.
 

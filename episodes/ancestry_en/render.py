@@ -119,10 +119,34 @@ def bg_purple(cx, t):
 
 
 # ================================================================== SCENE 1: Earth hook
+EARTH_X, EARTH_Y, EARTH_R = W / 2, 790, 330
+
+
+def jn_opening(t):
+    """Just Needy's position/size/expression in the opening: he steps in, looks up at the Earth,
+    turns to us on 'all related?', then walks to centre for the family tree."""
+    enter = ease_out(prog(t, S("hook1") + 0.7, S("hook1") + 1.5))
+    to_c = ease_io(prog(t, S("intro") - 0.1, S("intro") + 0.7))
+    x = lerp(300, W / 2, to_c)
+    y = 1395 + (1 - enter) * 520
+    h = 470
+    t_rel = word_t("hook2", "related")
+    turn = smooth(prog(t, t_rel - 0.25, t_rel + 0.1))
+    look = lerpv2((0.65, -0.9), (0.0, 0.0), turn)
+    brows = turn * (1 - to_c) * 0.9
+    mouth = "o" if 0.3 < turn and to_c < 0.2 and t < t_rel + 0.7 else "smile"
+    tilt = lerp(-0.12, 0.0, turn)
+    return x, y, h, P.Expr(look, brows, mouth), tilt, enter
+
+
+def lerpv2(a, b, k):
+    return (a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k)
+
+
 def scene_earth(cx, t):
     bg_space(cx, t)
     g = asset("globe")
-    X, Y, R = W / 2, 900, 345
+    X, Y, R = EARTH_X, EARTH_Y, EARTH_R
     lon0 = 25 + t * 3.0
     lat0 = 18
     pop = fmt_pop_frac(t)
@@ -139,11 +163,16 @@ def scene_earth(cx, t):
                 continue
             f = ease_out(prog(k, d, d + 0.4))
             g.arc(cx, a, b, X, Y, R, lon0, lat0, frac=f, alpha=0.55, lw=1.8)
-    # Just Needy steps in
-    a = prog(t, S("intro") - 0.15, S("intro") + 0.45)
-    if a > 0:
-        h = 560 * back_out(a)
-        P.draw_jn_full(cx, W / 2, 1420 + (1 - a) * 160, max(1, h), t=t, alpha=min(1, a * 2) * jn_full_alpha_earth(t))
+    # Just Needy looks up at the Earth, then at us
+    x, y, h, e, tilt, enter = jn_opening(t)
+    if enter > 0 and t < E("intro") - 0.25:
+        P.draw_jn_full(cx, x, y, h, t=t, expr=e, head_tilt=tilt)
+        # a small "?" as he wonders
+        t_rel = word_t("hook2", "related")
+        qa = pulse_in(t, t_rel - 0.05, S("intro") + 0.1, 0.2)
+        if qa > 0:
+            sc = back_out(clamp((t - t_rel + 0.05) / 0.3))
+            ui.draw_text(cx, "?", x + 95, y - h * 1.02, 84 * sc, YELLOW, alpha=qa, shadow=1.0)
 
 
 def fmt_pop_frac(t):
@@ -152,10 +181,6 @@ def fmt_pop_frac(t):
 
 def pop_value(t):
     return fmt(8_200_000_000 * fmt_pop_frac(t))
-
-
-def jn_full_alpha_earth(t):
-    return 1.0
 
 
 # ================================================================== SCENE 2: the fan tree
@@ -190,7 +215,7 @@ def spec_for(seed, g, i):
 
 
 def draw_fan(cx, ox, oy, z, gf, seed=0, palette="main", alpha=1.0, root="jn", avatars=5, root_r=None,
-             highlights=(), hl_amt=0.0, max_dot_g=10, label=True, t=0.0):
+             highlights=(), hl_amt=0.0, max_dot_g=10, label=True, t=0.0, root_expr=None, line_c=None):
     """Fan-shaped family tree. gf = generations revealed (float, up to 30)."""
     if alpha <= 0.003:
         return
@@ -244,7 +269,7 @@ def draw_fan(cx, ox, oy, z, gf, seed=0, palette="main", alpha=1.0, root="jn", av
             b = pts[i]
             ex, ey = a[0] + (b[0] - a[0]) * grow, a[1] + (b[1] - a[1]) * grow
             if portrait or g <= 5:
-                src(cx, LINE_BROWN, 0.95)
+                src(cx, line_c or LINE_BROWN, 0.95)
             else:
                 c = cf if i % 2 else cm
                 src(cx, (*c[:3], 0.55))
@@ -283,28 +308,33 @@ def draw_fan(cx, ox, oy, z, gf, seed=0, palette="main", alpha=1.0, root="jn", av
     # root
     rr = root_r if root_r is not None else max(56 * z, 36)
     if root == "jn":
-        P.draw_badge(cx, ox, oy, rr, "jn", glow=P.GOLD, glow_a=0.8, alpha=alpha)
+        P.draw_badge(cx, ox, oy, rr, "jn", glow=P.GOLD, glow_a=0.8, alpha=alpha, expr=root_expr)
         if label:
-            ui.pill(cx, "JUST NEEDY", ox, oy + rr + 26 * max(0.6, rr / 56), 22 * max(0.6, rr / 56), YELLOW, alpha=alpha)
+            ui.pill(cx, "JUST NEEDY", ox, oy + rr + 30, 28, YELLOW, alpha=alpha)
     else:
         P.draw_badge(cx, ox, oy, rr, "person", P.Spec(seed * 7 + 3), alpha=alpha, ring=PALETTES[palette][0])
+
+
+ROOT_Y = 1185.0
+NEIGHBOUR_DX = 330.0      # screen spacing between neighbouring trees at the reference zoom 0.31
 
 
 def tree_cam(t):
     """(root screen y, zoom) for the main fan."""
     keys = [
-        (S("par") - 0.6, (1185.0, 1.0)),
-        (S("dbl"), (1185.0, 1.0)),
+        (S("par") - 0.6, (ROOT_Y, 1.0)),
+        (S("dbl"), (ROOT_Y, 1.0)),
         (S("dbl") + 0.8, (1210.0, 0.86)),
         (S("g30") + 0.2, (1220.0, 0.80)),
         (E("g30") - 0.3, (1250.0, 0.44)),
-        (S("pop") + 0.2, (1290.0, 0.44)),
-        (E("pop"), (1290.0, 0.44)),
-        (S("same") + 0.4, (1270.0, 0.44)),
-        (E("same"), (1270.0, 0.44)),
-        (S("mix") + 0.9, (1250.0, 0.31)),
-        (S("mrca"), (1250.0, 0.31)),
-        (S("mrca") + 1.4, (1270.0, 0.24)),
+        (S("pop") + 0.2, (1330.0, 0.44)),
+        (E("pop"), (1330.0, 0.44)),
+        (S("same") + 0.4, (1260.0, 0.44)),
+        (E("same") - 0.3, (1260.0, 0.44)),
+        (S("mix") + 1.2, (1290.0, 0.37)),
+        (S("mrca") + 0.3, (1290.0, 0.37)),
+        (S("mrca") + 2.0, (1300.0, 0.29)),
+        (E("mrca"), (1300.0, 0.28)),
     ]
     oy, z = kf(t, keys, ease_io)
     gf = gens_revealed(t)
@@ -332,84 +362,196 @@ def g30_counter(t):
 HL = [(6, 5), (7, 37), (8, 120), (6, 40), (7, 90), (9, 300), (8, 200), (9, 450), (6, 22), (7, 66)]
 
 
+def _cross_links():
+    """Pairs of nodes in neighbouring trees that sit close together where the fans overlap: the
+    'shared ancestor' links drawn when the trees merge. World units (zoom 1, root at 0,0)."""
+    rnd = random.Random(17)
+    D = NEIGHBOUR_DX / 0.31
+    links = []
+    for side in (-1, 1):
+        for g in (7, 8, 9):
+            n = 2 ** g
+            idx = range(0, int(n * 0.32)) if side < 0 else range(int(n * 0.68), n)
+            cands = rnd.sample(list(idx), 5)
+            for i in cands:
+                ax, ay = POS[g][i]
+                best = None
+                for g2 in (7, 8, 9):
+                    n2 = 2 ** g2
+                    idx2 = range(int(n2 * 0.68), n2) if side < 0 else range(0, int(n2 * 0.32))
+                    for j in idx2:
+                        bx, by = POS[g2][j]
+                        bx += side * D
+                        d = math.hypot(bx - ax, by - ay)
+                        if best is None or d < best[0]:
+                            best = (d, (bx, by))
+                links.append(((ax, ay), best[1], side, rnd.uniform(0, 0.6)))
+    # links between the outer neighbours and their neighbours (second wave)
+    outer = []
+    for (a, b, side, d) in links:
+        outer.append(((a[0] + side * D, a[1]), (b[0] + side * D, b[1]), side, d + 0.2))
+    return links, outer
+
+
+LINKS, LINKS_OUTER = _cross_links()
+
+
+def jn_root_expr(t):
+    t_ov = word_t("mix", "overlap")
+    surprise = pulse_in(t, t_ov - 0.15, S("mrca") + 0.8, 0.2)
+    look_up = smooth(prog(t, S("par") - 0.2, S("par") + 0.3)) * (1 - smooth(prog(t, E("g30") - 0.4, E("g30"))))
+    look_star = smooth(prog(t, word_t("mrca", "ancestor") - 0.3, word_t("mrca", "ancestor")))
+    look_hl = pulse_in(t, S("same") + 0.4, E("same"), 0.25)
+    ly = -max(look_up, look_star, look_hl) * 0.9
+    if surprise > 0.5:
+        return P.Expr((0, -0.3), 1.0, "o")
+    if look_star > 0.5:
+        return P.Expr((0, -1), 0.5, "smile")
+    return P.Expr((0, ly), 0.0, "smile")
+
+
 def scene_tree(cx, t):
     bg_navy(cx, t)
     oy, z = tree_cam(t)
     gf = gens_revealed(t)
-    # other people's trees slide in and overlap (Scene C/D)
-    side = smooth(prog(t, S("mix") + 0.1, S("mix") + 1.3))
-    more = smooth(prog(t, S("mrca") + 0.2, S("mrca") + 1.6))
-    others = []
-    if side > 0:
-        dx = 300 + (1 - side) * 500
-        others += [(-dx, "green", 21, side), (dx, "orange", 22, side)]
-    if more > 0:
-        dx2 = 600 + (1 - more) * 500
-        others += [(-dx2, "violet", 23, more), (dx2, "teal", 24, more)]
-    for dx, pal, sd, a in others:
-        draw_fan(cx, W / 2 + dx * (z / 0.31), oy + 10, z, 30, seed=sd, palette=pal, alpha=0.9 * a, root="person",
-                 avatars=3, max_dot_g=8, root_r=max(30, 56 * z))
-    hl = smooth(prog(t, S("same") + 0.5, S("same") + 1.2)) * (1 - smooth(prog(t, S("mix"), S("mix") + 0.6)))
-    draw_fan(cx, W / 2, oy, z, gf, seed=1, palette="main", root="jn", highlights=HL, hl_amt=hl, t=t)
+    # rewind: the whole network collapses back into the past
+    rw = ease_io(prog(t, S("rewind") - 0.1, S("rewind") + 0.9))
+    if rw > 0:
+        z *= 1 - 0.85 * rw
+    net_a = 1 - smooth(prog(t, S("rewind") + 0.4, S("rewind") + 1.0))
+    # neighbouring trees GROW from their own roots and run into ours (Scene C), more join for Scene D
+    grow1 = prog(t, E("same") - 0.35, word_t("mix", "overlap") + 0.1)
+    grow2 = prog(t, S("mrca") + 0.2, S("mrca") + 1.9)
+    fans = []
+    k = z / 0.31
+    if grow1 > 0:
+        fans += [(-1, "green", 21, grow1), (1, "orange", 22, grow1)]
+    if grow2 > 0:
+        fans += [(-2, "violet", 23, grow2), (2, "teal", 24, grow2)]
+    for m, pal, sd, gp in fans:
+        gfo = 1 + 13 * ease_out(gp) if gp < 1 else 30
+        draw_fan(cx, W / 2 + m * NEIGHBOUR_DX * k, oy + 8, z, gfo, seed=sd, palette=pal,
+                 alpha=0.92 * smooth(clamp(gp * 4)) * net_a, root="person", avatars=3, max_dot_g=8,
+                 root_r=max(30, 56 * z))
+    hl = smooth(prog(t, S("same") + 0.5, S("same") + 1.2)) * (1 - smooth(prog(t, E("same") - 0.2, S("mix") + 0.3)))
+    draw_fan(cx, W / 2, oy, z, gf, seed=1, palette="main", root="jn", highlights=HL, hl_amt=hl, t=t,
+             root_expr=jn_root_expr(t), alpha=net_a)
+    # shared ancestors: links appear where the separate trees cross
+    t_ov = word_t("mix", "overlap")
+    lk = prog(t, t_ov - 0.4, t_ov + 1.0)
+    lk2 = prog(t, S("mrca") + 1.0, S("mrca") + 2.4)
+    for links, kk in ((LINKS, lk), (LINKS_OUTER, lk2)):
+        if kk <= 0:
+            continue
+        for (a, b, side, d) in links:
+            f = ease_out(clamp((kk - d) / 0.4))
+            if f <= 0:
+                continue
+            ax, ay = W / 2 + a[0] * z, oy + a[1] * z
+            bx, by = W / 2 + b[0] * z, oy + b[1] * z
+            ex, ey = ax + (bx - ax) * f, ay + (by - ay) * f
+            src(cx, YELLOW, 0.95 * net_a)
+            cx.set_line_width(3.4)
+            cx.move_to(ax, ay)
+            cx.line_to(ex, ey)
+            cx.stroke()
+            for (px, py), on in (((ax, ay), True), ((bx, by), f >= 1)):
+                if on:
+                    cx.set_source(rgrad(cx, px, py, 0, 16, [(0, (1, 0.85, 0.3, 0.8 * net_a)), (1, (1, 0.85, 0.3, 0))]))
+                    circle(cx, px, py, 16)
+                    cx.fill()
+                    circle(cx, px, py, 5)
+                    src(cx, YELLOW, net_a)
+                    cx.fill()
+    # Just Needy's "!" when the trees connect
+    ex_a = pulse_in(t, t_ov - 0.1, S("mrca") + 0.6, 0.2)
+    if ex_a > 0:
+        rr = max(56 * z, 36)
+        sc = back_out(clamp((t - t_ov + 0.1) / 0.3))
+        ui.draw_text(cx, "!", W / 2 + rr + 18, oy - rr - 6, 70 * sc, YELLOW, alpha=ex_a * net_a, shadow=1.0)
     # x2 tags while doubling is explained
     k2 = pulse_in(t, S("dbl") + 0.1, S("g30") + 0.4)
     if k2 > 0:
         for g in range(1, 5):
             x, y = POS[g][0] * z
-            ui.pill(cx, "×2", W / 2 + x - 8, oy + y + 54 * z + 6, 22, YELLOW, alpha=k2 * clamp(gf - g + 1), scale=1.0)
+            ui.pill(cx, "×2", W / 2 + x - 8, oy + y + 54 * z + 10, 30, YELLOW, alpha=k2 * clamp(gf - g + 1))
     # repeated ancestor: one person linked to many slots
     if hl > 0:
         ax, ay = W / 2, 560
-        P.draw_badge(cx, ax, ay, 50 * back_out(clamp(hl * 1.3)), "person", P.Spec(4242, female=True), glow=YELLOW,
+        P.draw_badge(cx, ax, ay, 56 * back_out(clamp(hl * 1.3)), "person", P.Spec(4242, female=True), glow=YELLOW,
                      glow_a=0.8, alpha=hl, ring=P.GOLD)
-        cx.set_line_width(2.4)
-        for k, (g, i) in enumerate(HL):
+        cx.set_line_width(2.6)
+        for kq, (g, i) in enumerate(HL):
             x, y = POS[g][i] * z
-            f = ease_out(clamp(hl * 1.6 - k * 0.05))
+            f = ease_out(clamp(hl * 1.6 - kq * 0.05))
             src(cx, YELLOW, 0.75 * hl)
-            cx.move_to(ax, ay + 50)
-            cx.line_to(ax + (W / 2 + x - ax) * f, ay + 50 + (oy + y - ay - 50) * f)
+            cx.move_to(ax, ay + 56)
+            cx.line_to(ax + (W / 2 + x - ax) * f, ay + 56 + (oy + y - ay - 56) * f)
             cx.stroke()
     # everyone's common ancestor (Scene D)
+    more = smooth(prog(t, word_t("mrca", "share") - 0.2, word_t("mrca", "ancestor") + 0.4))
     if more > 0:
         ax, ay = W / 2, 560
-        tops = [W / 2 + d * (z / 0.31) for d in (-1200, -900, -600, -300, 0, 300, 600, 900, 1200)]
         cx.set_line_width(3.0)
-        for k, x in enumerate(tops):
-            f = ease_out(clamp(more * 1.4 - abs(k - 4) * 0.08))
+        for m in range(-4, 5):
+            x = W / 2 + m * NEIGHBOUR_DX * k
+            f = ease_out(clamp(more * 1.4 - abs(m) * 0.08))
             ty = oy - RG(30) * z
-            src(cx, hexc("#E6B94A"), 0.85)
+            src(cx, hexc("#E6B94A"), 0.85 * net_a)
             cx.move_to(ax, ay)
             cx.line_to(ax + (x - ax) * f, ay + (ty - ay) * f)
             cx.stroke()
-        sa = smooth(prog(t, word_t("mrca", "ancestor") - 0.1, word_t("mrca", "ancestor") + 0.4))
+        sa = smooth(prog(t, word_t("mrca", "ancestor") - 0.1, word_t("mrca", "ancestor") + 0.4)) * net_a
         if sa > 0:
-            rr = 30 + 6 * math.sin(t * 3)
-            cx.set_source(rgrad(cx, ax, ay, 0, 140, [(0, (1, 0.9, 0.5, 0.75 * sa)), (0.35, (1, 0.8, 0.3, 0.25 * sa)), (1, (1, 0.8, 0.3, 0))]))
-            circle(cx, ax, ay, 140)
-            cx.fill()
-            circle(cx, ax, ay, rr)
-            src(cx, hexc("#FFE08A"), sa)
-            cx.fill_preserve()
-            src(cx, hexc("#B8862B"), sa)
-            cx.set_line_width(4)
-            cx.stroke()
-            # small star
-            cx.save()
-            cx.translate(ax, ay)
-            cx.rotate(t * 0.6)
-            for j in range(10):
-                rr2 = 18 if j % 2 == 0 else 7
-                a = j * math.pi / 5
-                (cx.line_to if j else cx.move_to)(rr2 * math.cos(a), rr2 * math.sin(a))
-            cx.close_path()
-            src(cx, hexc("#FFFFFF"), sa)
-            cx.fill()
-            cx.restore()
+            draw_star_medallion(cx, ax, ay, t, sa)
+    # rewind icon
+    ra = pulse_in(t, S("rewind") - 0.05, E("rewind") + 0.2, 0.2)
+    if ra > 0:
+        draw_rewind_icon(cx, W / 2, 900, ra)
     # 1200s population panel (Scene B)
     pa = smooth(prog(t, S("pop") - 0.1, S("pop") + 0.35)) * (1 - smooth(prog(t, S("same") - 0.1, S("same") + 0.25)))
     if pa > 0:
         draw_pop_panel(cx, t, pa)
+
+
+def draw_star_medallion(cx, ax, ay, t, sa):
+    rr = 30 + 6 * math.sin(t * 3)
+    cx.set_source(rgrad(cx, ax, ay, 0, 140, [(0, (1, 0.9, 0.5, 0.75 * sa)), (0.35, (1, 0.8, 0.3, 0.25 * sa)), (1, (1, 0.8, 0.3, 0))]))
+    circle(cx, ax, ay, 140)
+    cx.fill()
+    circle(cx, ax, ay, rr)
+    src(cx, hexc("#FFE08A"), sa)
+    cx.fill_preserve()
+    src(cx, hexc("#B8862B"), sa)
+    cx.set_line_width(4)
+    cx.stroke()
+    cx.save()
+    cx.translate(ax, ay)
+    cx.rotate(t * 0.6)
+    for j in range(10):
+        rr2 = 18 if j % 2 == 0 else 7
+        a = j * math.pi / 5
+        (cx.line_to if j else cx.move_to)(rr2 * math.cos(a), rr2 * math.sin(a))
+    cx.close_path()
+    src(cx, hexc("#FFFFFF"), sa)
+    cx.fill()
+    cx.restore()
+
+
+def draw_rewind_icon(cx, x, y, a):
+    cx.save()
+    cx.translate(x, y)
+    circle(cx, 0, 0, 92)
+    src(cx, (0.03, 0.05, 0.12, 0.55 * a))
+    cx.fill()
+    for dx in (-30, 26):
+        cx.move_to(dx + 30, -40)
+        cx.line_to(dx - 26, 0)
+        cx.line_to(dx + 30, 40)
+        cx.close_path()
+    src(cx, WHITE, 0.95 * a)
+    cx.fill()
+    cx.restore()
 
 
 def pulse_in(t, a, b, fade=0.3):
@@ -417,41 +559,104 @@ def pulse_in(t, a, b, fade=0.3):
 
 
 def draw_pop_panel(cx, t, a):
-    x, y, w, h = 70, 470 - (1 - a) * 40, 940, 280
+    x, y, w, h = 60, 445 - (1 - a) * 40, 960, 340
     cx.push_group()
-    rrect(cx, x, y, w, h, 26)
-    src(cx, hexc("#0C1430"), 0.94)
+    rrect(cx, x, y, w, h, 28)
+    src(cx, hexc("#0B1330"), 0.95)
     cx.fill_preserve()
     src(cx, hexc("#3B4C80"))
-    cx.set_line_width(2.5)
+    cx.set_line_width(3)
     cx.stroke()
-    ui.draw_text(cx, "ANCESTOR SLOTS NEEDED", x + 34, y + 62, 26, WHITE, align="left", alpha=0.9)
-    bw = w - 68
-    rrect(cx, x + 34, y + 80, bw, 52, 12)
+    ui.draw_text(cx, "ANCESTOR SLOTS NEEDED", x + 36, y + 66, 32, WHITE, align="left")
+    bw = w - 72
+    rrect(cx, x + 36, y + 88, bw, 66, 14)
     src(cx, hexc("#FF5A5F"))
     cx.fill()
-    ui.draw_text(cx, "1,073,741,824", x + 34 + bw - 18, y + 118, 30, WHITE, align="right")
-    ui.draw_text(cx, "PEOPLE ALIVE IN THE 1200s", x + 34, y + 186, 26, WHITE, align="left", alpha=0.9)
+    ui.draw_text(cx, "1,073,741,824", x + 36 + bw - 22, y + 136, 42, WHITE, align="right")
+    ui.draw_text(cx, "PEOPLE ALIVE IN THE 1200s", x + 36, y + 222, 32, WHITE, align="left")
     gk = ease_out(prog(t, S("pop") + 0.5, word_t("pop", "400")))
     gw = max(24, bw * 400 / 1074 * gk)
-    rrect(cx, x + 34, y + 204, gw, 52, 12)
+    rrect(cx, x + 36, y + 244, gw, 66, 14)
     src(cx, hexc("#2ECC71"))
     cx.fill()
-    ui.draw_text(cx, "~400 million", x + 34 + gw + 18, y + 242, 30, WHITE, align="left", alpha=clamp(gk * 1.5))
+    ui.draw_text(cx, "~400 million", x + 36 + gw + 22, y + 292, 42, WHITE, align="left", alpha=clamp(gk * 1.5))
     cx.pop_group_to_source()
     cx.paint_with_alpha(a)
 
 
+# ================================================================== SCENE 2b: family tree vs DNA
+DNA_LEAVES = sorted(random.Random(31).sample(range(64), 9))
+
+
+def scene_dna(cx, t):
+    """Genealogical vs genetic ancestry, on Just Needy's own tree."""
+    bg_navy(cx, t)
+    t_dna = word_t("gen", "DNA")
+    z = kf(t, [(S("gen") - 0.4, 0.62), (t_dna, 0.74), (E("gen") + 0.4, 0.77)], ease_io)
+    oy = kf(t, [(S("gen") - 0.4, 1290.0), (E("gen") + 0.4, 1310.0)], ease_io)
+    gf = 6 * ease_out(prog(t, S("gen") - 0.3, S("gen") + 1.4))
+    dim = smooth(prog(t, t_dna - 0.1, t_dna + 0.6))
+    e = P.Expr((0, -0.9), 0.0, "smile") if dim < 0.5 else P.Expr((0.0, -0.6), 0.6, "smile")
+    draw_fan(cx, W / 2, oy, z, gf, seed=1, palette="main", root="jn", t=t, root_expr=e,
+             alpha=1 - 0.72 * dim, max_dot_g=6, avatars=4)
+    # DNA: only a few branches actually pass pieces down
+    if dim > 0:
+        cx.set_line_cap(cairo.LINE_CAP_ROUND)
+        grow = 6 * ease_out(prog(t, t_dna, t_dna + 1.4))
+        for leaf in DNA_LEAVES:
+            pts = [(0.0, 0.0)] + [tuple(POS[g][leaf >> (6 - g)]) for g in range(1, 7)]
+            for gi in range(6):
+                f = clamp(grow - gi)
+                if f <= 0:
+                    break
+                (x0, y0), (x1, y1) = pts[gi], pts[gi + 1]
+                for lw, al in ((16, 0.15), (6, 1.0)):
+                    cx.set_line_width(lw)
+                    src(cx, CYAN, al * dim)
+                    cx.move_to(W / 2 + x0 * z, oy + y0 * z)
+                    cx.line_to(W / 2 + (x0 + (x1 - x0) * f) * z, oy + (y0 + (y1 - y0) * f) * z)
+                    cx.stroke()
+            if grow >= 6:
+                x, y = POS[6][leaf]
+                circle(cx, W / 2 + x * z, oy + y * z, 11)
+                src(cx, CYAN, dim)
+                cx.fill()
+        P.draw_badge(cx, W / 2, oy, max(56 * z, 36), "jn", glow=CYAN, glow_a=0.7 * dim, expr=e)
+    # legend chips
+    la = smooth(prog(t, S("gen") + 0.2, S("gen") + 0.6))
+    ui.pill(cx, "FAMILY TREE = everyone", W / 2, 520, 32, hexc("#DDE6FF"), alpha=la * (1 - 0.6 * dim))
+    ui.pill(cx, "DNA = only some", W / 2, 600, 32, CYAN, alpha=dim)
+
+
 # ================================================================== SCENE 3: Africa / genetic lines
-ANC_Y = 700
-MOD_Y = 1330
-ANC_X = [100 + k * 176 for k in range(6)]
-MOD_X = [72 + k * 133.7 for k in range(8)]
+ANC_Y = 690
+MOD_Y = 1250
+ANC_X = [120 + k * 168 for k in range(6)]
+MOD_X = [110 + k * 122.9 for k in range(8)]
 MOD_F = [True, False, True, False, False, True, False, True]
+JN_I = 3  # Just Needy is one of today's people
 MOD_SPECS = [P.Spec(500 + k, female=MOD_F[k]) for k in range(8)]
 ANC_SPECS = [P.Spec(600 + k, female=(k in (0, 2, 3)), ancient=True) for k in range(6)]
 ANC_SPECS_B = [P.Spec(700 + k, female=(k in (1, 5)), ancient=True) for k in range(6)]
 EVE, ADAM = 2, 3
+
+
+def _crowd():
+    """Other people alive at the same time, placed beyond the first framing (revealed by the pull-back)."""
+    rnd = random.Random(12)
+    out = []
+    for row, y in enumerate((585, ANC_Y, 800)):
+        x = -430.0 + rnd.uniform(0, 60)
+        while x < 1510:
+            inside = 40 < x < 1040
+            if not (row == 1 and inside) and not (inside and row != 1 and abs(x - ANC_X[EVE]) < 260):
+                out.append((x, y + rnd.uniform(-18, 18), P.Spec(800 + len(out), ancient=True), rnd.uniform(30, 38),
+                            rnd.uniform(70, 230), rnd.uniform(-50, 50)))
+            x += rnd.uniform(118, 170)
+    return out
+
+
+CROWD = _crowd()
 
 
 def _bez(p0, p1, n=24):
@@ -466,8 +671,8 @@ def _bez(p0, p1, n=24):
 
 
 def lineage_paths(root_x, targets):
-    """Binary-ish branching from an ancestor (top) to target x's (bottom). Returns list of (polyline, depth0)."""
-    y0, y1, y2, y3 = ANC_Y + 50, 905, 1110, MOD_Y - 56
+    """Branching from an ancestor (top) to target x's (bottom). Returns list of (polyline, depth)."""
+    y0, y1, y2, y3 = ANC_Y + 50, 880, 1060, MOD_Y - 54
     paths = []
     tg = sorted(targets)
     half = len(tg) // 2 or 1
@@ -489,12 +694,29 @@ def lineage_paths(root_x, targets):
     return paths
 
 
+def chain_to(paths, x):
+    """The single polyline from the ancestor down to the descendant at x."""
+    out = []
+    target = None
+    for d in (2, 1, 0):
+        for pl, dd in paths:
+            if dd != d:
+                continue
+            end = pl[-1]
+            if (d == 2 and abs(end[0] - x) < 1) or (d < 2 and target and abs(end[0] - target[0]) < 1 and abs(end[1] - target[1]) < 1):
+                out = pl + out[1:] if out else pl
+                target = pl[0]
+                break
+    return out
+
+
 EVE_PATHS = lineage_paths(ANC_X[EVE], MOD_X)
 ADAM_PATHS = lineage_paths(ANC_X[ADAM], [MOD_X[k] for k in range(8) if not MOD_F[k]])
+EVE_TO_JN = chain_to(EVE_PATHS, MOD_X[JN_I])
 
 
-def draw_paths(cx, paths, color, k, alpha=1.0, glow=True, travel=None):
-    """k in [0,3]: growth through depth levels."""
+def draw_paths(cx, paths, color, k, alpha=1.0, glow=True, up=False):
+    """k in [0,3]: growth through depth levels; up=True grows from the descendants back to the ancestor."""
     if alpha <= 0.003 or k <= 0:
         return
     for lw, a in (((22, 0.12), (12, 0.25), (6.5, 1.0)) if glow else ((6.5, 1.0),)):
@@ -503,219 +725,249 @@ def draw_paths(cx, paths, color, k, alpha=1.0, glow=True, travel=None):
         cx.set_line_join(cairo.LINE_JOIN_ROUND)
         src(cx, color, a * alpha)
         for pl, d in paths:
-            f = clamp(k - d)
+            dd = (2 - d) if up else d
+            f = clamp(k - dd)
             if f <= 0:
                 continue
-            n = max(2, int(len(pl) * ease_out(f)))
-            cx.move_to(*pl[0])
-            for p in pl[1:n]:
+            pts = pl[::-1] if up else pl
+            n = max(2, int(len(pts) * ease_out(f)))
+            cx.move_to(*pts[0])
+            for p in pts[1:n]:
                 cx.line_to(*p)
             cx.stroke()
-    if travel is not None:
-        for pl, d in paths:
-            u = travel * 3 - d
-            if 0 <= u <= 1:
-                i = int(u * (len(pl) - 1))
-                x, y = pl[i]
-                cx.set_source(rgrad(cx, x, y, 0, 26, [(0, (1, 1, 1, 0.95 * alpha)), (1, (1, 1, 1, 0))]))
-                circle(cx, x, y, 26)
-                cx.fill()
 
 
-def _web():
-    """Genealogical web: everyone connects to everyone through many intermediate ancestors."""
-    rnd = random.Random(5)
-    layers = [[(x, ANC_Y) for x in ANC_X],
-              [(80 + k * 102, 860 + rnd.uniform(-20, 20)) for k in range(10)],
-              [(60 + k * 88, 1010 + rnd.uniform(-20, 20)) for k in range(12)],
-              [(70 + k * 94, 1160 + rnd.uniform(-20, 20)) for k in range(11)],
-              [(x, MOD_Y) for x in MOD_X]]
-    edges = []
-    for li in range(1, len(layers)):
-        up = layers[li - 1]
-        for j, (x, y) in enumerate(layers[li]):
-            near = sorted(range(len(up)), key=lambda q: abs(up[q][0] - x) + rnd.uniform(0, 260))
-            for q in near[:2]:
-                edges.append((li, up[q], (x, y)))
-    dna = set(rnd.sample(range(len(edges)), 12))
-    return layers, edges, dna
+def travel_light(cx, pl, u, color, alpha=1.0):
+    if not pl or u <= 0 or u >= 1:
+        return
+    i = int(u * (len(pl) - 1))
+    x, y = pl[i]
+    cx.set_source(rgrad(cx, x, y, 0, 40, [(0, (1, 1, 1, 0.95 * alpha)), (0.4, (*color[:3], 0.6 * alpha)), (1, (*color[:3], 0))]))
+    circle(cx, x, y, 40)
+    cx.fill()
 
 
-WEB = _web()
+CLIP_TOP = 400
+CLIP_BOT = 1395
+
+
+def stage_clip(cx):
+    cx.rectangle(0, CLIP_TOP, W, CLIP_BOT - CLIP_TOP)
+    cx.clip()
+
+
+def stage_edges(cx, col):
+    """Soft fade at the top/bottom of a camera stage so nothing collides with header or captions."""
+    for y0, y1, a0, a1 in ((CLIP_TOP, CLIP_TOP + 40, 1, 0), (CLIP_BOT - 110, CLIP_BOT, 0, 1)):
+        cx.set_source(vgrad(cx, 0, y0, 0, y1, [(0, (*col[:3], a0)), (1, (*col[:3], a1))]))
+        cx.rectangle(0, y0, W, y1 - y0)
+        cx.fill()
+
+
+def bg_africa(cx, t, cam):
+    bg_purple(cx, t)
+    cx.save()
+    stage_clip(cx)
+    apply_cam(cx, cam)
+    asset("africa").draw(cx, 60, 380, 720, alpha=0.95)
+    ui.draw_text(cx, "AFRICA", 905, 560, 38, hexc("#D2A48E"), spacing=3, alpha=0.9)
+    cx.restore()
+
+
+def apply_cam(cx, cam):
+    x, y, zm = cam
+    cx.translate(W / 2, 900)
+    cx.scale(zm, zm)
+    cx.translate(-x, -y)
+
+
+def af_cam(t):
+    ex, ey = ANC_X[EVE], ANC_Y
+    jx, jy = MOD_X[JN_I], MOD_Y
+    t_w = word_t("mt", "woman")
+    t_only = word_t("trace", "only")
+    keys = [
+        (S("mt") - 0.4, (540.0, 1130.0, 1.4)),
+        (S("mt") + 1.2, (540.0, 1080.0, 1.25)),
+        (t_w + 0.2, (540.0, 900.0, 1.0)),
+        (S("eve") - 0.1, (520.0, 880.0, 1.05)),
+        (E("eve") + 0.3, (ex, ey + 80, 1.55)),
+        (E("eve") + 0.31, (ex, ey + 40, 1.7)),           # (cut to Adam / card in between)
+        (S("trace") + 0.4, (ex, ey + 40, 1.6)),
+        (t_only + 0.3, (560.0, 820.0, 0.7)),
+        (E("trace") - 0.2, (560.0, 830.0, 0.68)),
+        (S("unbroken") + 0.25, (ex, ey + 120, 1.25)),
+        (E("unbroken") - 0.1, (jx, jy - 120, 1.3)),
+        (E("unbroken") + 1.0, (jx, jy - 120, 1.3)),
+    ]
+    return kf(t, keys, ease_io)
+
+
+def draw_modern_row(cx, t, jn_expr=None, jn_glow=None, jn_glow_a=0.0, men_only=False):
+    for k, x in enumerate(MOD_X):
+        if k == JN_I:
+            P.draw_badge(cx, x, MOD_Y, 56, "jn", glow=jn_glow, glow_a=jn_glow_a, expr=jn_expr)
+            ui.pill(cx, "JUST NEEDY", x, MOD_Y + 86, 24, YELLOW)
+        else:
+            dim = 0.35 if (men_only and MOD_F[k]) else 1.0
+            P.draw_badge(cx, x, MOD_Y, 50, "person", MOD_SPECS[k], alpha=dim)
 
 
 def scene_africa(cx, t):
-    bg_purple(cx, t)
-    am = asset("africa")
-    am.draw(cx, 60, 390, 720, alpha=0.95)
-    ui.draw_text(cx, "AFRICA", 900, 560, 30, hexc("#C79A86"), alpha=0.9)
-    # rewind icon flash
-    ra = pulse_in(t, S("rewind") - 0.1, S("rewind") + 1.3, 0.25)
-    if ra > 0:
-        cx.save()
-        cx.translate(W / 2, 980)
-        for dx in (-34, 22):
-            cx.move_to(dx + 30, -40)
-            cx.line_to(dx - 26, 0)
-            cx.line_to(dx + 30, 40)
-            cx.close_path()
-        src(cx, WHITE, 0.9 * ra)
-        cx.fill()
-        cx.restore()
-    t_gen2 = word_t("gen", "DNA")
-    # genealogical web (Scene E)
-    wa = pulse_in(t, S("gen") - 0.2, S("mt") + 0.2, 0.35)
-    if wa > 0:
-        layers, edges, dna = WEB
-        dim = 1 - 0.75 * smooth(prog(t, t_gen2 - 0.1, t_gen2 + 0.5))
-        grow = ease_out(prog(t, S("gen") - 0.1, S("gen") + 1.2))
-        cx.set_line_width(2.2)
-        for n, (li, a, b) in enumerate(edges):
-            f = clamp(grow * 4 - (li - 1))
-            if f <= 0:
-                continue
-            src(cx, (0.85, 0.85, 0.95, 0.42 * wa * dim))
-            cx.move_to(*a)
-            cx.line_to(a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f)
-            cx.stroke()
-        for li in (1, 2, 3):
-            for x, y in layers[li]:
-                circle(cx, x, y, 6)
-                src(cx, (0.9, 0.85, 1.0, 0.6 * wa * dim * grow))
-                cx.fill()
-        ka = smooth(prog(t, t_gen2, t_gen2 + 0.6)) * wa
-        if ka > 0:
-            cx.set_line_width(6)
-            for n, (li, a, b) in enumerate(edges):
-                if n in dna:
-                    cx.set_source(rgrad(cx, b[0], b[1], 0, 1, [(0, CYAN), (1, CYAN)]))
-                    src(cx, CYAN, ka)
-                    cx.move_to(*a)
-                    cx.line_to(*b)
-                    cx.stroke()
-    # mitochondrial lineage
-    mt_k = 3 * ease_io(prog(t, S("mt") + 0.6, word_t("mt", "woman") + 0.3))
-    mt_a = 1 - smooth(prog(t, S("adam") - 0.1, S("adam") + 0.4))
-    mt_back = smooth(prog(t, S("trace") - 0.3, S("trace") + 0.3))
-    pink_a = max(mt_a if mt_k > 0 else 0, mt_back)
-    trav = None
-    if t >= S("unbroken"):
-        trav = ((t - S("unbroken")) / 1.3) % 1.0
-    draw_paths(cx, EVE_PATHS, PINK, 3 if mt_back > 0 else mt_k, alpha=pink_a, travel=trav)
-    # Y-chromosome lineage
-    y_k = 3 * ease_io(prog(t, S("adam") + 0.5, word_t("adam", "one man") if False else word_t("adam", "man:") + 0.3))
-    y_a = 1 - smooth(prog(t, S("trace") - 0.4, S("trace") + 0.1))
-    if t >= S("adam"):
-        draw_paths(cx, ADAM_PATHS, BLUE, y_k, alpha=y_a)
-    # broken lineages of everyone else
-    br = smooth(prog(t, word_t("trace", "weren't") - 0.2, word_t("trace", "weren't") + 0.6))
+    cam = af_cam(t)
+    bg_africa(cx, t, cam)
+    cx.save()
+    stage_clip(cx)
+    apply_cam(cx, cam)
+    t_w = word_t("mt", "woman")
+    # mother's line: grows from today's people back up to one woman
+    mt_k = 3 * ease_io(prog(t, S("mt") + 0.3, t_w + 0.2))
+    if t >= S("trace") - 0.5:
+        mt_k = 3
+    draw_paths(cx, EVE_PATHS, PINK, mt_k, up=True)
+    # everyone else alive at the time: lines that ended (Scene F, "not the only people")
+    t_br = word_t("trace", "weren't")
+    br = smooth(prog(t, t_br - 0.1, t_br + 1.2))
+    crowd_a = smooth(prog(t, S("trace") + 0.4, word_t("trace", "only")))
+    if crowd_a > 0:
+        for (x, y, spec, r, ln, dx) in CROWD:
+            draw_broken_line(cx, x, y + r, ln, dx, br)
+            P.draw_badge(cx, x, y, r, "person", spec, alpha=crowd_a * 0.95)
     if br > 0:
         rnd = random.Random(9)
-        cx.set_dash([10, 9])
         for k, x in enumerate(ANC_X):
             if k == EVE:
                 continue
             for j in range(2):
-                ln = rnd.uniform(90, 330)
-                dx = rnd.uniform(-60, 60) + (j - 0.5) * 50
-                y0 = ANC_Y + 50
-                f = ease_out(clamp(br * 1.4 - k * 0.06))
-                ex, ey = x + dx * f, y0 + ln * f
-                cx.set_line_width(3.5)
-                src(cx, (0.7, 0.68, 0.78, 0.8 * br))
-                cx.move_to(x, y0)
-                cx.curve_to(x, y0 + ln * 0.5 * f, ex, ey - ln * 0.4 * f, ex, ey)
-                cx.stroke()
-                cx.set_dash([])
-                circle(cx, ex, ey, 7)
-                src(cx, CORAL, br * clamp(f * 2 - 1))
-                cx.fill()
-                cx.set_dash([10, 9])
-        cx.set_dash([])
-    # ancient row (swaps to a different era for Y-Adam)
-    swap = smooth(prog(t, S("adam") - 0.2, S("adam") + 0.4)) * (1 - smooth(prog(t, S("trace") - 0.4, S("trace") + 0.1)))
-    eve_hi = smooth(prog(t, word_t("mt", "woman") - 0.2, word_t("mt", "woman") + 0.3)) * (1 - swap)
-    adam_hi = smooth(prog(t, word_t("adam", "man:") - 0.2, word_t("adam", "man:") + 0.3)) * swap
-    for specs, a in ((ANC_SPECS, 1 - swap), (ANC_SPECS_B, swap)):
-        if a <= 0.003:
-            continue
-        for k, x in enumerate(ANC_X):
-            r = 44
-            glow = None
-            hi = 0
-            if specs is ANC_SPECS and k == EVE:
-                hi = eve_hi
-                glow = PINK
-            if specs is ANC_SPECS_B and k == ADAM:
-                hi = adam_hi
-                glow = BLUE
-            P.draw_badge(cx, x, ANC_Y, r * (1 + 0.38 * hi), "person", specs[k], alpha=a, glow=glow if hi > 0 else None,
-                         glow_a=hi, ring=(PINK if glow is PINK and hi > 0.5 else BLUE if glow is BLUE and hi > 0.5 else None))
-    ea = smooth(prog(t, word_t("eve", "Mitochondrial") - 0.2, word_t("eve", "Mitochondrial") + 0.2)) * (1 - swap)
-    ui.pill(cx, "Mitochondrial Eve", ANC_X[EVE], ANC_Y - 92, 25, PINK, fg=WHITE, alpha=ea)
-    aa = smooth(prog(t, word_t("adam", "Y-chromosomal") - 0.2, word_t("adam", "Y-chromosomal") + 0.2)) * swap
-    ui.pill(cx, "Y-chromosomal Adam", ANC_X[ADAM], ANC_Y - 92, 25, BLUE, fg=WHITE, alpha=aa)
-    # modern row
-    for k, x in enumerate(MOD_X):
-        P.draw_badge(cx, x, MOD_Y, 54, "person", MOD_SPECS[k])
-    # "not a couple" card (Scene F)
-    ca = pulse_in(t, S("couple") - 0.1, S("trace") - 0.05, 0.3)
-    if ca > 0:
-        draw_couple_card(cx, t, ca)
+                draw_broken_line(cx, x, ANC_Y + 46, rnd.uniform(90, 300), rnd.uniform(-60, 60) + (j - 0.5) * 50, br)
+    # unbroken: a light travels down Eve's line to Just Needy
+    u = prog(t, S("unbroken") + 0.2, E("unbroken") - 0.15)
+    travel_light(cx, EVE_TO_JN, ease_io(u), PINK)
+    arrived = smooth(prog(t, E("unbroken") - 0.3, E("unbroken")))
+    # ancient row
+    eve_hi = smooth(prog(t, t_w - 0.2, t_w + 0.3))
+    for k, x in enumerate(ANC_X):
+        hi = eve_hi if k == EVE else 0
+        P.draw_badge(cx, x, ANC_Y, 46 * (1 + 0.4 * hi), "person", ANC_SPECS[k], glow=PINK if hi > 0 else None,
+                     glow_a=hi, ring=PINK if (k == EVE and hi > 0.5) else None)
+    ea = smooth(prog(t, word_t("eve", "Mitochondrial") - 0.25, word_t("eve", "Mitochondrial") + 0.15))
+    if t > S("trace") - 0.5:
+        ea = 1.0
+    ui.pill(cx, "Mitochondrial Eve", ANC_X[EVE], ANC_Y - 102, 32, PINK, fg=WHITE, alpha=ea)
+    # today
+    e = P.Expr((0, -0.8), 0.0, "smile")
+    if arrived > 0.5:
+        e = P.Expr((0, -0.3), 0.8, "grin")
+    draw_modern_row(cx, t, jn_expr=e, jn_glow=PINK, jn_glow_a=arrived)
+    cx.restore()
+    stage_edges(cx, hexc("#251A33"))
 
 
-def draw_couple_card(cx, t, a):
-    cx.push_group()
-    src(cx, (0.05, 0.03, 0.08, 0.82))
-    cx.rectangle(0, 420, W, 1020)
+def draw_broken_line(cx, x, y0, ln, dx, br):
+    if br <= 0:
+        return
+    f = ease_out(br)
+    ex, ey = x + dx * f, y0 + ln * f
+    cx.set_dash([10, 9])
+    cx.set_line_width(3.5)
+    src(cx, (0.72, 0.7, 0.8, 0.8 * br))
+    cx.move_to(x, y0)
+    cx.curve_to(x, y0 + ln * 0.5 * f, ex, ey - ln * 0.4 * f, ex, ey)
+    cx.stroke()
+    cx.set_dash([])
+    circle(cx, ex, ey, 8)
+    src(cx, CORAL, br * clamp(f * 2 - 1))
     cx.fill()
-    pop = back_out(clamp(a * 1.2))
-    for x, spec, col, name in ((300, ANC_SPECS[EVE], PINK, "Mitochondrial Eve"), (780, ANC_SPECS_B[ADAM], BLUE, "Y-chromosomal Adam")):
-        P.draw_badge(cx, x, 760, 120 * pop, "person", spec, glow=col, glow_a=0.6, ring=col)
-        ui.pill(cx, name, x, 925, 26, col, fg=WHITE)
-    # crossed-out "couple" symbol between them
-    k = smooth(prog(t, S("couple") + 0.15, S("couple") + 0.6))
+
+
+def adam_cam(t):
+    t_m = word_t("adam", "man:")
+    return kf(t, [(S("adam") - 0.3, (540.0, 1130.0, 1.4)), (S("adam") + 1.0, (560.0, 1080.0, 1.25)),
+                  (t_m + 0.2, (560.0, 900.0, 1.0)), (E("adam"), (ANC_X[ADAM] - 40, 860.0, 1.12)),
+                  (E("adam") + 1, (ANC_X[ADAM] - 40, 860.0, 1.12))], ease_io)
+
+
+def scene_adam(cx, t):
+    """Father-to-son line: a different era, different people; only the men's line."""
+    cam = adam_cam(t)
+    bg_africa(cx, t, cam)
     cx.save()
-    cx.translate(W / 2, 760)
-    circle(cx, 0, 0, 44)
-    src(cx, CORAL, k)
-    cx.set_line_width(7)
-    cx.stroke()
-    cx.move_to(-31, 31)
-    cx.line_to(31, -31)
-    cx.stroke()
-    cx.move_to(0, 16)
-    cx.curve_to(-26, -2, -18, -24, 0, -12)
-    cx.curve_to(18, -24, 26, -2, 0, 16)
-    src(cx, WHITE, 0.9 * k)
+    stage_clip(cx)
+    apply_cam(cx, cam)
+    t_m = word_t("adam", "man:")
+    k = 3 * ease_io(prog(t, S("adam") + 0.3, t_m + 0.2))
+    draw_paths(cx, ADAM_PATHS, BLUE, k, up=True)
+    hi = smooth(prog(t, t_m - 0.2, t_m + 0.3))
+    for i, x in enumerate(ANC_X):
+        h = hi if i == ADAM else 0
+        P.draw_badge(cx, x, ANC_Y, 46 * (1 + 0.4 * h), "person", ANC_SPECS_B[i], glow=BLUE if h > 0 else None,
+                     glow_a=h, ring=BLUE if (i == ADAM and h > 0.5) else None)
+    aa = smooth(prog(t, word_t("adam", "Y-chromosomal") - 0.25, word_t("adam", "Y-chromosomal") + 0.15))
+    ui.pill(cx, "Y-chromosomal Adam", ANC_X[ADAM], ANC_Y - 102, 32, BLUE, fg=WHITE, alpha=aa)
+    draw_modern_row(cx, t, jn_expr=P.Expr((0, -0.8), 0.0, "smile"), jn_glow=BLUE, jn_glow_a=hi, men_only=True)
+    cx.restore()
+    stage_edges(cx, hexc("#251A33"))
+
+
+def scene_couple(cx, t):
+    """Eve and Adam: not a couple, probably not even alive at the same time."""
+    bg_purple(cx, t)
+    s0 = S("couple")
+    kin = ease_out(prog(t, s0 - 0.3, s0 + 0.35))
+    xs = ((lerp(-200, 290, kin), ANC_SPECS[EVE], PINK, "Mitochondrial Eve"),
+          (lerp(1280, 790, kin), ANC_SPECS_B[ADAM], BLUE, "Y-chromosomal Adam"))
+    for x, spec, col, name in xs:
+        P.draw_badge(cx, x, 700, 150, "person", spec, glow=col, glow_a=0.6, ring=col)
+        ui.pill(cx, name.split(" ")[0], x, 905, 34, col, fg=WHITE)
+        ui.pill(cx, name.split(" ")[1], x, 960, 34, col, fg=WHITE)
+    # crossed-out heart
+    k = smooth(prog(t, s0 + 0.15, s0 + 0.5))
+    cx.save()
+    cx.translate(W / 2, 700)
+    sc = 0.6 + 0.4 * back_out(k)
+    cx.scale(sc, sc)
+    circle(cx, 0, 0, 56)
+    src(cx, (0.05, 0.03, 0.08, 0.9 * k))
     cx.fill()
-    cx.move_to(-31, 31)
-    cx.line_to(31, -31)
+    cx.move_to(0, 22)
+    cx.curve_to(-36, -2, -25, -34, 0, -16)
+    cx.curve_to(25, -34, 36, -2, 0, 22)
+    src(cx, WHITE, 0.95 * k)
+    cx.fill()
+    circle(cx, 0, 0, 56)
     src(cx, CORAL, k)
-    cx.set_line_width(7)
+    cx.set_line_width(9)
+    cx.stroke()
+    cx.move_to(-40, 40)
+    cx.line_to(40, -40)
     cx.stroke()
     cx.restore()
-    # timeline with two different points in time
-    k2 = smooth(prog(t, word_t("couple", "same") - 0.5, word_t("couple", "same") + 0.2))
-    y = 1110
-    cx.set_line_width(5)
-    src(cx, (1, 1, 1, 0.55 * k2))
-    cx.move_to(120, y)
-    cx.line_to(960, y)
+    # two different points on a timeline, sliding apart
+    k2 = smooth(prog(t, word_t("couple", "probably") - 0.1, word_t("couple", "probably") + 0.4))
+    sep = ease_io(prog(t, word_t("couple", "probably"), word_t("couple", "same") + 0.2))
+    y = 1150
+    cx.set_line_width(6)
+    src(cx, (1, 1, 1, 0.6 * k2))
+    cx.move_to(110, y)
+    cx.line_to(970, y)
     cx.stroke()
-    cx.move_to(960, y)
-    cx.line_to(940, y - 12)
-    cx.line_to(940, y + 12)
+    cx.move_to(975, y)
+    cx.line_to(948, y - 16)
+    cx.line_to(948, y + 16)
     cx.close_path()
     cx.fill()
-    ui.draw_text(cx, "TIME", 960, y + 48, 22, WHITE, align="right", spacing=3, alpha=0.6 * k2)
-    for x, col in ((330, PINK), (690, BLUE)):
-        circle(cx, x, y, 15)
+    ui.draw_text(cx, "TIME", 970, y + 58, 30, WHITE, align="right", spacing=4, alpha=0.75 * k2)
+    for x0, x1, col in ((520, 290, PINK), (560, 790, BLUE)):
+        x = lerp(x0, x1, sep)
+        circle(cx, x, y, 20)
         src(cx, col, k2)
         cx.fill()
-    ui.draw_text(cx, "different eras", W / 2, y - 34, 26, WHITE, alpha=0.85 * k2)
-    cx.pop_group_to_source()
-    cx.paint_with_alpha(a)
+        cx.set_line_width(4)
+        src(cx, col, 0.6 * k2)
+        cx.move_to(x, y - 24)
+        cx.line_to(x, 1000)
+        cx.stroke()
+    ui.draw_text(cx, "different times", W / 2, y + 120, 40, WHITE, alpha=k2 * sep, shadow=1.0)
 
 
 # ================================================================== SCENE 4: out of Africa
@@ -830,7 +1082,7 @@ def scene_map(cx, t):
         a = smooth(prog(t, ta - 0.1, ta + 0.3))
         if a > 0:
             x, y = scr(lo, la)
-            ui.draw_text(cx, name, x, y, 30, WHITE, spacing=3, alpha=a, shadow=1.0)
+            ui.draw_text(cx, name, x, y, 38, WHITE, spacing=3, alpha=a, shadow=1.0)
     cx.restore()
 
 
@@ -882,11 +1134,6 @@ def scene_final(cx, t):
         a = smooth(prog(t, ta - 0.2, ta + 0.25)) * (1 - smooth(prog(t, S("end") - 0.2, S("end") + 0.5)))
         draw_pin(cx, g, X, Y, R, lon0, lat0, lo, la, a, "person", spec, name, 40)
     draw_pin(cx, g, X, Y, R, lon0, lat0, *JN_HOME, 1.0, "jn", None, "JUST NEEDY", 50)
-    # Just Needy stands in front of the Earth for the closing line
-    ja = smooth(prog(t, S("end") + 0.1, S("end") + 1.0))
-    if ja > 0:
-        h = 540 * (0.85 + 0.15 * back_out(ja))
-        P.draw_jn_full(cx, W / 2, 1405, h, t=t, alpha=ja)
 
 
 def draw_pin(cx, g, X, Y, R, lon0, lat0, lo, la, a, kind, spec, label, r):
@@ -908,17 +1155,93 @@ def draw_pin(cx, g, X, Y, R, lon0, lat0, lo, la, a, kind, spec, label, r):
     cx.fill()
     P.draw_badge(cx, sx, sy - stem - r, r * back_out(clamp(a)), kind, spec, alpha=a,
                  glow=P.GOLD if kind == "jn" else None, glow_a=0.6)
-    ui.pill(cx, label, sx, sy - stem - 2 * r - 24, 20, YELLOW, alpha=a)
+    ui.pill(cx, label, sx, sy - stem - 2 * r - 28, 28, YELLOW, alpha=a)
+
+
+# ================================================================== SCENE 6: closing shot
+def _finale_arcs():
+    g = asset("globe")
+    rnd = random.Random(21)
+    L = g.lights
+    arcs = []
+    for i in range(110):
+        a = L[rnd.randrange(len(L))]
+        b = L[rnd.randrange(len(L))]
+        a = (math.degrees(a[0]), math.degrees(a[1]))
+        b = (math.degrees(b[0]), math.degrees(b[1]))
+        arcs.append((a, b))
+    # illuminate region by region: sweep west -> east by the arc's start longitude
+    arcs.sort(key=lambda ab: ((ab[0][0] + 200) % 360))
+    return arcs
+
+
+_FARCS = None
+
+
+def finale_cam(t):
+    s0 = S("end")
+    return kf(t, [(s0 - 0.3, (540.0, 930.0, 2.2)), (s0 + 0.5, (540.0, 920.0, 2.05)),
+                  (s0 + 3.2, (540.0, 900.0, 1.0)), (DUR, (540.0, 900.0, 0.97))], ease_io)
+
+
+def scene_finale(cx, t):
+    global _FARCS
+    if _FARCS is None:
+        _FARCS = _finale_arcs()
+    bg_space(cx, t)
+    g = asset("globe")
+    s0 = S("end")
+    cam = finale_cam(t)
+    cx.save()
+    cx.rectangle(0, CLIP_TOP, W, 1430 - CLIP_TOP)
+    cx.clip()
+    cx.translate(W / 2, 900)
+    cx.scale(cam[2], cam[2])
+    cx.translate(-cam[0], -cam[1])
+    X, Y, R = W / 2, 680, 300
+    lon0 = kf(t, [(s0 - 0.3, -5.0), (DUR, 22.0)], ease_io)
+    lat0 = 20
+    g.draw(cx, X, Y, R, lon0, lat0, lights=1.0, t=t)
+    # the family network: connections light up region by region as the camera pulls back
+    kk = prog(t, s0 - 0.2, word_t("end", "connected") + 0.4)
+    n = len(_FARCS)
+    for i, (a, b) in enumerate(_FARCS):
+        d = i / n * 0.75
+        f = ease_out(clamp((kk - d) / 0.25))
+        if f <= 0:
+            continue
+        g.arc(cx, a, b, X, Y, R, lon0, lat0, frac=f, alpha=0.42, lw=2.0 / max(1.0, cam[2] * 0.7))
+    # Just Needy, part of the picture: looks up at the network, a moment of surprise, then a smile
+    t_c = word_t("end", "connected")
+    t_th = word_t("end", "think.")
+    if t < t_c - 0.3:
+        e, tilt = P.Expr((0.15, -1.0), 0.2, "smile"), -0.06
+    elif t < t_th - 0.1:
+        e, tilt = P.Expr((0.0, -0.7), 1.0, "o"), -0.03
+    else:
+        e, tilt = P.Expr((0.0, 0.0), 0.3, "smile"), 0.0
+    P.draw_jn_full(cx, W / 2, 1385, 500, t=t, expr=e, head_tilt=tilt)
+    cx.restore()
+    for y0, y1, a0, a1 in ((CLIP_TOP, CLIP_TOP + 50, 1, 0), (1380, 1430, 0, 1)):
+        cx.set_source(vgrad(cx, 0, y0, 0, y1, [(0, (0.04, 0.07, 0.16, a0)), (1, (0.04, 0.07, 0.16, a1))]))
+        cx.rectangle(0, y0, W, y1 - y0)
+        cx.fill()
 
 
 # ================================================================== timeline
 def scene_spans():
+    """(scene, start, end, transition-in)"""
     return [
-        (scene_earth, 0.0, E("intro") + 0.25),
-        (scene_tree, E("intro") - 0.25, S("rewind") + 0.25),
-        (scene_africa, S("rewind") - 0.25, S("out") + 0.2),
-        (scene_map, S("out") - 0.3, S("think") + 0.15),
-        (scene_final, S("think") - 0.35, DUR + 1),
+        (scene_earth, 0.0, E("intro") + 0.25, "fade"),
+        (scene_tree, E("intro") - 0.25, S("gen") + 0.2, "fade"),
+        (scene_dna, S("gen") - 0.2, S("mt") + 0.2, "fade"),
+        (scene_africa, S("mt") - 0.2, S("adam") + 0.3, "fade"),
+        (scene_adam, S("adam") - 0.3, S("couple") + 0.2, "slide"),
+        (scene_couple, S("couple") - 0.2, S("trace") + 0.2, "fade"),
+        (scene_africa, S("trace") - 0.2, S("out") + 0.2, "fade"),
+        (scene_map, S("out") - 0.3, S("think") + 0.15, "fade"),
+        (scene_final, S("think") - 0.35, S("end") + 0.25, "fade"),
+        (scene_finale, S("end") - 0.25, DUR + 1, "fade"),
     ]
 
 
@@ -965,13 +1288,16 @@ HEADERS = None
 
 
 def caption_y(t):
-    if t < S("rewind"):
+    """Captions sit above the Shorts UI overlay (bottom ~22%) and below the diagrams."""
+    if t < S("par") - 0.3:
         return 1500
+    if t < S("mt") - 0.2:
+        return 1470
     if t < S("out") - 0.2:
-        return 1560
+        return 1455
     if t < S("think") - 0.2:
-        return 1420
-    return kf(t, [(S("end") - 0.2, 1500.0), (S("end") + 0.6, 1560.0)])
+        return 1400
+    return 1490
 
 
 def render_frame(t):
@@ -982,27 +1308,35 @@ def render_frame(t):
     cx = cairo.Context(surf)
     cx.set_source_rgb(0, 0, 0)
     cx.paint()
-    spans = [s for s in scene_spans() if s[1] <= t < s[2]]
-    for i, (fn, a, b) in enumerate(spans):
-        alpha = 1.0
-        if i > 0:
-            alpha = smooth(prog(t, a, a + 0.5))
-        if alpha >= 0.999 or i == 0:
+    spans = [sp for sp in scene_spans() if sp[1] <= t < sp[2]]
+    if len(spans) == 2 and spans[1][3] == "slide":
+        k = ease_io(prog(t, spans[1][1], spans[0][2]))
+        for (fn, a, b, kind), off in ((spans[0], -W * k), (spans[1], W * (1 - k))):
+            cx.save()
+            cx.translate(off, 0)
             fn(cx, t)
-        else:
-            cx.push_group()
-            fn(cx, t)
-            cx.pop_group_to_source()
-            cx.paint_with_alpha(alpha)
+            cx.restore()
+    else:
+        for i, (fn, a, b, kind) in enumerate(spans):
+            alpha = 1.0 if i == 0 else smooth(prog(t, a, a + 0.45))
+            if alpha >= 0.999 or i == 0:
+                fn(cx, t)
+            else:
+                cx.push_group()
+                fn(cx, t)
+                cx.pop_group_to_source()
+                cx.paint_with_alpha(alpha)
     # morph: Just Needy shrinks into the root portrait of his family tree
     mk = prog(t, E("intro") - 0.25, S("par") + 0.15)
     if 0 < mk < 1:
         k = ease_io(mk)
-        h = lerp(560, 150, k)
-        y = lerp(1420, 1185 + 75, k)
-        P.draw_jn_full(cx, W / 2, y, h, t=t, alpha=1 - smooth(prog(mk, 0.55, 1.0)))
+        x0, y0, h0, e, _, _ = jn_opening(E("intro") - 0.25)
+        h = lerp(h0, 150, k)
+        y = lerp(y0, ROOT_Y + 75, k)
+        P.draw_jn_full(cx, lerp(x0, W / 2, k), y, h, t=t, alpha=1 - smooth(prog(mk, 0.55, 1.0)),
+                       expr=P.Expr((0, -0.8 * k), 0, "smile"))
     ui.header(cx, t, HEADERS)
-    CAPS.draw(cx, t, caption_y(t))
+    CAPS.draw(cx, t, caption_y(t), size=64)
     # final fade out
     fo = smooth(prog(t, DUR - 0.7, DUR))
     if fo > 0:

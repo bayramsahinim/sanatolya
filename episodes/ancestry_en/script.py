@@ -39,11 +39,11 @@ LINES = [
     # ---- Scene E: ancient ancestry
     ("rewind", "Now let's rewind much further.",
      "Now let's rewind|*much further.*"),
-    ("gen", "Your family tree covers everyone you descend from. Your DNA carries pieces from only some of them.",
-     "Your *family tree* covers|everyone you descend from.|Your *DNA* carries pieces|from only some of them."),
+    ("gen", "Your family tree includes everyone you descend from. But your DNA comes from only some of them.",
+     "Your *family tree* includes|everyone you descend from.|But your *DNA* comes|from only *some* of them."),
     # ---- Scene F: mtEve / Y-Adam
-    ("mt", "DNA passed from mother to child traces back to one woman in Africa, about one hundred fifty to two hundred thousand years ago.",
-     "DNA passed from|*mother to child*|traces back to|*one woman* in Africa,|about *150,000–200,000*|years ago."),
+    ("mt", "DNA passed from mother to child traces back to one woman in Africa, roughly one hundred fifty to two hundred thousand years ago.",
+     "DNA passed from|*mother to child*|traces back to|*one woman* in Africa,|roughly *150,000–200,000*|years ago."),
     ("eve", "Scientists call her Mitochondrial Eve.",
      "Scientists call her|*Mitochondrial Eve.*"),
     ("adam", "DNA passed from father to son traces men back to one man: Y-chromosomal Adam.",
@@ -70,22 +70,19 @@ LINES = [
 
 # lines per TTS take
 TAKES = [
-    ["hook1", "hook2", "intro", "par", "gp", "ggp", "dbl"],
-    ["g30", "pop", "same", "mix", "mrca"],
-    ["rewind", "gen", "mt", "eve", "adam", "couple"],
-    ["trace", "unbroken", "out", "route"],
-    ["think", "rel", "end"],
+    ["hook1", "hook2", "intro", "par", "gp", "ggp", "dbl", "g30", "pop"],
+    ["same", "mix", "mrca", "rewind", "gen", "mt", "eve"],
+    ["adam", "couple", "trace", "unbroken", "out", "route", "think", "rel", "end"],
 ]
 
 # extra silence (s) after a line, beyond the default gap
 GAP_AFTER = {
-    "hook2": 0.35, "intro": 0.2, "dbl": 0.25, "pop": 0.15, "mix": 0.15, "mrca": 0.4,
-    "rewind": 0.15, "gen": 0.2, "eve": 0.2, "couple": 0.2, "unbroken": 0.3, "route": 0.35,
-    "think": 0.1, "rel": 0.35,
+    "hook2": 0.25, "intro": 0.1, "dbl": 0.12, "mrca": 0.25, "gen": 0.1, "eve": 0.1, "couple": 0.1,
+    "unbroken": 0.2, "route": 0.25, "rel": 0.25,
 }
-DEFAULT_GAP = 0.12
-LEAD_IN = 0.4
-TAIL = 1.8
+DEFAULT_GAP = 0.07
+LEAD_IN = 0.3
+TAIL = 2.2
 
 TEXT = {i: s for i, s, _ in LINES}
 CAPTION = {i: c for i, _, c in LINES}

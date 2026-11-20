@@ -159,16 +159,27 @@ def envelope(x, att=0.03, rel=0.4):
     return np.repeat(out, hop)[: len(x)] if len(out) else np.zeros(len(x))
 
 
+def polish_voice(x):
+    """High-pass, a touch of presence/air, gentle compression and a peak limiter (ffmpeg)."""
+    import soundfile as sf
+    a = os.path.join(BUILD, "voice_raw48.wav")
+    b = os.path.join(BUILD, "voice_polished.wav")
+    sf.write(a, x.astype(np.float32), SR)
+    chain = ("highpass=f=75,equalizer=f=250:t=q:w=1.0:g=-1.5,equalizer=f=3200:t=q:w=1.2:g=2.5,"
+             "highshelf=f=7500:g=2,acompressor=threshold=-20dB:ratio=2.5:attack=8:release=140:makeup=2,"
+             "alimiter=limit=0.89:attack=3:release=60")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", a, "-af", chain, "-ar", str(SR), b], check=True)
+    y, _ = sf.read(b)
+    return y
+
+
 def build_audio():
     voice24 = tts.read_wav(os.path.join(BUILD, "voice.wav"))
     voice = signal.resample_poly(voice24, 2, 1)
     total = DUR
     n = int(total * SR)
     voice = np.pad(voice, (0, max(0, n - len(voice))))[:n]
-    # light voice polish: high-pass + gentle presence
-    b, a = signal.butter(2, 80 / (SR / 2), "high")
-    voice = signal.lfilter(b, a, voice)
-    voice = voice / (np.abs(voice).max() + 1e-9) * 0.89
+    voice = polish_voice(voice)
     music = score(total)
     music = np.pad(music, (0, max(0, n - len(music))))[:n]
     music = music / (np.abs(music).max() + 1e-9) * 0.5

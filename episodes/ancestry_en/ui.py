@@ -71,9 +71,16 @@ def pill(cx, s, x, y, size, bg, fg=INKC, alpha=1.0, pad=None, scale=1.0):
 
 
 # ------------------------------------------------------------------ header
-HEADER_LABEL_Y = 214
-HEADER_VALUE_Y = 306
-HEADER_SUB_Y = 354
+HEADER_LABEL_Y = 200
+HEADER_VALUE_Y = 300
+HEADER_SUB_Y = 358
+
+
+def label_size(cx, s):
+    size = 33
+    while text_w(cx, s, size, 4.5) > 960 and size > 22:
+        size -= 1
+    return size
 
 
 def header(cx, t, entries, alpha=1.0):
@@ -90,9 +97,9 @@ def header(cx, t, entries, alpha=1.0):
     a_out = 1 - smooth(prog(t, cur[0], cur[0] + 0.1))
     # label
     if prev is not None and prev[1] != cur[1] and a_out > 0:
-        draw_text(cx, prev[1], W / 2, HEADER_LABEL_Y, 27, WHITE, spacing=4.5, alpha=0.82 * alpha * a_out)
+        draw_text(cx, prev[1], W / 2, HEADER_LABEL_Y, label_size(cx, prev[1]), WHITE, spacing=4.5, alpha=0.82 * alpha * a_out)
     la = a_in if (prev is None or prev[1] != cur[1]) else 1.0
-    draw_text(cx, cur[1], W / 2, HEADER_LABEL_Y, 27, WHITE, spacing=4.5, alpha=0.82 * alpha * la)
+    draw_text(cx, cur[1], W / 2, HEADER_LABEL_Y, label_size(cx, cur[1]), WHITE, spacing=4.5, alpha=0.82 * alpha * la)
     # value + sub
     for ent, a, new in ((prev, a_out, False), (cur, a_in, True)):
         if ent is None or a <= 0.003:
@@ -109,8 +116,8 @@ def header(cx, t, entries, alpha=1.0):
         cx.save()
         cx.translate(W / 2, HEADER_VALUE_Y - 26)
         cx.scale(sc, sc)
-        size = 74
-        while text_w(cx, v, size) > 1000 and size > 40:
+        size = 84
+        while text_w(cx, v, size) > 960 and size > 40:
             size -= 2
         draw_text(cx, v, 0, 26, size, ent[4], alpha=av, shadow=0.8)
         cx.restore()
@@ -118,7 +125,7 @@ def header(cx, t, entries, alpha=1.0):
             same_s = prev is not None and prev[3] == cur[3]
             if same_s and not new:
                 continue
-            draw_text(cx, ent[3], W / 2, HEADER_SUB_Y, 27, CYAN, alpha=0.95 * alpha * (1.0 if same_s else a))
+            draw_text(cx, ent[3], W / 2, HEADER_SUB_Y, 34, CYAN, alpha=0.95 * alpha * (1.0 if same_s else a))
 
 
 # ------------------------------------------------------------------ captions
@@ -213,7 +220,7 @@ class Captions:
         for k, wd in enumerate(widths):
             l_, r_ = extra(k)
             add = wd + l_ + r_ + (sp if cur else 0)
-            if cur and cw + add > 960:
+            if cur and cw + add > 900:
                 lines.append(cur)
                 cur, cw = [], 0
                 add -= sp

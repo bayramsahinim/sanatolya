@@ -164,7 +164,63 @@ def _face(cx, sp, R):
             cx.fill()
 
 
-def _jn_bust(cx, R):
+class Expr:
+    """Just Needy expression. look: eye direction (-1..1); brows: 0 none .. 1 raised (surprise);
+    mouth: 'smile', 'grin', 'o' (surprised), 'flat'."""
+
+    def __init__(self, look=(0.0, 0.0), brows=0.0, mouth="smile", blink=False):
+        self.look, self.brows, self.mouth, self.blink = look, brows, mouth, blink
+
+    def key(self):
+        return (round(self.look[0], 1), round(self.look[1], 1), round(self.brows, 1), self.mouth, self.blink)
+
+
+NEUTRAL = Expr()
+
+
+def jn_face(cx, x, y, hr, e=NEUTRAL, lw=None):
+    """Eyes, optional brows and mouth on a head of radius hr centred at (x, y)."""
+    lx, ly = e.look
+    ex0, ey0 = x + lx * hr * 0.16, y - hr * 0.12 + ly * hr * 0.13
+    for s_ in (-1, 1):
+        if e.blink:
+            line(cx, [(ex0 + s_ * hr * 0.3 - hr * 0.09, ey0), (ex0 + s_ * hr * 0.3 + hr * 0.09, ey0)], INK, hr * 0.06)
+        else:
+            ry = hr * (0.15 + 0.03 * e.brows)
+            ellipse(cx, ex0 + s_ * hr * 0.3, ey0, hr * 0.085, ry)
+            fs(cx, INK, None, 0)
+        if e.brows > 0.02:
+            by = ey0 - hr * (0.27 + 0.1 * e.brows)
+            cx.save()
+            cx.new_path()
+            cx.arc(ex0 + s_ * hr * 0.3, by + hr * 0.12, hr * 0.13, math.pi * 1.2, math.pi * 1.8)
+            src(cx, INK, min(1.0, e.brows * 1.5))
+            cx.set_line_width(hr * 0.055)
+            cx.set_line_cap(cairo.LINE_CAP_ROUND)
+            cx.stroke()
+            cx.restore()
+    mx, my = x + lx * hr * 0.1, y + hr * 0.08 + ly * hr * 0.06
+    cx.new_path()
+    if e.mouth == "o":
+        ellipse(cx, mx, my + hr * 0.3, hr * 0.09, hr * 0.12)
+        fs(cx, INK, None, 0)
+        return
+    if e.mouth == "flat":
+        line(cx, [(mx - hr * 0.18, my + hr * 0.32), (mx + hr * 0.18, my + hr * 0.32)], INK, hr * 0.07)
+        return
+    if e.mouth == "grin":
+        cx.arc(mx, my, hr * 0.38, math.pi * 0.18, math.pi * 0.82)
+        cx.close_path()
+        fs(cx, INK, None, 0)
+        return
+    cx.arc(mx, my, hr * 0.38, math.pi * 0.22, math.pi * 0.78)
+    src(cx, INK)
+    cx.set_line_width(hr * 0.07)
+    cx.set_line_cap(cairo.LINE_CAP_ROUND)
+    cx.stroke()
+
+
+def _jn_bust(cx, R, e=NEUTRAL):
     """Just Needy head-and-shoulders inside badge radius R."""
     lw = R * 0.045
     # hoodie shoulders
@@ -188,24 +244,16 @@ def _jn_bust(cx, R):
     hy, hr = -R * 0.12, R * 0.42
     circle(cx, 0, hy, hr)
     fs(cx, hexc("#FFFFFF"), INK, lw)
-    # eyes: black ovals
-    for s in (-1, 1):
-        ellipse(cx, s * hr * 0.3, hy - hr * 0.12, hr * 0.085, hr * 0.15)
-        fs(cx, INK, None, 0)
-    # smile
-    cx.arc(0, hy + hr * 0.08, hr * 0.38, math.pi * 0.22, math.pi * 0.78)
-    src(cx, INK)
-    cx.set_line_width(hr * 0.07)
-    cx.set_line_cap(cairo.LINE_CAP_ROUND)
-    cx.stroke()
+    jn_face(cx, 0, hy, hr, e)
 
 
 _CACHE = {}
 BADGE_PX = 192  # cached badge raster size
 
 
-def badge_surface(kind, spec=None, ring=None, bg=None):
-    key = (kind, spec.seed if spec else None, ring, bg)
+def badge_surface(kind, spec=None, ring=None, bg=None, expr=None):
+    expr = expr or NEUTRAL
+    key = (kind, spec.seed if spec else None, ring, bg, expr.key() if kind == "jn" else None)
     if key in _CACHE:
         return _CACHE[key]
     S = BADGE_PX
@@ -227,7 +275,7 @@ def badge_surface(kind, spec=None, ring=None, bg=None):
     cx.set_source(rgrad(cx, 0, -inner * 0.3, 0, inner * 1.2, [(0, shade(bg, 0.4)), (1, bg)]))
     cx.paint()
     if kind == "jn":
-        _jn_bust(cx, inner)
+        _jn_bust(cx, inner, expr)
     else:
         _face(cx, spec, inner)
     cx.restore()
@@ -235,7 +283,8 @@ def badge_surface(kind, spec=None, ring=None, bg=None):
     return surf
 
 
-def draw_badge(cx, x, y, r, kind="person", spec=None, alpha=1.0, ring=None, glow=None, glow_a=1.0, shadow=True):
+def draw_badge(cx, x, y, r, kind="person", spec=None, alpha=1.0, ring=None, glow=None, glow_a=1.0, shadow=True,
+               expr=None):
     if r <= 0.5 or alpha <= 0.003:
         return
     if glow is not None:
@@ -246,7 +295,7 @@ def draw_badge(cx, x, y, r, kind="person", spec=None, alpha=1.0, ring=None, glow
         circle(cx, x, y + r * 0.08, r * 1.02)
         src(cx, (0, 0, 0, 0.35 * alpha))
         cx.fill()
-    surf = badge_surface(kind, spec, ring)
+    surf = badge_surface(kind, spec, ring, expr=expr)
     cx.save()
     cx.translate(x - r, y - r)
     k = 2 * r / BADGE_PX
@@ -258,7 +307,7 @@ def draw_badge(cx, x, y, r, kind="person", spec=None, alpha=1.0, ring=None, glow
 
 
 # ------------------------------------------------------------------ full body Just Needy
-def draw_jn_full(cx, x, y, h, t=0.0, alpha=1.0, wave=0.0):
+def draw_jn_full(cx, x, y, h, t=0.0, alpha=1.0, wave=0.0, expr=None, head_tilt=0.0):
     """Front view, standing, hands in hoodie pocket. (x, y) = point between the feet; h = total height."""
     if alpha <= 0.003:
         return
@@ -328,20 +377,17 @@ def draw_jn_full(cx, x, y, h, t=0.0, alpha=1.0, wave=0.0):
     fs(cx, hexc("#FFFFFF"), INK, 4)
     # head
     hy = -530 + math.sin(t * 2.2 + 0.4) * 1.5
+    blink = 1.7 < (t % 3.4) < 1.81
+    e = expr or NEUTRAL
+    e = Expr(e.look, e.brows, e.mouth, blink=blink or e.blink)
+    cx.save()
+    cx.translate(0, -466)
+    cx.rotate(head_tilt)
+    cx.translate(0, 466)
     circle(cx, 0, hy, 72)
     fs(cx, hexc("#FFFFFF"), INK, lw + 0.5)
-    blink = 1.7 < (t % 3.4) < 1.81
-    for s in (-1, 1):
-        if blink:
-            line(cx, [(s * 22 - 7, hy - 8), (s * 22 + 7, hy - 8)], INK, 4)
-        else:
-            ellipse(cx, s * 22, hy - 8, 6.5, 11)
-            fs(cx, INK, None, 0)
-    cx.arc(0, hy + 6, 28, math.pi * 0.22, math.pi * 0.78)
-    src(cx, INK)
-    cx.set_line_width(5)
-    cx.set_line_cap(cairo.LINE_CAP_ROUND)
-    cx.stroke()
+    jn_face(cx, 0, hy, 72, e)
+    cx.restore()
     cx.restore()
     cx.pop_group_to_source()
     cx.paint_with_alpha(alpha)
