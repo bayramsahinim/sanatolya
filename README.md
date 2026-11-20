@@ -46,3 +46,28 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Short: "Your Brain Can't Stop Reading" (Stroop Effect Challenge)
+
+English adaptation of a 90 s Turkish color-reading Short: same scene order, the same 19 challenges
+(5 / 6 / 8 cards, 1.6 s / 1.1 s / 0.95 s per card), level 3 read aloud as a distraction, `? / 19` ending.
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC, 93 s) | `output/Your_Brain_Cant_Stop_Reading_Stroop_Challenge.mp4` |
+| English subtitles | `output/Your_Brain_Cant_Stop_Reading_Stroop_Challenge.en.srt` |
+
+```
+episodes/stroop_challenge/
+  script.py      challenges (word, ink colour), ink palette, narration lines
+  make_voice.py  Gemini TTS, one take per line (cached in assets/audio/tts/stroop)
+  timeline.py    narration placement, word timings, card schedule, scene ranges
+  render.py      scenes, HUD, cards, captions, mascot
+  episode.py     soundtrack, SRT, video
+```
+
+```bash
+python -m episodes.stroop_challenge.make_voice
+python -m episodes.stroop_challenge.timeline        # print the timing plan
+python -m episodes.stroop_challenge.episode all
+```
