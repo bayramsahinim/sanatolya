@@ -43,6 +43,35 @@ def take(lid):
     return tts.read_wav(out)
 
 
+def mute_noise_bursts(a, rms_db=-15.0, flat_min=0.45, frame=0.02, fade=0.012):
+    """Silence the loud white-noise burst the TTS appends after some takes (heard as a
+    "shhh/whoosh"). Only frames that are both loud and spectrally flat are muted; speech,
+    including s/f/th sounds, is far quieter at that flatness. Length is preserved, so the
+    timeline is unchanged."""
+    from scipy import signal
+    hop = int(frame * SR)
+    bad = np.zeros(len(a), bool)
+    for i in range(0, len(a) - hop + 1, hop):
+        seg = a[i:i + hop]
+        r = 20 * np.log10(np.sqrt((seg ** 2).mean()) + 1e-9)
+        if r > rms_db:
+            _, P = signal.welch(seg, SR, nperseg=min(256, hop))
+            if np.exp(np.mean(np.log(P + 1e-12))) / np.mean(P + 1e-12) > flat_min:
+                bad[max(0, i - hop):i + 2 * hop] = True
+    if not bad.any():
+        return a
+    gain = np.where(bad, 0.0, 1.0)
+    k = max(1, int(fade * SR))
+    gain = np.convolve(np.pad(gain, k, mode="edge"), np.ones(k) / k, mode="same")[k:-k]
+    return a * gain
+
+
+@functools.lru_cache(maxsize=None)
+def take_clean(lid):
+    """take() with the TTS noise bursts muted - used for the audio mix only."""
+    return mute_noise_bursts(take(lid))
+
+
 def _segments(a, thr=0.012, min_gap=0.14, min_len=0.0):
     fr = int(0.01 * SR)
     e = np.array([np.sqrt((a[i:i + fr] ** 2).mean()) for i in range(0, max(1, len(a) - fr), fr)])

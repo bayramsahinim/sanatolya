@@ -22,6 +22,7 @@ OUT_MP4 = f"output/{NAME}.mp4"
 OUT_SRT = f"output/{NAME}.en.srt"
 MIX = "build/stroop_mix.wav"
 MASTER = "build/stroop_master.wav"
+MIX_REF = "build/stroop_mix_ref.wav"   # same mix with the unmuted voice: sets the master gain
 FPS = 30
 W, H = 1080, 1920
 SR = A.SR
@@ -95,19 +96,27 @@ def build_audio():
     L = T["lines"]
     dur = T["end"] + 0.2
     n = int(dur * SR)
-    voice = np.zeros(n)
-    for lid, l in L.items():
-        a = A.resample(tl.take(lid), tts.SR, SR)
-        A.add(voice, A.fade(a, 0.004, 0.03), l["start"])
-    # level-3 distractor words
-    w = tl.take("l3read")
-    for item in T["l3words"]:
-        s0, s1 = item["src"]
-        seg = w[int(s0 * tts.SR): int(s1 * tts.SR)]
-        A.add(voice, A.fade(A.resample(seg, tts.SR, SR), 0.004, 0.04), item["at"])
-    voice = voice / max(1e-6, np.abs(voice).max()) * 0.85
-    voice = process_voice(voice)
-    vrms = np.sqrt((voice[np.abs(voice) > 0.02] ** 2).mean())
+    def assemble(take_fn):
+        v = np.zeros(n)
+        for lid, l in L.items():
+            a = A.resample(take_fn(lid), tts.SR, SR)
+            A.add(v, A.fade(a, 0.004, 0.03), l["start"])
+        # level-3 distractor words
+        w = take_fn("l3read")
+        for item in T["l3words"]:
+            s0, s1 = item["src"]
+            seg = w[int(s0 * tts.SR): int(s1 * tts.SR)]
+            A.add(v, A.fade(A.resample(seg, tts.SR, SR), 0.004, 0.04), item["at"])
+        return v
+
+    # Revision 3: the TTS noise bursts ("shhh") are muted in the narration we hear, but every
+    # gain (voice normalisation, SFX/music levels, ducking, master gain) is still derived from the
+    # unmuted reference voice, so nothing else in the mix moves.
+    ref = assemble(tl.take)
+    vscale = 0.85 / max(1e-6, np.abs(ref).max())
+    voice_ref = process_voice(ref * vscale)
+    voice = process_voice(assemble(tl.take_clean) * vscale)
+    vrms = np.sqrt((voice_ref[np.abs(voice_ref) > 0.02] ** 2).mean())
 
     tap = level_to(soft_tap(), vrms, SFX_DB["tap"])
     chime = level_to(soft_chime(), vrms, SFX_DB["chime"])
@@ -137,7 +146,7 @@ def build_audio():
     ms_floor = np.percentile(ms, 20)
     mus = mus / np.sqrt(np.maximum(ms, ms_floor))
     # mild, slow duck: -17 dB in gaps, -20 dB under narration
-    env = A.envelope_follow(voice, 0.3, 1.0)
+    env = A.envelope_follow(voice_ref, 0.3, 1.0)
     env = np.clip(env / max(1e-6, np.percentile(env[env > 0], 90)), 0, 1)
     k2 = int(0.5 * SR)
     env = np.convolve(env, np.ones(k2) / k2, mode="same")
@@ -146,12 +155,14 @@ def build_audio():
     fade = np.clip(tt / 0.8, 0, 1) * np.clip((T["end"] - tt) / 1.2, 0, 1)
     mus = mus * vrms * 10 ** (db / 20) * fade
 
-    mix = voice + sfx + mus
+    mix_ref = voice_ref + sfx + mus
+    mscale = 0.89 / np.abs(mix_ref).max()
+    mix = (voice + sfx + mus) * mscale
+    os.makedirs("build", exist_ok=True)
     for nm, x in (("voice", voice), ("sfx", sfx), ("music", mus)):
         sf.write(f"build/stroop_stem_{nm}.wav", x.astype(np.float32), SR)
-    mix = mix / np.abs(mix).max() * 0.89
-    os.makedirs("build", exist_ok=True)
     sf.write(MIX, mix.astype(np.float32), SR)
+    sf.write(MIX_REF, (mix_ref * mscale).astype(np.float32), SR)
     mrms = np.sqrt((mus[(env > 0.5)] ** 2).mean())
     print(f"mix {dur:.2f}s -> {MIX}")
     print(f"  music under narration: {20*np.log10(vrms/mrms):.1f} dB below voice")
@@ -174,7 +185,7 @@ def _lufs(path, af=None):
 def master(target=-14.5):
     """Static master: ONE fixed gain + safety peak limiter (the voice stem is already compressed).
     (No dynamic loudness normalisation - it would pump the music up in the gaps.)"""
-    gain = target - _lufs(MIX)
+    gain = target - _lufs(MIX_REF)
     chain = f"volume={gain:.2f}dB,alimiter=limit=0.74:attack=1:release=60:level=disabled"
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", MIX, "-af", chain, "-ar", str(SR), MASTER], check=True)
     print(f"master -> {MASTER}  (static gain {gain:+.1f} dB, {_lufs(MASTER):.1f} LUFS)")
