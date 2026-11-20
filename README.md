@@ -46,3 +46,33 @@ python -m episodes.rome_7_days.episode video        # final 1080p render
 python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
+
+## Episode: "What If Every Human Is Related?" (English adaptation, vertical)
+
+English adaptation of the Turkish shared-ancestry short, rebuilt shot for shot in Cinecode with
+Just Needy as the person at the root of every family tree.
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC, ~85 s) | `output/Just_Needy_What_If_Every_Human_Is_Related_EN.mp4` |
+| English subtitles | `output/Just_Needy_What_If_Every_Human_Is_Related_EN.en.srt` |
+
+```
+episodes/ancestry_en/
+  script.py   narration lines, on-screen captions (*highlight*, | = caption break), TTS takes
+  voice.py    Gemini TTS (Puck) -> line clips -> timed voice track (build/ancestry_en/timing.json)
+  people.py   ancestor portrait badges + Just Needy (badge and full body, per the character sheet)
+  geo.py      orthographic globe, Africa map, flat world map (assets/geo, Natural Earth via world-atlas)
+  ui.py       header block (label / value / sub) and word-timed captions with yellow highlights
+  render.py   scenes A-H + frame renderer (stills / full render)
+  mix.py      ambient score, ducking, loudness, SRT, final mux
+  qa.py       pre-delivery checks
+```
+
+```bash
+python -m episodes.ancestry_en.voice            # TTS (cached in assets/audio/tts_ancestry) + timing
+python -m episodes.ancestry_en.render video     # silent 1080x1920 render
+python -m episodes.ancestry_en.mix audio        # score + mix + SRT
+python -m episodes.ancestry_en.mix final        # mux -> output/
+python -m episodes.ancestry_en.qa output/Just_Needy_What_If_Every_Human_Is_Related_EN.mp4
+```

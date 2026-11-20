@@ -23,10 +23,10 @@ def envelope_db(audio):
     return np.convolve(db, k, mode="same")
 
 
-def find_pauses(audio, min_len=0.16):
+def find_pauses(audio, min_len=0.16, rel_db=38):
     db = envelope_db(audio)
     peak = np.percentile(db, 95)
-    thr = peak - 38
+    thr = peak - rel_db
     silent = db < thr
     pauses = []
     i = 0
@@ -58,9 +58,10 @@ def syllables(text):
     return total + 1.5
 
 
-def align(audio, texts):
-    """Return list of (start, end) seconds for each text."""
-    pauses, db, thr = find_pauses(audio)
+def align(audio, texts, rel_db=38):
+    """Return list of (start, end) seconds for each text.
+    rel_db: silence threshold below the speech peak (lower it for takes with a noise floor)."""
+    pauses, db, thr = find_pauses(audio, rel_db=rel_db)
     # speech region
     voiced = np.where(db >= thr)[0]
     t0 = voiced[0] * HOP / SR
