@@ -88,7 +88,7 @@ replaced by a Just Needy card; "Ce-eee!" is shown as "Peekaboo!".
 
 | Deliverable | Path |
 |---|---|
-| Final video (native 1080×1920, 30 fps, H.264/AAC, 46.1 s; source 45.5 s) | `output/Just_Needy_Baby_Turns_Head_Away_EN.mp4` |
+| Final video (native 1080×1920, 30 fps, H.264/AAC, 46.4 s; source 45.5 s) | `output/Just_Needy_Baby_Turns_Head_Away_EN.mp4` |
 | English subtitles | `output/Just_Needy_Baby_Turns_Head_Away_EN.en.srt` |
 
 ```
