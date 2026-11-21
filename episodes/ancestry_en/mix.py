@@ -220,9 +220,22 @@ def final():
     print(out)
 
 
+def final_locked(picture):
+    """Swap the soundtrack only: the video stream of `picture` is copied untouched (no re-encode)."""
+    a = os.path.join(BUILD, "mix.wav")
+    out = os.path.join(OUT_DIR, NAME + ".mp4")
+    tmp = out + ".tmp.mp4"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", picture, "-i", a, "-map", "0:v", "-map", "1:a", "-c:v", "copy",
+                    "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "-shortest", tmp], check=True)
+    os.replace(tmp, out)
+    print(out)
+
+
 if __name__ == "__main__":
     if sys.argv[1] == "audio":
         build_audio()
         srt()
     elif sys.argv[1] == "final":
         final()
+    elif sys.argv[1] == "relock":
+        final_locked(sys.argv[2])
