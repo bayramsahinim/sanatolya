@@ -70,6 +70,12 @@ def clips_from_take(p):
     clips = {}
     for l, (s, e) in zip(IDS, segs):
         clips[l] = cap_pauses(align.trim(audio, s, e, pre=0.05, post=0.14))
+    for l, c in clips.items():  # short fades: no clicks or abrupt cuts at line edges
+        n_in, n_out = int(0.012 * tts.SR), int(0.04 * tts.SR)
+        c = c.copy()
+        c[:n_in] *= np.linspace(0, 1, n_in)
+        c[-n_out:] *= np.linspace(1, 0, n_out)
+        clips[l] = c
     for l, c in clips.items():  # level-match on active speech
         db = align.envelope_db(c)
         act = db > np.percentile(db, 95) - 20
@@ -79,6 +85,7 @@ def clips_from_take(p):
 
 
 MIN_GAP = 0.22  # shortest breath between lines
+MAX_EXTRA_GAP = 0.10  # a pause may exceed the original pause by at most this
 
 
 def build(p=None):
@@ -88,8 +95,13 @@ def build(p=None):
     for k, (l, o0, o1, _, _) in enumerate(LINES):
         c = clips[l]
         d = len(c) / tts.SR
-        # keep the original start when possible (never earlier than the previous line + a breath)
-        start = max(o0 + (t - LINES[k - 1][2] if k else 0.0) * 0.0, o0, t + (MIN_GAP if k else 0.0)) if k else o0 + 0.05
+        # keep the original start when possible (never earlier than the previous line + a breath), but never
+        # leave a pause much longer than the original's pause between these two lines
+        if k:
+            orig_gap = o0 - LINES[k - 1][2]
+            start = min(max(o0, t + MIN_GAP), t + max(MIN_GAP, orig_gap + MAX_EXTRA_GAP))
+        else:
+            start = o0 + 0.05
         pauses, _, _ = align.find_pauses(c, min_len=0.12, rel_db=REL_DB)
         timing[l] = {"start": round(start, 3), "end": round(start + d, 3), "orig": [o0, o1],
                      "pauses": [(round(a, 3), round(b, 3)) for a, b in pauses if 0.1 < a and b < d - 0.1]}

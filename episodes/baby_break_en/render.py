@@ -242,8 +242,42 @@ def pause_icon(cx, x, y, r, alpha=1.0):
 
 # ================================================================== baby
 class BabyPose:
-    def __init__(self, yaw=0.0, look=(0.0, 0.0), eyes="open", brows="soft", mouth="flat", tilt=0.0, lid=0.0):
-        self.yaw, self.look, self.eyes, self.brows, self.mouth, self.tilt, self.lid = yaw, look, eyes, brows, mouth, tilt, lid
+    """Continuous face parameters, so expressions blend instead of switching.
+    lid 0 open .. 1 closed; happy 0..1 (smiling eyes); brow -1 annoyed .. 0 soft .. 1 raised;
+    smile -1 frown .. 1 smile; o 0..1 open 'o' mouth."""
+    KEYS = ("yaw", "lx", "ly", "tilt", "lid", "happy", "brow", "smile", "o")
+
+    def __init__(self, yaw=0.0, look=(0.0, 0.0), tilt=0.0, lid=0.0, happy=0.0, brow=0.0, smile=0.0, o=0.0):
+        self.yaw, self.lx, self.ly, self.tilt = yaw, look[0], look[1], tilt
+        self.lid, self.happy, self.brow, self.smile, self.o = lid, happy, brow, smile, o
+
+    @property
+    def look(self):
+        return (self.lx, self.ly)
+
+    def blend(self, other, k):
+        q = BabyPose()
+        for key in self.KEYS:
+            setattr(q, key, lerp(getattr(self, key), getattr(other, key), k))
+        return q
+
+    def but(self, **kw):
+        q = self.blend(self, 0)
+        if "look" in kw:
+            q.lx, q.ly = kw.pop("look")
+        for key, v in kw.items():
+            setattr(q, key, v)
+        return q
+
+
+def pose_track(T, keys):
+    """keys: [(t, BabyPose)]; eased blend between consecutive keys (hold = repeat a pose)."""
+    if T <= keys[0][0]:
+        return keys[0][1]
+    for (t0, p0), (t1, p1) in zip(keys, keys[1:]):
+        if T <= t1:
+            return p0.blend(p1, ease_io(prog(T, t0, t1)))
+    return keys[-1][1]
 
 
 def baby(cx, x, y, s, p, body=True, lw=LW):
@@ -354,162 +388,190 @@ def _baby_head(cx, p, lw):
     for sx in (-1, 1):
         ex = fx + sx * 33 * (1 + sx * yaw * 0.25)
         ey = fy - 2
-        if p.eyes == "closed":
-            cx.arc(ex, ey - 2, 12, 0.15 * math.pi, 0.85 * math.pi)
-            src(cx, INK)
-            cx.set_line_width(lw * 0.9)
-            cx.stroke()
-        elif p.eyes == "happy":
-            cx.arc(ex, ey + 6, 11, 1.15 * math.pi, 1.85 * math.pi)
-            src(cx, INK)
-            cx.set_line_width(lw * 0.9)
-            cx.stroke()
-        else:
-            ellipse(cx, ex + lx * 4, ey + ly * 3, 9.5, 12)
+        px, py = ex + lx * 4, ey + ly * 3
+        rx, ry = 9.5, 12.0 * (1 - 0.35 * p.happy)
+        lid = clamp(p.lid)
+        if lid < 0.97:
+            cx.save()
+            # upper lid covers the eye from the top
+            cx.rectangle(ex - 30, ey - 14 + 26 * lid, 60, 60)
+            cx.clip()
+            ellipse(cx, px, py, rx, ry)
             src(cx, INK)
             cx.fill()
-            ellipse(cx, ex + lx * 4 + 3, ey + ly * 3 - 4, 3.3, 3.3)
-            src(cx, WHITE)
+            ellipse(cx, px + 3, py - 4, 3.3, 3.3)
+            src(cx, WHITE, (1 - p.happy) * (1 - clamp(lid * 1.6)))
             cx.fill()
-            if p.lid > 0.01:  # heavy upper lid (bored / annoyed)
-                cx.save()
-                cx.rectangle(ex - 16, ey - 20, 32, 8 + 16 * p.lid)
-                cx.clip()
-                ellipse(cx, ex + lx * 4, ey + ly * 3, 10.5, 13)
+            cx.restore()
+            if p.happy > 0.01:  # cheeks push up: crescent eyes
+                ellipse(cx, px, py + 15 - 7 * p.happy, 14, 11 * p.happy)
                 src(cx, SKIN)
                 cx.fill()
-                cx.restore()
-                stroke_line(cx, [(ex - 12, ey - 12 + 16 * p.lid), (ex + 12, ey - 12 + 16 * p.lid - sx * 1.5)], INK, lw * 0.9)
-        # brows
-        by = ey - 24
-        if p.brows == "annoyed":
-            stroke_line(cx, [(ex - 12 * sx * -1 - 1, by - 3), (ex + 12 * sx * -1, by + 3)], INK, lw * 0.8)
-        elif p.brows == "up":
-            cx.arc(ex, by + 8, 12, 1.2 * math.pi, 1.8 * math.pi)
-            src(cx, HAIR, 0.8)
-            cx.set_line_width(lw * 0.7)
+        if lid > 0.05:  # lid edge; becomes the closed-eye curve
+            yl = ey - 14 + 26 * lid
+            cx.move_to(ex - 12, yl - 1)
+            cx.curve_to(ex - 5, yl + 5 * lid, ex + 5, yl + 5 * lid, ex + 12, yl - 1)
+            src(cx, INK, min(1.0, lid * 3))
+            cx.set_line_width(lw * 0.9)
+            cx.set_line_cap(cairo.LINE_CAP_ROUND)
             cx.stroke()
-        else:
-            cx.arc(ex, by + 10, 12, 1.25 * math.pi, 1.75 * math.pi)
-            src(cx, HAIR, 0.6)
-            cx.set_line_width(lw * 0.6)
-            cx.stroke()
+        # brows: -1 annoyed (inner end low, straight) .. 0 soft arch .. 1 raised
+        ann, up = clamp(-p.brow), clamp(p.brow)
+        by = ey - 24 - 5 * up
+        inner_x, outer_x = ex - sx * 12, ex + sx * 12
+        inner_y, outer_y = by + 7 * ann - 1 * up, by - 3 * ann + 2 * up
+        cx.move_to(outer_x, outer_y)
+        cx.curve_to(lerp(outer_x, inner_x, 0.33), by - 6 * (1 - ann) - 2 * up,
+                    lerp(outer_x, inner_x, 0.66), by - 6 * (1 - ann) - 2 * up, inner_x, inner_y)
+        src(cx, mix(HAIR, INK, ann), 0.6 + 0.3 * max(ann, up))
+        cx.set_line_width(lw * (0.6 + 0.2 * max(ann, up)))
+        cx.stroke()
     # nose
     cx.arc(fx, fy + 16, 4, 0.1 * math.pi, 0.9 * math.pi)
     src(cx, INK, 0.8)
     cx.set_line_width(lw * 0.6)
     cx.stroke()
-    # mouth
+    # mouth: curve (frown..smile) fading into an 'o'
     mx, my = fx + lx * 2, fy + 36
-    if p.mouth == "o":
-        ellipse(cx, mx, my + 2, 6, 8)
-        fs(cx, hexc("#7A2E2A"), INK, lw * 0.7)
-    elif p.mouth == "smile":
-        cx.arc(mx, my - 8, 13, 0.2 * math.pi, 0.8 * math.pi)
-        src(cx, INK)
+    m, o = p.smile, clamp(p.o)
+    if o < 0.98:
+        w = 8 + 4 * abs(m)
+        cx.move_to(mx - w, my + 2 - 3 * m)
+        cx.curve_to(mx - w * 0.4, my + 2 + 8 * m, mx + w * 0.4, my + 2 + 8 * m, mx + w, my + 2 - 3 * m)
+        src(cx, INK, 1 - o)
         cx.set_line_width(lw * 0.8)
+        cx.set_line_cap(cairo.LINE_CAP_ROUND)
         cx.stroke()
-    elif p.mouth == "frown":
-        cx.arc(mx, my + 12, 10, 1.25 * math.pi, 1.75 * math.pi)
-        src(cx, INK)
-        cx.set_line_width(lw * 0.8)
+    if o > 0.02:
+        ellipse(cx, mx, my + 2, 2 + 4 * o, 2 + 6 * o)
+        src(cx, hexc("#7A2E2A"), o)
+        cx.fill_preserve()
+        src(cx, INK, o)
+        cx.set_line_width(lw * 0.7)
         cx.stroke()
-    else:
-        stroke_line(cx, [(mx - 8, my + 2), (mx + 8, my)], INK, lw * 0.8)
 
 
 # ================================================================== Just Needy (sitting, cross-legged)
-HIP = (790.0, 1615.0)
+HIP = (790.0, 1615.0)     # body anchor (world); the figure is drawn in a body frame scaled by BODY_SC about it
+PIVOT = (790.0, 1630.0)   # leaning pivots at the seat, so the hoodie stays on the crossed legs
+BODY_SC = 1.14            # constant: Just Needy never changes size
+LEAN_ANG = -0.17          # lean toward the baby (rad)
+LEAN_DX = -40.0
+UPPER, FORE = 130.0, 120.0  # fixed arm segment lengths (body units, ~2/3 of the torso): arms never stretch
+SH_L, SH_R = (668.0, 1302.0), (922.0, 1302.0)
+HAND_R = 26.0
 
 
 class JNPose:
-    def __init__(self, lean=0.0, arm="shake", face="o", look=(-0.6, 0.35), brows=0.6, shake=0.0, rattle_a=None):
-        self.lean, self.arm, self.face, self.look, self.brows, self.shake = lean, arm, face, look, brows, shake
-        self.rattle_a = rattle_a
+    def __init__(self, lean=0.0, hand=(573.0, 1016.0), ra=-0.16, face="o", look=(-0.6, 0.35), brows=0.6, shake=0.0,
+                 raised=True):
+        self.lean, self.hand, self.ra, self.face, self.look, self.brows = lean, hand, ra, face, look, brows
+        self.shake, self.raised = shake, raised
 
 
-# arm targets in the upright body frame: (elbow, hand, rattle stick angle)
-ARMS = {
-    "shake": ((470.0, 1125.0), (525.0, 905.0), -0.16),
-    "hold": ((585.0, 1420.0), (612.0, 1185.0), 0.1),
-    "lap": ((628.0, 1478.0), (602.0, 1560.0), 0.86),
+# rattle-hand targets in WORLD space for the upright figure, with the rattle's stick angle
+HANDS = {
+    "shake": ((573.0, 1016.0), -0.16),
+    "hold": ((600.0, 1240.0), 0.10),
+    "lap": ((660.0, 1500.0), 0.86),
 }
+HAND_REST_R = (965.0, 1500.0)
 
 
-BODY_SC = 1.14
-LEAN_ANG = -0.26
-LEAN_DX = -70.0
+def _to_body(pt):
+    return HIP[0] + (pt[0] - HIP[0]) / BODY_SC, HIP[1] + (pt[1] - HIP[1]) / BODY_SC
 
 
-def _body_tf(lean):
-    return LEAN_ANG * lean, BODY_SC * (1.0 + 0.10 * lean), LEAN_DX * lean
+def _lean_tf(cx, lean):
+    cx.translate(PIVOT[0] + LEAN_DX * lean, PIVOT[1])
+    cx.rotate(LEAN_ANG * lean)
+    cx.translate(-PIVOT[0], -PIVOT[1])
 
 
-def jn_sitting(cx, p, T=0.0, draw_legs=True):
-    lean = p.lean
-    ang, sc, dx = _body_tf(lean)
+def _body_tf(cx):
+    cx.translate(HIP[0], HIP[1])
+    cx.scale(BODY_SC, BODY_SC)
+    cx.translate(-HIP[0], -HIP[1])
+
+
+def ik(sh, target, side):
+    """Two-bone IK with fixed lengths. side=-1 puts the elbow on the left (screen) side, +1 on the right."""
+    dx, dy = target[0] - sh[0], target[1] - sh[1]
+    d = math.hypot(dx, dy)
+    reach = (UPPER + FORE) * 0.985
+    if d > reach:  # out of reach: the hand stops at full extension (never stretches)
+        target = (sh[0] + dx / d * reach, sh[1] + dy / d * reach)
+        dx, dy, d = target[0] - sh[0], target[1] - sh[1], reach
+    d = max(d, abs(UPPER - FORE) + 1.0)
+    a = (UPPER ** 2 - FORE ** 2 + d ** 2) / (2 * d)
+    h = math.sqrt(max(0.0, UPPER ** 2 - a ** 2))
+    mx, my = sh[0] + dx * a / d, sh[1] + dy * a / d
+    c1 = (mx - dy / d * h, my + dx / d * h)
+    c2 = (mx + dy / d * h, my - dx / d * h)
+    el = max(c1, c2, key=lambda c: c[1] + 0.6 * side * c[0])  # elbow down and outward, like a relaxed arm
+    hx, hy = sh[0] + dx / d * (a + math.sqrt(max(0.0, FORE ** 2 - h ** 2))), sh[1] + dy / d * (a + math.sqrt(max(0.0, FORE ** 2 - h ** 2)))
+    return el, (hx, hy)
+
+
+def _legs(cx):
     hx, hy = HIP
-    # legs (black, crossed) - stay on the floor
-    if draw_legs:
-        cx.save()
-        cx.translate(hx + dx, hy + 30)
-        cx.rotate(ang * 0.35)
-        cx.translate(-hx, -hy - 30)
-        for sx in (-1, 1):
-            hip = (hx + sx * 80, hy - 10)
-            knee = (hx + sx * 255, hy + 40)
-            foot = (hx - sx * 40, hy + 88)
-            stroke_line(cx, [hip, knee, foot], JN_INK, 34)
-            ellipse(cx, foot[0] - sx * 28, foot[1] + 4, 32, 15, 0.0)
-            src(cx, JN_INK)
-            cx.fill()
-        cx.restore()
+    for sx in (-1, 1):
+        hip = (hx + sx * 80, hy - 10)
+        knee = (hx + sx * 255, hy + 40)
+        foot = (hx - sx * 40, hy + 88)
+        stroke_line(cx, [hip, knee, foot], JN_INK, 34)
+        ellipse(cx, foot[0] - sx * 28, foot[1] + 4, 32, 15, 0.0)
+        src(cx, JN_INK)
+        cx.fill()
+
+
+def jn_sitting(cx, p, T=0.0):
+    """Just Needy sitting cross-legged. Returns the rattle head position in world space."""
     cx.save()
-    cx.translate(hx + dx, hy)
-    cx.rotate(ang)
-    cx.scale(sc, sc)
-    cx.translate(-hx, -hy)
-    elbow, hand, ra = ARMS[p.arm] if isinstance(p.arm, str) else p.arm
-    # arm targets are authored in world space (upright pose); convert to the scaled body frame
-    elbow = (hx + (elbow[0] - hx) / BODY_SC, hy + (elbow[1] - hy) / BODY_SC)
-    hand = (hx + (hand[0] - hx) / BODY_SC, hy + (hand[1] - hy) / BODY_SC)
-    if p.rattle_a is not None:
-        ra = p.rattle_a
-    # hood behind neck
-    ellipse(cx, 795, 1262, 96, 34)
+    _body_tf(cx)
+    _legs(cx)
+    cx.restore()
+    cx.save()
+    _lean_tf(cx, p.lean)
+    _body_tf(cx)
+    ellipse(cx, 795, 1262, 96, 34)  # hood (down) behind the neck
     fs(cx, JN_BLUE_DK, JN_INK, 6)
     _jn_torso(cx)
     # right arm resting on the knee
-    _sleeve(cx, (930, 1300), (985, 1450), (972, 1575))
-    # drawstrings + neck
-    for s in (-1, 1):
+    tgt = _to_body(HAND_REST_R)
+    el, ha = ik(SH_R, tgt, +1)
+    _sleeve(cx, SH_R, el, ha)
+    for s in (-1, 1):  # drawstrings
         stroke_line(cx, [(795 + s * 20, 1262), (795 + s * 23, 1352)], hexc("#F4F4F4"), 7)
     rrect(cx, 782, 1218, 26, 44, 8)
     fs(cx, WHITE, JN_INK, 5)
-    # head
     _jn_head(cx, 795, 1112, 122, p, T)
-    # the arm holding the rattle
-    sh = (660.0, 1305.0)
-    shake_a = math.sin(T * 2 * math.pi * 6.5) * 0.28 * p.shake
-    shake_x = math.sin(T * 2 * math.pi * 6.5 + 0.6) * 10 * p.shake
-    hand2 = (hand[0] + shake_x, hand[1])
-    if p.arm != "lap":
-        rattle(cx, hand2[0], hand2[1], ra + shake_a, s=1.0 / BODY_SC)
-    _sleeve(cx, sh, elbow, hand2)
-    if p.arm == "lap":
-        rattle(cx, hand2[0], hand2[1], ra + shake_a, s=1.0 / BODY_SC)
-        circle(cx, hand2[0], hand2[1], 27)
-        fs(cx, WHITE, JN_INK, 5)
+    # rattle arm
+    w = 2 * math.pi * 6.5
+    shake_a = math.sin(T * w) * 0.28 * p.shake
+    tgt = _to_body(p.hand)
+    tgt = (tgt[0] + math.sin(T * w + 0.6) * 9 * p.shake, tgt[1] + math.cos(T * w + 0.6) * 4 * p.shake)
+    el, ha = ik(SH_L, tgt, -1)
+    ra = p.ra + shake_a
+    rattle(cx, ha[0], ha[1], ra, s=1.0 / BODY_SC)
+    _sleeve(cx, SH_L, el, ha)
+    rh = rattle_head(ha[0], ha[1], ra, 1.0 / BODY_SC)
+    m = cx.get_matrix()
     cx.restore()
-    return ang, sc, hand2, ra + shake_a
+    # body -> device -> world (undo the camera transform of the caller)
+    dev = m.transform_point(*rh)
+    inv = cx.get_matrix()
+    inv.invert()
+    return inv.transform_point(*dev)
 
 
 def body_to_world(pt, lean):
     """Body-frame coords -> world coords for the current lean."""
-    ang, sc, ox = _body_tf(lean)
-    dx, dy = pt[0] - HIP[0], pt[1] - HIP[1]
+    bx, by = HIP[0] + (pt[0] - HIP[0]) * BODY_SC, HIP[1] + (pt[1] - HIP[1]) * BODY_SC
+    ang = LEAN_ANG * lean
+    dx, dy = bx - PIVOT[0], by - PIVOT[1]
     c, s = math.cos(ang), math.sin(ang)
-    return HIP[0] + ox + sc * (dx * c - dy * s), HIP[1] + sc * (dx * s + dy * c)
+    return PIVOT[0] + LEAN_DX * lean + dx * c - dy * s, PIVOT[1] + dx * s + dy * c
 
 
 def _jn_torso(cx):
@@ -561,14 +623,13 @@ def _jn_torso_inner(cx):
 
 
 def _sleeve(cx, sh, el, ha):
-    stroke_line(cx, [sh, el, ha], JN_INK, 62)
-    stroke_line(cx, [sh, el, ha], JN_BLUE, 50)
-    # cuff + hand
-    dx, dy = ha[0] - el[0], ha[1] - el[1]
-    n = math.hypot(dx, dy) or 1
-    cxp = (ha[0] - dx / n * 14, ha[1] - dy / n * 14)
-    stroke_line(cx, [cxp, (cxp[0] + dx / n * 2, cxp[1] + dy / n * 2)], JN_BLUE_DK, 50)
-    circle(cx, ha[0], ha[1], 27)
+    """Hoodie sleeve with fixed segment lengths; it starts inside the torso, and a cap hides the seam."""
+    stroke_line(cx, [sh, el, ha], JN_INK, 55)
+    stroke_line(cx, [sh, el, ha], JN_BLUE, 44)
+    circle(cx, sh[0], sh[1], 23)
+    src(cx, JN_BLUE)
+    cx.fill()
+    circle(cx, ha[0], ha[1], HAND_R)
     fs(cx, WHITE, JN_INK, 5)
 
 
@@ -786,58 +847,60 @@ def glass(cx, x, y_bot, level, alpha=1.0, wobble=0.0, overflow=0.0, T=0.0):
 
 # ================================================================== the original timeline (original seconds)
 # baby in the wide shot
+LOOKAWAY = BabyPose(yaw=-0.30, look=(-0.8, 0.5), tilt=-0.04, lid=0.12, brow=0.0, smile=-0.1)
+ANNOYED = BabyPose(yaw=-0.42, look=(-1.0, 0.6), tilt=-0.06, lid=0.5, brow=-1.0, smile=-0.8)
+NEUTRAL = BabyPose(yaw=-0.12, look=(0.2, 0.2), lid=0.1, brow=0.0, smile=-0.2)
+CALM_AWAY = BabyPose(yaw=-0.18, look=(-0.7, 0.6), tilt=-0.03, lid=0.2, brow=0.0, smile=-0.1)
+TURN_BACK = BabyPose(yaw=0.26, look=(0.9, 0.0), lid=0.0, brow=0.3, smile=0.5)
+SMILE = BabyPose(yaw=0.26, look=(0.9, 0.0), lid=0.0, brow=0.3, smile=1.0)
+SHOT4 = BabyPose(yaw=0.12, look=(0.6, 0.0), lid=0.0, brow=0.2, smile=1.0)
+
+WIDE_KEYS = [
+    (0.0, LOOKAWAY), (4.9, LOOKAWAY), (6.6, ANNOYED), (12.6, ANNOYED), (13.6, NEUTRAL), (14.4, NEUTRAL),
+    (28.9, CALM_AWAY), (36.2, CALM_AWAY), (37.4, TURN_BACK), (38.0, SMILE), (38.15, SMILE.but(happy=1.0)),
+    (38.6, SMILE.but(happy=1.0)), (38.95, SMILE),
+    (39.0, SHOT4), (40.95, SHOT4), (41.25, SHOT4.but(happy=0.9)), (41.6, SHOT4.but(happy=0.9)), (41.9, SHOT4),
+    (43.1, SHOT4), (44.4, LOOKAWAY), (46.0, LOOKAWAY),
+]
+
+
 def baby_wide_pose(T):
-    if T < 5.4:
-        return BabyPose(yaw=-0.30, look=(-0.8, 0.5), mouth="flat", brows="soft", tilt=-0.04)
-    if T < 12.8:
-        k = smooth(prog(T, 5.4, 6.6))
-        return BabyPose(yaw=lerp(-0.30, -0.42, k), look=(-1.0, 0.6), mouth="frown", brows="annoyed", lid=0.55 * k,
-                        tilt=-0.06)
-    if T < 14.5:
-        return BabyPose(yaw=lerp(-0.42, -0.12, smooth(prog(T, 12.8, 13.4))), look=(0.2, 0.2), mouth="flat")
-    if T < 35.9:  # shot 3: calm, still looking away a little
-        return BabyPose(yaw=-0.18, look=(-0.7, 0.6), mouth="flat", brows="soft", tilt=-0.03)
-    if T < 39.0:  # turns back toward Just Needy on their own, smiles
-        k = smooth(prog(T, 36.4, 37.4))
-        return BabyPose(yaw=lerp(-0.18, 0.26, k), look=(lerp(-0.7, 0.9, k), lerp(0.6, 0.0, k)),
-                        mouth="smile" if T > 37.2 else "flat", eyes="happy" if 38.0 < T < 38.7 else "open")
-    # shot 4: smiling, a slow content blink, then (loop) looks away again as the rattle comes back
-    if T < 43.3:
-        eyes = "happy" if 41.0 < T < 41.7 else "open"
-        return BabyPose(yaw=0.12, look=(0.6, 0.0), mouth="smile", eyes=eyes)
-    k = smooth(prog(T, 43.3, 44.3))
-    return BabyPose(yaw=lerp(0.12, -0.30, k), look=(lerp(0.6, -0.8, k), lerp(0.0, 0.5, k)),
-                    mouth="smile" if k < 0.5 else "flat", tilt=-0.04 * k)
+    return pose_track(T, WIDE_KEYS)
+
+
+def _hand_blend(k, p0, p1):
+    (h0, r0), (h1, r1) = HANDS[p0], HANDS[p1]
+    return (lerp(h0[0], h1[0], k), lerp(h0[1], h1[1], k)), lerp(r0, r1, k)
 
 
 def jn_pose(T):
+    hs, rs = HANDS["shake"]
     if T < 6.0:
-        return JNPose(lean=0.0, arm="shake", face="o", look=(-0.65, 0.35), brows=0.7,
+        return JNPose(lean=0.0, hand=hs, ra=rs, face="o", look=(-0.65, 0.35), brows=0.7,
                       shake=win(T, -1, 1.6, 0.01, 0.35) + 0.15)
     if T < 12.5:
         lean = ease_io(prog(T, 6.0, 6.9))
         sh = 0.15 + 0.85 * win(T, 7.9, 9.6, 0.1, 0.3)
-        return JNPose(lean=lean, arm="shake", face="o", look=(-0.8, 0.45), brows=0.8, shake=sh)
+        return JNPose(lean=lean, hand=hs, ra=rs, face="o", look=(-0.8, 0.45), brows=0.8, shake=sh)
     if T < 14.5:
         k = ease_io(prog(T, 12.5, 13.3))
-        el = tuple(lerp(a, b, k) for a, b in zip(ARMS["shake"][0], ARMS["hold"][0]))
-        ha = tuple(lerp(a, b, k) for a, b in zip(ARMS["shake"][1], ARMS["hold"][1]))
-        ra = lerp(ARMS["shake"][2], ARMS["hold"][2], k)
-        return JNPose(lean=1 - k, arm=(el, ha, ra), face="smile" if k > 0.5 else "o", look=(-0.5 * (1 - k), 0.1),
+        ha, ra = _hand_blend(k, "shake", "hold")
+        return JNPose(lean=1 - k, hand=ha, ra=ra, face="smile" if k > 0.5 else "o", look=(-0.5 * (1 - k), 0.1),
                       brows=0.7 * (1 - k))
+    hl, rl = HANDS["lap"]
     if T < 39.0:
         face = "laugh" if 37.7 < T < 38.8 else "smile"
         look = (-0.35, 0.25) if T < 36.4 else (-0.55, 0.3)
-        return JNPose(arm="lap", face=face, look=look, brows=0.0)
+        return JNPose(hand=hl, ra=rl, face=face, look=look, brows=0.0, raised=False)
     if T < 41.9:
-        return JNPose(arm="lap", face="smile", look=(-0.55, 0.3), brows=0.0)
+        return JNPose(hand=hl, ra=rl, face="smile", look=(-0.55, 0.3), brows=0.0, raised=False)
     if T < 42.5:  # picks the rattle back up (loop to the opening)
         k = ease_io(prog(T, 41.9, 42.45))
-        el = tuple(lerp(a, b, k) for a, b in zip(ARMS["lap"][0], ARMS["shake"][0]))
-        ha = tuple(lerp(a, b, k) for a, b in zip(ARMS["lap"][1], ARMS["shake"][1]))
-        ra = lerp(ARMS["lap"][2], ARMS["shake"][2], k)
-        return JNPose(arm=(el, ha, ra), face="o" if k > 0.5 else "smile", look=(-0.65, 0.35), brows=0.7 * k)
-    return JNPose(arm="shake", face="o", look=(-0.65, 0.35), brows=0.7, shake=0.15 + 0.85 * win(T, 43.6, 46, 0.2, 0.01))
+        ha, ra = _hand_blend(k, "lap", "shake")
+        return JNPose(hand=ha, ra=ra, face="o" if k > 0.5 else "smile", look=(-0.65, 0.35), brows=0.7 * k,
+                      raised=k > 0.5)
+    return JNPose(hand=hs, ra=rs, face="o", look=(-0.65, 0.35), brows=0.7,
+                  shake=0.15 + 0.85 * win(T, 43.6, 46, 0.2, 0.01))
 
 
 # camera: (world x at screen centre, world y at screen centre, zoom)
@@ -878,12 +941,10 @@ def draw_wide(cx, T):
         cx.set_dash([])
     p = jn_pose(T)
     baby(cx, 268, 1395, 1.0, baby_wide_pose(T))
-    ang, sc, hand, ra = jn_sitting(cx, p, T)
-    rh_body = rattle_head(hand[0], hand[1], ra, 1.0 / BODY_SC)
-    rh = body_to_world(rh_body, p.lean)
+    rh = jn_sitting(cx, p, T)
     # rattle shake burst lines
-    if p.arm == "shake" or isinstance(p.arm, tuple):
-        a_b = clamp(p.shake - 0.2) / 0.8 if T < 6 or T > 42.5 else clamp((p.shake - 0.2) / 0.8)
+    if p.raised:
+        a_b = clamp((p.shake - 0.2) / 0.8)
         burst(cx, rh[0], rh[1], 78, 108, 7, rot=0.3 + 0.2 * math.sin(T * 9), alpha=a_b, lw=6)
     # prohibition sign over the rattle ("don't try to get their attention")
     a_no = win(T, 2.95, 5.35, 0.12, 0.3)
@@ -924,7 +985,7 @@ def draw_wide(cx, T):
         cx.save()
         cx.translate(bx, by)
         cx.scale(k, k)
-        baby_badge(cx, 0, 0, 112, BabyPose(eyes="closed", mouth="o", yaw=0.0), alpha=a_tb, bg=WHITE)
+        baby_badge(cx, 0, 0, 112, BabyPose(lid=1.0, o=1.0), alpha=a_tb, bg=WHITE)
         ui.font(cx, 34)
         _outlined_text(cx, "z", 62, -58, 30, a_tb, fill=INK, outline=None)
         _outlined_text(cx, "z", 84, -82, 22, a_tb, fill=INK, outline=None)
@@ -973,19 +1034,18 @@ def follow_card(cx, x, y, a, k):
     cx.restore()
 
 
+CURIOUS = BabyPose(look=(0.0, -0.2), brow=1.0, o=1.0)
+OVERLOAD = BabyPose(look=(0.0, 0.0), brow=-0.8, smile=-0.7, lid=0.45)
+TURNED = BabyPose(yaw=-0.42, look=(-0.9, 0.3), tilt=-0.08, brow=-0.9, smile=-0.7, lid=0.45)
+RELAXED = BabyPose(yaw=-0.42, look=(-0.9, 0.3), tilt=-0.13, brow=0.0, smile=-0.3, lid=1.0)
+CLOSE_KEYS = [
+    (14.0, CURIOUS), (18.9, CURIOUS), (20.6, OVERLOAD), (21.9, OVERLOAD), (22.6, TURNED), (27.2, TURNED),
+    (28.2, RELAXED), (29.0, RELAXED),
+]
+
+
 def close_pose(T):
-    if T < 19.9:
-        return BabyPose(yaw=0.0, look=(0.0, -0.2), eyes="open", brows="up", mouth="o")
-    if T < 21.9:
-        k = smooth(prog(T, 19.9, 20.4))
-        return BabyPose(yaw=0.0, look=(0.0, 0.0), brows="annoyed", mouth="frown", lid=0.5 * k)
-    if T < 27.4:
-        k = smooth(prog(T, 21.9, 22.6))  # turns the head away
-        return BabyPose(yaw=-0.42 * k, look=(-0.9 * k, 0.3 * k), brows="annoyed", mouth="frown", lid=0.45,
-                        tilt=-0.08 * k)
-    k = smooth(prog(T, 27.4, 27.9))
-    return BabyPose(yaw=-0.42, look=(-0.9, 0.3), eyes="closed" if k > 0.5 else "open", brows="soft", mouth="frown",
-                    lid=0.45, tilt=-0.08 - 0.05 * k)
+    return pose_track(T, CLOSE_KEYS)
 
 
 def draw_close(cx, T):
@@ -1007,7 +1067,7 @@ def draw_close(cx, T):
         u = prog(T, t0, t0 + 0.9)
         if 0 < u < 1:
             a = 1 - smooth(prog(u, 0.75, 1.0))
-            y = lerp(220, 660, ease_in(prog(u, 0.25, 1.0)))
+            y = lerp(440, 660, ease_in(prog(u, 0.25, 1.0)))
             x = lerp(620, 548, prog(u, 0.25, 1.0))
             r = 38 * back_out(prog(u, 0.0, 0.2)) * (1 - 0.4 * prog(u, 0.6, 1.0))
             if kind == "face":
@@ -1020,7 +1080,7 @@ def draw_close(cx, T):
     a_bb = win(T, 23.3, 25.3, 0.15, 0.2)
     if a_bb > 0.01:
         baby_badge(cx, 830, 720, 70 * back_out(prog(T, 23.3, 23.55)),
-                   BabyPose(eyes="closed", mouth="o"), alpha=a_bb, slash=ease_out(prog(T, 24.45, 24.75)))
+                   BabyPose(lid=1.0, o=1.0), alpha=a_bb, slash=ease_out(prog(T, 24.45, 24.75)))
     a_p = win(T, 25.4, 29.2, 0.12, 0.01)
     if a_p > 0.01:
         pause_icon(cx, 890, 730, 86 * back_out(prog(T, 25.4, 25.7)), a_p)
@@ -1138,7 +1198,7 @@ def captions():
     return _CAPS
 
 
-CAP_Y = 372
+CAP_Y = 330
 CAP_SIZE = 66
 
 
@@ -1149,7 +1209,7 @@ def draw_captions(cx, t):
             a = 1.0
             s = " ".join(w for w, _, _ in words)
             size = CAP_SIZE
-            while ui.text_w(cx, s, size) > 940 and size > 44:
+            while ui.text_w(cx, s, size) > 860 and size > 44:
                 size -= 2
             w = ui.text_w(cx, s, size)
             _outlined_text(cx, s, W / 2 - w / 2, CAP_Y, size, a, lw_k=0.13)

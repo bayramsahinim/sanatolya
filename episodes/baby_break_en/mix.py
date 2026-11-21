@@ -40,6 +40,23 @@ def _resample(x, sr_in, sr_out):
     return resample_poly(x, sr_out // g, sr_in // g, axis=0).astype(np.float32)
 
 
+def deess(x, sr, f0=5000.0, over_pct=97, ratio=3.0):
+    """Gentle split-band de-esser: only the band above f0 is turned down, and only where it exceeds the
+    voice's own 97th-percentile sibilant level (tames a few hot 's' sounds without dulling the voice)."""
+    from scipy.signal import butter, sosfiltfilt
+    sos = butter(4, f0, "hp", fs=sr, output="sos")
+    hi = sosfiltfilt(sos, x)
+    lo = x - hi
+    n = int(0.008 * sr)
+    env = np.sqrt(np.convolve(hi ** 2, np.ones(n) / n, mode="same") + 1e-12)
+    db = 20 * np.log10(env)
+    thr = np.percentile(db[db > db.max() - 50], over_pct)
+    red = np.where(db > thr, (db - thr) * (1 - 1 / ratio), 0.0)
+    m = int(0.012 * sr)  # smooth the gain so it never pumps
+    red = np.convolve(red, np.hanning(m) / np.hanning(m).sum(), mode="same")
+    return (lo + hi * 10 ** (-red / 20)).astype(np.float32)
+
+
 def _rms_active(x):
     n = len(x) // 1024 * 1024
     fr = x[:n].reshape(-1, 1024)
@@ -52,7 +69,7 @@ def audio():
     tm = render.timing()
     dur = tm["duration"]
     n = int(round(dur * SR))
-    voice = tts.read_wav(os.path.join(BUILD, "voice.wav"))
+    voice = deess(tts.read_wav(os.path.join(BUILD, "voice.wav")), tts.SR)
     voice = _resample(voice, tts.SR, SR)[:n]
     mixbuf = np.zeros((n, 2), np.float32)
     mixbuf[:len(voice)] += voice[:, None] * 10 ** (VOICE_GAIN_DB / 20)
@@ -80,7 +97,7 @@ def audio():
     sf.write(tmp, mixbuf, SR, subtype="FLOAT")
     out = os.path.join(BUILD, "mix.wav")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", tmp, "-af",
-                    "loudnorm=I=-14:TP=-1.5:LRA=11:linear=true", "-ar", str(SR), out], check=True)
+                    f"loudnorm=I=-14:TP=-1.5:LRA=11:linear=true,afade=t=out:st={dur - 0.3:.3f}:d=0.3", "-ar", str(SR), out], check=True)
     print(out, f"{dur:.2f}s, sfx gain {20 * np.log10(g):+.1f} dB")
     srt()
 
