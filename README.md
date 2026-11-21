@@ -78,3 +78,34 @@ python -m episodes.ancestry_en.mix audio        # score + mix + SRT
 python -m episodes.ancestry_en.mix final        # mux -> output/
 python -m episodes.ancestry_en.qa output/Just_Needy_What_If_Every_Human_Is_Related_EN.mp4
 ```
+
+## Episode: "Baby Turns Head Away" (English adaptation, vertical)
+
+Faithful English adaptation of the Turkish baby-body-language short: same story, scene order, actions,
+camera moves and loop ending, rebuilt shot for shot in Cinecode. Just Needy plays the adult (shakes the
+rattle, leans in, then gives the baby space); the baby is unchanged. The source channel's follow card is
+replaced by a Just Needy card; "Ce-eee!" is shown as "Peekaboo!".
+
+| Deliverable | Path |
+|---|---|
+| Final video (native 1080×1920, 30 fps, H.264/AAC, 46.1 s; source 45.5 s) | `output/Just_Needy_Baby_Turns_Head_Away_EN.mp4` |
+| English subtitles | `output/Just_Needy_Baby_Turns_Head_Away_EN.en.srt` |
+
+```
+episodes/baby_break_en/
+  script.py      Turkish lines (verbatim) + English translation, original line timing, caption chunks
+  direction.txt  narrator direction (young adult American male, conversational, medium-fast)
+  voice.py       one continuous Gemini TTS take (voice Fenrir) -> lines placed at the original line starts
+  render.py      sets, baby rig, sitting Just Needy rig, props/icons, camera; authored in ORIGINAL time and
+                 mapped to the English timing by a warp anchored at every line start/end
+  mix.py         narration + the source's own sound effects (from a Demucs music/effects stem, gated to the
+                 effect events, retimed), loudness -14 LUFS, SRT, mux
+```
+
+```bash
+python -m episodes.baby_break_en.voice take     # cached in assets/audio/tts_baby
+python -m episodes.baby_break_en.voice build
+python -m episodes.baby_break_en.render video
+python -m episodes.baby_break_en.mix audio
+python -m episodes.baby_break_en.mix final
+```
