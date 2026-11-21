@@ -49,6 +49,9 @@ SECTION_NOTE = {
     4: "This take is the journey out of Africa and the ending. Keep it moving through the places, then for the last line slow down slightly and let it land, quietly meaningful.",
 }
 REL_DB = 30
+# single-line pickups replacing a line from a section take: line -> (file, start s, end s)
+# 'mix': the section take said "family tree start"; this pickup says "family trees start".
+PICKUPS = {"mix": ("vo3_fix_mix_f9d7bd9776.wav", 5.13, 7.92)}
 
 
 def take_text(i, lines=None):
@@ -94,7 +97,7 @@ def _stretch(c, ratio):
         return tts.read_wav(b)
 
 
-def cap_pauses(c, cap=0.42):
+def cap_pauses(c, cap=0.28):
     pauses, _, _ = align.find_pauses(c, min_len=cap + 0.05, rel_db=REL_DB)
     out, last = [], 0
     for a, b in pauses:
@@ -113,7 +116,10 @@ def split_lines():
         audio = tts.read_wav(take_path(i))
         segs = align.align(audio, [TEXT[l] for l in ids], rel_db=REL_DB)
         for l, (s, e) in zip(ids, segs):
-            clips[l] = cap_pauses(align.trim(audio, s, e, pre=0.05, post=0.14))
+            clips[l] = cap_pauses(align.trim(audio, s, e, pre=0.04, post=0.09))
+    for l, (f, a, b) in PICKUPS.items():
+        audio = tts.read_wav(os.path.join(OUT, f))
+        clips[l] = cap_pauses(audio[int(a * tts.SR):int(b * tts.SR)])
     # level-match (active speech RMS)
     for l, c in clips.items():
         db = align.envelope_db(c)
@@ -131,25 +137,18 @@ def build():
     buf = np.zeros(int(total * tts.SR) + tts.SR, np.float32)
     report = []
     prev_end = 0.0
+    EARLY, LATE, GAP = 0.35, 0.45, 0.08   # how far a line may move against the locked picture
     for k, l in enumerate(ids):
         c = clips[l]
         s_lock, e_lock = L[l]["start"], L[l]["end"]
-        nxt = L[ids[k + 1]]["start"] if k + 1 < len(ids) else total - 1.2
+        nxt = L[ids[k + 1]]["start"] if k + 1 < len(ids) else total - 1.0
         d_new = len(c) / tts.SR
         d_old = e_lock - s_lock
-        # room: may start up to 0.12 s early (if the previous line is done) and run into the gap before the next line
-        start = s_lock
-        room = nxt - 0.06 - start
+        start = max(s_lock - (EARLY if d_new > d_old else 0.0), prev_end + GAP)   # never overlap
+        limit = nxt + (LATE if k + 1 < len(ids) else 0.0) - GAP   # the next line may start a little late
         ratio = 1.0
-        drift = d_new / d_old
-        if d_new > room:
-            early = min(0.12, max(0.0, s_lock - prev_end - 0.05))
-            start -= early
-            room += early
-        need = max(d_new / room if d_new > room else 1.0, drift if drift > 1 + MAX_FIT else 1.0,
-                   drift if drift < 1 - MAX_FIT else 1.0)
-        if need != 1.0:
-            ratio = float(np.clip(need, 1 - MAX_FIT, 1 + MAX_FIT))
+        if start + d_new > limit:
+            ratio = float(np.clip(d_new / max(0.1, limit - start), 1.0, 1 + MAX_FIT))
             c = _stretch(c, ratio)
         a = int(start * tts.SR)
         buf[a:a + len(c)] += c[: len(buf) - a]

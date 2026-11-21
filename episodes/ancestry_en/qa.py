@@ -71,16 +71,23 @@ def main(path):
     m, _ = sf.read(f"{R.BUILD}/mix.wav")
     def db(a):
         return 20 * np.log10(np.sqrt((a ** 2).mean()) + 1e-9)
-    lv = [db(v[int(x["start"] * sr):int(x["end"] * sr)]) for x in R.TL.values()]
-    check(max(lv) - min(lv) <= 2.5, f"narration level spread across lines {max(lv) - min(lv):.1f} dB (<= 2.5)")
     check(np.abs(v).max() < 0.99 and np.abs(m).max() < 0.99, f"no clipping (voice peak {np.abs(v).max():.2f}, mix peak {np.abs(m).max():.2f})")
+    import os, json as _j
+    pos = {k: (x["start"], x["end"]) for k, x in R.TL.items()}
+    fit = f"{R.BUILD}/vo_fit.json"
+    if os.path.exists(fit):  # replaced narration: use where each line is actually spoken
+        for r in _j.load(open(fit)):
+            s0 = R.TL[r["line"]]["start"] + r["shift"]
+            pos[r["line"]] = (s0, s0 + r["new"] / r["ratio"])
+    lv = [db(v[int(a * sr):int(b * sr)]) for a, b in pos.values()]
+    check(max(lv) - min(lv) <= 2.5, f"narration level spread across actual lines {max(lv) - min(lv):.1f} dB (<= 2.5)")
     gaps = []
     names = list(R.TL)
     for a, b in zip(names, names[1:]):
-        g0, g1 = R.TL[a]["end"] + 0.05, R.TL[b]["start"] - 0.05
+        g0, g1 = pos[a][1] + 0.05, pos[b][0] - 0.05
         if g1 - g0 > 0.15:
             gaps.append(db(m[int(g0 * sr):int(g1 * sr)]))
-    speech = np.mean([db(m[int(x["start"] * sr):int(x["end"] * sr)]) for x in R.TL.values()])
+    speech = np.mean([db(m[int(a * sr):int(b * sr)]) for a, b in pos.values()])
     check(speech - max(gaps) >= 8, f"music sits well under the voice (speech {speech:.1f} dB, loudest gap {max(gaps):.1f} dB)")
     print("ALL CHECKS PASSED" if ok else "SOME CHECKS FAILED")
     return ok

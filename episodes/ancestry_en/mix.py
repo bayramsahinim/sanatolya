@@ -195,6 +195,31 @@ def build_audio():
     print(out)
 
 
+def voice_remap():
+    """If the narration was replaced on a locked picture, map locked times to where each line is now spoken."""
+    import json
+    fit = os.path.join(BUILD, "vo_fit.json")
+    if not os.path.exists(fit):
+        return None
+    from episodes.ancestry_en.render import TL
+    rows = json.load(open(fit))
+    spans = []
+    for r in rows:
+        s0, e0 = TL[r["line"]]["start"], TL[r["line"]]["end"]
+        ns = s0 + r["shift"]
+        spans.append((s0, e0, ns, ns + r["new"] / r["ratio"]))
+
+    def f(t, end=False):
+        for i, (s0, e0, ns, ne) in enumerate(spans):
+            nxt = spans[i + 1][0] if i + 1 < len(spans) else 1e9
+            if s0 - 0.3 <= t < nxt - 0.05 or (end and s0 <= t <= nxt):
+                if t <= e0:
+                    return ns + (t - s0) * (ne - ns) / max(0.01, e0 - s0)
+                return ne + (t - e0)
+        return t
+    return f
+
+
 def srt():
     def ts(x):
         x = max(0, x)
@@ -203,6 +228,9 @@ def srt():
         return f"{int(h):02d}:{int(m):02d}:{int(s):02d},{int(round((s - int(s)) * 1000)):03d}".replace(",1000", ",999")
     os.makedirs(OUT_DIR, exist_ok=True)
     cues = CAPS.srt_cues()
+    remap = voice_remap()
+    if remap:
+        cues = [(remap(a), remap(b, end=True), txt) for a, b, txt in cues]
     p = os.path.join(OUT_DIR, NAME + ".en.srt")
     with open(p, "w") as f:
         for i, (a, b, txt) in enumerate(cues, 1):
