@@ -1,0 +1,170 @@
+{
+ "duration": 87.585,
+ "lines": {
+  "hook1": {
+   "start": 0.3,
+   "end": 2.284,
+   "pauses": []
+  },
+  "hook2": {
+   "start": 2.354,
+   "end": 3.698,
+   "pauses": []
+  },
+  "intro": {
+   "start": 4.018,
+   "end": 5.725,
+   "pauses": []
+  },
+  "par": {
+   "start": 5.895,
+   "end": 6.855,
+   "pauses": []
+  },
+  "gp": {
+   "start": 6.925,
+   "end": 7.842,
+   "pauses": []
+  },
+  "ggp": {
+   "start": 7.912,
+   "end": 9.128,
+   "pauses": []
+  },
+  "dbl": {
+   "start": 9.198,
+   "end": 11.139,
+   "pauses": [
+    [
+     0.98,
+     1.1
+    ]
+   ]
+  },
+  "g30": {
+   "start": 11.329,
+   "end": 16.983,
+   "pauses": [
+    [
+     2.76,
+     2.91
+    ]
+   ]
+  },
+  "pop": {
+   "start": 17.053,
+   "end": 20.999,
+   "pauses": []
+  },
+  "same": {
+   "start": 21.069,
+   "end": 23.757,
+   "pauses": []
+  },
+  "mix": {
+   "start": 23.827,
+   "end": 25.937,
+   "pauses": []
+  },
+  "mrca": {
+   "start": 26.007,
+   "end": 31.554,
+   "pauses": []
+  },
+  "rewind": {
+   "start": 31.874,
+   "end": 33.239,
+   "pauses": []
+  },
+  "gen": {
+   "start": 33.309,
+   "end": 38.92,
+   "pauses": [
+    [
+     2.88,
+     3.17
+    ]
+   ]
+  },
+  "mt": {
+   "start": 39.09,
+   "end": 46.791,
+   "pauses": [
+    [
+     4.38,
+     4.58
+    ]
+   ]
+  },
+  "eve": {
+   "start": 46.861,
+   "end": 48.909,
+   "pauses": []
+  },
+  "adam": {
+   "start": 49.079,
+   "end": 54.455,
+   "pauses": [
+    [
+     3.67,
+     3.94
+    ]
+   ]
+  },
+  "couple": {
+   "start": 54.525,
+   "end": 57.785,
+   "pauses": []
+  },
+  "trace": {
+   "start": 57.955,
+   "end": 64.867,
+   "pauses": [
+    [
+     4.16,
+     4.44
+    ]
+   ]
+  },
+  "unbroken": {
+   "start": 64.937,
+   "end": 67.241,
+   "pauses": []
+  },
+  "out": {
+   "start": 67.511,
+   "end": 70.69,
+   "pauses": []
+  },
+  "route": {
+   "start": 70.76,
+   "end": 73.341,
+   "pauses": [
+    [
+     0.96,
+     1.1
+    ]
+   ]
+  },
+  "think": {
+   "start": 73.661,
+   "end": 74.707,
+   "pauses": []
+  },
+  "rel": {
+   "start": 74.777,
+   "end": 79.321,
+   "pauses": [
+    [
+     3.05,
+     3.25
+    ]
+   ]
+  },
+  "end": {
+   "start": 79.641,
+   "end": 85.315,
+   "pauses": []
+  }
+ }
+}
