@@ -127,10 +127,44 @@ def draw_tag(cx, name, txt, k):
 _TAG_START = {}
 
 
+def motion_blur(s, sh, t):
+    """Camera motion blur from the shot camera's screen-space velocity (whips smear, pushes zoom-blur)."""
+    import cv2
+    import numpy as np
+    dt = 1 / FPS
+    a, b = sh.cam(max(0.0, t - dt)), sh.cam(t)
+    # screen-space motion of the frame centre's world point + zoom rate
+    vx = (a.x - b.x) * b.zoom
+    vy = (a.y - b.y) * b.zoom
+    zr = b.zoom / max(1e-6, a.zoom) - 1
+    sp = math.hypot(vx, vy)
+    if sp < 18 and abs(zr) < 0.03:
+        return s
+    img = gfx.to_np(s).astype(np.float32)
+    if sp >= 18:
+        L = int(min(260, sp * 1.6))
+        k = np.zeros((L | 1, L | 1), np.float32)
+        c = (L | 1) // 2
+        ang = math.atan2(vy, vx)
+        cv2.line(k, (int(c - math.cos(ang) * c), int(c - math.sin(ang) * c)),
+                 (int(c + math.cos(ang) * c), int(c + math.sin(ang) * c)), 1.0, 1)
+        k /= k.sum()
+        img = cv2.filter2D(img, -1, k, borderType=cv2.BORDER_REFLECT)
+    if abs(zr) >= 0.03:
+        n = int(min(36, 8 + abs(zr) * 140))
+        acc = np.zeros_like(img)
+        for i in range(n):
+            f = 1 + zr * 1.0 * i / (n - 1)
+            M = cv2.getRotationMatrix2D((W / 2, H / 2), 0, f)
+            acc += cv2.warpAffine(img, M, (W, H), borderMode=cv2.BORDER_REFLECT)
+        img = acc / n
+    return gfx.from_np(np.clip(img, 0, 255).astype(np.uint8))
+
+
 def render_frame(T):
     sh = shot_at(T)
     t = T - sh.t0
-    s = sh.render(t)
+    s = motion_blur(sh.render(t), sh, t)
     cx = cairo.Context(s)
     tags = sh.tags(t)
     if tags:

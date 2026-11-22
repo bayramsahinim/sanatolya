@@ -52,8 +52,12 @@ class Shot:
     def w(self, line_id, k):
         return WS(line_id, k) - self.t0
 
+    trans_in = None    # (kind, (dx, dy) or target, duration) - set by build()
+    trans_out = None
+
     def cam(self, t):
-        return gfx.cam_kf(t, self.keys, shake_amp=self.drift, shake_t=self.shakes)
+        c = gfx.cam_kf(t, self.keys, shake_amp=self.drift, shake_t=self.shakes)
+        return transition_cam(self, c, t)
 
     def back(self, cx, t):
         pass
@@ -103,6 +107,46 @@ class Shot:
         self.post(cx, t)
         grade(cx, self.grade_kind)
         return s
+
+
+# ================================================================ transitions (reference edit grammar)
+# whip  : camera accelerates sideways out of shot A, the cut hides inside the motion blur, shot B decelerates in
+# push  : camera rushes into a point of A (ease-in), B starts tight and settles (ease-out)
+# pull  : A pulls back fast, B starts slightly tight and keeps pulling out (reveal)
+# cut   : plain hard cut on a sentence start
+WHIP = 420  # max extra camera travel in world px (layers are painted with this much margin)
+
+
+def transition_cam(shot, c, t):
+    dur_shot = shot.t1 - shot.t0
+    if shot.trans_out:
+        kind, arg, d = shot.trans_out
+        k = ease_in(prog(t, dur_shot - d, dur_shot))
+        if k > 0:
+            _tx(c, kind, arg, k, out=True)
+    if shot.trans_in:
+        kind, arg, d = shot.trans_in
+        k = 1 - ease_out(prog(t, 0, d))
+        if k > 0:
+            _tx(c, kind, arg, k, out=False)
+    return c
+
+
+def _tx(c, kind, arg, k, out):
+    if kind == "whip":
+        dx, dy = arg
+        sgn = 1 if out else -1
+        c.x += sgn * dx * WHIP * k
+        c.y += sgn * dy * WHIP * k
+    elif kind == "push":
+        if out:
+            tx, ty = arg if arg else (c.x, c.y)
+            c.x, c.y = lerp(c.x, tx, k), lerp(c.y, ty, k)
+            c.zoom *= 1 + 1.9 * k
+        else:
+            c.zoom *= 1 + 0.6 * k
+    elif kind == "pull":
+        c.zoom *= (1 - 0.28 * k) if out else (1 + 0.55 * k)
 
 
 def grade(cx, kind):
@@ -1096,10 +1140,46 @@ def build():
         (S25_Fleet, T("night", 10) - 0.05),
         (S26_Split, T("end", 0) - 0.05),
     ]
+    # transition into shot i+1 (same location -> camera move; new sentence + new place -> hard cut)
+    trans = [
+        ("push", (476, 780)),   # horse -> bow close-up
+        ("whip", (1, 0)),       # bow -> ships sailing right
+        ("cut", None),          # "The Trojans rush..."
+        ("cut", None),          # walls -> beach
+        ("whip", (-1, 0)),      # Trojans -> Laocoon
+        ("whip", (1, 0)),       # follow the spear to the flank
+        ("push", (700, 930)),   # into the spear hole -> inside the horse
+        ("cut", None),          # "Beware..."
+        ("cut", None),          # "Then they find..."
+        ("push", None),         # reeds -> Sinon sobbing close
+        ("cut", None),          # "That's why..."
+        ("cut", None),          # "Right on cue..."
+        ("whip", (-1, 0)),      # serpents -> Laocoon
+        ("pull", None),         # "Message received" reveal
+        ("cut", None),          # "So how do you..."
+        ("whip", (-1, 0)),      # bonk -> tearing down
+        ("push", (540, 900)),   # through the breach -> plaza
+        ("pull", None),         # "Nobody believes her"
+        ("cut", None),          # "That night"
+        ("push", (600, 900)),   # into the horse
+        ("whip", (-1, 0)),      # Anticlus -> Odysseus clamps
+        ("cut", None),          # "At midnight"
+        ("whip", (1, 0)),       # hatch -> gates
+        ("whip", (1, 0)),       # gates -> fleet
+        ("cut", None),          # finale
+    ]
     shots = []
     for i, (cls, t0) in enumerate(cuts):
         t1 = cuts[i + 1][1] if i + 1 < len(cuts) else DUR
         shots.append(cls(max(0.0, t0), t1))
+    for i, (kind, arg) in enumerate(trans):
+        if kind == "cut":
+            continue
+        a, b = shots[i], shots[i + 1]
+        d_out = {"whip": 0.2, "push": 0.28, "pull": 0.22}[kind]
+        d_in = {"whip": 0.26, "push": 0.32, "pull": 0.4}[kind]
+        a.trans_out = (kind, arg, min(d_out, (a.t1 - a.t0) * 0.4))
+        b.trans_in = (kind, arg, min(d_in, (b.t1 - b.t0) * 0.4))
     return shots
 
 
