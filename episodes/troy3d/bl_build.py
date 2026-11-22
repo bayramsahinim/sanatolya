@@ -310,8 +310,8 @@ def gate_wall(name, y=0.0, gate_w=7.0, gate_h=10.0, h=14, length=80, breach=Fals
 # ================================================================ PROP: the horse (giant, wooden, on wheels)
 def build_horse(name="Horse"):
     root = empty(name)
-    wood = pbr("HorseWood", "wood_planks", 1.3, (1.15, 0.85, 0.58), rough=0.7, bump=0.9)
-    wood_dk = pbr("HorseWoodDk", "wood_planks", 1.3, (0.62, 0.42, 0.27), rough=0.8, bump=0.9)
+    wood = pbr("HorseWood", "wood_planks", 1.3, (1.9, 1.3, 0.8), rough=0.7, bump=0.9)
+    wood_dk = pbr("HorseWoodDk", "wood_planks", 1.3, (1.05, 0.7, 0.45), rough=0.8, bump=0.9)
     metal = flat("Iron", (0.35, 0.35, 0.38), 0.4)
     # +X = forward (head)
     mesh_ob(name + "_plat", cube(), wood_dk, (0, 0, 0.75), scale=(5.0, 2.4, 0.4), parent=root, bevel=0.06)
@@ -465,7 +465,260 @@ def build_ship(name, loc, s=1.0, rot=0.0, sail=(0.92, 0.88, 0.78), stripe=(0.15,
     return root
 
 
-SETS = {"beach": set_beach}
+# ================================================================ STYLIZED LOOK (reference rules)
+def lin(c):
+    return tuple(x ** 2.2 for x in c)
+
+
+def toon(name, color, var=0.07, rough=0.6, scale=2.0, emission=None):
+    """Saturated flat colour with soft large-scale variation (stylized low-poly look). colour in sRGB."""
+    key = ("toon", name, tuple(color))
+    color = lin(color)
+    if key in _MATS:
+        return _MATS[key]
+    m = bpy.data.materials.new(name)
+    m.use_nodes = True
+    nt = m.node_tree
+    bsdf = nt.nodes["Principled BSDF"]
+    bsdf.inputs["Roughness"].default_value = rough
+    noise = nt.nodes.new("ShaderNodeTexNoise")
+    noise.inputs["Scale"].default_value = scale
+    tc = nt.nodes.new("ShaderNodeTexCoord")
+    nt.links.new(tc.outputs["Object"], noise.inputs["Vector"])
+    ramp = nt.nodes.new("ShaderNodeValToRGB")
+    c0 = [max(0, c * (1 - var)) for c in color]
+    c1 = [min(1, c * (1 + var)) for c in color]
+    ramp.color_ramp.elements[0].color = (*c0, 1)
+    ramp.color_ramp.elements[1].color = (*c1, 1)
+    nt.links.new(noise.outputs["Fac"], ramp.inputs["Fac"])
+    nt.links.new(ramp.outputs["Color"], bsdf.inputs["Base Color"])
+    if emission:
+        bsdf.inputs["Emission Color"].default_value = (*emission[0], 1)
+        bsdf.inputs["Emission Strength"].default_value = emission[1]
+    _MATS[key] = m
+    return m
+
+
+def sky_world(stops=((0.0, (0.72, 0.88, 1.0)), (0.18, (0.36, 0.66, 1.0)), (0.6, (0.13, 0.38, 0.92))),
+              strength=1.0, ground=(0.55, 0.6, 0.65)):
+    """Cartoon gradient sky (horizon pale -> deep saturated blue), colours in sRGB. Clouds are 3D meshes."""
+    w = bpy.data.worlds.new("Sky")
+    bpy.context.scene.world = w
+    w.use_nodes = True
+    nt = w.node_tree
+    bg = nt.nodes["Background"]
+    tc = nt.nodes.new("ShaderNodeTexCoord")
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(tc.outputs["Generated"], sep.inputs["Vector"])
+    ramp = nt.nodes.new("ShaderNodeValToRGB")
+    els = ramp.color_ramp.elements
+    while len(els) < len(stops):
+        els.new(0.5)
+    for e, (pos, col) in zip(els, stops):
+        e.position = pos
+        e.color = (*lin(col), 1)
+    nt.links.new(sep.outputs["Z"], ramp.inputs["Fac"])
+    nt.links.new(ramp.outputs["Color"], bg.inputs["Color"])
+    bg.inputs["Strength"].default_value = strength
+
+
+def cloud(name, loc, s=10.0, seed=0, mat=None):
+    r = random.Random(seed)
+    mat = mat or toon("Cloud", (0.97, 0.98, 1.0), 0.04, 0.9, emission=((0.9, 0.93, 1.0), 0.35))
+    root = empty(name, loc)
+    for k in range(7):
+        rr = s * r.uniform(0.35, 0.6)
+        ob = mesh_ob(f"{name}_{k}", lambda: bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1), mat,
+                     ((k - 3) * s * 0.3 + r.uniform(-1, 1) * s * 0.1, r.uniform(-1, 1) * s * 0.15,
+                      (1 - abs(k - 3) / 3) * s * 0.25), scale=(rr * 1.1, rr, rr * 0.8), parent=root)
+        ob.visible_shadow = False
+    return root
+
+
+def lowpoly_rock(name, loc, s=1.0, seed=0, color=(0.55, 0.5, 0.45)):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=s, location=loc)
+    ob = bpy.context.active_object
+    ob.name = name
+    r = random.Random(seed)
+    for v in ob.data.vertices:
+        v.co *= 1 + r.uniform(-0.25, 0.25)
+    ob.scale = (1, r.uniform(0.7, 1.1), r.uniform(0.5, 0.8))
+    ob.rotation_euler = (0, 0, r.uniform(0, 6.28))
+    ob.data.materials.append(toon("Rock" + str(seed % 3), color, 0.1, 0.8))
+    return ob
+
+
+def bush(name, loc, s=1.0, seed=0, color=(0.2, 0.55, 0.12)):
+    r = random.Random(seed)
+    root = empty(name, loc)
+    mat = toon("Bush", color, 0.15, 0.7, scale=1.0)
+    for k in range(5):
+        mesh_ob(f"{name}_{k}", lambda: bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=1), mat,
+                (r.uniform(-0.6, 0.6) * s, r.uniform(-0.6, 0.6) * s, r.uniform(0.3, 0.8) * s),
+                scale=(s * r.uniform(0.5, 0.8),) * 3, parent=root)
+    return root
+
+
+def grass_field(name, size, loc, density, color=(0.34, 0.66, 0.16), blade_h=0.4, seed=1, ground_mat=None):
+    """Ground plane + geometry-nodes scatter of upright low-poly grass tufts."""
+    bpy.ops.mesh.primitive_plane_add(size=size, location=loc)
+    g = bpy.context.active_object
+    g.name = name
+    g.data.materials.append(ground_mat or toon("GrassGround", tuple(c * 0.8 for c in color), 0.1, 0.9))
+    # one tuft = 5 thin bent blades
+    bm_objs = []
+    r = random.Random(seed)
+    for k in range(5):
+        bpy.ops.mesh.primitive_cone_add(vertices=3, radius1=0.035, radius2=0, depth=blade_h * r.uniform(0.7, 1.2),
+                                        location=(r.uniform(-0.06, 0.06), r.uniform(-0.06, 0.06), blade_h / 2),
+                                        rotation=(r.uniform(-0.35, 0.35), r.uniform(-0.35, 0.35), 0))
+        bm_objs.append(bpy.context.active_object)
+    for o in bm_objs:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = bm_objs[0]
+    bpy.ops.object.join()
+    tuft = bpy.context.active_object
+    tuft.name = name + "_tuft"
+    tuft.data.materials.append(toon("Blade", color, 0.3, 0.6, scale=0.5))
+    tuft.location = (0, 0, -100)
+    tuft.hide_render = True
+    ng = bpy.data.node_groups.new(name + "_scatter", "GeometryNodeTree")
+    ng.interface.new_socket("Geometry", in_out="INPUT", socket_type="NodeSocketGeometry")
+    ng.interface.new_socket("Geometry", in_out="OUTPUT", socket_type="NodeSocketGeometry")
+    N = ng.nodes
+    gi, go = N.new("NodeGroupInput"), N.new("NodeGroupOutput")
+    dist = N.new("GeometryNodeDistributePointsOnFaces")
+    dist.inputs["Density"].default_value = density
+    dist.inputs["Seed"].default_value = seed
+    inst = N.new("GeometryNodeInstanceOnPoints")
+    oi = N.new("GeometryNodeObjectInfo")
+    oi.inputs["Object"].default_value = tuft
+    rnd = N.new("FunctionNodeRandomValue")
+    rnd.data_type = "FLOAT_VECTOR"
+    rnd.inputs["Min"].default_value = (0.6, 0.6, 0.5)
+    rnd.inputs["Max"].default_value = (1.3, 1.3, 1.4)
+    rot = N.new("FunctionNodeRandomValue")
+    rot.data_type = "FLOAT_VECTOR"
+    rot.inputs["Min"].default_value = (0, 0, 0)
+    rot.inputs["Max"].default_value = (0, 0, 6.28)
+    real = N.new("GeometryNodeRealizeInstances")
+    join = N.new("GeometryNodeJoinGeometry")
+    L = ng.links.new
+    L(gi.outputs[0], dist.inputs["Mesh"])
+    L(dist.outputs["Points"], inst.inputs["Points"])
+    L(oi.outputs["Geometry"], inst.inputs["Instance"])
+    L(rnd.outputs["Value"], inst.inputs["Scale"])
+    L(rot.outputs["Value"], inst.inputs["Rotation"])
+    L(gi.outputs[0], join.inputs[0])
+    L(inst.outputs["Instances"], join.inputs[0])
+    L(join.outputs[0], go.inputs[0])
+    m = g.modifiers.new("scatter", "NODES")
+    m.node_group = ng
+    return g
+
+
+def set_beach2(night=False):
+    """Stylized beach: cartoon sky + 3D clouds, warm sand, turquoise sea, grassy dunes, Troy on the hill."""
+    sky_world()
+    sun(3.2, (math.radians(55), 0, math.radians(-50)), (1.0, 0.92, 0.78), angle=2)
+    sand = toon("Sand2", (0.93, 0.76, 0.45), 0.08, 0.85, scale=0.15)
+    ground("Beach", sand, 400, (0, -160, 0), disp=0.5, disp_scale=12)
+    sea = ground("Sea", water_mat((0.0, 0.32, 0.52), (0.1, 0.75, 0.78)), 1200, (0, 640, -0.12))
+    # foam line along the shore
+    foam = toon("Foam", (1, 1, 1), 0.02, 0.4, emission=((1, 1, 1), 0.2))
+    mesh_ob("Foam", cube(), foam, (0, 40.5, -0.05), scale=(400, 1.2, 0.1))
+    # grassy dunes behind the beach (camera side, -Y)
+    for k, (x, y, w) in enumerate(((-40, -45, 30), (10, -60, 40), (55, -42, 26))):
+        d = mesh_ob(f"Dune{k}", sphere(32, 16), toon("DuneGrass", (0.36, 0.62, 0.18), 0.12, 0.9, scale=0.2),
+                    (x, y, -w * 0.18), scale=(w, w * 0.55, w * 0.32))
+    grass_field("BeachGrass", 60, (-8, -32, 0.02), 30, (0.40, 0.70, 0.18), 0.45, 3,
+                ground_mat=toon("Clear", (0.93, 0.76, 0.45), 0.08, 0.85, scale=0.15))
+    # Troy on a green hill far away
+    mesh_ob("Hill", sphere(48, 24), toon("HillGrass", (0.30, 0.58, 0.16), 0.15, 0.9, scale=0.05),
+            (-70, -150, -18), scale=(110, 60, 38))
+    st = toon("TroyStone", (0.92, 0.84, 0.66), 0.06, 0.8)
+    for i, x in enumerate(range(-120, -20, 14)):
+        wall_segment(f"TroyW{i}", x, x + 14, -128, 9, 3, st)
+        if i % 2 == 0:
+            tower(f"TroyT{i}", x, -128, 6, 15, st)
+    # clouds
+    r = random.Random(7)
+    for k in range(14):
+        cloud(f"Cloud{k}", (r.uniform(-260, 260), r.uniform(80, 420), r.uniform(45, 110)), r.uniform(14, 30), k)
+    for k in range(6):
+        cloud(f"CloudB{k}", (r.uniform(-260, 260), r.uniform(-420, -200), r.uniform(50, 110)), r.uniform(14, 28),
+              k + 20)
+    # dressing
+    for k in range(18):
+        lowpoly_rock(f"Rock{k}", (r.uniform(-50, 50), r.uniform(-20, 38), 0.1), r.uniform(0.3, 1.2), k)
+    for k in range(10):
+        bush(f"Bush{k}", (r.uniform(-60, 60), r.uniform(-40, -18), 0), r.uniform(0.6, 1.4), k)
+    char = toon("Char", (0.08, 0.06, 0.05), 0.1, 1.0)
+    logm = toon("Log", (0.45, 0.28, 0.16), 0.15, 0.8)
+    for k, (x, y) in enumerate(((-11, 9), (15, 18), (-24, 26))):
+        mesh_ob(f"Ash{k}", cyl(24), char, (x, y, 0.05), scale=(2.4, 2.4, 0.08))
+        for j in range(4):
+            mesh_ob(f"Log{k}{j}", cyl(8), logm, (x, y, 0.25), rot=(math.pi / 2 - 0.25, 0, j * 0.8),
+                    scale=(0.3, 0.3, 1.9))
+    spear_wood = toon("SpearWood", (0.5, 0.32, 0.16), 0.1)
+    bronze = toon("Bronze2", (0.85, 0.6, 0.2), 0.05, 0.35)
+    for k in range(8):
+        x, y = r.uniform(-30, 30), r.uniform(-4, 32)
+        e = Euler((r.uniform(-0.4, 0.4), r.uniform(-0.4, 0.4), 0))
+        mesh_ob(f"Spear{k}", cyl(6), spear_wood, (x, y, 1.2), rot=e, scale=(0.09, 0.09, 2.6))
+        tip = Vector((0, 0, 1.3))
+        tip.rotate(e)
+        mesh_ob(f"SpearTip{k}", cone(), bronze, Vector((x, y, 1.2)) + tip, rot=e, scale=(0.18, 0.18, 0.5))
+    for k in range(3):
+        build_ship(f"BShip{k}", (40 + k * 30, 150 + k * 25, 0), 1.0 - k * 0.1, sail=(0.95, 0.9, 0.8))
+
+
+SETS = {"beach": set_beach, "beach2": set_beach2}
+
+
+# ================================================================ character shadow cards
+def shadow_cards(actors):
+    """actors: [{"img": png, "pos": [x,y,z], "w": m, "h": m, "foot": frac_from_bottom}] - invisible to camera,
+    cast real shadows from the 2D character silhouettes."""
+    for ob in [o for o in bpy.data.objects if o.name.startswith("ShadowCard")]:
+        bpy.data.objects.remove(ob, do_unlink=True)
+    cam = bpy.context.scene.camera
+    for k, a in enumerate(actors):
+        bpy.ops.mesh.primitive_plane_add(size=1)
+        ob = bpy.context.active_object
+        ob.name = f"ShadowCard{k}"
+        img = bpy.data.images.load(a["img"])
+        m = bpy.data.materials.new(f"ShadowCardMat{k}")
+        m.use_nodes = True
+        nt = m.node_tree
+        for n in list(nt.nodes):
+            nt.nodes.remove(n)
+        out = nt.nodes.new("ShaderNodeOutputMaterial")
+        tex = nt.nodes.new("ShaderNodeTexImage")
+        tex.image = img
+        tr = nt.nodes.new("ShaderNodeBsdfTransparent")
+        df = nt.nodes.new("ShaderNodeBsdfDiffuse")
+        mx = nt.nodes.new("ShaderNodeMixShader")
+        nt.links.new(tex.outputs["Alpha"], mx.inputs["Fac"])
+        nt.links.new(tr.outputs[0], mx.inputs[1])
+        nt.links.new(df.outputs[0], mx.inputs[2])
+        nt.links.new(mx.outputs[0], out.inputs["Surface"])
+        ob.data.materials.append(m)
+        w, h = a["w"], a["h"]
+        px, py, pz = a["pos"]
+        ob.scale = (w, h, 1)
+        ob.rotation_euler = (math.pi / 2, 0, 0)
+        # face the camera around Z
+        d = Vector((cam.location.x - px, cam.location.y - py))
+        ang = math.atan2(d.y, d.x) - math.pi / 2
+        ob.rotation_euler = (math.pi / 2, 0, ang)
+        ob.location = (px, py, pz + h / 2 - a.get("foot", 0.0) * h)
+        ob.visible_camera = False
+        ob.visible_diffuse = False
+        ob.visible_glossy = False
+        ob.visible_transmission = False
+        ob.visible_volume_scatter = False
+        ob.visible_shadow = True
 
 
 # ================================================================ render setup + job
@@ -484,8 +737,9 @@ def setup_render(res, samples):
     sc.cycles.caustics_reflective = sc.cycles.caustics_refractive = False
     sc.render.resolution_x, sc.render.resolution_y = res
     sc.render.resolution_percentage = 100
-    sc.view_settings.view_transform = "AgX"
-    sc.view_settings.look = "AgX - Medium High Contrast"
+    sc.view_settings.view_transform = "Standard"
+    sc.view_settings.look = "Medium Contrast"
+    sc.view_settings.exposure = -0.35
     sc.render.image_settings.file_format = "PNG"
     sc.render.film_transparent = False
     vl = sc.view_layers[0]
@@ -496,7 +750,12 @@ def setup_render(res, samples):
         nt.nodes.remove(n)
     rl = nt.nodes.new("CompositorNodeRLayers")
     comp = nt.nodes.new("CompositorNodeComposite")
-    nt.links.new(rl.outputs["Image"], comp.inputs["Image"])
+    glare = nt.nodes.new("CompositorNodeGlare")
+    glare.glare_type = "FOG_GLOW"
+    glare.threshold = 1.2
+    glare.size = 7
+    nt.links.new(rl.outputs["Image"], glare.inputs["Image"])
+    nt.links.new(glare.outputs["Image"], comp.inputs["Image"])
     fo = nt.nodes.new("CompositorNodeOutputFile")
     fo.format.file_format = "OPEN_EXR"
     fo.format.color_depth = "32"
@@ -555,6 +814,7 @@ def run(job):
                 for c in ob.children_recursive:
                     c.hide_render = st["hide"]
         set_horse_state(f)
+        shadow_cards(f.get("actors", []))
         wn = bpy.data.materials.get("Water")
         if wn:
             wn.node_tree.nodes["waves"].inputs["W"].default_value = f.get("time", idx / 30) * 0.3

@@ -58,13 +58,14 @@ class Cam3:
 def load_bg(png, exr):
     bg = cv2.imread(png, cv2.IMREAD_COLOR)
     bg = cv2.resize(bg, (W, H), interpolation=cv2.INTER_LANCZOS4)
-    z = cv2.imread(exr, cv2.IMREAD_UNCHANGED)
-    if z is None:
-        z = np.full((H, W), 1e9, np.float32)
-    else:
+    try:
+        import OpenEXR
+        z = list(OpenEXR.File(exr).channels().values())[0].pixels.astype(np.float32)
         if z.ndim == 3:
             z = z[:, :, 0]
         z = cv2.resize(z, (W, H), interpolation=cv2.INTER_NEAREST)
+    except Exception:
+        z = np.full((H, W), 1e9, np.float32)
     return bg, z
 
 
@@ -75,8 +76,33 @@ class Actor:
         self.fig, self.pos, self.pose_fn, self.h, self.shadow = fig, pos, pose_fn, h, shadow
 
 
-def composite(bg, zbuf, cam, actors, tint=(1.0, 0.98, 0.94), halo=True, draw_extra=None):
+SPR_W, SPR_H, SPR_FOOT, SPR_S = 600, 1000, 50, 2.2
+
+
+def write_sprite(actor, path):
+    """Character silhouette for Blender's shadow card. Returns the card description for the job."""
+    surf = gfx.surface(SPR_W, SPR_H)
+    cx = cairo.Context(surf)
+    actor.fig.draw(cx, actor.pose_fn(SPR_S, SPR_W / 2, SPR_H - SPR_FOOT))
+    surf.write_to_png(path)
+    mpp = HUMAN_M * actor.h / (HUMAN_PX * SPR_S * actor.h)
+    mpp = HUMAN_M / (HUMAN_PX * SPR_S) * actor.h
+    return {"img": os.path.abspath(path), "pos": list(map(float, actor.pos)), "w": SPR_W * mpp, "h": SPR_H * mpp,
+            "foot": SPR_FOOT / SPR_H}
+
+
+def fog(bg, zbuf, color=(0.86, 0.9, 1.0), dist=180.0, amount=0.55):
+    """Aerial perspective: far geometry fades toward the horizon colour (sky untouched)."""
+    f = (1 - np.exp(-zbuf / dist)) * amount
+    f[zbuf > 5e3] = 0
+    col = np.array([color[2], color[1], color[0]], np.float32) * 255
+    return (bg.astype(np.float32) * (1 - f[:, :, None]) + col * f[:, :, None]).astype(np.uint8)
+
+
+def composite(bg, zbuf, cam, actors, tint=(1.0, 0.98, 0.94), halo=True, draw_extra=None, fog_args=None):
     """bg: BGR uint8 (H, W, 3); returns cairo surface with actors composited (far to near, occluded)."""
+    if fog_args is not None:
+        bg = fog(bg, zbuf, **fog_args)
     out = np.zeros((H, W, 4), np.uint8)
     out[:, :, :3] = bg
     out[:, :, 3] = 255
@@ -91,10 +117,10 @@ def composite(bg, zbuf, cam, actors, tint=(1.0, 0.98, 0.94), halo=True, draw_ext
         s = cam.scale_at(z, HUMAN_M * a.h) / a.h * a.h
         placed.append((z, x, y, s, a))
     placed.sort(key=lambda t: -t[0])
-    # contact shadows on the ground
+    # soft contact occlusion right under the feet (the cast shadow comes from Blender)
     for z, x, y, s, a in placed:
         if a.shadow:
-            gfx.contact_shadow(bcx, x, y, 95 * s, 0.45)
+            gfx.contact_shadow(bcx, x, y, 60 * s, 0.3)
     layer = np.zeros((H, W, 4), np.float32)
     joints = {}
     for z, x, y, s, a in placed:
