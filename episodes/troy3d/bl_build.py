@@ -38,6 +38,9 @@ def mesh_ob(name, mesh_fn, mat=None, loc=(0, 0, 0), rot=(0, 0, 0), scale=(1, 1, 
     ob.location = loc
     ob.rotation_euler = rot
     ob.scale = scale
+    if ob.type == "MESH":
+        # bake the scale so object-space textures and bevels are in real metres
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
     if mat:
         ob.data.materials.append(mat)
     if bevel:
@@ -376,6 +379,15 @@ def build_horse(name="Horse"):
     return root
 
 
+def build_spear(name="Spear3D", L=3.2):
+    root = empty(name, (0, 0, -100))
+    mesh_ob(name + "_shaft", cyl(8), toon("SpearWood", (0.5, 0.32, 0.16), 0.1), (-L / 2, 0, 0), rot=(0, math.pi / 2, 0),
+            scale=(0.09, 0.09, L), parent=root)
+    mesh_ob(name + "_tip", cone(), toon("Bronze2", (0.85, 0.6, 0.2), 0.05, 0.35), (0.25, 0, 0), rot=(0, math.pi / 2, 0),
+            scale=(0.2, 0.2, 0.5), parent=root)
+    return root
+
+
 def set_horse_state(f):
     hp = bpy.data.objects.get("Horse_hatchpivot")
     if hp:
@@ -631,7 +643,7 @@ def set_beach2(night=False):
     for k, (x, y, w) in enumerate(((-40, -45, 30), (10, -60, 40), (55, -42, 26))):
         d = mesh_ob(f"Dune{k}", sphere(32, 16), toon("DuneGrass", (0.36, 0.62, 0.18), 0.12, 0.9, scale=0.2),
                     (x, y, -w * 0.18), scale=(w, w * 0.55, w * 0.32))
-    grass_field("BeachGrass", 60, (-8, -32, 0.02), 30, (0.40, 0.70, 0.18), 0.45, 3,
+    grass_field("BeachGrass", 44, (-8, -48, 0.02), 30, (0.40, 0.70, 0.18), 0.45, 3,
                 ground_mat=toon("Clear", (0.93, 0.76, 0.45), 0.08, 0.85, scale=0.15))
     # Troy on a green hill far away
     mesh_ob("Hill", sphere(48, 24), toon("HillGrass", (0.30, 0.58, 0.16), 0.15, 0.9, scale=0.05),
@@ -782,9 +794,13 @@ def look_at(cam, loc, target, roll=0.0):
 def run(job):
     clear()
     fo = setup_render(job.get("res", [720, 1280]), job.get("samples", 16))
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import bl_sets
+    SETS.update(bl_sets.SETS)
     SETS[job["set"]](**job.get("set_args", {}))
     if job.get("horse", True):
         build_horse()
+    build_spear()
     cam = bpy.context.scene.camera
     out = job["out"]
     os.makedirs(out, exist_ok=True)
@@ -815,6 +831,13 @@ def run(job):
                     c.hide_render = st["hide"]
         set_horse_state(f)
         shadow_cards(f.get("actors", []))
+        if "serpents" in f:
+            bl_sets.set_serpents(f["serpents"])
+        if "doors" in f:
+            for side in (-1, 1):
+                h = bpy.data.objects.get(f"DoorHinge{side}")
+                if h:
+                    h.rotation_euler = (0, 0, side * math.radians(95) * f["doors"])
         wn = bpy.data.materials.get("Water")
         if wn:
             wn.node_tree.nodes["waves"].inputs["W"].default_value = f.get("time", idx / 30) * 0.3

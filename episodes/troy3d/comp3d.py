@@ -127,6 +127,8 @@ def composite(bg, zbuf, cam, actors, tint=(1.0, 0.98, 0.94), halo=True, draw_ext
         surf = gfx.surface()
         cx = cairo.Context(surf)
         J = a.fig.draw(cx, a.pose_fn(s, x, y))
+        J["_fig"] = a.fig
+        J["head_rad"] = J.get("head_rad", 52 * s)
         joints[id(a)] = J
         arr = gfx.to_np(surf).astype(np.float32)
         al = arr[:, :, 3:4] / 255.0
