@@ -124,13 +124,13 @@ EARTH_X, EARTH_Y, EARTH_R = W / 2, 790, 330
 
 def jn_opening(t):
     """Just Needy's position/size/expression in the opening: he steps in, looks up at the Earth,
-    turns to us on 'all related?', then walks to centre for the family tree."""
-    enter = ease_out(prog(t, S("hook1") + 0.7, S("hook1") + 1.5))
+    turns to us on 'relative?', then walks to centre for the family tree."""
+    enter = ease_out(prog(t, S("hook_a") + 0.9, S("hook_a") + 1.7))
     to_c = ease_io(prog(t, S("intro") - 0.1, S("intro") + 0.7))
     x = lerp(300, W / 2, to_c)
     y = 1395 + (1 - enter) * 520
     h = 470
-    t_rel = word_t("hook2", "related")
+    t_rel = word_t("hook_b", "relative")
     turn = smooth(prog(t, t_rel - 0.25, t_rel + 0.1))
     look = lerpv2((0.65, -0.9), (0.0, 0.0), turn)
     brows = turn * (1 - to_c) * 0.9
@@ -143,32 +143,148 @@ def lerpv2(a, b, k):
     return (a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k)
 
 
+# ------------------------------------------------------------------ opening: deep star field + slow camera
+def _deep_stars():
+    """Three parallax layers of naturally distributed stars (far = many, tiny, dim; near = few, larger,
+    blue-white). Positions span a margin around the frame so the slow camera drift never reveals an edge."""
+    rnd = np.random.default_rng(2024)
+    M = 160
+    layers = []
+    for n, rmin, rmax, amin, amax, depth in ((1000, 0.75, 1.25, 0.22, 0.60, 0.25),
+                                             (340, 1.05, 1.8, 0.42, 0.85, 0.55),
+                                             (75, 1.5, 2.5, 0.65, 1.0, 1.0)):
+        # loose clustering (a faint band) + uniform field, so it never looks like a regular grid
+        u = rnd.random(n)
+        x = rnd.uniform(-M, W + M, n)
+        y = np.where(u < 0.3, H * 0.42 + (x - W / 2) * -0.55 + rnd.normal(0, 210, n), rnd.uniform(-M, H + M, n))
+        r = rmin + (rmax - rmin) * rnd.random(n) ** 2.2          # mostly small, a few bright
+        a = amin + (amax - amin) * rnd.random(n) ** 1.6
+        tint = rnd.random(n)                                        # 0 = white, 1 = blue-white
+        ph = rnd.uniform(0, 6.28, n)
+        sp = rnd.uniform(0.6, 1.8, n)
+        layers.append((x, y, r, a, tint, ph, sp, depth))
+    return layers
+
+
+DEEP = _deep_stars()
+
+
+def opening_zoom(t):
+    """Slow cinematic push toward the Earth: a gentle drift from frame one, a clearer push 1-3 s."""
+    return 1.0 + 0.02 * prog(t, 0.0, 1.0) + 0.075 * ease_io(prog(t, 1.0, 3.3)) + 0.025 * prog(t, 3.3, 6.2)
+
+
+def bg_space_deep(cx, t, zoom):
+    cx.set_source(rgrad(cx, W / 2, H * 0.47, 50, H * 0.75, [(0, hexc("#14254F")), (0.6, hexc("#0A1532")), (1, hexc("#050A1C"))]))
+    cx.paint()
+    # very faint, wide milky band for depth (no colourful nebulae)
+    cx.save()
+    cx.translate(W / 2, H * 0.42)
+    cx.rotate(-0.5)
+    cx.scale(1.0, 0.22)
+    cx.set_source(rgrad(cx, 0, 0, 0, W * 1.1, [(0, (0.55, 0.65, 0.95, 0.06)), (0.6, (0.45, 0.55, 0.9, 0.025)), (1, (0.4, 0.5, 0.9, 0))]))
+    circle(cx, 0, 0, W * 1.1)
+    cx.fill()
+    cx.restore()
+    CX0, CY0 = EARTH_X, EARTH_Y
+    for x, y, r, a, tint, ph, sp, depth in DEEP:
+        z = 1 + (zoom - 1) * depth                       # parallax: near stars spread faster
+        X = CX0 + (x - CX0) * z - t * 5.0 * depth        # slow lateral drift, faster for near layers
+        Y = CY0 + (y - CY0) * z + t * 1.6 * depth
+        tw = 1 + 0.16 * np.sin(t * sp + ph)              # very subtle twinkle
+        A = np.clip(a * tw, 0, 1)
+        vis = (X > -4) & (X < W + 4) & (Y > -4) & (Y < H + 4)
+        R_ = r * z
+        if depth < 1.0:
+            # batch by tint bucket for speed
+            for lo, hi, col in ((0, 0.6, (1.0, 1.0, 1.0)), (0.6, 1.01, (0.78, 0.87, 1.0))):
+                sel = vis & (tint >= lo) & (tint < hi)
+                for xx, yy, rr, aa in zip(X[sel], Y[sel], R_[sel], A[sel]):
+                    cx.arc(xx, yy, rr, 0, 6.2832)
+                    src(cx, (*col, aa))
+                    cx.fill()
+        else:
+            for xx, yy, rr, aa, tt in zip(X[vis], Y[vis], R_[vis], A[vis], tint[vis]):
+                col = (0.72, 0.84, 1.0) if tt > 0.45 else (1.0, 1.0, 1.0)
+                cx.set_source(rgrad(cx, xx, yy, 0, rr * 4.0, [(0, (*col, aa * 0.35)), (1, (*col, 0))]))
+                circle(cx, xx, yy, rr * 4.0)
+                cx.fill()
+                circle(cx, xx, yy, rr)
+                src(cx, (*col, aa))
+                cx.fill()
+    # the channel's soft four-point sparkles, kept few and quiet
+    for x, y, ph in SPARKS[:6]:
+        a = 0.18 + 0.16 * math.sin(t * 0.9 + ph)
+        X = CX0 + (x - CX0) * zoom - t * 5.0
+        Y = CY0 + (y - CY0) * zoom + t * 1.6
+        src(cx, (0.85, 0.92, 1, a))
+        cx.set_line_width(1.4)
+        cx.move_to(X - 6, Y)
+        cx.line_to(X + 6, Y)
+        cx.move_to(X, Y - 6)
+        cx.line_to(X, Y + 6)
+        cx.stroke()
+    _header_band(cx, (0.02, 0.04, 0.10, 0.55))
+
+
+# populous regions used for the "shared ancestry" links (lon, lat)
+HUBS = [(78, 23), (113, 30), (10, 48), (8, 9), (31, 29), (110, -6), (36, 0), (45, 33), (37, 55), (28, -26),
+        (-5, 40), (100, 15), (67, 30), (-15, 14), (20, 0), (140, 36), (127, 37), (55, 25), (25, 60), (90, 45)]
+
+
+def _hub_links():
+    """Pairs of distant hubs (>= 35 deg apart), in a fixed order."""
+    rnd = random.Random(5)
+    out = []
+    for _ in range(400):
+        a, b = rnd.sample(HUBS, 2)
+        la1, lo1, la2, lo2 = map(math.radians, (a[1], a[0], b[1], b[0]))
+        d = math.degrees(math.acos(max(-1, min(1, math.sin(la1) * math.sin(la2) + math.cos(la1) * math.cos(la2) * math.cos(lo1 - lo2)))))
+        if d >= 35 and (a, b) not in out and (b, a) not in out:
+            j = (rnd.uniform(-3, 3), rnd.uniform(-3, 3))
+            out.append(((a[0] + j[0], a[1] + j[1]), (b[0] - j[1], b[1] + j[0]), rnd.uniform(0, 0.7)))
+        if len(out) == 18:
+            break
+    return out
+
+
+EARTH_LINKS = _hub_links()
+T_LINKS = 3.0
+
+
 def scene_earth(cx, t):
-    bg_space(cx, t)
+    zoom = opening_zoom(t)
+    bg_space_deep(cx, t, zoom)
     g = asset("globe")
-    X, Y, R = EARTH_X, EARTH_Y, EARTH_R
+    X, Y, R = EARTH_X, EARTH_Y, EARTH_R * zoom
     lon0 = 25 + t * 3.0
     lat0 = 18
     pop = fmt_pop_frac(t)
-    g.draw(cx, X, Y, R, lon0, lat0, lights=0.12 + 0.88 * pop, t=t)
-    # "what if we're all related?" -> golden connections across the globe
-    k = prog(t, S("hook2") + 0.2, S("hook2") + 1.6)
-    if k > 0:
-        rnd = random.Random(3)
-        for i in range(70):
-            a = (rnd.uniform(-10, 110), rnd.uniform(-30, 60))
-            b = (rnd.uniform(-10, 110), rnd.uniform(-30, 60))
-            d = rnd.uniform(0, 0.6)
-            if g.screen(*a, X, Y, R, lon0, lat0)[2] < 0.2 or g.screen(*b, X, Y, R, lon0, lat0)[2] < 0.2:
-                continue
-            f = ease_out(prog(k, d, d + 0.4))
-            g.arc(cx, a, b, X, Y, R, lon0, lat0, frac=f, alpha=0.55, lw=1.8)
+    g.draw(cx, X, Y, R, lon0, lat0, lights=0.03 + 0.97 * pop, t=t)
+    # 3-5 s: thin glowing links between distant regions -> shared ancestors
+    for a, b, d in EARTH_LINKS:
+        f = ease_out(prog(t, T_LINKS + d, T_LINKS + d + 0.6))
+        if f <= 0:
+            continue
+        if g.screen(*a, X, Y, R, lon0, lat0)[2] < 0.15 or g.screen(*b, X, Y, R, lon0, lat0)[2] < 0.15:
+            continue
+        # bright while drawing, then settles to a quiet glow
+        al = 1.0 - 0.55 * smooth(prog(t, T_LINKS + d + 0.6, T_LINKS + d + 1.6))
+        g.arc(cx, a, b, X, Y, R, lon0, lat0, frac=f, alpha=0.16 * al, lw=6.0)
+        g.arc(cx, a, b, X, Y, R, lon0, lat0, frac=f, alpha=0.75 * al, lw=1.5)
+        for p, show in ((a, 1.0), (b, 1.0 if f > 0.98 else 0.0)):
+            sx, sy, _ = g.screen(*p, X, Y, R, lon0, lat0)
+            ga = 0.8 * al * show
+            if ga > 0:
+                cx.set_source(rgrad(cx, sx, sy, 0, 11, [(0, (1.0, 0.9, 0.5, ga)), (1, (1.0, 0.85, 0.3, 0))]))
+                circle(cx, sx, sy, 11)
+                cx.fill()
     # Just Needy looks up at the Earth, then at us
     x, y, h, e, tilt, enter = jn_opening(t)
     if enter > 0 and t < E("intro") - 0.25:
         P.draw_jn_full(cx, x, y, h, t=t, expr=e, head_tilt=tilt)
         # a small "?" as he wonders
-        t_rel = word_t("hook2", "related")
+        t_rel = word_t("hook_b", "relative")
         qa = pulse_in(t, t_rel - 0.05, S("intro") + 0.1, 0.2)
         if qa > 0:
             sc = back_out(clamp((t - t_rel + 0.05) / 0.3))
@@ -176,11 +292,13 @@ def scene_earth(cx, t):
 
 
 def fmt_pop_frac(t):
-    return ease_io(prog(t, 0.45, S("hook1") + (E("hook1") - S("hook1")) * 0.75))
+    """People-lights (and the population counter) fill in during 'every person on Earth'."""
+    return ease_io(prog(t, 0.9, 3.0))
 
 
 def pop_value(t):
-    return fmt(8_200_000_000 * fmt_pop_frac(t))
+    # the counter starts rolling with the first word, ahead of the lights
+    return fmt(8_200_000_000 * ease_io(prog(t, 0.2, 2.9)))
 
 
 # ================================================================== SCENE 2: the fan tree
@@ -1250,7 +1368,7 @@ def header_entries():
     t_few = word_t("mrca", "few")
     return [
         (0.0, "WORLD POPULATION", pop_value, "", YELLOW),
-        (S("hook2") - 0.05, "BUT WHAT IF...", "we're all related?", "", YELLOW),
+        (word_t("hook_b", "your") - 0.1, "WHAT IF...", "we're all related?", "", YELLOW),
         (S("intro") - 0.05, "FAMILY TREE", "Just Needy", "our main character", WHITE),
         (S("par") - 0.05, "ANCESTORS", "2 parents", "generation 1", WHITE),
         (S("gp") - 0.05, "ANCESTORS", "4 grandparents", "generation 2", WHITE),

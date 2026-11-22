@@ -78,3 +78,17 @@ python -m episodes.ancestry_en.mix audio        # score + mix + SRT
 python -m episodes.ancestry_en.mix final        # mux -> output/
 python -m episodes.ancestry_en.qa output/Just_Needy_What_If_Every_Human_Is_Related_EN.mp4
 ```
+
+**Opening-hook revision** (`hook_open.py`): the first two lines are replaced by one hook, "What if every person
+on Earth... was actually your relative?" (Gemini TTS, voice Puck, cached in
+`assets/audio/tts_ancestry/hook_v2_puck.wav`; speech starts at 0.2 s). The opening scene gets a three-layer
+parallax star field (~1,400 stars, blue-white highlights, subtle twinkle), a slow camera push toward the Earth,
+people-lights filling in at 1-3 s and thin glowing links between distant regions at 3-5 s. Everything from
+"Let's climb our friend's family tree" on is unchanged: the picture re-renders identically, and the new
+opening audio is crossfaded into the delivered soundtrack at 4.30-4.45 s (music-only gap).
+
+```bash
+python -m episodes.ancestry_en.hook_open audio DELIVERED.mp4   # new opening + delivered soundtrack
+python -m episodes.ancestry_en.render video
+python -m episodes.ancestry_en.hook_open final                 # mux + SRT -> output/
+```

@@ -8,10 +8,12 @@ split back into lines with cinecode.align.
 
 LINES = [
     # ---- Hook: Earth
-    ("hook1", "There are over eight billion people on Earth.",
-     "There are over|*8 billion*|people on Earth."),
-    ("hook2", "But what if we're all related?",
-     "But what if|we're *all related?*"),
+    # one recorded sentence ("What if every person on Earth... was actually your relative?"),
+    # split at its natural pause so the captions follow the speech
+    ("hook_a", "What if every person on Earth...",
+     "What if|*every person*|on Earth..."),
+    ("hook_b", "was actually your relative?",
+     "was actually|your *relative?*"),
     ("intro", "Let's climb our friend's family tree.",
      "Let's climb our friend's|*family tree.*"),
     # ---- Scene A: your ancestors
@@ -70,14 +72,14 @@ LINES = [
 
 # lines per TTS take
 TAKES = [
-    ["hook1", "hook2", "intro", "par", "gp", "ggp", "dbl", "g30", "pop"],
+    ["hook_a", "hook_b", "intro", "par", "gp", "ggp", "dbl", "g30", "pop"],
     ["same", "mix", "mrca", "rewind", "gen", "mt", "eve"],
     ["adam", "couple", "trace", "unbroken", "out", "route", "think", "rel", "end"],
 ]
 
 # extra silence (s) after a line, beyond the default gap
 GAP_AFTER = {
-    "hook2": 0.25, "intro": 0.1, "dbl": 0.12, "mrca": 0.25, "gen": 0.1, "eve": 0.1, "couple": 0.1,
+    "hook_b": 0.25, "intro": 0.1, "dbl": 0.12, "mrca": 0.25, "gen": 0.1, "eve": 0.1, "couple": 0.1,
     "unbroken": 0.2, "route": 0.25, "rel": 0.25,
 }
 DEFAULT_GAP = 0.07

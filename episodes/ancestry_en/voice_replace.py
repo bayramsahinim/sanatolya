@@ -34,7 +34,7 @@ VOICE = os.environ.get("VO_VOICE", "Puck")
 MAX_FIT = 0.06  # never time-adjust a line by more than this; report instead
 
 SECTIONS = [
-    ["hook1", "hook2", "intro", "par", "gp", "ggp", "dbl"],
+    ["intro", "par", "gp", "ggp", "dbl"],
     ["g30", "pop", "same", "mix", "mrca"],
     ["rewind", "gen", "mt", "eve"],
     ["adam", "couple", "trace", "unbroken"],
@@ -126,7 +126,8 @@ def split_lines():
 def build():
     clips = split_lines()
     L = LOCKED["lines"]
-    ids = [l for l, _, _ in LINES]
+    # the opening hook has its own take and is placed by hook_open.py
+    ids = [l for l, _, _ in LINES if any(l in sec for sec in SECTIONS)]
     total = LOCKED["duration"]
     buf = np.zeros(int(total * tts.SR) + tts.SR, np.float32)
     report = []
@@ -173,7 +174,7 @@ if __name__ == "__main__":
     if cmd == "audition":
         v = sys.argv[2]
         m = sys.argv[3] if len(sys.argv) > 3 else MODEL
-        txt = take_text(0, ["hook1", "hook2", "intro", "par", "gp", "ggp", "dbl"])
+        txt = take_text(0, ["intro", "par", "gp", "ggp", "dbl"])
         p = os.path.join(BUILD, "audition", f"{m}_{v}.wav")
         os.makedirs(os.path.dirname(p), exist_ok=True)
         a = tts.synth(txt, p, m, voice=v, retries=1)

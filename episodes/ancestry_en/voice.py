@@ -90,7 +90,7 @@ KOKORO_SPEED = 1.13
 KOKORO_DIR = os.path.join(ROOT, "build", "kokoro")
 KOKORO_URL = "https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX/resolve/main"
 # per-line delivery: slight pace changes give natural variation (lists quicker, reveals steadier)
-LINE_SPEED = {"hook1": 0.97, "hook2": 0.95, "par": 1.04, "gp": 1.04, "ggp": 1.03, "g30": 1.03, "mrca": 1.03,
+LINE_SPEED = {"hook_a": 0.96, "hook_b": 0.96, "par": 1.04, "gp": 1.04, "ggp": 1.03, "g30": 1.03, "mrca": 1.03,
               "trace": 1.03, "think": 0.93, "end": 0.95, "eve": 0.97, "couple": 1.02}
 # spoken forms that the phonemizer reads more naturally
 SAY = {"Y-chromosomal": "Y chromosomal"}
