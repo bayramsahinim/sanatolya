@@ -1,0 +1,18 @@
+{
+ "kontrast": 0.72,
+ "parlak_pct": 3.36,
+ "isikli_pct": 76.9,
+ "ikili_pct": 19.2,
+ "golge_aydinlik_hattat_duvari": 0.31,
+ "golge_rengi_hattat_duvari": "mavi (#3a4063); aydınlık kısım sıcak (#8c6d6a)",
+ "hale_kandil": {
+  "cekirdek": 61,
+  "p4": 0.74,
+  "p10": 0.62,
+  "p20": 0.5,
+  "p40": 0.36
+ },
+ "kafa_V_elle_6_kafa": "0,96 – 1,00",
+ "kafa_S_elle_6_kafa": "0,00 – 0,09",
+ "kafa_golge_kati": "0,84 – 0,90"
+}

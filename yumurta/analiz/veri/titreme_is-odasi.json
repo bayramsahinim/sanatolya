@@ -1,0 +1,27 @@
+{
+ "salon": {
+  "kare": 352,
+  "titrek_pct": 1.682,
+  "en_kotu": 4.082
+ },
+ "mutfak": {
+  "kare": 39,
+  "titrek_pct": 0.886,
+  "en_kotu": 1.044
+ },
+ "is_odasi": {
+  "kare": 110,
+  "titrek_pct": 0.923,
+  "en_kotu": 2.42
+ },
+ "hattat": {
+  "kare": 190,
+  "titrek_pct": 0.652,
+  "en_kotu": 1.04
+ },
+ "tumu": {
+  "kare": 691,
+  "titrek_pct": 1.233,
+  "en_kotu": 4.082
+ }
+}
