@@ -117,6 +117,27 @@ const PROPS = {
   rope(g, x, y, s) { g.save(); g.translate(x, y); g.strokeStyle = '#c9a66b'; g.lineWidth = 9; g.beginPath(); g.ellipse(0, -4, 22, 12, 0, 0, 6.29); g.stroke(); g.restore(); },
   spoon(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(.2 * s); g.strokeStyle = PLUM; g.lineWidth = 6; g.fillStyle = '#a8763e';
     g.beginPath(); g.roundRect(-5, -10, 10, 80, 5); g.fill(); g.stroke(); g.beginPath(); g.ellipse(0, 84, 16, 22, 0, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
+  // a roofer's hammer: short handle, iron head across the top
+  hammer(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.5 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
+    g.fillStyle = '#9a6a3a'; g.beginPath(); g.roundRect(-6, -110, 12, 130, 5); g.fill(); g.stroke();
+    g.fillStyle = '#8a8c98'; g.beginPath(); g.roundRect(-38, -136, 76, 30, 6); g.fill(); g.stroke(); g.restore(); },
+  // a green glass bottle with a cap (p.capOff leaves the cap out; p.bulge swells the glass under pressure)
+  bottle(g, x, y, s, p = {}) { g.save(); g.translate(x, y); g.rotate(-.12 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
+    const b = 1 + (p.bulge || 0) * .22;
+    g.fillStyle = '#5fbf6a'; g.beginPath(); g.moveTo(-10, -150); g.lineTo(10, -150); g.lineTo(12, -118); g.quadraticCurveTo(32 * b, -96, 30 * b, -60);
+    g.lineTo(30 * b, 28); g.quadraticCurveTo(30 * b, 40, 0, 40); g.quadraticCurveTo(-30 * b, 40, -30 * b, 28); g.lineTo(-30 * b, -60); g.quadraticCurveTo(-32 * b, -96, -12, -118); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = '#c6f0cc'; g.beginPath(); g.roundRect(-20 * b, -50, 10, 64, 5); g.fill();
+    g.fillStyle = '#f2ead8'; g.beginPath(); g.roundRect(-30 * b, -36, 60 * b, 38, 4); g.fill(); g.stroke();
+    if (!p.capOff) { g.fillStyle = '#d8343a'; g.beginPath(); g.roundRect(-14, -166, 28, 18, 4); g.fill(); g.stroke(); }
+    g.restore(); },
+  // a clay cup of wine
+  cup(g, x, y, s) { g.save(); g.translate(x, y); g.strokeStyle = PLUM; g.lineWidth = 6; g.fillStyle = '#c8683a';
+    g.beginPath(); g.moveTo(-30, -44); g.lineTo(30, -44); g.lineTo(22, 10); g.quadraticCurveTo(0, 18, -22, 10); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = '#7a1e3a'; g.beginPath(); g.ellipse(0, -44, 30, 8, 0, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
+  // a bunch of grapes
+  grapes(g, x, y, s) { g.save(); g.translate(x, y + 10); g.strokeStyle = PLUM; g.lineWidth = 4; g.fillStyle = '#7a3fa8';
+    for (const [dx, dy] of [[-18, 0], [0, 0], [18, 0], [-9, 18], [9, 18], [0, 36], [-18, -18], [18, -18], [0, -18]]) { g.beginPath(); g.arc(dx, dy + 10, 12, 0, 6.29); g.fill(); g.stroke(); }
+    g.fillStyle = '#5aa840'; g.beginPath(); g.ellipse(14, -16, 20, 10, -.5, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
 };
 
 // ---------- hats ----------
