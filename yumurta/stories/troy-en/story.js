@@ -30,7 +30,8 @@ const HDR = (r, g, b) => new THREE.Color().setRGB(r, g, b);
 const DEG = Math.PI / 180;
 const backOut = x => x <= 0 ? 0 : x >= 1 ? 1 : 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2;
 
-let C, WORDS, w, A;
+let C, WORDS, w, A, h;                  // h(j) = start of word j of the new hook (0..27)
+const NH = 28;
 const BOOM = () => w(214) + .62;          // the punchline explosion                      // w(i) = start of word i; A(i) = two frames before it (acting lands early)
 const cast = {}, sets = {}, dyn = {};
 const SETX = { beach: 0, walls: 200, sea: 400, reeds: 600, plaza: 800, belly: 1000, wallsN: 1200, plazaN: 1400, seaN: 1600, bellyN: 1800 };
@@ -603,10 +604,14 @@ export const LOOK = {
 function cameraPath() {
   const X = SETX;
   const keys = [
-    // hook: low under the horse, the Greeks trudging off past the lens -> the whole horse -> the bow -> the ship sails
-    { t: 0, pos: [3.3, 1.05, 5.6], look: [2.3, 3.4, -5], fov: 60, creep: .32, drift: .05 },
-    { t: w(5) + .9, dur: 1.2, pos: [9.5, 2.2, 12], look: [2.5, 4, -6], fov: 52, creep: .28 },
-    { t: w(10) + .18, dur: .3, move: 'whip', pos: [7.2, .9, 7.6], look: [.6, 5.2, -6], fov: 56, creep: .3, drift: .03 },
+    // HOOK: "Troy survived ten years of war" — a Greek's face behind the ram as it bounces off the wall, pull back to the
+    // wall towering over them; "then tore down its own walls" — Trojans with pickaxes, the wall falls; "for a wooden
+    // horse" — the horse rolls in through the hole; "You see," — the beach: the horse, the Greeks walking off; the ship
+    { t: 0, pos: [X.walls - 28.6, 1.35, WALL_Z + 8.6], look: [X.walls - 29.6, 1.7, WALL_Z + 5.8], fov: 46, creep: .35, drift: .04 },
+    { t: h(2) - .12, dur: .32, move: 'whip', pos: [X.walls - 18, 3.4, WALL_Z + 19], look: [X.walls - 28.5, 6.5, WALL_Z], fov: 60, creep: .3 },
+    { t: h(6) + .02, dur: .3, move: 'whip', pos: [X.walls + 15.2, 1.45, -2.4], look: [X.walls + 15.4, 2.5, -12], fov: 54, creep: .35 },
+    { t: h(12) + .02, dur: .3, move: 'whip', pos: [X.walls + 4, 1.1, 10.5], look: [X.walls + 16, 4, 1.5], fov: 60, creep: .3, drift: .04 },
+    { t: h(16) - .1, dur: .3, move: 'whip', pos: [8.5, 1.6, 11], look: [2.2, 3.8, -5], fov: 54, creep: .3 },
     { t: w(14) + .3, dur: .32, move: 'whip', pos: [5.5, 3.4, -16], look: [16, 3.2, -36], fov: 44, creep: .3, drift: .05 },
     // the Trojans pour out of the gate
     { t: w(17) + .14, dur: .32, move: 'whip', pos: [X.walls + .4, 1.3, 9], look: [X.walls, 2.6, -8], fov: 50, creep: .3 },
@@ -653,14 +658,16 @@ function cameraPath() {
     { t: BOOM(), move: 'cut', pos: [X.walls + 12, 1.45, 36], look: [X.walls + 10.5, 11, -20], fov: 62, creep: .35 },
   ];
   const cp = new CamPath(keys, { fps: FPS });
-  cp.kick(BOOM() + .05, 1.8); cp.kick(w(124) - .08, 1.2); cp.kick(w(129) - .3, 1.4); cp.kick(w(37) + .05, .5); cp.kick(w(170) + .1, .6);
+  cp.kick(BOOM() + .05, 1.8); for (const k of [.0, .9, 1.8]) cp.kick(k + .32, .5); cp.kick(h(11) - .05, 1.3); cp.kick(w(124) - .08, 1.2); cp.kick(w(129) - .3, 1.4); cp.kick(w(37) + .05, .5); cp.kick(w(170) + .1, .6);
   return cp;
 }
 
 // ---------------------------------------------------------------- SETUP
 export async function setup(ctx) {
   C = ctx; WORDS = ctx.words;
-  w = i => WORDS[i].start; A = i => WORDS[i].start - 2 / FPS;
+  const OLDH = { 0: 16, 5: 19, 10: 20, 14: 25, 16: 27 };              // old opening words -> their new-hook counterparts
+  const idx = i => i >= 17 ? i + NH - 17 : OLDH[i];
+  w = i => WORDS[idx(i)].start; A = i => WORDS[idx(i)].start - 2 / FPS; h = j => WORDS[j].start;
   DUR = Math.ceil((WORDS[WORDS.length - 1].end + 2.2) * FPS) / FPS;
   const { scene } = ctx;
   scene.background = new THREE.Color('#5a9ae0');
@@ -748,7 +755,7 @@ export function frame(t, ctx) {
     if (preT) {
       // three Greeks trudge to the boats (to the right, away from us)
       if (t < w(14) + .3) for (const [i, n] of ['gre1', 'gre2', 'gre3'].entries()) {
-        const u = t * .9;
+        const u = (t - h(16) + 1.5) * .9;
         put(n, 1.7 + i * 1.25 + u * .55, 1.3 - i * .55 - u * 1.0, { expr: 'neutral', look: .6, lookY: .2, blink: bl(10 + i), armR: [12 + Math.sin(t * 6 + i) * 10, 8], armL: [12 - Math.sin(t * 6 + i) * 10, 8], bob: Math.abs(Math.sin(t * 6 + i)) * -8 }, { key: sun });
       }
       focus = V(0, 4, -6);
@@ -801,8 +808,36 @@ export function frame(t, ctx) {
   // ================= WALLS (day) =================
   if (where === 'walls') {
     const sun = dyn.wallsSun.dir, broken = t > w(129) - .25 || t >= w(198) - .5;
-    dyn.wallR2.visible = !broken; dyn.breach.visible = broken; setDoors(dyn.doors, t < w(23) ? ramp(t, w(17) - .2, w(17) + .3) : 0);
-    if (t < w(23)) {
+    const hookFall = h(11) - .1, broken2 = broken || (t >= hookFall && t < h(16));
+    dyn.wallR2.visible = !broken2; dyn.breach.visible = broken2; setDoors(dyn.doors, t < w(23) ? ramp(t, w(17) - .2, w(17) + .3) : 0);
+    if (t < h(6)) {
+      // HOOK 1: ten years of ramming. The ram bounces off; a Trojan on the battlements laughs down at them.
+      const rx = SETX.walls - 30, ph = (t % .9) / .9, push = ph < .35 ? S(ph / .35) : 1 - S((ph - .35) / .65), hitK = Math.max(0, 1 - ph / .25);
+      dyn.ram.visible = true; dyn.ram.position.set(rx + push * .9, 1.05, WALL_Z + 5.6);
+      ['gre1', 'gre2', 'gre3'].forEach((n, i) => put(n, rx - 2.2 + i * 1.5 + push * .9, WALL_Z + 6.2 + (i === 1 ? .35 : 0), { expr: push > .8 ? 'angry' : hitK > .3 ? 'surprised' : 'focused', sweat: 1, blink: bl(70 + i), armR: [70, -30], armL: [70, -30], lean: 10 * push - 8 * hitK, tilt: hitK * (i - 1) * 8 }, { key: sun }));
+      put('tro2', rx + 1.5, WALL_Z + WALL_T / 2 - .2, { expr: 'laugh', laughMarks: .9, mouth: .5 + .4 * Math.abs(Math.sin(t * 11)), look: -.6, lookY: .8, blink: bl(44), armR: [150 + Math.sin(t * 9) * 15, 30], armL: [30, 60] }, { y: WALL_H + 1.4, key: sun });
+      put('tro5', rx + 4.0, WALL_Z + WALL_T / 2 - .2, { expr: 'grin', look: -.8, lookY: .8, blink: bl(45), armR: [80, 20], armL: [14, 8], propR: 'spear' }, { y: WALL_H + 1.4, key: sun });
+      dyn.dust.wisps.push({ n: 120, size: .7, alpha: .5 * hitK, speed: .5, path: (uu, tt, i) => [rx + 2.6 + Math.sin(i * 9.1) * uu * 1.6, .4 + uu * 1.4 + Math.cos(i * 3.7) * .3, WALL_Z + 5.6 + Math.cos(i * 5.3) * uu * 1.4] });
+      focus = t < h(2) ? V(rx - .7, 1.6, WALL_Z + 6.5) : V(rx, 4, WALL_Z + 4);
+    } else if (t < h(12)) {
+      // HOOK 2: "then tore down its own walls"
+      ['tro1', 'tro3', 'tro6', 'tro5'].forEach((n, i) => {
+        const ph = (t * 2.8 + i * .25) % 1, hitting = t < hookFall + .25;
+        put(n, SETX.walls + 12.6 + i * 1.6, WALL_Z + 4.2 + (i % 2) * .9, { expr: hitting ? 'grin' : 'surprised', blink: bl(60 + i, hookFall), propR: 'pickaxe', armR: hitting ? [lerp(170, 60, ph * ph), 10] : [30, 10], armL: [20, 10], lean: hitting ? 6 * ph : -6 }, { key: sun });
+      });
+      if (t < hookFall) for (let i = 0; i < 4; i++) { const ph = (t * 2.8 + i * .25) % 1, k = Math.max(0, 1 - Math.abs(ph - .85) * 6);
+        if (k > 0) dyn.dust.wisps.push({ n: 40, size: .5, alpha: .55 * k, speed: .6, seed: i, path: (uu, tt, j) => [SETX.walls + 12.6 + i * 1.6 + Math.sin(j * 7.1) * uu * .8, 1.2 + uu * 1.2, WALL_Z + 2.7 + Math.cos(j * 3.3) * uu * .6] }); }
+      if (t > hookFall) { const u = t - hookFall; dyn.dust.wisps.push({ n: 700, size: 1.1, alpha: .4 * Math.max(0, 1 - u / 1.4), speed: .2, path: (uu, tt, i) => [SETX.walls + 16 + (Math.sin(i * 12.9) * 9) * (.3 + u), 1 + uu * 5 * (.4 + u), WALL_Z + 3 + Math.cos(i * 7.7) * 4 * (.3 + u)] }); }
+      focus = V(SETX.walls + 15, 2, WALL_Z + 4.5);
+    } else if (t < h(16)) {
+      // HOOK 3: "for a wooden horse" — it rolls through the hole, the crowd cheers it in
+      const hz = lerp(13, WALL_Z + 4, S(lin(t, h(12) - .2, h(16) + .4)));
+      setHorse(SETX.walls + 16, hz, -Math.PI / 2, { roll: hz, bow: 1 });
+      ['tro3', 'tro4', 'tro6'].forEach((n, i) => put(n, SETX.walls + 14.5 + i * 1.5, hz - 7.2 - (i % 2) * .5, { expr: 'grin', look: .3, blink: bl(50 + i), armR: [150, -20], armL: [150, -20], lean: 12, bob: Math.abs(Math.sin(t * 8 + i)) * -10 }, { key: sun }));
+      dyn.ropeTo = horsePt(5.0, 6.4, 0);
+      placeCrowd(dyn.troCrowd, cam, (i, c) => i < 30 ? [SETX.walls + 5 + c.r * 9 + (c.r < .5 ? 0 : 15), WALL_Z + 6 + c.r2 * 12, Math.abs(Math.sin(t * 9 + i * 1.3)) * .2] : null);
+      focus = V(SETX.walls + 16, 3, hz);
+    } else if (t < w(23)) {
       // the Trojans pour out of the gate toward us
       ['tro1', 'tro2', 'tro3', 'tro4', 'tro5', 'tro6'].forEach((n, i) => {
         const u = Math.max(0, t - w(17) - i * .1), z = WALL_Z + 3 + u * 6.5, x = SETX.walls + (i - 2.5) * .7 * Math.min(1, u * .8);
@@ -1082,7 +1117,7 @@ export function overlay(g, t, ctx) {
       for (let y = a[1] + 40 * sc; y < b[1]; y += 50 * sc) { g.strokeStyle = '#c9a66b'; g.lineWidth = 7 * sc; g.beginPath(); g.moveTo(a[0] - 24 * sc, y); g.lineTo(a[0] + 24 * sc, y); g.stroke(); } }
   }
   // the ropes the Trojans pull
-  if (where === 'walls' && t >= w(112) && t < w(125) && dyn.ropeTo) {
+  if (where === 'walls' && ((t >= w(112) && t < w(125)) || (t >= h(12) && t < h(16))) && dyn.ropeTo) {
     const to = proj(dyn.ropeTo, W, H);
     if (to) for (const n of ['tro3', 'tro4', 'tro6']) { const h = cast[n].hand(1); if (!h) continue; const p = proj(h, W, H); if (!p) continue;
       g.strokeStyle = PLUM; g.lineWidth = 12 * sc; g.lineCap = 'round'; g.beginPath(); g.moveTo(...p); g.quadraticCurveTo((p[0] + to[0]) / 2, (p[1] + to[1]) / 2 + 40 * sc, ...to); g.stroke(); g.strokeStyle = '#c9a66b'; g.lineWidth = 7 * sc; g.stroke(); }
@@ -1094,6 +1129,7 @@ export function overlay(g, t, ctx) {
   }
   // labels
   if (where === 'seaN' && t > w(193)) { const p = proj(V(SETX.seaN + 70, 30, -300), W, H); if (p) label(g, 'TENEDOS', p[0], p[1], 46 * sc, '#ffffff', ramp(t, w(193), w(193) + .4)); }
+  if (where === 'walls' && t >= h(2) && t < h(6)) { const k = pop(h(2) + .1); g.save(); g.translate(W / 2, H * .17); g.scale(k, k); label(g, '10 YEARS', 0, 0, 100 * sc, '#ffffff'); g.restore(); }
   if (where === 'walls' && t >= w(198) && t < w(207)) { const k = pop(w(198) + .3); g.save(); g.translate(W / 2, H * .17); g.scale(k, k); label(g, '10 YEARS', 0, 0, 100 * sc, '#ffffff'); g.restore(); }
   if (where === 'walls' && t >= w(207) && t < BOOM()) { const k = pop(w(208) + .2); g.save(); g.translate(W / 2, H * .17); g.scale(k, k); label(g, '1 AFTERNOON', 0, 0, 100 * sc, '#ffd60a'); g.restore(); }
 }
