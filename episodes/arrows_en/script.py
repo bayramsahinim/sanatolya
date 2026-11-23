@@ -1,0 +1,21 @@
+"""Straw Boats — English vertical short in the egg-head style (yumurta engine).
+
+Pattern of the reference Shorts: strange move in the hook, mockery, rising stakes,
+"You see" mechanism, payoff on the last word.
+LINES: (line_id, spoken_text).
+"""
+
+TITLE = "How Straw Men Stole 100,000 Arrows"
+
+LINES = [
+    ("hook",   "He attacked a navy of a thousand ships with twenty boats full of straw men."),
+    ("order",  "You see, his own commander wants him gone, so he orders a hundred thousand arrows in ten days. He says, \"I only need three.\" \"Fail, and you lose your head.\""),
+    ("idle",   "Then for two whole days, he does nothing. No blacksmiths, no feathers, not a single arrow."),
+    ("straw",  "On the third night, he wraps twenty boats in straw and fills them with straw soldiers. His friend asks, \"Are we going to war, or scaring crows?\""),
+    ("fog",    "Before dawn, a thick fog swallows the river, and he sails straight at the enemy camp, pounding war drums."),
+    ("enemy",  "The enemy general hears an attack he can't see, and he won't risk his ships in that fog. So he does the safe thing: \"Archers! Shoot at the drums!\""),
+    ("thud",   "Thousands of arrows slam into the straw, until the boats start to tip. So he turns them around to fill up the other side."),
+    ("why",    "You see, straw grabs an arrow and won't let go, and in fog, a straw man looks exactly like a real one."),
+    ("end",    "As the sun burns through, his boats turn for home, so loaded they barely float, and his whole crew shouts back across the water: \"Thanks for the arrows!\""),
+]
+TEXT = {k: v for k, v in LINES}

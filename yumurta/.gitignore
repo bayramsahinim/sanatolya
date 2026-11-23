@@ -9,3 +9,4 @@ ref/
 __pycache__/
 !stories/troy-en/voice/voice.wav
 !stories/pompeii-en/voice/voice.wav
+!stories/arrows-en/voice/voice.wav
