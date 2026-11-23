@@ -159,6 +159,17 @@ const PROPS = {
     g.beginPath(); g.moveTo(-34, -120); g.lineTo(34, -120); g.lineTo(22, 0); g.lineTo(38, 110); g.lineTo(-38, 110); g.lineTo(-22, 0); g.closePath(); g.fill(); g.stroke();
     g.strokeStyle = '#b8902a'; g.lineWidth = 3; for (let k = -2; k <= 2; k++) { g.beginPath(); g.moveTo(k * 12, -110); g.lineTo(k * 14, 100); g.stroke(); }
     g.fillStyle = '#9a6a3a'; g.strokeStyle = PLUM; g.lineWidth = 5; g.beginPath(); g.roundRect(-26, -10, 52, 16, 4); g.fill(); g.stroke(); g.restore(); },
+  // a Roman shield: a tall curved red board, gold rim and boss
+  scutum(g, x, y, s) { g.save(); g.translate(x, y); g.strokeStyle = PLUM; g.lineWidth = 7;
+    g.fillStyle = '#b8323a'; g.beginPath(); g.roundRect(-62, -130, 124, 250, 22); g.fill(); g.stroke();
+    g.strokeStyle = '#e0aa3e'; g.lineWidth = 7; g.beginPath(); g.roundRect(-50, -118, 100, 226, 16); g.stroke();
+    g.beginPath(); g.moveTo(0, -110); g.lineTo(0, 100); g.moveTo(-44, -5); g.lineTo(44, -5); g.stroke();
+    g.fillStyle = '#e0aa3e'; g.strokeStyle = PLUM; g.lineWidth = 6; g.beginPath(); g.arc(0, -5, 24, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
+  // a bundle of dry branches, held in the arms
+  sticks(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-1.2 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
+    for (let k = -3; k <= 3; k++) { g.fillStyle = ['#8a5a32', '#a8743e', '#6a4428'][(k + 3) % 3]; g.save(); g.rotate(k * .06); g.beginPath(); g.roundRect(-7 + k * 9, -140, 13, 270, 5); g.fill(); g.stroke();
+      g.beginPath(); g.moveTo(k * 9, -60 - k * 10); g.lineTo(k * 9 + (k % 2 ? 34 : -34), -110 - k * 6); g.stroke(); g.restore(); }
+    g.fillStyle = '#c9a66b'; g.beginPath(); g.roundRect(-40, -12, 80, 18, 5); g.fill(); g.stroke(); g.restore(); },
   // a clay cup of wine
   cup(g, x, y, s) { g.save(); g.translate(x, y); g.strokeStyle = PLUM; g.lineWidth = 6; g.fillStyle = '#c8683a';
     g.beginPath(); g.moveTo(-30, -44); g.lineTo(30, -44); g.lineTo(22, 10); g.quadraticCurveTo(0, 18, -22, 10); g.closePath(); g.fill(); g.stroke();

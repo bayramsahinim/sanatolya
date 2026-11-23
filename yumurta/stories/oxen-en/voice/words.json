@@ -1,0 +1,1064 @@
+{
+"words": [
+{
+"word": "He",
+"start": 0.0,
+"end": 0.22
+},
+{
+"word": "escaped",
+"start": 0.22,
+"end": 0.46
+},
+{
+"word": "a",
+"start": 0.46,
+"end": 0.7
+},
+{
+"word": "Roman",
+"start": 0.7,
+"end": 0.98
+},
+{
+"word": "trap",
+"start": 0.98,
+"end": 1.28
+},
+{
+"word": "with",
+"start": 1.28,
+"end": 1.56
+},
+{
+"word": "two",
+"start": 1.56,
+"end": 1.9
+},
+{
+"word": "thousand",
+"start": 1.9,
+"end": 2.24
+},
+{
+"word": "cows",
+"start": 2.24,
+"end": 2.48
+},
+{
+"word": "and",
+"start": 2.48,
+"end": 2.7
+},
+{
+"word": "a",
+"start": 2.7,
+"end": 2.8
+},
+{
+"word": "pile",
+"start": 2.8,
+"end": 3.06
+},
+{
+"word": "of",
+"start": 3.06,
+"end": 3.3
+},
+{
+"word": "firewood.",
+"start": 3.3,
+"end": 3.72
+},
+{
+"word": "You",
+"start": 4.3,
+"end": 4.36
+},
+{
+"word": "see,",
+"start": 4.36,
+"end": 4.48
+},
+{
+"word": "his",
+"start": 4.6,
+"end": 4.6
+},
+{
+"word": "army",
+"start": 4.6,
+"end": 4.86
+},
+{
+"word": "is",
+"start": 4.86,
+"end": 5.04
+},
+{
+"word": "boxed",
+"start": 5.04,
+"end": 5.28
+},
+{
+"word": "into",
+"start": 5.28,
+"end": 5.54
+},
+{
+"word": "a",
+"start": 5.54,
+"end": 5.7
+},
+{
+"word": "valley.",
+"start": 5.7,
+"end": 5.9
+},
+{
+"word": "Mountains",
+"start": 6.44,
+"end": 6.44
+},
+{
+"word": "on",
+"start": 6.44,
+"end": 6.58
+},
+{
+"word": "every",
+"start": 6.58,
+"end": 6.74
+},
+{
+"word": "side,",
+"start": 6.74,
+"end": 6.96
+},
+{
+"word": "and",
+"start": 6.96,
+"end": 7.14
+},
+{
+"word": "the",
+"start": 7.14,
+"end": 7.22
+},
+{
+"word": "only",
+"start": 7.22,
+"end": 7.46
+},
+{
+"word": "road",
+"start": 7.46,
+"end": 7.68
+},
+{
+"word": "out",
+"start": 7.68,
+"end": 7.9
+},
+{
+"word": "is",
+"start": 7.9,
+"end": 8.06
+},
+{
+"word": "a",
+"start": 8.06,
+"end": 8.18
+},
+{
+"word": "narrow",
+"start": 8.18,
+"end": 8.44
+},
+{
+"word": "pass,",
+"start": 8.44,
+"end": 8.78
+},
+{
+"word": "guarded",
+"start": 8.78,
+"end": 9.28
+},
+{
+"word": "by",
+"start": 9.28,
+"end": 9.5
+},
+{
+"word": "four",
+"start": 9.5,
+"end": 9.96
+},
+{
+"word": "thousand",
+"start": 9.96,
+"end": 10.42
+},
+{
+"word": "Romans.",
+"start": 10.42,
+"end": 10.72
+},
+{
+"word": "The",
+"start": 11.28,
+"end": 11.42
+},
+{
+"word": "Roman",
+"start": 11.42,
+"end": 11.6
+},
+{
+"word": "general",
+"start": 11.6,
+"end": 11.8
+},
+{
+"word": "just",
+"start": 11.8,
+"end": 12.04
+},
+{
+"word": "smiles:",
+"start": 12.04,
+"end": 12.34
+},
+{
+"word": "\"The",
+"start": 12.82,
+"end": 12.9
+},
+{
+"word": "fox",
+"start": 12.9,
+"end": 13.26
+},
+{
+"word": "is",
+"start": 13.26,
+"end": 13.56
+},
+{
+"word": "in",
+"start": 13.56,
+"end": 13.76
+},
+{
+"word": "the",
+"start": 13.76,
+"end": 13.9
+},
+{
+"word": "trap.\"",
+"start": 13.9,
+"end": 14.14
+},
+{
+"word": "Every",
+"start": 14.7,
+"end": 14.84
+},
+{
+"word": "day,",
+"start": 14.84,
+"end": 15.0
+},
+{
+"word": "the",
+"start": 15.0,
+"end": 15.12
+},
+{
+"word": "food",
+"start": 15.12,
+"end": 15.28
+},
+{
+"word": "runs",
+"start": 15.28,
+"end": 15.5
+},
+{
+"word": "lower.",
+"start": 15.5,
+"end": 15.78
+},
+{
+"word": "Climb",
+"start": 16.12,
+"end": 16.18
+},
+{
+"word": "the",
+"start": 16.18,
+"end": 16.3
+},
+{
+"word": "mountains,",
+"start": 16.3,
+"end": 16.6
+},
+{
+"word": "and",
+"start": 16.6,
+"end": 16.86
+},
+{
+"word": "his",
+"start": 16.86,
+"end": 16.96
+},
+{
+"word": "men",
+"start": 16.96,
+"end": 17.14
+},
+{
+"word": "get",
+"start": 17.14,
+"end": 17.3
+},
+{
+"word": "picked",
+"start": 17.3,
+"end": 17.52
+},
+{
+"word": "off",
+"start": 17.52,
+"end": 17.72
+},
+{
+"word": "in",
+"start": 17.72,
+"end": 17.86
+},
+{
+"word": "the",
+"start": 17.86,
+"end": 17.96
+},
+{
+"word": "dark.",
+"start": 17.96,
+"end": 18.18
+},
+{
+"word": "Charge",
+"start": 18.6,
+"end": 18.64
+},
+{
+"word": "the",
+"start": 18.64,
+"end": 18.8
+},
+{
+"word": "pass,",
+"start": 18.8,
+"end": 19.16
+},
+{
+"word": "and",
+"start": 19.16,
+"end": 19.7
+},
+{
+"word": "they",
+"start": 19.7,
+"end": 19.8
+},
+{
+"word": "die",
+"start": 19.8,
+"end": 20.0
+},
+{
+"word": "in",
+"start": 20.0,
+"end": 20.2
+},
+{
+"word": "the",
+"start": 20.2,
+"end": 20.3
+},
+{
+"word": "bottleneck.",
+"start": 20.3,
+"end": 20.6
+},
+{
+"word": "So",
+"start": 21.1,
+"end": 21.22
+},
+{
+"word": "he",
+"start": 21.22,
+"end": 21.34
+},
+{
+"word": "orders",
+"start": 21.34,
+"end": 21.54
+},
+{
+"word": "his",
+"start": 21.54,
+"end": 21.8
+},
+{
+"word": "men",
+"start": 21.8,
+"end": 21.98
+},
+{
+"word": "to",
+"start": 21.98,
+"end": 22.16
+},
+{
+"word": "collect",
+"start": 22.16,
+"end": 22.4
+},
+{
+"word": "dry",
+"start": 22.4,
+"end": 22.78
+},
+{
+"word": "branches,",
+"start": 22.78,
+"end": 23.16
+},
+{
+"word": "and",
+"start": 23.16,
+"end": 23.42
+},
+{
+"word": "every",
+"start": 23.42,
+"end": 23.8
+},
+{
+"word": "cow",
+"start": 23.8,
+"end": 24.02
+},
+{
+"word": "they",
+"start": 24.02,
+"end": 24.18
+},
+{
+"word": "can",
+"start": 24.18,
+"end": 24.32
+},
+{
+"word": "find.",
+"start": 24.32,
+"end": 24.52
+},
+{
+"word": "His",
+"start": 24.66,
+"end": 24.76
+},
+{
+"word": "officers",
+"start": 24.76,
+"end": 25.0
+},
+{
+"word": "ask,",
+"start": 25.0,
+"end": 25.32
+},
+{
+"word": "\"Are",
+"start": 25.6,
+"end": 25.68
+},
+{
+"word": "we",
+"start": 25.68,
+"end": 25.84
+},
+{
+"word": "fighting",
+"start": 25.84,
+"end": 26.1
+},
+{
+"word": "Romans,",
+"start": 26.1,
+"end": 26.42
+},
+{
+"word": "or",
+"start": 26.42,
+"end": 26.7
+},
+{
+"word": "having",
+"start": 26.7,
+"end": 27.0
+},
+{
+"word": "a",
+"start": 27.0,
+"end": 27.14
+},
+{
+"word": "barbecue?\"",
+"start": 27.14,
+"end": 27.44
+},
+{
+"word": "At",
+"start": 27.44,
+"end": 28.0
+},
+{
+"word": "midnight,",
+"start": 28.0,
+"end": 28.28
+},
+{
+"word": "they",
+"start": 28.42,
+"end": 28.52
+},
+{
+"word": "tie",
+"start": 28.52,
+"end": 28.8
+},
+{
+"word": "the",
+"start": 28.8,
+"end": 28.94
+},
+{
+"word": "branches",
+"start": 28.94,
+"end": 29.18
+},
+{
+"word": "to",
+"start": 29.18,
+"end": 29.4
+},
+{
+"word": "the",
+"start": 29.4,
+"end": 29.5
+},
+{
+"word": "horns",
+"start": 29.5,
+"end": 29.7
+},
+{
+"word": "of",
+"start": 29.7,
+"end": 29.96
+},
+{
+"word": "two",
+"start": 29.96,
+"end": 30.29
+},
+{
+"word": "thousand",
+"start": 30.29,
+"end": 30.62
+},
+{
+"word": "cows,",
+"start": 30.62,
+"end": 30.84
+},
+{
+"word": "set",
+"start": 31.22,
+"end": 31.42
+},
+{
+"word": "them",
+"start": 31.42,
+"end": 31.56
+},
+{
+"word": "on",
+"start": 31.56,
+"end": 31.72
+},
+{
+"word": "fire,",
+"start": 31.72,
+"end": 31.96
+},
+{
+"word": "and",
+"start": 32.12,
+"end": 32.22
+},
+{
+"word": "drive",
+"start": 32.22,
+"end": 32.5
+},
+{
+"word": "them",
+"start": 32.5,
+"end": 32.7
+},
+{
+"word": "up",
+"start": 32.7,
+"end": 32.88
+},
+{
+"word": "the",
+"start": 32.88,
+"end": 33.02
+},
+{
+"word": "mountain.",
+"start": 33.02,
+"end": 33.22
+},
+{
+"word": "The",
+"start": 33.46,
+"end": 33.62
+},
+{
+"word": "guards",
+"start": 33.62,
+"end": 33.74
+},
+{
+"word": "at",
+"start": 33.74,
+"end": 33.9
+},
+{
+"word": "the",
+"start": 33.9,
+"end": 33.98
+},
+{
+"word": "pass",
+"start": 33.98,
+"end": 34.16
+},
+{
+"word": "see",
+"start": 34.16,
+"end": 34.4
+},
+{
+"word": "thousands",
+"start": 34.4,
+"end": 34.72
+},
+{
+"word": "of",
+"start": 34.72,
+"end": 34.98
+},
+{
+"word": "torches",
+"start": 34.98,
+"end": 35.22
+},
+{
+"word": "climbing",
+"start": 35.22,
+"end": 35.52
+},
+{
+"word": "the",
+"start": 35.52,
+"end": 35.72
+},
+{
+"word": "ridge.",
+"start": 35.72,
+"end": 35.9
+},
+{
+"word": "\"They're",
+"start": 36.28,
+"end": 36.4
+},
+{
+"word": "escaping",
+"start": 36.4,
+"end": 36.64
+},
+{
+"word": "over",
+"start": 36.64,
+"end": 36.86
+},
+{
+"word": "the",
+"start": 36.86,
+"end": 36.98
+},
+{
+"word": "mountain!",
+"start": 36.98,
+"end": 37.24
+},
+{
+"word": "After",
+"start": 37.48,
+"end": 37.72
+},
+{
+"word": "them!\"",
+"start": 37.72,
+"end": 37.98
+},
+{
+"word": "And",
+"start": 38.14,
+"end": 38.36
+},
+{
+"word": "they",
+"start": 38.36,
+"end": 38.48
+},
+{
+"word": "abandon",
+"start": 38.48,
+"end": 38.7
+},
+{
+"word": "the",
+"start": 38.7,
+"end": 38.9
+},
+{
+"word": "pass.",
+"start": 38.9,
+"end": 39.14
+},
+{
+"word": "You",
+"start": 39.68,
+"end": 39.76
+},
+{
+"word": "see,",
+"start": 39.76,
+"end": 39.88
+},
+{
+"word": "at",
+"start": 39.94,
+"end": 40.02
+},
+{
+"word": "night,",
+"start": 40.02,
+"end": 40.22
+},
+{
+"word": "nobody",
+"start": 40.64,
+"end": 40.82
+},
+{
+"word": "sees",
+"start": 40.82,
+"end": 41.08
+},
+{
+"word": "an",
+"start": 41.08,
+"end": 41.28
+},
+{
+"word": "army.",
+"start": 41.28,
+"end": 41.52
+},
+{
+"word": "They",
+"start": 41.78,
+"end": 41.9
+},
+{
+"word": "only",
+"start": 41.9,
+"end": 42.14
+},
+{
+"word": "see",
+"start": 42.14,
+"end": 42.38
+},
+{
+"word": "torches.",
+"start": 42.38,
+"end": 42.76
+},
+{
+"word": "And",
+"start": 43.16,
+"end": 43.28
+},
+{
+"word": "a",
+"start": 43.28,
+"end": 43.38
+},
+{
+"word": "torch",
+"start": 43.38,
+"end": 43.52
+},
+{
+"word": "on",
+"start": 43.52,
+"end": 43.64
+},
+{
+"word": "a",
+"start": 43.64,
+"end": 43.76
+},
+{
+"word": "cow",
+"start": 43.76,
+"end": 44.0
+},
+{
+"word": "looks",
+"start": 44.0,
+"end": 44.54
+},
+{
+"word": "exactly",
+"start": 44.54,
+"end": 44.98
+},
+{
+"word": "like",
+"start": 44.98,
+"end": 45.28
+},
+{
+"word": "a",
+"start": 45.28,
+"end": 45.4
+},
+{
+"word": "torch",
+"start": 45.4,
+"end": 45.62
+},
+{
+"word": "in",
+"start": 45.62,
+"end": 45.88
+},
+{
+"word": "a",
+"start": 45.88,
+"end": 46.0
+},
+{
+"word": "soldier's",
+"start": 46.0,
+"end": 46.32
+},
+{
+"word": "hand.",
+"start": 46.32,
+"end": 46.48
+},
+{
+"word": "So",
+"start": 46.78,
+"end": 46.9
+},
+{
+"word": "while",
+"start": 46.9,
+"end": 46.98
+},
+{
+"word": "the",
+"start": 46.98,
+"end": 47.28
+},
+{
+"word": "Romans",
+"start": 47.28,
+"end": 47.28
+},
+{
+"word": "chase",
+"start": 47.28,
+"end": 47.5
+},
+{
+"word": "the",
+"start": 47.5,
+"end": 47.68
+},
+{
+"word": "lights,",
+"start": 47.68,
+"end": 47.84
+},
+{
+"word": "his",
+"start": 48.3,
+"end": 48.42
+},
+{
+"word": "entire",
+"start": 48.42,
+"end": 48.8
+},
+{
+"word": "army",
+"start": 48.8,
+"end": 49.06
+},
+{
+"word": "walks",
+"start": 49.06,
+"end": 49.34
+},
+{
+"word": "quietly",
+"start": 49.34,
+"end": 49.82
+},
+{
+"word": "through",
+"start": 49.82,
+"end": 50.22
+},
+{
+"word": "the",
+"start": 50.22,
+"end": 50.36
+},
+{
+"word": "empty",
+"start": 50.36,
+"end": 50.54
+},
+{
+"word": "pass.",
+"start": 50.54,
+"end": 50.8
+},
+{
+"word": "At",
+"start": 51.2,
+"end": 51.34
+},
+{
+"word": "dawn,",
+"start": 51.34,
+"end": 51.56
+},
+{
+"word": "the",
+"start": 51.84,
+"end": 52.08
+},
+{
+"word": "guards",
+"start": 52.08,
+"end": 52.22
+},
+{
+"word": "finally",
+"start": 52.22,
+"end": 52.54
+},
+{
+"word": "catch",
+"start": 52.54,
+"end": 52.78
+},
+{
+"word": "the",
+"start": 52.78,
+"end": 52.94
+},
+{
+"word": "army",
+"start": 52.94,
+"end": 53.16
+},
+{
+"word": "they",
+"start": 53.16,
+"end": 53.34
+},
+{
+"word": "chased",
+"start": 53.34,
+"end": 53.52
+},
+{
+"word": "all",
+"start": 53.52,
+"end": 53.78
+},
+{
+"word": "night:",
+"start": 53.78,
+"end": 54.12
+},
+{
+"word": "two",
+"start": 54.28,
+"end": 54.62
+},
+{
+"word": "thousand",
+"start": 54.62,
+"end": 54.96
+},
+{
+"word": "very",
+"start": 54.96,
+"end": 55.4
+},
+{
+"word": "confused",
+"start": 55.4,
+"end": 55.82
+},
+{
+"word": "cows.",
+"start": 55.82,
+"end": 56.1
+}
+]
+}
