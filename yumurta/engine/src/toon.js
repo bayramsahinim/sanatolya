@@ -146,15 +146,17 @@ function hat(g, kind, w, h, look, lit) {
     g.strokeStyle = shade(col, 1.35); g.lineWidth = 3; g.setLineDash([9, 9]); g.beginPath(); g.moveTo(-w * .42, -h * .415); g.lineTo(w * .42, -h * .415); g.stroke(); g.setLineDash([]);
   } else if (kind === 'helmet') {                     // a bronze Greek helmet with a horsehair crest (look.crest)
     const crest = look.crest || '#d23a3a', bz = look.hatColor || '#d9a441';
-    const cr = () => { g.beginPath(); g.moveTo(-w * .46, -h * .62); g.quadraticCurveTo(-w * .5, -h * 1.32, w * .05, -h * 1.36); g.quadraticCurveTo(w * .56, -h * 1.3, w * .5, -h * .66); g.quadraticCurveTo(0, -h * .98, -w * .46, -h * .62); g.closePath(); };
-    shaded(g, cr, { cx: 0, cy: -h * 1.0, w: w, h: h * .7 }, crest, shade(crest, .62), { lit, blur: 12, push: .14, lift: .12 });
-    g.strokeStyle = PLUM; cr(); g.stroke();
-    g.strokeStyle = shade(crest, .55); g.lineWidth = 4; for (let k = -3; k <= 3; k++) { g.beginPath(); g.moveTo(w * k * .1, -h * 1.02); g.lineTo(w * k * .12, -h * 1.26); g.stroke(); }
+    // the crest: a narrow horsehair brush standing on the crown (seen from the front), not a second cap
+    const cw = w * .13, cr = () => { g.beginPath(); g.moveTo(-cw, -h * .8); g.quadraticCurveTo(-cw * 1.5, -h * 1.22, -cw * .2, -h * 1.3); g.quadraticCurveTo(cw * 1.9, -h * 1.34, cw * 1.6, -h * 1.0); g.quadraticCurveTo(cw * 1.3, -h * .86, cw, -h * .8); g.closePath(); };
+    shaded(g, cr, { cx: 0, cy: -h * 1.05, w: cw * 3.4, h: h * .55 }, crest, shade(crest, .6), { lit, blur: 8, push: .14, lift: .12 });
+    g.strokeStyle = PLUM; g.lineWidth = OUT - 3; cr(); g.stroke();
+    g.strokeStyle = shade(crest, .55); g.lineWidth = 3.5; for (let k = -2; k <= 2; k++) { g.beginPath(); g.moveTo(cw * k * .35, -h * .86); g.lineTo(cw * k * .45 + cw * .3, -h * 1.24); g.stroke(); }
     const bowl = () => { g.beginPath(); g.moveTo(-w * .52, -h * .18); g.quadraticCurveTo(-w * .54, -h * .88, 0, -h * .9); g.quadraticCurveTo(w * .54, -h * .88, w * .52, -h * .18); g.lineTo(w * .4, -h * .26); g.quadraticCurveTo(0, -h * .4, -w * .4, -h * .26); g.closePath(); };
     shaded(g, bowl, { cx: 0, cy: -h * .55, w: w * 1.04, h: h * .72 }, shade(bz, 1.12), shade(bz, .66), { lit, blur: 12, push: .14, lift: .12 });
     g.strokeStyle = PLUM; g.lineWidth = OUT - 1; bowl(); g.stroke();
     g.fillStyle = 'rgba(255,248,220,.6)'; g.beginPath(); g.ellipse(-lit * -w * .2, -h * .66, w * .1, h * .045, -.3, 0, 6.29); g.fill();
     g.fillStyle = shade(bz, .8); g.beginPath(); g.roundRect(-w * .5, -h * .32, w, h * .07, 8); g.fill(); g.stroke();
+    g.fillStyle = shade(bz, .55); for (let k = -4; k <= 4; k++) { g.beginPath(); g.arc(k * w * .1, -h * .285, 4.5, 0, 6.29); g.fill(); }
   } else if (kind === 'wreath') {                     // a laurel wreath (priests)
     for (let k = 0; k < 11; k++) { const a = Math.PI * (1.08 + k * .084), x = Math.cos(a) * w * .5, y = Math.sin(a) * h * .5 - h * .02;
       g.save(); g.translate(x, y); g.rotate(a + 1.3); g.fillStyle = k % 2 ? '#6fae5a' : '#8cc46e'; g.lineWidth = 4; g.beginPath(); g.ellipse(0, 0, 22, 11, 0, 0, 6.29); g.fill(); g.stroke(); g.restore(); }
@@ -357,10 +359,20 @@ export class Toon {
     const bw = L.bodyW || 184;
     // legs
     if (!robe) for (const s of [-1, 1]) {
-      g.strokeStyle = PLUM; g.lineWidth = LIMB; g.lineCap = 'round';
+      g.strokeStyle = PLUM; g.lineWidth = L.limb || LIMB; g.lineCap = 'round';
       const fx = cx + s * 40; g.beginPath(); g.moveTo(cx + s * 36, bodyBot - 20); g.lineTo(fx, SOLE - 14); g.stroke();
       g.fillStyle = PLUM; g.beginPath(); g.ellipse(fx + s * 13, SOLE - 12, 27, 13, 0, 0, 6.29); g.fill();
     } else if (!sit) for (const s of [-1, 1]) { g.fillStyle = PLUM; g.beginPath(); g.ellipse(cx + s * 50, SOLE - 12, 30, 14, 0, 0, 6.29); g.fill(); }
+    if (L.hairStyle === 'long') {                                             // long hair hangs behind the body, so it is drawn first
+      const hw = L.headW || 276, hh = L.headH || 258;
+      g.save(); g.translate(cx, 200 + bob); g.rotate((p.tilt || 0) * D2R);
+      g.fillStyle = L.hairColor || '#3a2a24'; g.strokeStyle = PLUM; g.lineWidth = OUT - 2; g.lineJoin = 'round';                                           // a mane that starts at the ears and falls in waves past the shoulders
+        g.beginPath(); g.moveTo(-hw * .46, hh * .05); g.bezierCurveTo(-hw * .58, hh * .5, -hw * .62, hh * .9, -hw * .5, hh * 1.2);
+        for (let k = 0; k <= 6; k++) { const x = -hw * .5 + k * hw * .1667; g.quadraticCurveTo(x - hw * .08, hh * (1.3 + (k % 2) * .06), x, hh * 1.2); }
+        g.bezierCurveTo(hw * .62, hh * .9, hw * .58, hh * .5, hw * .46, hh * .05); g.closePath(); g.fill(); g.stroke();
+        g.strokeStyle = shade(L.hairColor || '#3a2a24', .7); g.lineWidth = 4; for (const s2 of [-1, 1]) for (let k = 0; k < 3; k++) { g.beginPath(); g.moveTo(s2 * hw * (.52 + k * .05), hh * .3); g.quadraticCurveTo(s2 * hw * (.68 + k * .03), hh * .9, s2 * hw * (.5 + k * .04), hh * 1.3); g.stroke(); }
+            g.restore();
+    }
     // body: a pill (coat) or a bell (robe)
     const tw = bw * (robe ? .8 : .86), bwid = sit ? bw * 1.85 : robe ? bw * 1.3 : bw;
     const bodyPath = () => {
@@ -404,8 +416,8 @@ export class Toon {
     // arms (behind the head, over the body)
     const sh = bodyTop + 50;
     const aL = p.armL || [12, 8], aR = p.armR || [12, 8];
-    const hL = p.noArmL ? null : limb(g, cx - bw * .36, sh, aL[0], aL[1], 120, 112, LIMB, -1);
-    const hR = p.noArmR ? null : limb(g, cx + bw * .36, sh, aR[0], aR[1], 120, 112, LIMB, 1);
+    const LW = L.limb || LIMB, hL = p.noArmL ? null : limb(g, cx - bw * .36, sh, aL[0], aL[1], 120, 112, LW, -1);
+    const hR = p.noArmR ? null : limb(g, cx + bw * .36, sh, aR[0], aR[1], 120, 112, LW, 1);
     for (const [h, prop, s] of [[hL, p.propL, -1], [hR, p.propR, 1]]) {
       if (!h) continue;
       if (prop && PROPS[prop]) PROPS[prop](g, h[0], h[1], s, p);
@@ -419,8 +431,7 @@ export class Toon {
     if (L.hat && L.hatBack) hat(g, L.hat, hw, hh, L, lit);
     if (L.hairStyle) {                                                        // long / wild / bun hair behind the head
       g.fillStyle = L.hairColor || '#3a2a24'; g.strokeStyle = PLUM; g.lineWidth = OUT - 2; g.lineJoin = 'round';
-      if (L.hairStyle === 'long') { g.beginPath(); g.moveTo(-hw * .52, -hh * .2); g.bezierCurveTo(-hw * .7, hh * .5, -hw * .6, hh * 1.25, -hw * .36, hh * 1.32); g.lineTo(hw * .36, hh * 1.32);
-        g.bezierCurveTo(hw * .6, hh * 1.25, hw * .7, hh * .5, hw * .52, -hh * .2); g.quadraticCurveTo(0, -hh * .8, -hw * .52, -hh * .2); g.closePath(); g.fill(); g.stroke(); }
+      if (L.hairStyle === 'long') { /* drawn behind the body, see above */ }
       else if (L.hairStyle === 'wild') { for (let k = 0; k < 13; k++) { const a = Math.PI * (.82 + k * .105); g.beginPath(); g.arc(Math.cos(a) * hw * .55, Math.sin(a) * hh * .55 + hh * .1, 40 + (k % 3) * 9, 0, 6.29); g.fill(); g.stroke(); } }
       else if (L.hairStyle === 'bun') { g.beginPath(); g.arc(-hw * .1, -hh * .55, 48, 0, 6.29); g.fill(); g.stroke(); }
     }
@@ -434,7 +445,7 @@ export class Toon {
     rimLight(g, hp, hb, p.rim, lit);
     if (p.soot) { g.save(); hp(); g.clip(); g.fillStyle = '#3a3048'; g.globalAlpha = .4 * p.soot; g.beginPath(); g.ellipse(hw * .22, hh * .14, 30, 18, .4, 0, 6.29); g.ellipse(-hw * .3, -hh * .2, 22, 12, -.3, 0, 6.29); g.fill(); g.restore(); }
     ink(g, hp);
-    if (L.hairStyle && !L.hat) {                                              // hair over the crown
+    if (L.hairStyle && (!L.hat || L.hat === 'diadem' || L.hat === 'wreath')) {                                              // hair over the crown
       g.save(); hp(); g.clip(); g.fillStyle = L.hairColor || '#3a2a24';
       g.beginPath(); g.moveTo(-hw * .6, -hh * .02); g.quadraticCurveTo(-hw * .2, -hh * .42, hw * .1, -hh * .3); g.quadraticCurveTo(hw * .42, -hh * .4, hw * .6, -hh * .02); g.lineTo(hw * .6, -hh * .7); g.lineTo(-hw * .6, -hh * .7); g.closePath(); g.fill(); g.restore();
       g.strokeStyle = PLUM; g.lineWidth = THIN; g.beginPath(); g.moveTo(-hw * .5, -hh * .08); g.quadraticCurveTo(-hw * .2, -hh * .42, hw * .1, -hh * .3); g.quadraticCurveTo(hw * .42, -hh * .4, hw * .5, -hh * .08); g.stroke();

@@ -30,7 +30,8 @@ const HDR = (r, g, b) => new THREE.Color().setRGB(r, g, b);
 const DEG = Math.PI / 180;
 const backOut = x => x <= 0 ? 0 : x >= 1 ? 1 : 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2;
 
-let C, WORDS, w, A;                      // w(i) = start of word i; A(i) = two frames before it (acting lands early)
+let C, WORDS, w, A;
+const BOOM = () => w(214) + .62;          // the punchline explosion                      // w(i) = start of word i; A(i) = two frames before it (acting lands early)
 const cast = {}, sets = {}, dyn = {};
 const SETX = { beach: 0, walls: 200, sea: 400, reeds: 600, plaza: 800, belly: 1000, wallsN: 1200, plazaN: 1400, seaN: 1600, bellyN: 1800 };
 
@@ -73,22 +74,39 @@ function waterTex({ deep = '#1d86b8', light = '#48c4d8', seed = 7, night = false
 function skyTex(night) {
   const [c, g] = cvs(4096, 1024); const R = rng(night ? 41 : 17);
   const gr = g.createLinearGradient(0, 0, 0, 1024);
-  if (night) { gr.addColorStop(0, D('#0e1638')); gr.addColorStop(.42, D('#25306a')); gr.addColorStop(.5, D('#3b4686')); gr.addColorStop(1, D('#2a2f60')); }
-  else { gr.addColorStop(0, D('#1f6fd8')); gr.addColorStop(.3, D('#3f92ec')); gr.addColorStop(.46, D('#7cbdf6')); gr.addColorStop(.5, D('#b4dcfa')); gr.addColorStop(1, D('#9ccff2')); }
+  if (night) { gr.addColorStop(0, D('#101a44')); gr.addColorStop(.38, D('#2a3878')); gr.addColorStop(.5, D('#4a5a9a')); gr.addColorStop(1, D('#2a3266')); }
+  else { gr.addColorStop(0, D('#1560d0')); gr.addColorStop(.25, D('#2f86ec')); gr.addColorStop(.43, D('#6fb4f4')); gr.addColorStop(.5, D('#c6e4fa')); gr.addColorStop(1, D('#a8d4f2')); }
   g.fillStyle = gr; g.fillRect(0, 0, 4096, 1024);
-  if (night) {
-    for (let i = 0; i < 700; i++) { g.fillStyle = `rgba(255,255,255,${.3 + R() * .7})`; g.fillRect(R() * 4096, R() * 470, 2 + R() * 2, 2 + R() * 2); }
-  }
-  // puffy painted clouds just above the horizon band (y ~ 0.5 is the horizon)
-  for (let k = 0; k < (night ? 14 : 46); k++) {
-    const x = R() * 4096, y = 380 + R() * 110, s = 16 + R() * 26;
-    const lobes = [[0, 0, 1], [-.9, .2, .7], [.9, .25, .75], [-.4, -.35, .75], [.45, -.3, .7]];
-    g.fillStyle = night ? D('#4a5590') : D('#c9d9f0');
-    for (const [dx, dy, r] of lobes) { g.beginPath(); g.arc(x + dx * s, y + dy * s + s * .18, s * r, 0, 6.29); g.fill(); }
-    g.fillStyle = night ? D('#6a74ad') : D('#ffffff');
-    for (const [dx, dy, r] of lobes) { g.beginPath(); g.arc(x + dx * s - s * .06, y + dy * s, s * r * .94, 0, 6.29); g.fill(); }
-    g.strokeStyle = night ? D('#3a4478') : D('#a8bede'); g.lineWidth = 4; g.beginPath(); g.moveTo(x - s * 1.6, y + s * .9); g.lineTo(x + s * 1.6, y + s * .9); g.stroke();
-  }
+  if (night) for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(255,255,255,${.3 + R() * .7})`; g.fillRect(R() * 4096, R() * 450, 1.5 + R() * 2, 1.5 + R() * 2); }
+  // soft cumulus: many blurred puffs, bright on top, a cool grey belly; flattened toward the horizon (perspective)
+  const cloud = (x, y, s, n) => {
+    for (let pass = 0; pass < 2; pass++) {
+      g.filter = `blur(${pass ? 1 : 3}px)`;
+      for (let k = 0; k < n; k++) {
+        const dx = (R() - .5) * s * 2.6, dy = -Math.abs(R() - .5) * s * .9 * (1 - Math.abs(dx) / (s * 1.6)), r = s * (.3 + R() * .35);
+        const grd = g.createRadialGradient(x + dx - r * .2, y + dy - r * .35, r * .1, x + dx, y + dy, r);
+        if (night) { grd.addColorStop(0, D(pass ? '#8a94c8' : '#5a6498')); grd.addColorStop(1, D('#3a4478', 0)); }
+        else { grd.addColorStop(0, D(pass ? '#ffffff' : '#dfe8f6')); grd.addColorStop(.7, D(pass ? '#f4f8fc' : '#b8c8e0', .95)); grd.addColorStop(1, D('#b0c4e0', 0)); }
+        g.fillStyle = grd; g.beginPath(); g.ellipse(x + dx, y + dy, r, r * .7, 0, 0, 6.29); g.fill();
+      }
+      R(); // keep the sequence moving between passes
+    }
+    g.filter = 'none';
+  };
+  for (let k = 0; k < (night ? 10 : 34); k++) { const y = 150 + R() * 330, s = 54 - (y - 150) * .11 + R() * 18; cloud(R() * 4096, y, s * (night ? 1.4 : 1), 10 + Math.floor(R() * 8)); }
+  // a band of hazy hills and far mountains on the horizon (y = 512), with gaps for open sea
+  const ridge = (base, amp, col, seed, gap) => {
+    const r2 = rng(seed); g.fillStyle = col; g.beginPath(); g.moveTo(0, 520);
+    let ph = r2() * 9;
+    for (let x = 0; x <= 4096; x += 16) {
+      const on = Math.max(0, Math.sin(x / 4096 * Math.PI * 2 * 3 + ph) + gap);
+      const y = base - on * amp * (.55 + .45 * Math.sin(x * .011 + ph) * Math.sin(x * .0037 + ph * 2)) - on * amp * .18 * Math.sin(x * .05);
+      g.lineTo(x, y);
+    }
+    g.lineTo(4096, 520); g.closePath(); g.fill();
+  };
+  if (night) { ridge(512, 34, D('#2e3870'), 5, .2); ridge(513, 20, D('#262e5c'), 6, .1); }
+  else { ridge(512, 44, D('#9bbcd8'), 5, .2); ridge(513, 26, D('#7fa8a0'), 6, .1); ridge(514, 14, D('#6a9a68'), 7, -.1); }
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = THREE.RepeatWrapping; return t;
 }
 function sailTex() {
@@ -138,6 +156,95 @@ function torch(g, L, x, z, h = 2.6, k = 6, range = 12) {
   (dyn.flames ||= []).push({ f, pl, k, seed: x * 7 + z });
   return f;
 }
+
+// ---------------------------------------------------------------- DRESSING: trees, grass tufts, banners, crowds
+// low-poly trees: olive (a cluster of lumpy green balls on a crooked trunk) and cypress (a dark spindle)
+function trees(g, pts, seed = 1) {
+  const R = rng(seed), bark = flat('#6a4a32');
+  const leafG = new THREE.IcosahedronGeometry(1, 1), cypG = new THREE.ConeGeometry(1, 1, 9, 3);
+  const olive = ['#5f9a3a', '#6fae44', '#4f8a34'].map(c => flat(c)), cyp = ['#2f6a34', '#3a7a3a'].map(c => flat(c));
+  for (const [x, z, s0, kind] of pts) {
+    const s = s0 * (.8 + R() * .4);
+    if (kind === 'c') {
+      cyl(g, .12 * s, .16 * s, 1.2 * s, x, .6 * s, z, bark, [0, 0, 0], 6);
+      const m = new THREE.Mesh(cypG, cyp[Math.floor(R() * 2)]); m.scale.set(.9 * s, 6.5 * s, .9 * s); m.position.set(x, 1 * s + 3.1 * s, z); g.add(m);
+    } else {
+      const tr = cyl(g, .14 * s, .24 * s, 2.4 * s, x, 1.2 * s, z, bark, [(R() - .5) * .25, 0, (R() - .5) * .25], 7);
+      for (let k = 0; k < 6; k++) { const m = new THREE.Mesh(leafG, olive[k % 3]); const r = (.9 + R() * .7) * s; m.scale.set(r, r * .8, r); m.position.set(x + (R() - .5) * 2.2 * s, (2.6 + R() * 1.4) * s, z + (R() - .5) * 2.2 * s); m.rotation.set(R() * 3, R() * 3, 0); g.add(m); }
+    }
+  }
+}
+function scatterTrees(g, X, n, area, seed, mix = .35, avoid = () => false) {
+  const R = rng(seed), pts = [];
+  while (pts.length < n) { const x = X + area[0] + R() * (area[1] - area[0]), z = area[2] + R() * (area[3] - area[2]); if (avoid(x - X, z)) continue; pts.push([x, z, 1 + R() * .6, R() < mix ? 'c' : 'o']); }
+  trees(g, pts, seed + 1);
+}
+// grass tufts: a fan of five blades, instanced, with tone variation (what makes a lawn read as grass up close)
+function tufts(g, X, n, area, seed, cols = ['#4f9a34', '#5fae3c', '#6abf48', '#3f8a2e'], h = .45, avoid = () => false) {
+  const pos = [], nor = [];
+  for (let k = 0; k < 5; k++) {
+    const a = k / 5 * Math.PI * 2, lean = .35, bx = Math.cos(a) * .05, bz = Math.sin(a) * .05, w2 = .045;
+    const px = -Math.sin(a) * w2, pz = Math.cos(a) * w2, tx = Math.cos(a) * lean * .5, tz = Math.sin(a) * lean * .5;
+    pos.push(bx + px, 0, bz + pz, bx - px, 0, bz - pz, bx + tx, 1, bz + tz);
+    for (let i = 0; i < 3; i++) nor.push(0, 1, 0);
+  }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+  const mat = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide });
+  const im = new THREE.InstancedMesh(geo, mat, n), R = rng(seed), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), col = new THREE.Color();
+  let i = 0;
+  while (i < n) {
+    const x = area[0] + R() * (area[1] - area[0]), z = area[2] + R() * (area[3] - area[2]); if (avoid(x, z)) continue;
+    const s = .6 + R() * .9; q.setFromAxisAngle(V(0, 1, 0), R() * 6.28);
+    m4.compose(V(X + x, 0, z), q, V(.55 + s * .4, h * (.55 + R() * .7), .55 + s * .4)); im.setMatrixAt(i, m4);
+    im.setColorAt(i, col.set(cols[Math.floor(R() * cols.length)])); i++;
+  }
+  im.receiveShadow = true; g.add(im); return im;
+}
+// a long cloth banner with a painted emblem, hung from a pole on a wall
+function bannerTex(ground, emblem) {
+  const [c, g] = cvs(256, 768); g.fillStyle = ground; g.fillRect(0, 0, 256, 768);
+  g.fillStyle = shade(ground, .75); g.fillRect(0, 0, 256, 30); g.fillRect(0, 0, 18, 768); g.fillRect(238, 0, 18, 768);
+  g.fillStyle = '#f0c040'; g.fillRect(28, 40, 200, 8); g.fillRect(28, 640, 200, 8);
+  g.strokeStyle = '#f0c040'; g.fillStyle = '#f0c040'; g.lineWidth = 10;
+  if (emblem === 'sun') { g.beginPath(); g.arc(128, 300, 56, 0, 6.29); g.fill(); for (let k = 0; k < 12; k++) { const a = k / 12 * 6.29; g.beginPath(); g.moveTo(128 + Math.cos(a) * 70, 300 + Math.sin(a) * 70); g.lineTo(128 + Math.cos(a) * 104, 300 + Math.sin(a) * 104); g.stroke(); } }
+  else { g.beginPath(); g.moveTo(128, 190); g.lineTo(200, 330); g.lineTo(128, 470); g.lineTo(56, 330); g.closePath(); g.fill(); g.fillStyle = ground; g.beginPath(); g.arc(128, 330, 30, 0, 6.29); g.fill(); }
+  g.beginPath(); g.moveTo(128, 560); g.lineTo(158, 600); g.lineTo(128, 640); g.lineTo(98, 600); g.closePath(); g.fillStyle = '#f0c040'; g.fill();
+  // the swallow-tail end
+  g.globalCompositeOperation = 'destination-out'; g.beginPath(); g.moveTo(0, 768); g.lineTo(128, 690); g.lineTo(256, 768); g.closePath(); g.fill(); g.globalCompositeOperation = 'source-over';
+  return ctex(c);
+}
+function banner(g, x, y, z, w2, h2, tex, ry = 0) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w2, h2, 1, 6), new THREE.MeshLambertMaterial({ map: tex, transparent: true, alphaTest: .5, side: THREE.DoubleSide }));
+  const p = m.geometry.attributes.position; for (let i = 0; i < p.count; i++) p.setZ(i, Math.sin((p.getY(i) / h2 + .5) * 5) * .06 * (.5 - p.getY(i) / h2));
+  m.geometry.computeVertexNormals(); m.position.set(x, y, z); m.rotation.y = ry; g.add(m);
+  cyl(g, .07, .07, w2 + .5, x, y + h2 / 2 + .05, z, flat('#5a3a22'), [0, 0, Math.PI / 2], 8);
+  return m;
+}
+// Crowds: snapshots of a cast member's drawing, stamped on many cards. Cheap (no per-card canvas work), so a
+// whole army can stand behind the speaking cast. Each card faces the camera; a little hop keeps them alive.
+function snapshot(look, pose) {
+  const T = new Toon(look, new THREE.Scene()); T.draw({ shade: '#e8e3f4', lit: 1, ...pose });
+  const c = document.createElement('canvas'); c.width = T.c.width; c.height = T.c.height; c.getContext('2d').drawImage(T.c, 0, 0);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
+  return { geo: T.mesh.geometry, mat: new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: .3, side: THREE.DoubleSide }) };
+}
+function makeCrowd(scene, kinds, n, seed) {
+  const R = rng(seed), cards = [];
+  for (let i = 0; i < n; i++) {
+    const k = kinds[Math.floor(R() * kinds.length)], m = new THREE.Mesh(k.geo, k.mat.clone()); m.layers.set(1); m.visible = false; scene.add(m);
+    cards.push({ m, r: R(), r2: R(), r3: R() });
+  }
+  return cards;
+}
+// place a crowd: fn(i, card) -> [x, z, hop] or null
+function placeCrowd(cards, cam, fn, tint = [1, 1, 1]) {
+  cards.forEach((c, i) => {
+    const p = fn(i, c); if (!p) { c.m.visible = false; return; }
+    c.m.visible = true; c.m.position.set(p[0], p[2] || 0, p[1]); c.m.rotation.y = Math.atan2(cam.position.x - p[0], cam.position.z - p[1]);
+    c.m.material.color.setRGB(...tint);
+  });
+}
+function hideCrowd(cards) { for (const c of cards) c.m.visible = false; }
 
 // ---------------------------------------------------------------- PROP: the horse (head toward local +x, y up)
 function buildHorse(scene) {
@@ -203,6 +310,8 @@ function buildShip(scene) {
   cyl(S2, .12, .12, 8.4, .2, 11.1, 0, hull, [Math.PI / 2, 0, 0], 8);
   for (let k = 0; k < 7; k++) for (const s of [-1, 1]) cyl(S2, .06, .06, 4, -4.5 + k * 1.5, .5, s * 2.4, hull, [s * 1.0, 0, 0], 6);
   for (const s of [-1, 1]) { ball(S2, .5, 6.3, 1.2, s * 1.62, flat('#f6f2ea'), [1, .8, .2]); ball(S2, .24, 6.42, 1.2, s * 1.7, flat('#2a1a2c'), [1, 1, .2]); }
+  const lamp = new THREE.Group(); S2.add(lamp); S2.userData.lamp = lamp;
+  for (const x of [-6.6, 6.4]) { const m = new THREE.Mesh(new THREE.SphereGeometry(.35, 12, 8), new THREE.MeshBasicMaterial({ color: HDR(3.4, 2.0, .7) })); m.position.set(x, 3.6, 0); m.layers.set(1); lamp.add(m); }
   shadows(S2); S2.visible = false; return S2;
 }
 function buildSpear(scene) {
@@ -265,6 +374,8 @@ function buildBeach(scene) {
   }
   for (let k = 0; k < 16; k++) rock(g, X + (R() - .5) * 90, -R() * 25 + 12, .3 + R() * .9, '#b8a890', k);
   for (let k = 0; k < 12; k++) bush(g, X - 30 - R() * 60, 0, 18 - R() * 40, .7 + R() * .8, '#5aa840', k);
+  scatterTrees(g, X, 26, [-120, -32, -90, 10], 51, .4);
+  tufts(g, X, 2600, [-40, 30, -28, 14], 52, ['#b8b85a', '#a4aa48', '#c8c46a', '#94a448'], .38, (x, z) => Math.abs(x) < 6 && z > -12 && z < 0);
   // the Greek fleet at anchor far out (sails away in the hook)
   dyn.beachShips = [0, 1, 2].map(i => { const s = buildShip(scene); s.scale.setScalar(1.1); return s; });
   const L = new THREE.Group();
@@ -332,9 +443,13 @@ function buildWalls(scene, night) {
     const rf = new THREE.Mesh(new THREE.ConeGeometry(4.6, 2.4, 4), roofM); rf.position.set(x, h + 1.2, z); rf.rotation.y = Math.PI / 4; g.add(rf);
   }
   for (let k = 0; k < 16; k++) bush(g, X + (R() < .5 ? -1 : 1) * (8 + R() * 40), 0, WALL_Z + 6 + R() * 30, .8 + R(), '#4f9a3a', k + 3);
+  tufts(g, X, 14000, [-45, 45, WALL_Z + 2.6, 32], night ? 62 : 61, night ? ['#2f5a3a', '#3a6a40', '#2a4e36'] : undefined, .36, (x, z) => Math.abs(x) < 5.2);
+  scatterTrees(g, X, 30, [-90, 90, WALL_Z + 8, 90], night ? 64 : 63, .45, (x, z) => (Math.abs(x) < 38 && z < 34) || Math.abs(x) < 8);
+  const banT = bannerTex(night ? '#5a1a26' : '#b8283a', 'sun');
+  for (const bx of [-60, -48, -36, -22, 40, 52, 64]) banner(g, X + bx, WALL_H - 3.6, WALL_Z + WALL_T / 2 + .08, 2.4, 6.6, banT);
   const L = new THREE.Group();
   if (night) {
-    L.add(new THREE.HemisphereLight('#8a98f0', '#4a4078', 2.3));
+    L.add(new THREE.HemisphereLight('#9aa8f8', '#5a5088', 2.9));
     dyn.wallsNMoon = sunLight(L, X, [.45, -.55, -.7], { color: '#a8bcff', k: 2.0, size: 40 });
     for (const x of [-4.6, 4.6]) torch(g, L, X + x, WALL_Z + WALL_T / 2 + 1.2, 2.8, 9, 14);
   } else {
@@ -408,9 +523,12 @@ function buildPlaza(scene, night) {
       if (night) win.userData.noShadow = true;
     }
   }
+  scatterTrees(g, X, 14, [-40, 40, -60, -40], night ? 72 : 71, .6);
+  const banP = bannerTex(night ? '#5a1a26' : '#b8283a', 'sun');
+  for (const bx of [-9.5, -3.2, 3.2, 9.5]) banner(g, X + bx, 9.6, -26.9, 1.6, 4.4, banP);
   const L = new THREE.Group();
   if (night) {
-    L.add(new THREE.HemisphereLight('#8a98f0', '#4a4078', 2.3));
+    L.add(new THREE.HemisphereLight('#9aa8f8', '#5a5088', 2.9));
     dyn.plazaNMoon = sunLight(L, X, [-.4, -.5, .75], { color: '#a8bcff', k: 2.0, size: 30 });
     for (const [x, z] of [[-9, -6], [9, -6], [-9, 6], [9, 6]]) torch(g, L, X + x, z, 2.7, 8, 13);
   } else {
@@ -450,8 +568,8 @@ function buildBelly(scene, night) {
     const m = box(g, .9, .05, .02, X - 3.4 + k * 1.35, 1.9 + (k % 3) * .75, -2.03, slit); m.userData.noShadow = true; m.layers.set(1);
   }
   if (night) {
-    L.add(new THREE.HemisphereLight('#7a74c0', '#3a2a40', 1.7));
-    const pl = new THREE.PointLight('#ffb060', 5, 8, 1.5); pl.position.set(X + 2.6, 2.6, -.8); L.add(pl);
+    L.add(new THREE.HemisphereLight('#8a84d0', '#4a3a50', 2.3));
+    const pl = new THREE.PointLight('#ffb060', 9, 10, 1.4); pl.position.set(X + 2.6, 2.6, -.8); L.add(pl);
     const lamp = new THREE.Mesh(new THREE.SphereGeometry(.16, 16, 12), new THREE.MeshBasicMaterial({ color: HDR(3, 1.8, .6) })); lamp.position.set(X + 2.6, 2.6, -.8); lamp.layers.set(1); g.add(lamp);
     cyl(g, .01, .01, 1.8, X + 2.6, 3.6, -.8, flat('#2a2630'), [0, 0, 0], 4);
   } else {
@@ -463,20 +581,21 @@ function buildBelly(scene, night) {
 }
 
 // ---------------------------------------------------------------- CAST
-const TRO = { hat: 'helmet', crest: '#d8343a', cloth: '#b8323a', trim: '#e0aa3e', height: 1.72 };
-const GRE = { hat: 'helmet', crest: '#2f6fd0', hatColor: '#d9a441', cloth: '#2f5fa8', trim: '#ece4d0', height: 1.72 };
+const BULK = { bodyW: 214, limb: 17 };
+const TRO = { ...BULK, hat: 'helmet', crest: '#d8343a', hatColor: '#c9a24a', cloth: '#b8323a', trim: '#e0aa3e', sash: '#5a3a22', height: 1.72 };
+const GRE = { ...BULK, hat: 'helmet', crest: '#2f6fd0', hatColor: '#b8b4b0', cloth: '#2f5fa8', trim: '#ece4d0', sash: '#6a4a2a', height: 1.72 };
 export const LOOK = {
-  laocoon: { hat: 'wreath', beard: '#efebe4', beardLen: .86, mustache: '#ddd6cc', body: 'robe', cloth: '#ece4d4', trim: '#d9a441', height: 1.8 },
-  sinon: { hairStyle: 'wild', hairColor: '#4a3322', cloth: '#9a7b55', collar: false, height: 1.68 },
-  cassandra: { hairStyle: 'wild', hairColor: '#2a1a22', body: 'robe', cloth: '#7a3fa8', trim: '#e0aa3e', height: 1.66 },
-  helen: { hairStyle: 'long', hairColor: '#f0c050', hat: 'diadem', body: 'robe', cloth: '#f2d6e4', trim: '#e0aa3e', height: 1.66 },
+  laocoon: { ...BULK, hat: 'wreath', beard: '#efebe4', beardLen: .86, mustache: '#ddd6cc', body: 'robe', cloth: '#ece4d4', trim: '#d9a441', height: 1.8 },
+  sinon: { ...BULK, hairStyle: 'wild', hairColor: '#4a3322', cloth: '#9a7b55', sash: '#5a4030', pattern: 'stripes', collar: false, height: 1.68 },
+  cassandra: { ...BULK, hairStyle: 'wild', hairColor: '#2a1a22', body: 'robe', cloth: '#7a3fa8', trim: '#e0aa3e', height: 1.66 },
+  helen: { ...BULK, hairStyle: 'long', hairColor: '#f0c050', hat: 'diadem', body: 'robe', cloth: '#f2d6e4', trim: '#e0aa3e', height: 1.66 },
   odysseus: { ...GRE, crest: '#1f56b8', beard: '#3a2618', beardLen: .6, mustache: '#3a2618', cloth: '#24508f', height: 1.76 },
   anticlus: { ...GRE, crest: '#56b8f0', cloth: '#3a7bc8', height: 1.6, headW: 262, headH: 246 },
   tro1: { ...TRO }, tro2: { ...TRO, cloth: '#a92b2b', mustache: true, hair: '#3a2a24' },
-  tro3: { hat: 'kulah', hatColor: '#8a5a3a', cloth: '#d08a3a', pattern: 'stripes', height: 1.64 },
-  tro4: { hairStyle: 'bun', hairColor: '#4a2a20', body: 'robe', cloth: '#3f9a8a', trim: '#f0d080', height: 1.6 },
+  tro3: { ...BULK, hat: 'kulah', hatColor: '#8a5a3a', cloth: '#d08a3a', pattern: 'stripes', height: 1.64 },
+  tro4: { ...BULK, hairStyle: 'bun', hairColor: '#4a2a20', body: 'robe', cloth: '#3f9a8a', trim: '#f0d080', height: 1.6 },
   tro5: { ...TRO, cloth: '#c0392b', height: 1.76 },
-  tro6: { hat: 'kulah', hatColor: '#3d5a8a', cloth: '#e0b040', buttons: '#7a4a2a', height: 1.58, headW: 262, headH: 246 },
+  tro6: { ...BULK, hat: 'kulah', hatColor: '#3d5a8a', cloth: '#e0b040', buttons: '#7a4a2a', height: 1.58, headW: 262, headH: 246 },
   gre1: { ...GRE }, gre2: { ...GRE, cloth: '#2b5da9', mustache: true, hair: '#2a1e18' }, gre3: { ...GRE, cloth: '#3a7bc8', height: 1.66 },
 };
 
@@ -484,51 +603,57 @@ export const LOOK = {
 function cameraPath() {
   const X = SETX;
   const keys = [
-    // hook: the hooves -> up to the whole horse, the Greeks trudging to the ships -> the bow -> the fleet sails
-    { t: 0, pos: [3.4, .55, 1.2], look: [.4, 4.6, -6], fov: 66, creep: .3, drift: .06 },
+    // hook: low under the horse, the Greeks trudging off past the lens -> the whole horse -> the bow -> the ship sails
+    { t: 0, pos: [3.3, 1.05, 5.6], look: [2.3, 3.4, -5], fov: 60, creep: .32, drift: .05 },
     { t: w(5) + .9, dur: 1.2, pos: [9.5, 2.2, 12], look: [2.5, 4, -6], fov: 52, creep: .28 },
-    { t: w(10) + .18, dur: .3, move: 'whip', pos: [-1.2, 5.6, -2.6], look: [-2.95, 6.1, -6.7], fov: 40, creep: .3, drift: .03 },
-    { t: w(14) + .75, dur: .9, pos: [8, 3.2, -14], look: [60, 4, -180], fov: 36, creep: .3, drift: .05 },
+    { t: w(10) + .18, dur: .3, move: 'whip', pos: [7.2, .9, 7.6], look: [.6, 5.2, -6], fov: 56, creep: .3, drift: .03 },
+    { t: w(14) + .3, dur: .32, move: 'whip', pos: [5.5, 3.4, -16], look: [16, 3.2, -36], fov: 44, creep: .3, drift: .05 },
     // the Trojans pour out of the gate
     { t: w(17) + .14, dur: .32, move: 'whip', pos: [X.walls + .4, 1.3, 9], look: [X.walls, 2.6, -8], fov: 50, creep: .3 },
     // back on the beach: No army. No ships. Just a horse.
-    { t: w(23) + .14, dur: .32, move: 'whip', pos: [.6, 1.25, 7.2], look: [0, 2.6, -5], fov: 58, creep: .26 },
-    { t: w(30) + .55, dur: .8, pos: [-4.6, 1.4, 7.0], look: [-6.4, 1.8, .6], fov: 48, creep: .27 },
+    { t: w(23) + .14, dur: .32, move: 'whip', pos: [.3, 1.25, 5.0], look: [0, 2.3, -3], fov: 56, creep: .3 },
+    { t: w(27), dur: .5, pos: [.2, .7, 4.4], look: [0, 4.4, -5], fov: 64, creep: .3 },
+    { t: w(30) + .55, dur: .8, pos: [-5.0, 1.5, 4.4], look: [-6.6, 1.75, .6], fov: 46, creep: .3 },
     { t: w(36) + .12, dur: .3, move: 'whip', pos: [2.6, 4.3, 1.4], look: [.2, 4.55, -4.95], fov: 40, creep: .3, drift: .03 },
     // inside the horse: the spear tip pokes through
-    { t: w(40) + .12, dur: .32, move: 'whip', pos: [X.belly - .2, 1.45, 4.6], look: [X.belly - .2, 1.6, -2], fov: 60, creep: .3, drift: .04 },
-    { t: w(44) + .12, dur: .32, move: 'whip', pos: [-5.4, .95, 3.6], look: [-6.3, 2.0, .6], fov: 46, creep: .3 },
+    { t: w(40) + .12, dur: .32, move: 'whip', pos: [X.belly - .2, 1.5, 3.4], look: [X.belly - .2, 1.6, -2], fov: 58, creep: .32, drift: .04 },
+    // BEWARE: right in his face
+    { t: w(44) + .12, dur: .32, move: 'whip', pos: [-5.95, 1.4, 2.35], look: [-6.3, 1.62, .6], fov: 42, creep: .3 },
     // the reeds: Sinon
-    { t: w(49) + .1, dur: .34, move: 'whip', pos: [X.reeds + .3, 1.5, 9.5], look: [X.reeds, 1.3, -3], fov: 50, creep: .27 },
-    { t: w(64) + .55, dur: .8, pos: [X.reeds, 1.45, 2.9], look: [X.reeds, 1.45, -.4], fov: 44, creep: .3, drift: .03 },
+    { t: w(49) + .1, dur: .34, move: 'whip', pos: [X.reeds + .3, 1.5, 7.5], look: [X.reeds, 1.3, -3], fov: 50, creep: .27 },
+    { t: w(64) + .4, dur: .6, pos: [X.reeds + .25, 1.45, 2.05], look: [X.reeds, 1.55, 0], fov: 42, creep: .3, drift: .03 },
     // horse vs gate
     { t: w(81) + .12, dur: .34, move: 'whip', pos: [X.walls - 19, 3.4, 16], look: [X.walls, 5.2, -4], fov: 48, creep: .25 },
     // the serpents
     { t: w(91) + .12, dur: .34, move: 'whip', pos: [X.sea, 2.0, 16], look: [X.sea + 2, 6.5, -24], fov: 52, creep: .3 },
-    { t: w(103) + .12, dur: .32, move: 'whip', pos: [-5.5, 1.3, 5.0], look: [-6.3, 1.9, .6], fov: 46, creep: .28 },
+    { t: w(103) + .12, dur: .32, move: 'whip', pos: [-5.6, 1.35, 3.6], look: [-6.3, 1.7, .6], fov: 46, creep: .3 },
     { t: w(106) + .7, dur: 1.0, pos: [0, .85, 10], look: [0, 4.2, -6], fov: 58, creep: .26 },
     // pulling the horse to the gate (bonk), tearing down the wall
     { t: w(112) + .12, dur: .34, move: 'whip', pos: [X.walls + 17, 3.2, 18], look: [X.walls + 1, 5, -2], fov: 54, creep: .25 },
-    { t: w(125) + .45, dur: .7, pos: [X.walls + 16, 2.2, 10], look: [X.walls + 16, 3.6, -9], fov: 54, creep: .27 },
-    // the festival: Cassandra
-    { t: w(132) + .12, dur: .34, move: 'whip', pos: [X.plaza - 1.3, 1.45, 6.4], look: [X.plaza - .6, 1.7, 1.5], fov: 46, creep: .3 },
+    { t: w(125) + .45, dur: .7, pos: [X.walls + 15, 2.0, 7.5], look: [X.walls + 15, 2.4, -9], fov: 46, creep: .3 },
+    // the festival: Cassandra, in her face
+    { t: w(132) + .12, dur: .34, move: 'whip', pos: [X.plaza - 1.05, 1.5, 4.45], look: [X.plaza - .85, 1.68, 2.3], fov: 44, creep: .3 },
     { t: w(139) + .6, dur: .9, pos: [X.plaza - 2.5, 1.6, 10.5], look: [X.plaza, 2.2, 0], fov: 52, creep: .26 },
-    // night: Helen (the one hard cut)
+    { t: w(144) - .1, dur: .5, pos: [X.plaza - 1.2, 1.55, 5.4], look: [X.plaza - .9, 2.0, 2.3], fov: 46, creep: .3 },
+    // night: Helen (the one hard cut), then up close as she calls
     { t: w(149), move: 'cut', pos: [X.plazaN - 2.8, 1.45, 7.6], look: [X.plazaN - .8, 2.2, 0], fov: 50, creep: .27 },
+    { t: w(155) - .2, dur: .6, pos: [X.plazaN - .6, 1.45, 6.0], look: [X.plazaN - .15, 1.95, 2.4], fov: 50, creep: .3 },
     // inside, at night: Anticlus, Odysseus
-    { t: w(162) + .12, dur: .34, move: 'whip', pos: [X.bellyN - .1, 1.5, 3.6], look: [X.bellyN - .1, 1.6, -1.5], fov: 52, creep: .3 },
-    { t: w(169) + .3, dur: .4, pos: [X.bellyN, 1.6, 2.3], look: [X.bellyN, 1.7, -1.5], fov: 40, creep: .3, drift: .02 },
+    { t: w(162) + .12, dur: .34, move: 'whip', pos: [X.bellyN - .1, 1.5, 3.4], look: [X.bellyN - .1, 1.6, -1.5], fov: 52, creep: .3 },
+    { t: w(169) + .3, dur: .4, pos: [X.bellyN, 1.55, 2.3], look: [X.bellyN, 1.6, -1.5], fov: 46, creep: .3, drift: .02 },
     // midnight: the hatch, the gates, the fleet
-    { t: w(176) + .12, dur: .34, move: 'whip', pos: [X.plazaN - 2.4, .55, 5.6], look: [X.plazaN + .3, 2.1, -1.4], fov: 64, creep: .27 },
-    { t: w(182) + .12, dur: .32, move: 'whip', pos: [X.wallsN, 1.45, WALL_Z + 10.5], look: [X.wallsN, 3.0, -9], fov: 52, creep: .3 },
+    { t: w(176) + .12, dur: .34, move: 'whip', pos: [X.plazaN + 1.9, 1.0, 4.6], look: [X.plazaN + .1, 2.4, -1.4], fov: 56, creep: .27 },
+    { t: w(182) + .12, dur: .32, move: 'whip', pos: [X.wallsN + 1.2, 1.5, WALL_Z + 13.5], look: [X.wallsN, 3.6, -9], fov: 54, creep: .3 },
     { t: w(187) + .12, dur: .34, move: 'whip', pos: [X.seaN, 3.0, 12], look: [X.seaN + 20, 3, -100], fov: 44, creep: .3 },
     // finale: ten years of ramming vs one afternoon
     { t: w(198) + .12, dur: .34, move: 'whip', pos: [X.walls - 30, 1.5, 4], look: [X.walls - 30, 2.4, -9], fov: 50, creep: .27 },
     { t: w(207) + .12, dur: .34, move: 'whip', pos: [X.walls + 16, 1.7, 6], look: [X.walls + 16, 2.8, -9], fov: 54, creep: .25 },
-    { t: w(213) + .3, dur: 1.6, pos: [X.walls + 14, 4.5, 26], look: [X.walls + 10, 5, -10], fov: 56, creep: .2 },
+    { t: w(213) + .3, dur: 1.0, pos: [X.walls + 14, 4.5, 26], look: [X.walls + 10, 5, -10], fov: 56, creep: .2 },
+    // ...and the punchline: the city goes up behind a Trojan who only now gets it
+    { t: BOOM(), move: 'cut', pos: [X.walls + 12, 1.45, 36], look: [X.walls + 10.5, 11, -20], fov: 62, creep: .35 },
   ];
   const cp = new CamPath(keys, { fps: FPS });
-  cp.kick(w(124) - .08, 1.2); cp.kick(w(129) - .3, 1.4); cp.kick(w(37) + .05, .5); cp.kick(w(170) + .1, .6);
+  cp.kick(BOOM() + .05, 1.8); cp.kick(w(124) - .08, 1.2); cp.kick(w(129) - .3, 1.4); cp.kick(w(37) + .05, .5); cp.kick(w(170) + .1, .6);
   return cp;
 }
 
@@ -553,6 +678,13 @@ export async function setup(ctx) {
   dyn.armO = new Arm3D(scene, cast.odysseus);
   dyn.dust = new Smoke(scene, { color: '#e8d8b8', maxPoints: 2400, H: ctx.H });
   dyn.torchSmoke = new Smoke(scene, { color: '#6a6488', maxPoints: 400, H: ctx.H });
+  dyn.fire = new Smoke(scene, { color: '#ff9a30', maxPoints: 1600, H: ctx.H, additive: true });
+  dyn.boomSmoke = new Smoke(scene, { color: '#d8682a', maxPoints: 2600, H: ctx.H }); dyn.boomDark = new Smoke(scene, { color: '#4a3a3a', maxPoints: 900, H: ctx.H }); dyn.boomDark.pts.renderOrder = 4; dyn.fire.pts.renderOrder = 6; dyn.boomSmoke.pts.renderOrder = 5;
+  const cheer = { expr: 'grin', armR: [150, 20], armL: [150, -20] }, stand = { expr: 'neutral', armR: [14, 8], armL: [14, 8] };
+  const troK = ['tro1', 'tro2', 'tro3', 'tro4', 'tro5', 'tro6'].flatMap((n, i) => [snapshot(LOOK[n], i % 2 ? cheer : { ...stand, expr: 'smile' }), snapshot(LOOK[n], i % 2 ? { ...stand, look: .5 } : cheer)]);
+  const greK = ['gre1', 'gre2', 'gre3'].flatMap(n => [snapshot(LOOK[n], { expr: 'smug', propR: 'spear', armR: [40, 30], look: .3 }), snapshot(LOOK[n], { expr: 'angry', propR: 'torch', armR: [140, 10], look: -.3 })]);
+  dyn.troCrowd = makeCrowd(scene, troK, 70, 5);
+  dyn.greCrowd = makeCrowd(scene, greK, 60, 6);
   dyn.cam = cameraPath();
 }
 
@@ -582,11 +714,12 @@ export function frame(t, ctx) {
   for (const f of dyn.flames || []) { const k = 1 + .15 * Math.sin(t * 19 + f.seed) * Math.sin(t * 7 + f.seed * 2); f.f.scale.set(1, k, 1); f.pl.intensity = f.k * (.9 + .1 * k); }
   // hide everything dynamic, then show what this beat needs
   dyn.horse.visible = false; dyn.spear.visible = false; dyn.spearIn.visible = false; dyn.ram.visible = false;
-  for (const s of dyn.ships) s.visible = false;
-  for (const s of dyn.beachShips) s.visible = false;
+  for (const s of dyn.ships) { s.visible = false; s.userData.lamp.visible = false; }
+  for (const s of dyn.beachShips) { s.visible = false; s.userData.lamp.visible = false; }
   for (const s of dyn.serpents) { s.tube.visible = false; s.head.visible = false; }
   for (const c of Object.values(cast)) c.hide();
-  dyn.armO.hide();
+  dyn.armO.hide(); hideCrowd(dyn.troCrowd); hideCrowd(dyn.greCrowd);
+  dyn.fire.wisps.length = 0; dyn.boomSmoke.wisps.length = 0; dyn.boomDark.wisps.length = 0;
   const tint = FACE[light].map((v, i) => v / GRADE[light][i]), shadeC = SHADE[light];
   const bl = (seed, ...sw) => blinkAt(t, seed, sw, FPS);
   const put = (name, x, z, p, { y = 0, key = null, isDir = true, scale = 1 } = {}) => {
@@ -605,21 +738,29 @@ export function frame(t, ctx) {
     setHorse(0, -6, Math.PI, { bow: bowT ? backOut(lin(t, w(10) + .25, w(10) + .55)) : 0 });
     // the fleet at anchor / sailing away
     dyn.beachShips.forEach((s, i) => { s.visible = true; const go = Math.max(0, t - w(14)); s.position.set(70 + i * 38, 0, -170 - i * 30 - go * 6); s.rotation.y = Math.PI / 2 + .2; });
+    if (t >= w(14) + .3 && t < w(17)) {
+      const sh = dyn.beachShips[0], go = t - w(14); sh.position.set(15 + go * 1.6, Math.sin(t * 2) * .12, -37 - go * .8); sh.rotation.set(0, .45, Math.sin(t * 1.6) * .03); sh.updateMatrixWorld();
+      ['gre1', 'odysseus', 'gre2', 'gre3'].forEach((n, i) => {
+        const p = sh.localToWorld(V(-3.6 + i * 2.1, 1.62, .4 * (i % 2 ? 1 : -1))), wave = Math.sin(t * 13 + i * 1.7);
+        put(n, p.x, p.z, { expr: i === 1 ? 'smug' : 'grin', look: -.4, blink: bl(14 + i), armR: [150 + wave * 22, 30], armL: [14, 8] }, { y: p.y, key: sun });
+      });
+    }
     if (preT) {
       // three Greeks trudge to the boats (to the right, away from us)
-      for (const [i, n] of ['gre1', 'gre2', 'gre3'].entries()) {
+      if (t < w(14) + .3) for (const [i, n] of ['gre1', 'gre2', 'gre3'].entries()) {
         const u = t * .9;
-        put(n, 5.6 + i * 1.5 + u * .5, -1.2 - i * .7 - u * 1.2, { expr: 'neutral', look: .6, lookY: .2, blink: bl(10 + i), armR: [12 + Math.sin(t * 6 + i) * 10, 8], armL: [12 - Math.sin(t * 6 + i) * 10, 8], bob: Math.abs(Math.sin(t * 6 + i)) * -8 }, { key: sun });
+        put(n, 1.7 + i * 1.25 + u * .55, 1.3 - i * .55 - u * 1.0, { expr: 'neutral', look: .6, lookY: .2, blink: bl(10 + i), armR: [12 + Math.sin(t * 6 + i) * 10, 8], armL: [12 - Math.sin(t * 6 + i) * 10, 8], bob: Math.abs(Math.sin(t * 6 + i)) * -8 }, { key: sun });
       }
       focus = V(0, 4, -6);
     } else if (t < w(30)) {
       // four Trojans skid to a stop in front of the horse; look left (No army), right (No ships), up (Just a horse)
       const no1 = w(23), no2 = w(25), up = w(27) - .05;
       ['tro1', 'tro3', 'tro6', 'tro5'].forEach((n, i) => {
-        const skid = 1 - ramp(t, w(23) - .3, w(23) + .15), x = -2.7 + i * 1.8 - skid * 3, z = -.6 - (i % 2) * .5;
+        const skid = 1 - ramp(t, w(23) - .3, w(23) + .15), x = -1.65 + i * 1.1 - skid * 3, z = -.6 - (i % 2) * .5;
         const look = t < no1 ? 0 : t < no2 ? -.9 : t < up ? .9 : (i < 2 ? .4 : -.4), lookY = t > up ? -1 : 0;
         put(n, x, z, { expr: t > up ? 'surprised' : t > no1 ? 'worried' : 'neutral', look, lookY, blink: bl(20 + i, no1, no2, up), lean: -10 * skid, tilt: t > up ? -6 : 0 }, { key: sun });
       });
+      placeCrowd(dyn.troCrowd, cam, (i, c) => i < 24 ? [(c.r < .5 ? -1 : 1) * (3 + c.r2 * 7), -2.2 - c.r3 * 6, Math.abs(Math.sin(t * 7 + i)) * .06] : null);
       focus = V(0, 1.6, -1);
     } else if (lao) {
       // Laocoön marches in and hurls his spear; then BEWARE at the lens
@@ -649,6 +790,7 @@ export function frame(t, ctx) {
     } else {
       // message received: the Trojans look at each other, then bow to the horse
       const sac = A(111) - .2, bow = ramp(t, sac, sac + .5), look = Math.floor(t * 2.2) % 2;
+      placeCrowd(dyn.troCrowd, cam, (i, c) => i < 30 ? [(c.r - .5) * 22, -2.8 - c.r3 * 7, 0] : null);
       ['tro1', 'tro3', 'tro6', 'tro5'].forEach((n, i) => {
         put(n, -3 + i * 2, -1 - (i % 2) * .6, { expr: bow > .5 ? 'proud' : 'neutral', lid: bow * .6, look: bow < .1 ? ((i + look) % 2 ? .9 : -.9) : 0, lookY: bow > .1 ? .8 : 0, blink: bl(20 + i, sac), lean: 0 }, { key: sun, scale: 1 });
         cast[n].mesh.rotation.x = bow * .35;
@@ -666,6 +808,8 @@ export function frame(t, ctx) {
         const u = Math.max(0, t - w(17) - i * .1), z = WALL_Z + 3 + u * 6.5, x = SETX.walls + (i - 2.5) * .7 * Math.min(1, u * .8);
         put(n, x, z, { expr: 'grin', look: (i % 2 ? .3 : -.3), blink: bl(40 + i), armR: [40 + Math.sin(t * 14 + i) * 35, 20], armL: [40 - Math.sin(t * 14 + i) * 35, 20], bob: Math.abs(Math.sin(t * 14 + i)) * -16, lean: 8 }, { key: sun });
       });
+      placeCrowd(dyn.troCrowd, cam, (i, c) => { const u = t - w(17) - .4 - c.r * 1.4; if (u < 0) return null; const z = WALL_Z + 1 + u * 6.2; if (z > 7) return null;
+        return [SETX.walls + (c.r2 - .5) * Math.min(GATE_W - 1, 1 + u * 4) * (1 + Math.max(0, z - WALL_Z - 4) * .25), z - c.r3 * 1.5, Math.abs(Math.sin(t * 14 + i)) * .12]; });
       focus = V(SETX.walls, 1.6, 2);
     } else if (t < w(91)) {
       // horse vs gate (the bars are drawn in overlay())
@@ -686,11 +830,11 @@ export function frame(t, ctx) {
       const hit = w(129) - .25;
       ['tro1', 'tro2', 'tro5', 'tro6'].forEach((n, i) => {
         const ph = (t * 2.6 + i * .25) % 1, hitting = t < hit + .3;
-        put(n, SETX.walls + 11 + i * 3, WALL_Z + 4.2 + (i % 2) * .7, { expr: hitting ? 'grin' : 'surprised', blink: bl(60 + i, hit), propR: 'pickaxe', armR: hitting ? [lerp(170, 60, ph * ph), 10] : [30, 10], armL: [20, 10], lean: hitting ? 6 * ph : -4 }, { key: sun });
+        put(n, SETX.walls + 12.6 + i * 1.6, WALL_Z + 4.2 + (i % 2) * .9, { expr: hitting ? 'grin' : 'surprised', blink: bl(60 + i, hit), propR: 'pickaxe', armR: hitting ? [lerp(170, 60, ph * ph), 10] : [30, 10], armL: [20, 10], lean: hitting ? 6 * ph : -4 }, { key: sun });
       });
       if (t > hit) {
         const R = rng(3), u = t - hit;
-        dyn.dust.wisps.push({ n: 900, size: 1.4, alpha: .55 * Math.max(0, 1 - u / 2.2), speed: .2, path: (uu, tt, i) => [SETX.walls + 16 + (Math.sin(i * 12.9) * 9) * (.3 + u), 1 + uu * 5 * (.4 + u), WALL_Z + 3 + Math.cos(i * 7.7) * 4 * (.3 + u)] });
+        dyn.dust.wisps.push({ n: 700, size: 1.1, alpha: .35 * Math.max(0, 1 - u / 1.6), speed: .2, path: (uu, tt, i) => [SETX.walls + 16 + (Math.sin(i * 12.9) * 9) * (.3 + u), 1 + uu * 5 * (.4 + u), WALL_Z + 3 + Math.cos(i * 7.7) * 4 * (.3 + u)] });
       }
       focus = V(SETX.walls + 16, 2, WALL_Z + 4);
     } else {
@@ -704,6 +848,23 @@ export function frame(t, ctx) {
       });
       const hz = lerp(30, WALL_Z + 1, S(lin(t, w(209), w(213) + .6)));
       setHorse(SETX.walls + 16, hz, -Math.PI / 2, { roll: hz, bow: 1 });
+      placeCrowd(dyn.troCrowd, cam, (i, c) => i < 40 ? [SETX.walls + 4 + c.r * 26, WALL_Z + 8 + c.r2 * 14, Math.abs(Math.sin(t * 9 + i * 1.3)) * .18] : null);
+      if (t >= BOOM()) {
+        const tb = t - BOOM(), e = 1 - Math.exp(-tb * 1.6), cx = SETX.walls + 7, cz = -44;
+        const Hs = 8 + 27 * e, Rm = 5 + 7.5 * e, rm = 3.5 + 4.2 * e;
+        const mush = (i, n) => {
+          const hs = k => { const x = Math.sin(i * k) * 43758.5453; return x - Math.floor(x); }, a = hs(12.9898) * 6.2832, f = hs(78.233), f2 = hs(39.425);
+          if (i % 10 < 5) { const cu = 1 - 2 * f, sr = Math.sqrt(Math.max(0, 1 - cu * cu)), R2 = (Rm + rm) * .85; return [cx + R2 * sr * Math.cos(a), Hs + rm * 1.3 * cu * (cu < 0 ? .45 : 1) + tb * 1.2, cz + R2 * sr * Math.sin(a) * .7]; }
+          if (i % 10 < 9) { const r = (3 + f2 * 3.5) * (1 - f * .35) * (1 + e * .3); return [cx + Math.cos(a) * r, f * Hs, cz + Math.sin(a) * r]; }
+          const r = 4 + e * 22 * (.6 + f * .4); return [cx + Math.cos(a) * r, 1 + f2 * 3, cz + Math.sin(a) * r];
+        };
+        // body: opaque orange puffs; core: a little additive yellow; rim: dark smoke round the cap and the foot
+        dyn.boomSmoke.wisps.push({ n: 2400, size: 2.6 + 2.6 * e, alpha: .95, speed: 0, path: (u, tt, i) => mush(i, 2400) });
+        dyn.fire.wisps.push({ n: 500, size: 3.5 + 3 * e, alpha: Math.max(.05, .2 - tb * .1), speed: 0, path: (u, tt, i) => { const p = mush(i * 3, 500); return [p[0] + (cx - p[0]) * .25, p[1], p[2] + 4]; } });
+        dyn.boomDark.wisps.push({ n: 600, size: 6 + 5 * e, alpha: Math.min(.75, tb * 1.2), speed: 0, path: (u, tt, i) => { const p = mush(i * 10 + (i % 3 ? 0 : 9), 600); return [cx + (p[0] - cx) * 1.25, p[1] + (i % 2 ? 3 : -1), p[2] - 5]; } });
+        put('tro1', SETX.walls + 12.55, 33.6, { expr: tb < .45 ? 'neutral' : 'worried', sweat: ramp(t, BOOM() + .5, BOOM() + .9), look: tb < .45 ? -.9 : .15, lookY: tb < .45 ? -.4 : 0, blink: bl(61, BOOM() + .45), propR: 'pickaxe', armR: [lerp(150, 25, ramp(t, BOOM() + .1, BOOM() + .5)), 10], armL: [14, 8], rim: { color: WARM, a: .6 * e } }, { key: V(-.2, -.4, .9), isDir: true });
+        hideCrowd(dyn.troCrowd);
+      }
       if (t > w(207)) dyn.dust.wisps.push({ n: 500, size: 1.0, alpha: .4, speed: .25, path: (uu, tt, i) => [SETX.walls + 16 + Math.sin(i * 12.9) * 7, .5 + uu * 4, WALL_Z + 3 + Math.cos(i * 7.7) * 3] });
       focus = t < w(207) ? V(rx, 1.5, WALL_Z + 6) : V(SETX.walls + 16, 2, WALL_Z + 5);
     }
@@ -713,7 +874,7 @@ export function frame(t, ctx) {
     const sx = SETX.sea;
     dyn.ships[0].visible = true; dyn.ships[0].position.set(sx + 60, 0, -220); dyn.ships[0].rotation.y = 1.2;
     dyn.serpents.forEach((s, k) => {
-      const rise = S(lin(t, w(94) + k * .45, w(98) + k * .45)), bx = sx - 5 + k * 13;
+      const rise = S(lin(t, w(91) + .35 + k * .3, w(95) + .3 + k * .3)), bx = sx - 5 + k * 13;
       const pts = []; for (let i = 0; i < 8; i++) { const u = i / 7; pts.push([bx + Math.sin(u * 5 + t * 3 + k) * 1.8 * (.4 + u), -4 + u * 13 * rise, -22 - k * 6 + Math.cos(u * 4 + t * 2) * 1.4]); }
       if (rise > .02) setSerpent(s, pts, t);
     });
@@ -741,6 +902,7 @@ export function frame(t, ctx) {
       const x = px - 9 + ((t * 2.4 + i * 3.6) % 19), z = -.8 - (i % 3) * 1.6;
       put(n, x, z, { expr: 'grin', look: .7, blink: bl(91 + i), armR: [120, 20], armL: [20 + Math.sin(t * 8 + i) * 12, 8], bob: Math.abs(Math.sin(t * 8 + i)) * -8 }, { key: sun });
     });
+    placeCrowd(dyn.troCrowd, cam, (i, c) => i < 44 ? [px + (c.r - .5) * 26, -2.5 - c.r2 * 12, Math.abs(Math.sin(t * 8 + i * 1.3)) * .16] : null);
     dyn.cloudAt = cursed ? cast.cassandra.toWorld(0, -60) : null;
     focus = V(px - .9, 1.5, 2.3);
   }
@@ -790,26 +952,29 @@ export function frame(t, ctx) {
     const wx = SETX.wallsN, moon = dyn.wallsNMoon.dir;
     dyn.wallR2N.visible = false; dyn.breachN.visible = true; setDoors(dyn.doorsN, ramp(t, w(182) + .1, w(185)));
     ['gre1', 'gre3'].forEach((n, i) => put(n, wx + (i ? 1.1 : -1.1), WALL_Z + 3.4, { expr: 'smug', look: i ? -.5 : .5, blink: bl(140 + i), armR: i ? [20, 10] : [150, 10], propR: i ? undefined : 'torch', rim: { color: WARM, a: .45 } }, { key: moon }));
+    placeCrowd(dyn.greCrowd, cam, (i, c) => { const u = t - w(184) - c.r * 1.2; if (u < 0) return null; const z = WALL_Z + 11 - u * 3.2 - c.r3 * 2; if (z < WALL_Z + 2.5) return null;
+      return [wx + (c.r2 - .5) * Math.max(GATE_W - .5, (z - WALL_Z) * 1.1), z, Math.abs(Math.sin(t * 10 + i)) * .1]; }, tint);
     focus = V(wx, 1.6, WALL_Z + 3.4);
   }
   // ================= SEA (night): the fleet returns from behind Tenedos =================
   if (where === 'seaN') {
     const sx = SETX.seaN, goals = [[-12, -30], [8, -24], [24, -38], [-2, -48], [16, -56], [38, -50], [-22, -60], [32, -80]];
     dyn.ships.forEach((s, k) => {
-      const u = S(Math.max(0, Math.min(1, (t - w(187) - k * .15) / 1.7)));
+      const u = S(Math.max(0, Math.min(1, .3 + (t - w(187) - k * .1) / 1.8)));
       if (u <= 0) return;
-      s.visible = true; s.position.set(sx + lerp(90 + k * 6, goals[k][0], u), 0, lerp(-290, goals[k][1], u)); s.rotation.y = -.35 + Math.PI;
-      s.position.y = Math.sin(t * 2 + k) * .15;
+      s.visible = true; s.scale.setScalar(1.3); s.position.set(sx + lerp(60 + k * 6, goals[k][0], u), 0, lerp(-170, goals[k][1], u)); s.rotation.y = -.35 + Math.PI;
+      s.position.y = Math.sin(t * 2 + k) * .15; s.userData.lamp.visible = true;
     });
     focus = V(sx + 10, 3, -60);
   }
 
-  dyn.dust.update(t);
+  dyn.dust.update(t); dyn.fire.update(t); dyn.boomSmoke.update(t); dyn.boomDark.update(t);
   // ---- the look: lens, grade
-  const look = { sat: night ? 1.12 : 1.22, lift: night ? [.1, .1, .2] : [.09, .085, .13], bloom: night ? .95 : .7, vignette: night ? .3 : .2, tint: GRADE[light] };
-  if (focus) Object.assign(look, { focus: cam.position.distanceTo(focus), coc: where === 'sea' || where === 'seaN' ? 2 : 6, range: 3.5 });
+  const look = { sat: night ? 1.15 : 1.28, lift: night ? [.13, .12, .22] : [.07, .07, .11], bloom: night ? .95 : .7, vignette: night ? .3 : .2, tint: GRADE[light] };
+  if (focus) Object.assign(look, { focus: cam.position.distanceTo(focus), coc: where === 'sea' || where === 'seaN' ? 2 : 4, range: 4 });
   look.blur = cp.moving > .15 ? 16 : 0;
   look.flash = t >= w(149) && t < w(149) + 2 / FPS ? .3 : 0;
+  if (t >= BOOM()) { const tb = t - BOOM(); look.flash = Math.max(0, .9 - tb * 3); look.bloom = .55; look.tint = [1.1, .98, .86]; look.coc = 1.2; }
   dyn.where = where;
   return look;
 }
@@ -930,5 +1095,5 @@ export function overlay(g, t, ctx) {
   // labels
   if (where === 'seaN' && t > w(193)) { const p = proj(V(SETX.seaN + 70, 30, -300), W, H); if (p) label(g, 'TENEDOS', p[0], p[1], 46 * sc, '#ffffff', ramp(t, w(193), w(193) + .4)); }
   if (where === 'walls' && t >= w(198) && t < w(207)) { const k = pop(w(198) + .3); g.save(); g.translate(W / 2, H * .17); g.scale(k, k); label(g, '10 YEARS', 0, 0, 100 * sc, '#ffffff'); g.restore(); }
-  if (where === 'walls' && t >= w(207)) { const k = pop(w(208) + .2); g.save(); g.translate(W / 2, H * .17); g.scale(k, k); label(g, '1 AFTERNOON', 0, 0, 100 * sc, '#ffd60a'); g.restore(); }
+  if (where === 'walls' && t >= w(207) && t < BOOM()) { const k = pop(w(208) + .2); g.save(); g.translate(W / 2, H * .17); g.scale(k, k); label(g, '1 AFTERNOON', 0, 0, 100 * sc, '#ffd60a'); g.restore(); }
 }
