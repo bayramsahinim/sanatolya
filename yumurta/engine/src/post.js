@@ -162,7 +162,7 @@ export class Post {
     this.ink = quad(INK_FRAG, {
       tColor: { value: null }, tDepth: { value: null }, tNormal: { value: null }, res: { value: res },
       near: { value: .1 }, far: { value: 400 }, inkColor: { value: new THREE.Color('#0b0a0c') },
-      inkNear: { value: 3.4 * W / 1080 }, inkFar: { value: 2.2 * W / 1080 }, inkStrength: { value: .95 },
+      inkNear: { value: 3.4 * Math.min(W, H) / 1080 }, inkFar: { value: 2.2 * Math.min(W, H) / 1080 }, inkStrength: { value: .95 },
       depthThresh: { value: .022 }, normalThresh: { value: .3 }, fogInk: { value: .45 },
     });
     this.lens = quad(LENS_FRAG, {
@@ -178,9 +178,9 @@ export class Post {
       vignette: { value: .22 }, contrast: { value: 1.06 }, flash: { value: 0 }, tint: { value: new THREE.Vector3(1, 1, 1) },
     });
   }
-  // look: { focus, coc (px at 1080 wide), range, sat, lift:[r,g,b], vignette, flash, tint:[r,g,b], bloom, bloomAt (threshold) }
+  // look: { focus, coc (px at 1080 on the short side), range, sat, lift:[r,g,b], vignette, flash, tint:[r,g,b], bloom, bloomAt (threshold) }
   render(scene, cam, look = {}) {
-    const r = this.r, sx = this.W / 1080;
+    const r = this.r, sx = Math.min(this.W, this.H) / 1080;
     cam.layers.set(0);
     // shadow casters that exist only for the shadow maps (a character's silhouette card): on for the world pass, off after it
     const so = scene.userData.shadowOnly || [], was = so.map(o => o.visible);

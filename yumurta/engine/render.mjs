@@ -26,6 +26,7 @@ await page.setViewport({ width: 540, height: 960 });
 await page.goto(`http://127.0.0.1:${port}/engine/index.html?story=${story}&capture=1&scale=${scale}`, { waitUntil: 'load' });
 await page.waitForFunction(() => window.__ready, { timeout: 120000 });
 const meta = await page.evaluate(() => window.__meta);
+const land = meta.W > meta.H, TW = land ? 640 : 360, TH = land ? 360 : 640;   // contact-sheet tile
 fs.mkdirSync(path.join(SD, 'audio'), { recursive: true });
 fs.writeFileSync(path.join(SD, 'audio', 'cues.json'), JSON.stringify({ DUR: meta.DUR, cues: meta.CUES }, null, 1));
 if (args.cues) { console.log('cues written'); await browser.close(); server.close(); process.exit(0); }
@@ -41,10 +42,10 @@ if (args.stills) {
   for (const t of times) { const f = path.join(dir, `s_${t.toFixed(2)}.png`); fs.writeFileSync(f, await grab(t)); files.push(f); }
   const cols = Math.min(files.length, +(args.cols || 5)), rows = Math.ceil(files.length / cols);
   const inputs = files.flatMap(f => ['-i', f]);
-  const lay = files.map((_, i) => `${(i % cols) * 360}_${Math.floor(i / cols) * 640}`).join('|');
+  const lay = files.map((_, i) => `${(i % cols) * TW}_${Math.floor(i / cols) * TH}`).join('|');
   const sheet = path.join(OUT, args.name || 'stills.jpg');
-  const scaleF = files.map((_, i) => `[${i}:v]scale=360:640[v${i}]`).join(';');
-  const filt = files.length === 1 ? `[0:v]scale=360:640` : `${scaleF};${files.map((_, i) => `[v${i}]`).join('')}xstack=inputs=${files.length}:layout=${lay}:fill=black`;
+  const scaleF = files.map((_, i) => `[${i}:v]scale=${TW}:${TH}[v${i}]`).join(';');
+  const filt = files.length === 1 ? `[0:v]scale=${TW}:${TH}` : `${scaleF};${files.map((_, i) => `[v${i}]`).join('')}xstack=inputs=${files.length}:layout=${lay}:fill=black`;
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...inputs, '-filter_complex', filt, '-q:v', '3', sheet]);
   console.log('sheet', sheet);
 } else {

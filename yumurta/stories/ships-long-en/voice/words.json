@@ -1,0 +1,5704 @@
+{
+"words": [
+{
+"word": "On",
+"start": 0.6,
+"end": 1.0,
+"sec": "hook"
+},
+{
+"word": "the",
+"start": 1.0,
+"end": 1.1,
+"sec": "hook"
+},
+{
+"word": "morning",
+"start": 1.1,
+"end": 1.44,
+"sec": "hook"
+},
+{
+"word": "of",
+"start": 1.44,
+"end": 1.82,
+"sec": "hook"
+},
+{
+"word": "April",
+"start": 1.82,
+"end": 2.28,
+"sec": "hook"
+},
+{
+"word": "twenty-third,",
+"start": 2.28,
+"end": 3.107,
+"sec": "hook"
+},
+{
+"word": "fourteen",
+"start": 3.107,
+"end": 3.933,
+"sec": "hook"
+},
+{
+"word": "fifty-three,",
+"start": 3.933,
+"end": 4.76,
+"sec": "hook"
+},
+{
+"word": "the",
+"start": 5.62,
+"end": 5.64,
+"sec": "hook"
+},
+{
+"word": "defenders",
+"start": 5.64,
+"end": 6.08,
+"sec": "hook"
+},
+{
+"word": "of",
+"start": 6.08,
+"end": 6.46,
+"sec": "hook"
+},
+{
+"word": "Constantinople",
+"start": 6.46,
+"end": 7.14,
+"sec": "hook"
+},
+{
+"word": "looked",
+"start": 7.14,
+"end": 7.86,
+"sec": "hook"
+},
+{
+"word": "down",
+"start": 7.86,
+"end": 8.24,
+"sec": "hook"
+},
+{
+"word": "at",
+"start": 8.24,
+"end": 8.48,
+"sec": "hook"
+},
+{
+"word": "the",
+"start": 8.48,
+"end": 8.6,
+"sec": "hook"
+},
+{
+"word": "one",
+"start": 8.6,
+"end": 9.0,
+"sec": "hook"
+},
+{
+"word": "stretch",
+"start": 9.0,
+"end": 9.4,
+"sec": "hook"
+},
+{
+"word": "of",
+"start": 9.4,
+"end": 9.6,
+"sec": "hook"
+},
+{
+"word": "water",
+"start": 9.6,
+"end": 9.98,
+"sec": "hook"
+},
+{
+"word": "they",
+"start": 9.98,
+"end": 10.42,
+"sec": "hook"
+},
+{
+"word": "thought",
+"start": 10.42,
+"end": 10.7,
+"sec": "hook"
+},
+{
+"word": "was",
+"start": 10.7,
+"end": 10.96,
+"sec": "hook"
+},
+{
+"word": "perfectly",
+"start": 10.96,
+"end": 11.52,
+"sec": "hook"
+},
+{
+"word": "safe\u2026",
+"start": 11.52,
+"end": 12.14,
+"sec": "hook"
+},
+{
+"word": "and",
+"start": 12.14,
+"end": 13.26,
+"sec": "hook"
+},
+{
+"word": "saw",
+"start": 13.26,
+"end": 13.56,
+"sec": "hook"
+},
+{
+"word": "enemy",
+"start": 13.56,
+"end": 14.1,
+"sec": "hook"
+},
+{
+"word": "warships",
+"start": 14.1,
+"end": 14.88,
+"sec": "hook"
+},
+{
+"word": "floating",
+"start": 14.88,
+"end": 15.64,
+"sec": "hook"
+},
+{
+"word": "in",
+"start": 15.64,
+"end": 15.88,
+"sec": "hook"
+},
+{
+"word": "it.",
+"start": 15.88,
+"end": 16.46,
+"sec": "hook"
+},
+{
+"word": "Dozens",
+"start": 17.04,
+"end": 17.16,
+"sec": "hook"
+},
+{
+"word": "of",
+"start": 17.16,
+"end": 17.54,
+"sec": "hook"
+},
+{
+"word": "them.",
+"start": 17.54,
+"end": 17.76,
+"sec": "hook"
+},
+{
+"word": "The",
+"start": 18.62,
+"end": 18.82,
+"sec": "hook"
+},
+{
+"word": "harbor",
+"start": 18.82,
+"end": 19.06,
+"sec": "hook"
+},
+{
+"word": "was",
+"start": 19.06,
+"end": 19.44,
+"sec": "hook"
+},
+{
+"word": "still",
+"start": 19.44,
+"end": 19.82,
+"sec": "hook"
+},
+{
+"word": "locked.",
+"start": 19.82,
+"end": 20.3,
+"sec": "hook"
+},
+{
+"word": "The",
+"start": 20.86,
+"end": 21.1,
+"sec": "hook"
+},
+{
+"word": "great",
+"start": 21.1,
+"end": 21.36,
+"sec": "hook"
+},
+{
+"word": "chain",
+"start": 21.36,
+"end": 21.78,
+"sec": "hook"
+},
+{
+"word": "was",
+"start": 21.78,
+"end": 22.12,
+"sec": "hook"
+},
+{
+"word": "still",
+"start": 22.12,
+"end": 22.48,
+"sec": "hook"
+},
+{
+"word": "in",
+"start": 22.48,
+"end": 22.76,
+"sec": "hook"
+},
+{
+"word": "place.",
+"start": 22.76,
+"end": 23.12,
+"sec": "hook"
+},
+{
+"word": "Nobody",
+"start": 23.96,
+"end": 24.18,
+"sec": "hook"
+},
+{
+"word": "had",
+"start": 24.18,
+"end": 24.5,
+"sec": "hook"
+},
+{
+"word": "broken",
+"start": 24.5,
+"end": 24.88,
+"sec": "hook"
+},
+{
+"word": "through.",
+"start": 24.88,
+"end": 25.32,
+"sec": "hook"
+},
+{
+"word": "So",
+"start": 25.32,
+"end": 26.48,
+"sec": "hook"
+},
+{
+"word": "how",
+"start": 26.48,
+"end": 26.9,
+"sec": "hook"
+},
+{
+"word": "did",
+"start": 26.9,
+"end": 27.1,
+"sec": "hook"
+},
+{
+"word": "the",
+"start": 27.1,
+"end": 27.26,
+"sec": "hook"
+},
+{
+"word": "ships",
+"start": 27.26,
+"end": 27.5,
+"sec": "hook"
+},
+{
+"word": "get",
+"start": 27.5,
+"end": 27.8,
+"sec": "hook"
+},
+{
+"word": "in?",
+"start": 27.8,
+"end": 28.16,
+"sec": "hook"
+},
+{
+"word": "They",
+"start": 29.26,
+"end": 29.36,
+"sec": "hook"
+},
+{
+"word": "came",
+"start": 29.36,
+"end": 29.76,
+"sec": "hook"
+},
+{
+"word": "over",
+"start": 29.76,
+"end": 30.22,
+"sec": "hook"
+},
+{
+"word": "a",
+"start": 30.22,
+"end": 30.56,
+"sec": "hook"
+},
+{
+"word": "hill.",
+"start": 30.56,
+"end": 30.86,
+"sec": "hook"
+},
+{
+"word": "In",
+"start": 34.51,
+"end": 35.01,
+"sec": "city"
+},
+{
+"word": "fourteen",
+"start": 35.01,
+"end": 35.69,
+"sec": "city"
+},
+{
+"word": "fifty-three,",
+"start": 35.69,
+"end": 36.37,
+"sec": "city"
+},
+{
+"word": "Constantinople",
+"start": 37.17,
+"end": 37.61,
+"sec": "city"
+},
+{
+"word": "was",
+"start": 37.61,
+"end": 38.25,
+"sec": "city"
+},
+{
+"word": "more",
+"start": 38.25,
+"end": 38.69,
+"sec": "city"
+},
+{
+"word": "than",
+"start": 38.69,
+"end": 38.93,
+"sec": "city"
+},
+{
+"word": "a",
+"start": 38.93,
+"end": 39.09,
+"sec": "city"
+},
+{
+"word": "city.",
+"start": 39.09,
+"end": 39.33,
+"sec": "city"
+},
+{
+"word": "For",
+"start": 40.05,
+"end": 40.27,
+"sec": "city"
+},
+{
+"word": "over",
+"start": 40.27,
+"end": 40.53,
+"sec": "city"
+},
+{
+"word": "a",
+"start": 40.53,
+"end": 40.71,
+"sec": "city"
+},
+{
+"word": "thousand",
+"start": 40.71,
+"end": 41.13,
+"sec": "city"
+},
+{
+"word": "years",
+"start": 41.13,
+"end": 41.65,
+"sec": "city"
+},
+{
+"word": "it",
+"start": 41.91,
+"end": 42.05,
+"sec": "city"
+},
+{
+"word": "had",
+"start": 42.05,
+"end": 42.17,
+"sec": "city"
+},
+{
+"word": "been",
+"start": 42.17,
+"end": 42.31,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 42.31,
+"end": 42.51,
+"sec": "city"
+},
+{
+"word": "capital",
+"start": 42.51,
+"end": 42.79,
+"sec": "city"
+},
+{
+"word": "of",
+"start": 42.79,
+"end": 43.17,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 43.17,
+"end": 43.31,
+"sec": "city"
+},
+{
+"word": "Eastern",
+"start": 43.31,
+"end": 43.79,
+"sec": "city"
+},
+{
+"word": "Roman",
+"start": 43.79,
+"end": 44.17,
+"sec": "city"
+},
+{
+"word": "Empire,",
+"start": 44.17,
+"end": 44.71,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 45.29,
+"end": 45.39,
+"sec": "city"
+},
+{
+"word": "Byzantine",
+"start": 45.39,
+"end": 45.87,
+"sec": "city"
+},
+{
+"word": "Empire.",
+"start": 45.87,
+"end": 46.35,
+"sec": "city"
+},
+{
+"word": "It",
+"start": 47.13,
+"end": 47.43,
+"sec": "city"
+},
+{
+"word": "sat",
+"start": 47.43,
+"end": 47.71,
+"sec": "city"
+},
+{
+"word": "on",
+"start": 47.71,
+"end": 47.97,
+"sec": "city"
+},
+{
+"word": "a",
+"start": 47.97,
+"end": 48.09,
+"sec": "city"
+},
+{
+"word": "triangle",
+"start": 48.09,
+"end": 48.55,
+"sec": "city"
+},
+{
+"word": "of",
+"start": 48.55,
+"end": 48.81,
+"sec": "city"
+},
+{
+"word": "land,",
+"start": 48.81,
+"end": 49.19,
+"sec": "city"
+},
+{
+"word": "with",
+"start": 49.19,
+"end": 49.65,
+"sec": "city"
+},
+{
+"word": "water",
+"start": 49.65,
+"end": 50.03,
+"sec": "city"
+},
+{
+"word": "on",
+"start": 50.03,
+"end": 50.25,
+"sec": "city"
+},
+{
+"word": "two",
+"start": 50.25,
+"end": 50.49,
+"sec": "city"
+},
+{
+"word": "sides,",
+"start": 50.49,
+"end": 50.97,
+"sec": "city"
+},
+{
+"word": "and",
+"start": 50.97,
+"end": 51.51,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 51.51,
+"end": 51.63,
+"sec": "city"
+},
+{
+"word": "strongest",
+"start": 51.63,
+"end": 52.15,
+"sec": "city"
+},
+{
+"word": "walls",
+"start": 52.15,
+"end": 52.65,
+"sec": "city"
+},
+{
+"word": "of",
+"start": 52.65,
+"end": 52.89,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 52.89,
+"end": 53.03,
+"sec": "city"
+},
+{
+"word": "medieval",
+"start": 53.03,
+"end": 53.31,
+"sec": "city"
+},
+{
+"word": "world",
+"start": 53.31,
+"end": 53.79,
+"sec": "city"
+},
+{
+"word": "on",
+"start": 53.79,
+"end": 54.13,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 54.13,
+"end": 54.29,
+"sec": "city"
+},
+{
+"word": "third.",
+"start": 54.29,
+"end": 54.53,
+"sec": "city"
+},
+{
+"word": "The",
+"start": 55.51,
+"end": 55.77,
+"sec": "city"
+},
+{
+"word": "land",
+"start": 55.77,
+"end": 56.05,
+"sec": "city"
+},
+{
+"word": "walls,",
+"start": 56.05,
+"end": 56.47,
+"sec": "city"
+},
+{
+"word": "built",
+"start": 56.65,
+"end": 56.97,
+"sec": "city"
+},
+{
+"word": "in",
+"start": 56.97,
+"end": 57.17,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 57.17,
+"end": 57.31,
+"sec": "city"
+},
+{
+"word": "fifth",
+"start": 57.31,
+"end": 58.05,
+"sec": "city"
+},
+{
+"word": "century,",
+"start": 58.05,
+"end": 58.05,
+"sec": "city"
+},
+{
+"word": "ran",
+"start": 58.39,
+"end": 58.59,
+"sec": "city"
+},
+{
+"word": "for",
+"start": 58.59,
+"end": 58.83,
+"sec": "city"
+},
+{
+"word": "about",
+"start": 58.83,
+"end": 59.07,
+"sec": "city"
+},
+{
+"word": "six",
+"start": 59.07,
+"end": 59.53,
+"sec": "city"
+},
+{
+"word": "kilometers:",
+"start": 59.53,
+"end": 60.07,
+"sec": "city"
+},
+{
+"word": "a",
+"start": 60.63,
+"end": 61.03,
+"sec": "city"
+},
+{
+"word": "moat,",
+"start": 61.03,
+"end": 61.51,
+"sec": "city"
+},
+{
+"word": "an",
+"start": 61.89,
+"end": 62.01,
+"sec": "city"
+},
+{
+"word": "outer",
+"start": 62.01,
+"end": 62.37,
+"sec": "city"
+},
+{
+"word": "wall,",
+"start": 62.37,
+"end": 62.65,
+"sec": "city"
+},
+{
+"word": "and",
+"start": 63.05,
+"end": 63.13,
+"sec": "city"
+},
+{
+"word": "a",
+"start": 63.13,
+"end": 63.35,
+"sec": "city"
+},
+{
+"word": "towering",
+"start": 63.35,
+"end": 63.87,
+"sec": "city"
+},
+{
+"word": "inner",
+"start": 63.87,
+"end": 64.29,
+"sec": "city"
+},
+{
+"word": "wall,",
+"start": 64.29,
+"end": 64.67,
+"sec": "city"
+},
+{
+"word": "with",
+"start": 64.67,
+"end": 65.25,
+"sec": "city"
+},
+{
+"word": "nearly",
+"start": 65.25,
+"end": 65.61,
+"sec": "city"
+},
+{
+"word": "two",
+"start": 65.61,
+"end": 65.95,
+"sec": "city"
+},
+{
+"word": "hundred",
+"start": 65.95,
+"end": 66.29,
+"sec": "city"
+},
+{
+"word": "towers.",
+"start": 66.29,
+"end": 67.03,
+"sec": "city"
+},
+{
+"word": "For",
+"start": 67.95,
+"end": 68.33,
+"sec": "city"
+},
+{
+"word": "a",
+"start": 68.33,
+"end": 68.43,
+"sec": "city"
+},
+{
+"word": "thousand",
+"start": 68.43,
+"end": 68.93,
+"sec": "city"
+},
+{
+"word": "years,",
+"start": 68.93,
+"end": 69.43,
+"sec": "city"
+},
+{
+"word": "no",
+"start": 69.79,
+"end": 70.17,
+"sec": "city"
+},
+{
+"word": "army",
+"start": 70.17,
+"end": 70.57,
+"sec": "city"
+},
+{
+"word": "had",
+"start": 70.57,
+"end": 70.83,
+"sec": "city"
+},
+{
+"word": "ever",
+"start": 70.83,
+"end": 71.31,
+"sec": "city"
+},
+{
+"word": "broken",
+"start": 71.31,
+"end": 71.63,
+"sec": "city"
+},
+{
+"word": "through",
+"start": 71.63,
+"end": 71.95,
+"sec": "city"
+},
+{
+"word": "them.",
+"start": 71.95,
+"end": 72.35,
+"sec": "city"
+},
+{
+"word": "But",
+"start": 73.13,
+"end": 73.47,
+"sec": "city"
+},
+{
+"word": "by",
+"start": 73.47,
+"end": 73.63,
+"sec": "city"
+},
+{
+"word": "fourteen",
+"start": 73.63,
+"end": 74.2,
+"sec": "city"
+},
+{
+"word": "fifty-three,",
+"start": 74.2,
+"end": 74.77,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 75.39,
+"end": 75.43,
+"sec": "city"
+},
+{
+"word": "empire",
+"start": 75.43,
+"end": 75.91,
+"sec": "city"
+},
+{
+"word": "around",
+"start": 75.91,
+"end": 76.43,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 76.43,
+"end": 76.65,
+"sec": "city"
+},
+{
+"word": "city",
+"start": 76.65,
+"end": 76.87,
+"sec": "city"
+},
+{
+"word": "was",
+"start": 76.87,
+"end": 77.27,
+"sec": "city"
+},
+{
+"word": "almost",
+"start": 77.27,
+"end": 77.81,
+"sec": "city"
+},
+{
+"word": "gone.",
+"start": 77.81,
+"end": 78.27,
+"sec": "city"
+},
+{
+"word": "What",
+"start": 79.21,
+"end": 79.39,
+"sec": "city"
+},
+{
+"word": "was",
+"start": 79.39,
+"end": 79.55,
+"sec": "city"
+},
+{
+"word": "left",
+"start": 79.55,
+"end": 79.97,
+"sec": "city"
+},
+{
+"word": "was",
+"start": 79.97,
+"end": 80.35,
+"sec": "city"
+},
+{
+"word": "a",
+"start": 80.35,
+"end": 80.51,
+"sec": "city"
+},
+{
+"word": "proud,",
+"start": 80.51,
+"end": 80.97,
+"sec": "city"
+},
+{
+"word": "half-empty",
+"start": 81.37,
+"end": 82.05,
+"sec": "city"
+},
+{
+"word": "capital,",
+"start": 82.05,
+"end": 82.55,
+"sec": "city"
+},
+{
+"word": "surrounded",
+"start": 82.55,
+"end": 83.47,
+"sec": "city"
+},
+{
+"word": "by",
+"start": 83.47,
+"end": 83.81,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 83.81,
+"end": 83.99,
+"sec": "city"
+},
+{
+"word": "rising",
+"start": 83.99,
+"end": 84.37,
+"sec": "city"
+},
+{
+"word": "power",
+"start": 84.37,
+"end": 84.87,
+"sec": "city"
+},
+{
+"word": "of",
+"start": 84.87,
+"end": 85.21,
+"sec": "city"
+},
+{
+"word": "the",
+"start": 85.21,
+"end": 85.35,
+"sec": "city"
+},
+{
+"word": "Ottomans.",
+"start": 85.35,
+"end": 85.85,
+"sec": "city"
+},
+{
+"word": "The",
+"start": 87.5,
+"end": 87.92,
+"sec": "sultan"
+},
+{
+"word": "Ottoman",
+"start": 87.92,
+"end": 88.36,
+"sec": "sultan"
+},
+{
+"word": "sultan",
+"start": 88.36,
+"end": 88.88,
+"sec": "sultan"
+},
+{
+"word": "was",
+"start": 88.88,
+"end": 89.38,
+"sec": "sultan"
+},
+{
+"word": "Mehmed",
+"start": 89.38,
+"end": 89.92,
+"sec": "sultan"
+},
+{
+"word": "the",
+"start": 89.92,
+"end": 90.15,
+"sec": "sultan"
+},
+{
+"word": "Second.",
+"start": 90.15,
+"end": 90.38,
+"sec": "sultan"
+},
+{
+"word": "He",
+"start": 91.02,
+"end": 91.18,
+"sec": "sultan"
+},
+{
+"word": "was",
+"start": 91.18,
+"end": 91.32,
+"sec": "sultan"
+},
+{
+"word": "just",
+"start": 91.32,
+"end": 91.54,
+"sec": "sultan"
+},
+{
+"word": "twenty-one",
+"start": 91.54,
+"end": 92.18,
+"sec": "sultan"
+},
+{
+"word": "years",
+"start": 92.18,
+"end": 92.64,
+"sec": "sultan"
+},
+{
+"word": "old,",
+"start": 92.64,
+"end": 93.06,
+"sec": "sultan"
+},
+{
+"word": "and",
+"start": 93.36,
+"end": 93.44,
+"sec": "sultan"
+},
+{
+"word": "he",
+"start": 93.44,
+"end": 93.68,
+"sec": "sultan"
+},
+{
+"word": "had",
+"start": 93.68,
+"end": 93.92,
+"sec": "sultan"
+},
+{
+"word": "one",
+"start": 93.92,
+"end": 94.36,
+"sec": "sultan"
+},
+{
+"word": "goal:",
+"start": 94.36,
+"end": 94.72,
+"sec": "sultan"
+},
+{
+"word": "to",
+"start": 95.12,
+"end": 95.32,
+"sec": "sultan"
+},
+{
+"word": "take",
+"start": 95.32,
+"end": 95.64,
+"sec": "sultan"
+},
+{
+"word": "the",
+"start": 95.64,
+"end": 95.9,
+"sec": "sultan"
+},
+{
+"word": "city",
+"start": 95.9,
+"end": 96.18,
+"sec": "sultan"
+},
+{
+"word": "that",
+"start": 96.18,
+"end": 96.46,
+"sec": "sultan"
+},
+{
+"word": "his",
+"start": 96.46,
+"end": 96.64,
+"sec": "sultan"
+},
+{
+"word": "ancestors",
+"start": 96.64,
+"end": 97.18,
+"sec": "sultan"
+},
+{
+"word": "had",
+"start": 97.18,
+"end": 97.7,
+"sec": "sultan"
+},
+{
+"word": "failed",
+"start": 97.7,
+"end": 98.06,
+"sec": "sultan"
+},
+{
+"word": "to",
+"start": 98.06,
+"end": 98.34,
+"sec": "sultan"
+},
+{
+"word": "take.",
+"start": 98.34,
+"end": 98.58,
+"sec": "sultan"
+},
+{
+"word": "He",
+"start": 99.28,
+"end": 99.6,
+"sec": "sultan"
+},
+{
+"word": "prepared",
+"start": 99.6,
+"end": 100.0,
+"sec": "sultan"
+},
+{
+"word": "for",
+"start": 100.0,
+"end": 100.32,
+"sec": "sultan"
+},
+{
+"word": "it",
+"start": 100.32,
+"end": 100.5,
+"sec": "sultan"
+},
+{
+"word": "like",
+"start": 100.5,
+"end": 100.74,
+"sec": "sultan"
+},
+{
+"word": "an",
+"start": 100.74,
+"end": 100.88,
+"sec": "sultan"
+},
+{
+"word": "engineer.",
+"start": 100.88,
+"end": 101.4,
+"sec": "sultan"
+},
+{
+"word": "He",
+"start": 102.04,
+"end": 102.3,
+"sec": "sultan"
+},
+{
+"word": "built",
+"start": 102.3,
+"end": 102.48,
+"sec": "sultan"
+},
+{
+"word": "a",
+"start": 102.48,
+"end": 102.7,
+"sec": "sultan"
+},
+{
+"word": "fortress",
+"start": 102.7,
+"end": 103.22,
+"sec": "sultan"
+},
+{
+"word": "on",
+"start": 103.22,
+"end": 103.56,
+"sec": "sultan"
+},
+{
+"word": "the",
+"start": 103.56,
+"end": 103.7,
+"sec": "sultan"
+},
+{
+"word": "Bosphorus",
+"start": 103.7,
+"end": 104.2,
+"sec": "sultan"
+},
+{
+"word": "to",
+"start": 104.2,
+"end": 104.64,
+"sec": "sultan"
+},
+{
+"word": "cut",
+"start": 104.64,
+"end": 104.88,
+"sec": "sultan"
+},
+{
+"word": "off",
+"start": 104.88,
+"end": 105.04,
+"sec": "sultan"
+},
+{
+"word": "help",
+"start": 105.04,
+"end": 105.34,
+"sec": "sultan"
+},
+{
+"word": "from",
+"start": 105.34,
+"end": 105.6,
+"sec": "sultan"
+},
+{
+"word": "the",
+"start": 105.6,
+"end": 105.78,
+"sec": "sultan"
+},
+{
+"word": "north.",
+"start": 105.78,
+"end": 106.02,
+"sec": "sultan"
+},
+{
+"word": "He",
+"start": 106.76,
+"end": 107.02,
+"sec": "sultan"
+},
+{
+"word": "hired",
+"start": 107.02,
+"end": 107.32,
+"sec": "sultan"
+},
+{
+"word": "a",
+"start": 107.32,
+"end": 107.56,
+"sec": "sultan"
+},
+{
+"word": "Hungarian",
+"start": 107.56,
+"end": 108.06,
+"sec": "sultan"
+},
+{
+"word": "cannon-maker",
+"start": 108.06,
+"end": 108.92,
+"sec": "sultan"
+},
+{
+"word": "named",
+"start": 108.92,
+"end": 109.42,
+"sec": "sultan"
+},
+{
+"word": "Orban.",
+"start": 109.42,
+"end": 109.92,
+"sec": "sultan"
+},
+{
+"word": "Orban",
+"start": 110.72,
+"end": 111.18,
+"sec": "sultan"
+},
+{
+"word": "had",
+"start": 111.18,
+"end": 111.44,
+"sec": "sultan"
+},
+{
+"word": "first",
+"start": 111.44,
+"end": 111.8,
+"sec": "sultan"
+},
+{
+"word": "offered",
+"start": 111.8,
+"end": 112.16,
+"sec": "sultan"
+},
+{
+"word": "his",
+"start": 112.16,
+"end": 112.36,
+"sec": "sultan"
+},
+{
+"word": "services",
+"start": 112.36,
+"end": 112.7,
+"sec": "sultan"
+},
+{
+"word": "to",
+"start": 112.7,
+"end": 113.04,
+"sec": "sultan"
+},
+{
+"word": "the",
+"start": 113.04,
+"end": 113.18,
+"sec": "sultan"
+},
+{
+"word": "Byzantine",
+"start": 113.18,
+"end": 113.6,
+"sec": "sultan"
+},
+{
+"word": "emperor,",
+"start": 113.6,
+"end": 113.96,
+"sec": "sultan"
+},
+{
+"word": "but",
+"start": 114.36,
+"end": 114.56,
+"sec": "sultan"
+},
+{
+"word": "the",
+"start": 114.56,
+"end": 114.7,
+"sec": "sultan"
+},
+{
+"word": "emperor",
+"start": 114.7,
+"end": 115.08,
+"sec": "sultan"
+},
+{
+"word": "couldn't",
+"start": 115.08,
+"end": 115.64,
+"sec": "sultan"
+},
+{
+"word": "afford",
+"start": 115.64,
+"end": 116.04,
+"sec": "sultan"
+},
+{
+"word": "him.",
+"start": 116.04,
+"end": 116.36,
+"sec": "sultan"
+},
+{
+"word": "Mehmed",
+"start": 116.36,
+"end": 117.52,
+"sec": "sultan"
+},
+{
+"word": "paid",
+"start": 117.52,
+"end": 117.9,
+"sec": "sultan"
+},
+{
+"word": "him",
+"start": 117.9,
+"end": 118.18,
+"sec": "sultan"
+},
+{
+"word": "four",
+"start": 118.18,
+"end": 118.6,
+"sec": "sultan"
+},
+{
+"word": "times",
+"start": 118.6,
+"end": 119.18,
+"sec": "sultan"
+},
+{
+"word": "what",
+"start": 119.18,
+"end": 119.42,
+"sec": "sultan"
+},
+{
+"word": "he",
+"start": 119.42,
+"end": 119.56,
+"sec": "sultan"
+},
+{
+"word": "asked.",
+"start": 119.56,
+"end": 120.06,
+"sec": "sultan"
+},
+{
+"word": "Orban",
+"start": 120.86,
+"end": 121.38,
+"sec": "sultan"
+},
+{
+"word": "cast",
+"start": 121.38,
+"end": 121.8,
+"sec": "sultan"
+},
+{
+"word": "a",
+"start": 121.8,
+"end": 122.12,
+"sec": "sultan"
+},
+{
+"word": "bronze",
+"start": 122.12,
+"end": 122.5,
+"sec": "sultan"
+},
+{
+"word": "bombard",
+"start": 122.5,
+"end": 122.92,
+"sec": "sultan"
+},
+{
+"word": "so",
+"start": 122.92,
+"end": 123.58,
+"sec": "sultan"
+},
+{
+"word": "huge",
+"start": 123.58,
+"end": 124.16,
+"sec": "sultan"
+},
+{
+"word": "it",
+"start": 124.16,
+"end": 124.5,
+"sec": "sultan"
+},
+{
+"word": "needed",
+"start": 124.5,
+"end": 124.82,
+"sec": "sultan"
+},
+{
+"word": "dozens",
+"start": 124.82,
+"end": 125.36,
+"sec": "sultan"
+},
+{
+"word": "of",
+"start": 125.36,
+"end": 125.72,
+"sec": "sultan"
+},
+{
+"word": "oxen",
+"start": 125.72,
+"end": 126.14,
+"sec": "sultan"
+},
+{
+"word": "to",
+"start": 126.14,
+"end": 126.28,
+"sec": "sultan"
+},
+{
+"word": "pull",
+"start": 126.28,
+"end": 126.48,
+"sec": "sultan"
+},
+{
+"word": "it,",
+"start": 126.48,
+"end": 126.76,
+"sec": "sultan"
+},
+{
+"word": "and",
+"start": 127.12,
+"end": 127.34,
+"sec": "sultan"
+},
+{
+"word": "its",
+"start": 127.34,
+"end": 127.48,
+"sec": "sultan"
+},
+{
+"word": "stone",
+"start": 127.48,
+"end": 127.86,
+"sec": "sultan"
+},
+{
+"word": "balls",
+"start": 127.86,
+"end": 128.28,
+"sec": "sultan"
+},
+{
+"word": "weighed",
+"start": 128.28,
+"end": 128.68,
+"sec": "sultan"
+},
+{
+"word": "more",
+"start": 128.68,
+"end": 128.98,
+"sec": "sultan"
+},
+{
+"word": "than",
+"start": 128.98,
+"end": 129.18,
+"sec": "sultan"
+},
+{
+"word": "half",
+"start": 129.18,
+"end": 129.56,
+"sec": "sultan"
+},
+{
+"word": "a",
+"start": 129.56,
+"end": 129.86,
+"sec": "sultan"
+},
+{
+"word": "ton.",
+"start": 129.86,
+"end": 130.16,
+"sec": "sultan"
+},
+{
+"word": "In",
+"start": 130.82,
+"end": 131.54,
+"sec": "sultan"
+},
+{
+"word": "early",
+"start": 131.54,
+"end": 131.9,
+"sec": "sultan"
+},
+{
+"word": "April,",
+"start": 131.9,
+"end": 132.3,
+"sec": "sultan"
+},
+{
+"word": "he",
+"start": 132.6,
+"end": 132.78,
+"sec": "sultan"
+},
+{
+"word": "arrived",
+"start": 132.78,
+"end": 133.12,
+"sec": "sultan"
+},
+{
+"word": "outside",
+"start": 133.12,
+"end": 133.68,
+"sec": "sultan"
+},
+{
+"word": "the",
+"start": 133.68,
+"end": 133.9,
+"sec": "sultan"
+},
+{
+"word": "walls",
+"start": 133.9,
+"end": 134.14,
+"sec": "sultan"
+},
+{
+"word": "with",
+"start": 134.14,
+"end": 134.46,
+"sec": "sultan"
+},
+{
+"word": "an",
+"start": 134.46,
+"end": 134.6,
+"sec": "sultan"
+},
+{
+"word": "army",
+"start": 134.6,
+"end": 134.88,
+"sec": "sultan"
+},
+{
+"word": "of",
+"start": 134.88,
+"end": 135.14,
+"sec": "sultan"
+},
+{
+"word": "perhaps",
+"start": 135.14,
+"end": 135.5,
+"sec": "sultan"
+},
+{
+"word": "eighty",
+"start": 135.5,
+"end": 136.07,
+"sec": "sultan"
+},
+{
+"word": "thousand",
+"start": 136.07,
+"end": 136.64,
+"sec": "sultan"
+},
+{
+"word": "men.",
+"start": 136.64,
+"end": 136.96,
+"sec": "sultan"
+},
+{
+"word": "Inside,",
+"start": 136.96,
+"end": 138.32,
+"sec": "sultan"
+},
+{
+"word": "the",
+"start": 138.78,
+"end": 138.86,
+"sec": "sultan"
+},
+{
+"word": "last",
+"start": 138.86,
+"end": 139.24,
+"sec": "sultan"
+},
+{
+"word": "emperor,",
+"start": 139.24,
+"end": 139.66,
+"sec": "sultan"
+},
+{
+"word": "Constantine",
+"start": 140.22,
+"end": 140.58,
+"sec": "sultan"
+},
+{
+"word": "the",
+"start": 140.58,
+"end": 140.85,
+"sec": "sultan"
+},
+{
+"word": "Eleventh,",
+"start": 140.85,
+"end": 141.12,
+"sec": "sultan"
+},
+{
+"word": "had",
+"start": 141.54,
+"end": 141.8,
+"sec": "sultan"
+},
+{
+"word": "fewer",
+"start": 141.8,
+"end": 142.12,
+"sec": "sultan"
+},
+{
+"word": "than",
+"start": 142.12,
+"end": 142.42,
+"sec": "sultan"
+},
+{
+"word": "eight",
+"start": 142.42,
+"end": 142.89,
+"sec": "sultan"
+},
+{
+"word": "thousand",
+"start": 142.89,
+"end": 143.36,
+"sec": "sultan"
+},
+{
+"word": "defenders,",
+"start": 143.36,
+"end": 143.78,
+"sec": "sultan"
+},
+{
+"word": "among",
+"start": 144.56,
+"end": 144.78,
+"sec": "sultan"
+},
+{
+"word": "them",
+"start": 144.78,
+"end": 145.0,
+"sec": "sultan"
+},
+{
+"word": "a",
+"start": 145.26,
+"end": 145.34,
+"sec": "sultan"
+},
+{
+"word": "band",
+"start": 145.34,
+"end": 145.58,
+"sec": "sultan"
+},
+{
+"word": "of",
+"start": 145.58,
+"end": 145.8,
+"sec": "sultan"
+},
+{
+"word": "Genoese",
+"start": 145.8,
+"end": 146.38,
+"sec": "sultan"
+},
+{
+"word": "soldiers",
+"start": 146.38,
+"end": 146.8,
+"sec": "sultan"
+},
+{
+"word": "led",
+"start": 147.2,
+"end": 147.36,
+"sec": "sultan"
+},
+{
+"word": "by",
+"start": 147.36,
+"end": 147.58,
+"sec": "sultan"
+},
+{
+"word": "a",
+"start": 147.58,
+"end": 147.7,
+"sec": "sultan"
+},
+{
+"word": "famous",
+"start": 147.7,
+"end": 148.12,
+"sec": "sultan"
+},
+{
+"word": "captain,",
+"start": 148.12,
+"end": 148.58,
+"sec": "sultan"
+},
+{
+"word": "Giovanni",
+"start": 149.2,
+"end": 149.5,
+"sec": "sultan"
+},
+{
+"word": "Giustiniani.",
+"start": 149.5,
+"end": 150.34,
+"sec": "sultan"
+},
+{
+"word": "The",
+"start": 151.99,
+"end": 152.41,
+"sec": "chain"
+},
+{
+"word": "defenders",
+"start": 152.41,
+"end": 152.77,
+"sec": "chain"
+},
+{
+"word": "knew",
+"start": 152.77,
+"end": 153.31,
+"sec": "chain"
+},
+{
+"word": "where",
+"start": 153.31,
+"end": 153.59,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 153.59,
+"end": 153.73,
+"sec": "chain"
+},
+{
+"word": "weak",
+"start": 153.73,
+"end": 153.95,
+"sec": "chain"
+},
+{
+"word": "point",
+"start": 153.95,
+"end": 154.23,
+"sec": "chain"
+},
+{
+"word": "was.",
+"start": 154.23,
+"end": 154.75,
+"sec": "chain"
+},
+{
+"word": "In",
+"start": 155.27,
+"end": 155.51,
+"sec": "chain"
+},
+{
+"word": "twelve",
+"start": 155.51,
+"end": 155.98,
+"sec": "chain"
+},
+{
+"word": "oh-four,",
+"start": 155.98,
+"end": 156.45,
+"sec": "chain"
+},
+{
+"word": "crusaders",
+"start": 157.01,
+"end": 157.39,
+"sec": "chain"
+},
+{
+"word": "had",
+"start": 157.39,
+"end": 157.65,
+"sec": "chain"
+},
+{
+"word": "captured",
+"start": 157.65,
+"end": 158.15,
+"sec": "chain"
+},
+{
+"word": "Constantinople",
+"start": 158.15,
+"end": 158.91,
+"sec": "chain"
+},
+{
+"word": "not",
+"start": 158.91,
+"end": 159.53,
+"sec": "chain"
+},
+{
+"word": "from",
+"start": 159.53,
+"end": 159.77,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 159.77,
+"end": 159.95,
+"sec": "chain"
+},
+{
+"word": "land,",
+"start": 159.95,
+"end": 160.23,
+"sec": "chain"
+},
+{
+"word": "but",
+"start": 160.61,
+"end": 160.87,
+"sec": "chain"
+},
+{
+"word": "from",
+"start": 160.87,
+"end": 161.07,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 161.07,
+"end": 161.31,
+"sec": "chain"
+},
+{
+"word": "harbor,",
+"start": 161.31,
+"end": 161.55,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 162.13,
+"end": 162.23,
+"sec": "chain"
+},
+{
+"word": "Golden",
+"start": 162.23,
+"end": 162.61,
+"sec": "chain"
+},
+{
+"word": "Horn,",
+"start": 162.61,
+"end": 163.07,
+"sec": "chain"
+},
+{
+"word": "where",
+"start": 163.45,
+"end": 163.73,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 163.73,
+"end": 163.87,
+"sec": "chain"
+},
+{
+"word": "sea",
+"start": 163.87,
+"end": 164.15,
+"sec": "chain"
+},
+{
+"word": "walls",
+"start": 164.15,
+"end": 164.43,
+"sec": "chain"
+},
+{
+"word": "were",
+"start": 164.43,
+"end": 164.71,
+"sec": "chain"
+},
+{
+"word": "lower",
+"start": 164.71,
+"end": 165.07,
+"sec": "chain"
+},
+{
+"word": "and",
+"start": 165.07,
+"end": 165.49,
+"sec": "chain"
+},
+{
+"word": "weaker.",
+"start": 165.49,
+"end": 165.87,
+"sec": "chain"
+},
+{
+"word": "So",
+"start": 166.71,
+"end": 166.93,
+"sec": "chain"
+},
+{
+"word": "before",
+"start": 166.93,
+"end": 167.31,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 167.31,
+"end": 167.49,
+"sec": "chain"
+},
+{
+"word": "Ottomans",
+"start": 167.49,
+"end": 167.85,
+"sec": "chain"
+},
+{
+"word": "arrived,",
+"start": 167.85,
+"end": 168.33,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 168.83,
+"end": 168.91,
+"sec": "chain"
+},
+{
+"word": "Byzantines",
+"start": 168.91,
+"end": 169.49,
+"sec": "chain"
+},
+{
+"word": "stretched",
+"start": 169.49,
+"end": 169.91,
+"sec": "chain"
+},
+{
+"word": "an",
+"start": 169.91,
+"end": 170.23,
+"sec": "chain"
+},
+{
+"word": "enormous",
+"start": 170.23,
+"end": 170.83,
+"sec": "chain"
+},
+{
+"word": "chain",
+"start": 170.83,
+"end": 171.43,
+"sec": "chain"
+},
+{
+"word": "across",
+"start": 171.43,
+"end": 171.83,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 171.83,
+"end": 172.07,
+"sec": "chain"
+},
+{
+"word": "mouth",
+"start": 172.07,
+"end": 172.37,
+"sec": "chain"
+},
+{
+"word": "of",
+"start": 172.37,
+"end": 172.59,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 172.59,
+"end": 172.69,
+"sec": "chain"
+},
+{
+"word": "Golden",
+"start": 172.69,
+"end": 172.95,
+"sec": "chain"
+},
+{
+"word": "Horn,",
+"start": 172.95,
+"end": 173.29,
+"sec": "chain"
+},
+{
+"word": "from",
+"start": 173.75,
+"end": 173.95,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 173.95,
+"end": 174.13,
+"sec": "chain"
+},
+{
+"word": "city",
+"start": 174.13,
+"end": 174.33,
+"sec": "chain"
+},
+{
+"word": "to",
+"start": 174.33,
+"end": 174.81,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 174.81,
+"end": 174.97,
+"sec": "chain"
+},
+{
+"word": "tower",
+"start": 174.97,
+"end": 175.23,
+"sec": "chain"
+},
+{
+"word": "of",
+"start": 175.23,
+"end": 175.49,
+"sec": "chain"
+},
+{
+"word": "Galata",
+"start": 175.49,
+"end": 175.87,
+"sec": "chain"
+},
+{
+"word": "on",
+"start": 175.87,
+"end": 176.09,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 176.09,
+"end": 176.19,
+"sec": "chain"
+},
+{
+"word": "other",
+"start": 176.19,
+"end": 176.37,
+"sec": "chain"
+},
+{
+"word": "side.",
+"start": 176.37,
+"end": 176.75,
+"sec": "chain"
+},
+{
+"word": "It",
+"start": 177.03,
+"end": 177.35,
+"sec": "chain"
+},
+{
+"word": "floated",
+"start": 177.35,
+"end": 177.99,
+"sec": "chain"
+},
+{
+"word": "on",
+"start": 177.99,
+"end": 178.31,
+"sec": "chain"
+},
+{
+"word": "wooden",
+"start": 178.31,
+"end": 178.63,
+"sec": "chain"
+},
+{
+"word": "logs,",
+"start": 178.63,
+"end": 179.09,
+"sec": "chain"
+},
+{
+"word": "and",
+"start": 179.61,
+"end": 179.73,
+"sec": "chain"
+},
+{
+"word": "behind",
+"start": 179.73,
+"end": 180.05,
+"sec": "chain"
+},
+{
+"word": "it",
+"start": 180.05,
+"end": 180.31,
+"sec": "chain"
+},
+{
+"word": "waited",
+"start": 180.63,
+"end": 180.83,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 180.83,
+"end": 181.01,
+"sec": "chain"
+},
+{
+"word": "Christian",
+"start": 181.01,
+"end": 181.41,
+"sec": "chain"
+},
+{
+"word": "ships.",
+"start": 181.41,
+"end": 181.77,
+"sec": "chain"
+},
+{
+"word": "As",
+"start": 182.77,
+"end": 182.89,
+"sec": "chain"
+},
+{
+"word": "long",
+"start": 182.89,
+"end": 183.19,
+"sec": "chain"
+},
+{
+"word": "as",
+"start": 183.19,
+"end": 183.41,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 183.41,
+"end": 183.53,
+"sec": "chain"
+},
+{
+"word": "chain",
+"start": 183.53,
+"end": 183.81,
+"sec": "chain"
+},
+{
+"word": "held,",
+"start": 183.81,
+"end": 184.19,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 184.79,
+"end": 184.89,
+"sec": "chain"
+},
+{
+"word": "harbor",
+"start": 184.89,
+"end": 185.15,
+"sec": "chain"
+},
+{
+"word": "walls",
+"start": 185.15,
+"end": 185.63,
+"sec": "chain"
+},
+{
+"word": "didn't",
+"start": 185.63,
+"end": 185.99,
+"sec": "chain"
+},
+{
+"word": "need",
+"start": 185.99,
+"end": 186.29,
+"sec": "chain"
+},
+{
+"word": "many",
+"start": 186.29,
+"end": 186.55,
+"sec": "chain"
+},
+{
+"word": "defenders.",
+"start": 186.55,
+"end": 186.95,
+"sec": "chain"
+},
+{
+"word": "And",
+"start": 187.57,
+"end": 187.79,
+"sec": "chain"
+},
+{
+"word": "every",
+"start": 187.79,
+"end": 188.19,
+"sec": "chain"
+},
+{
+"word": "soldier",
+"start": 188.19,
+"end": 188.57,
+"sec": "chain"
+},
+{
+"word": "saved",
+"start": 188.57,
+"end": 188.97,
+"sec": "chain"
+},
+{
+"word": "there",
+"start": 188.97,
+"end": 189.39,
+"sec": "chain"
+},
+{
+"word": "could",
+"start": 189.39,
+"end": 189.77,
+"sec": "chain"
+},
+{
+"word": "fight",
+"start": 189.77,
+"end": 190.07,
+"sec": "chain"
+},
+{
+"word": "on",
+"start": 190.07,
+"end": 190.39,
+"sec": "chain"
+},
+{
+"word": "the",
+"start": 190.39,
+"end": 190.53,
+"sec": "chain"
+},
+{
+"word": "land",
+"start": 190.53,
+"end": 190.79,
+"sec": "chain"
+},
+{
+"word": "walls.",
+"start": 190.79,
+"end": 191.11,
+"sec": "chain"
+},
+{
+"word": "Mehmed's",
+"start": 192.76,
+"end": 193.72,
+"sec": "defeat"
+},
+{
+"word": "cannons",
+"start": 193.72,
+"end": 193.98,
+"sec": "defeat"
+},
+{
+"word": "pounded",
+"start": 193.98,
+"end": 194.72,
+"sec": "defeat"
+},
+{
+"word": "the",
+"start": 194.72,
+"end": 194.96,
+"sec": "defeat"
+},
+{
+"word": "land",
+"start": 194.96,
+"end": 195.22,
+"sec": "defeat"
+},
+{
+"word": "walls",
+"start": 195.22,
+"end": 195.6,
+"sec": "defeat"
+},
+{
+"word": "day",
+"start": 195.6,
+"end": 196.06,
+"sec": "defeat"
+},
+{
+"word": "after",
+"start": 196.06,
+"end": 196.46,
+"sec": "defeat"
+},
+{
+"word": "day,",
+"start": 196.46,
+"end": 196.94,
+"sec": "defeat"
+},
+{
+"word": "but",
+"start": 197.42,
+"end": 197.58,
+"sec": "defeat"
+},
+{
+"word": "every",
+"start": 197.58,
+"end": 198.0,
+"sec": "defeat"
+},
+{
+"word": "night",
+"start": 198.0,
+"end": 198.36,
+"sec": "defeat"
+},
+{
+"word": "the",
+"start": 198.68,
+"end": 198.74,
+"sec": "defeat"
+},
+{
+"word": "defenders",
+"start": 198.74,
+"end": 199.16,
+"sec": "defeat"
+},
+{
+"word": "rebuilt",
+"start": 199.16,
+"end": 199.88,
+"sec": "defeat"
+},
+{
+"word": "the",
+"start": 199.88,
+"end": 200.14,
+"sec": "defeat"
+},
+{
+"word": "damage.",
+"start": 200.14,
+"end": 200.5,
+"sec": "defeat"
+},
+{
+"word": "His",
+"start": 201.3,
+"end": 201.42,
+"sec": "defeat"
+},
+{
+"word": "fleet",
+"start": 201.42,
+"end": 201.74,
+"sec": "defeat"
+},
+{
+"word": "attacked",
+"start": 201.74,
+"end": 202.34,
+"sec": "defeat"
+},
+{
+"word": "the",
+"start": 202.34,
+"end": 202.56,
+"sec": "defeat"
+},
+{
+"word": "chain,",
+"start": 202.56,
+"end": 202.86,
+"sec": "defeat"
+},
+{
+"word": "and",
+"start": 202.86,
+"end": 203.52,
+"sec": "defeat"
+},
+{
+"word": "failed.",
+"start": 203.52,
+"end": 203.84,
+"sec": "defeat"
+},
+{
+"word": "Then,",
+"start": 204.94,
+"end": 205.14,
+"sec": "defeat"
+},
+{
+"word": "on",
+"start": 205.46,
+"end": 205.66,
+"sec": "defeat"
+},
+{
+"word": "April",
+"start": 205.66,
+"end": 206.08,
+"sec": "defeat"
+},
+{
+"word": "twentieth,",
+"start": 206.08,
+"end": 207.18,
+"sec": "defeat"
+},
+{
+"word": "four",
+"start": 207.26,
+"end": 207.5,
+"sec": "defeat"
+},
+{
+"word": "Christian",
+"start": 207.5,
+"end": 207.98,
+"sec": "defeat"
+},
+{
+"word": "ships",
+"start": 207.98,
+"end": 208.34,
+"sec": "defeat"
+},
+{
+"word": "carrying",
+"start": 208.34,
+"end": 208.78,
+"sec": "defeat"
+},
+{
+"word": "supplies",
+"start": 208.78,
+"end": 209.42,
+"sec": "defeat"
+},
+{
+"word": "sailed",
+"start": 209.42,
+"end": 209.98,
+"sec": "defeat"
+},
+{
+"word": "straight",
+"start": 209.98,
+"end": 210.56,
+"sec": "defeat"
+},
+{
+"word": "through",
+"start": 210.56,
+"end": 211.08,
+"sec": "defeat"
+},
+{
+"word": "the",
+"start": 211.08,
+"end": 211.3,
+"sec": "defeat"
+},
+{
+"word": "Ottoman",
+"start": 211.3,
+"end": 211.64,
+"sec": "defeat"
+},
+{
+"word": "navy,",
+"start": 211.64,
+"end": 211.98,
+"sec": "defeat"
+},
+{
+"word": "in",
+"start": 212.26,
+"end": 212.44,
+"sec": "defeat"
+},
+{
+"word": "front",
+"start": 212.44,
+"end": 212.62,
+"sec": "defeat"
+},
+{
+"word": "of",
+"start": 212.62,
+"end": 212.76,
+"sec": "defeat"
+},
+{
+"word": "the",
+"start": 212.76,
+"end": 212.86,
+"sec": "defeat"
+},
+{
+"word": "whole",
+"start": 212.86,
+"end": 213.2,
+"sec": "defeat"
+},
+{
+"word": "city.",
+"start": 213.2,
+"end": 213.54,
+"sec": "defeat"
+},
+{
+"word": "The",
+"start": 214.44,
+"end": 214.6,
+"sec": "defeat"
+},
+{
+"word": "sultan",
+"start": 214.6,
+"end": 214.82,
+"sec": "defeat"
+},
+{
+"word": "was",
+"start": 214.82,
+"end": 215.08,
+"sec": "defeat"
+},
+{
+"word": "so",
+"start": 215.08,
+"end": 215.44,
+"sec": "defeat"
+},
+{
+"word": "furious",
+"start": 215.44,
+"end": 216.1,
+"sec": "defeat"
+},
+{
+"word": "that",
+"start": 216.1,
+"end": 216.5,
+"sec": "defeat"
+},
+{
+"word": "he",
+"start": 216.5,
+"end": 216.66,
+"sec": "defeat"
+},
+{
+"word": "rode",
+"start": 216.66,
+"end": 216.96,
+"sec": "defeat"
+},
+{
+"word": "his",
+"start": 216.96,
+"end": 217.2,
+"sec": "defeat"
+},
+{
+"word": "horse",
+"start": 217.2,
+"end": 217.48,
+"sec": "defeat"
+},
+{
+"word": "into",
+"start": 217.48,
+"end": 217.96,
+"sec": "defeat"
+},
+{
+"word": "the",
+"start": 217.96,
+"end": 218.18,
+"sec": "defeat"
+},
+{
+"word": "sea,",
+"start": 218.18,
+"end": 218.52,
+"sec": "defeat"
+},
+{
+"word": "shouting",
+"start": 218.8,
+"end": 219.22,
+"sec": "defeat"
+},
+{
+"word": "orders",
+"start": 219.22,
+"end": 219.64,
+"sec": "defeat"
+},
+{
+"word": "at",
+"start": 219.64,
+"end": 219.9,
+"sec": "defeat"
+},
+{
+"word": "his",
+"start": 219.9,
+"end": 220.02,
+"sec": "defeat"
+},
+{
+"word": "admiral.",
+"start": 220.02,
+"end": 220.4,
+"sec": "defeat"
+},
+{
+"word": "The",
+"start": 221.16,
+"end": 221.44,
+"sec": "defeat"
+},
+{
+"word": "four",
+"start": 221.44,
+"end": 221.72,
+"sec": "defeat"
+},
+{
+"word": "ships",
+"start": 221.72,
+"end": 221.96,
+"sec": "defeat"
+},
+{
+"word": "reached",
+"start": 221.96,
+"end": 222.38,
+"sec": "defeat"
+},
+{
+"word": "the",
+"start": 222.38,
+"end": 222.66,
+"sec": "defeat"
+},
+{
+"word": "chain,",
+"start": 222.66,
+"end": 222.92,
+"sec": "defeat"
+},
+{
+"word": "it",
+"start": 223.42,
+"end": 223.54,
+"sec": "defeat"
+},
+{
+"word": "was",
+"start": 223.54,
+"end": 223.64,
+"sec": "defeat"
+},
+{
+"word": "lowered",
+"start": 223.64,
+"end": 223.96,
+"sec": "defeat"
+},
+{
+"word": "for",
+"start": 223.96,
+"end": 224.24,
+"sec": "defeat"
+},
+{
+"word": "them,",
+"start": 224.24,
+"end": 224.48,
+"sec": "defeat"
+},
+{
+"word": "and",
+"start": 224.94,
+"end": 225.0,
+"sec": "defeat"
+},
+{
+"word": "they",
+"start": 225.0,
+"end": 225.12,
+"sec": "defeat"
+},
+{
+"word": "slipped",
+"start": 225.12,
+"end": 225.52,
+"sec": "defeat"
+},
+{
+"word": "into",
+"start": 225.52,
+"end": 225.86,
+"sec": "defeat"
+},
+{
+"word": "the",
+"start": 225.86,
+"end": 226.02,
+"sec": "defeat"
+},
+{
+"word": "harbor.",
+"start": 226.02,
+"end": 226.24,
+"sec": "defeat"
+},
+{
+"word": "The",
+"start": 227.4,
+"end": 227.52,
+"sec": "defeat"
+},
+{
+"word": "siege",
+"start": 227.52,
+"end": 227.76,
+"sec": "defeat"
+},
+{
+"word": "was",
+"start": 227.76,
+"end": 228.08,
+"sec": "defeat"
+},
+{
+"word": "two",
+"start": 228.08,
+"end": 228.46,
+"sec": "defeat"
+},
+{
+"word": "weeks",
+"start": 228.46,
+"end": 228.68,
+"sec": "defeat"
+},
+{
+"word": "old,",
+"start": 228.68,
+"end": 229.04,
+"sec": "defeat"
+},
+{
+"word": "and",
+"start": 229.68,
+"end": 229.8,
+"sec": "defeat"
+},
+{
+"word": "it",
+"start": 229.8,
+"end": 229.9,
+"sec": "defeat"
+},
+{
+"word": "was",
+"start": 229.9,
+"end": 230.04,
+"sec": "defeat"
+},
+{
+"word": "going",
+"start": 230.04,
+"end": 230.34,
+"sec": "defeat"
+},
+{
+"word": "badly.",
+"start": 230.34,
+"end": 230.68,
+"sec": "defeat"
+},
+{
+"word": "So",
+"start": 232.33,
+"end": 232.89,
+"sec": "plan"
+},
+{
+"word": "Mehmed",
+"start": 232.89,
+"end": 233.25,
+"sec": "plan"
+},
+{
+"word": "decided",
+"start": 233.25,
+"end": 233.81,
+"sec": "plan"
+},
+{
+"word": "that",
+"start": 233.81,
+"end": 234.27,
+"sec": "plan"
+},
+{
+"word": "if",
+"start": 234.27,
+"end": 234.51,
+"sec": "plan"
+},
+{
+"word": "his",
+"start": 234.51,
+"end": 234.71,
+"sec": "plan"
+},
+{
+"word": "ships",
+"start": 234.71,
+"end": 235.01,
+"sec": "plan"
+},
+{
+"word": "couldn't",
+"start": 235.01,
+"end": 235.51,
+"sec": "plan"
+},
+{
+"word": "go",
+"start": 235.51,
+"end": 235.75,
+"sec": "plan"
+},
+{
+"word": "through",
+"start": 235.75,
+"end": 236.11,
+"sec": "plan"
+},
+{
+"word": "the",
+"start": 236.11,
+"end": 236.33,
+"sec": "plan"
+},
+{
+"word": "chain,",
+"start": 236.33,
+"end": 236.63,
+"sec": "plan"
+},
+{
+"word": "they",
+"start": 237.03,
+"end": 237.37,
+"sec": "plan"
+},
+{
+"word": "would",
+"start": 237.37,
+"end": 237.55,
+"sec": "plan"
+},
+{
+"word": "go",
+"start": 237.55,
+"end": 237.83,
+"sec": "plan"
+},
+{
+"word": "around",
+"start": 237.83,
+"end": 238.33,
+"sec": "plan"
+},
+{
+"word": "it.",
+"start": 238.33,
+"end": 239.01,
+"sec": "plan"
+},
+{
+"word": "Over",
+"start": 239.21,
+"end": 239.53,
+"sec": "plan"
+},
+{
+"word": "land.",
+"start": 239.53,
+"end": 239.97,
+"sec": "plan"
+},
+{
+"word": "Behind",
+"start": 241.01,
+"end": 241.41,
+"sec": "plan"
+},
+{
+"word": "the",
+"start": 241.41,
+"end": 241.65,
+"sec": "plan"
+},
+{
+"word": "Genoese",
+"start": 241.65,
+"end": 242.05,
+"sec": "plan"
+},
+{
+"word": "colony",
+"start": 242.05,
+"end": 242.37,
+"sec": "plan"
+},
+{
+"word": "of",
+"start": 242.37,
+"end": 242.73,
+"sec": "plan"
+},
+{
+"word": "Galata",
+"start": 242.73,
+"end": 243.15,
+"sec": "plan"
+},
+{
+"word": "rose",
+"start": 243.63,
+"end": 243.7,
+"sec": "plan"
+},
+{
+"word": "a",
+"start": 243.7,
+"end": 243.77,
+"sec": "plan"
+},
+{
+"word": "hill.",
+"start": 243.77,
+"end": 244.17,
+"sec": "plan"
+},
+{
+"word": "The",
+"start": 244.89,
+"end": 245.11,
+"sec": "plan"
+},
+{
+"word": "Genoese",
+"start": 245.11,
+"end": 245.53,
+"sec": "plan"
+},
+{
+"word": "there",
+"start": 245.53,
+"end": 245.77,
+"sec": "plan"
+},
+{
+"word": "were",
+"start": 245.77,
+"end": 246.01,
+"sec": "plan"
+},
+{
+"word": "officially",
+"start": 246.01,
+"end": 246.53,
+"sec": "plan"
+},
+{
+"word": "neutral,",
+"start": 246.53,
+"end": 247.07,
+"sec": "plan"
+},
+{
+"word": "trading",
+"start": 247.39,
+"end": 247.63,
+"sec": "plan"
+},
+{
+"word": "with",
+"start": 247.63,
+"end": 247.91,
+"sec": "plan"
+},
+{
+"word": "both",
+"start": 247.91,
+"end": 248.13,
+"sec": "plan"
+},
+{
+"word": "sides,",
+"start": 248.13,
+"end": 248.59,
+"sec": "plan"
+},
+{
+"word": "and",
+"start": 248.97,
+"end": 249.25,
+"sec": "plan"
+},
+{
+"word": "the",
+"start": 249.25,
+"end": 249.39,
+"sec": "plan"
+},
+{
+"word": "Ottomans",
+"start": 249.39,
+"end": 249.85,
+"sec": "plan"
+},
+{
+"word": "would",
+"start": 249.85,
+"end": 250.09,
+"sec": "plan"
+},
+{
+"word": "pass",
+"start": 250.09,
+"end": 250.37,
+"sec": "plan"
+},
+{
+"word": "right",
+"start": 250.37,
+"end": 250.85,
+"sec": "plan"
+},
+{
+"word": "outside",
+"start": 250.85,
+"end": 251.39,
+"sec": "plan"
+},
+{
+"word": "their",
+"start": 251.39,
+"end": 251.65,
+"sec": "plan"
+},
+{
+"word": "walls.",
+"start": 251.65,
+"end": 251.97,
+"sec": "plan"
+},
+{
+"word": "On",
+"start": 252.87,
+"end": 253.01,
+"sec": "plan"
+},
+{
+"word": "the",
+"start": 253.01,
+"end": 253.15,
+"sec": "plan"
+},
+{
+"word": "other",
+"start": 253.15,
+"end": 253.45,
+"sec": "plan"
+},
+{
+"word": "side",
+"start": 253.45,
+"end": 253.87,
+"sec": "plan"
+},
+{
+"word": "was",
+"start": 253.87,
+"end": 254.35,
+"sec": "plan"
+},
+{
+"word": "the",
+"start": 254.35,
+"end": 254.55,
+"sec": "plan"
+},
+{
+"word": "Golden",
+"start": 254.55,
+"end": 254.93,
+"sec": "plan"
+},
+{
+"word": "Horn,",
+"start": 254.93,
+"end": 255.35,
+"sec": "plan"
+},
+{
+"word": "behind",
+"start": 255.91,
+"end": 256.37,
+"sec": "plan"
+},
+{
+"word": "the",
+"start": 256.37,
+"end": 256.59,
+"sec": "plan"
+},
+{
+"word": "chain.",
+"start": 256.59,
+"end": 256.91,
+"sec": "plan"
+},
+{
+"word": "His",
+"start": 256.91,
+"end": 258.01,
+"sec": "plan"
+},
+{
+"word": "men",
+"start": 258.01,
+"end": 258.29,
+"sec": "plan"
+},
+{
+"word": "cleared",
+"start": 258.29,
+"end": 258.77,
+"sec": "plan"
+},
+{
+"word": "a",
+"start": 258.77,
+"end": 259.05,
+"sec": "plan"
+},
+{
+"word": "road",
+"start": 259.05,
+"end": 259.31,
+"sec": "plan"
+},
+{
+"word": "over",
+"start": 259.31,
+"end": 259.65,
+"sec": "plan"
+},
+{
+"word": "it,",
+"start": 259.65,
+"end": 259.99,
+"sec": "plan"
+},
+{
+"word": "laid",
+"start": 260.19,
+"end": 260.51,
+"sec": "plan"
+},
+{
+"word": "down",
+"start": 260.51,
+"end": 260.79,
+"sec": "plan"
+},
+{
+"word": "wooden",
+"start": 260.79,
+"end": 261.11,
+"sec": "plan"
+},
+{
+"word": "rails",
+"start": 261.11,
+"end": 261.57,
+"sec": "plan"
+},
+{
+"word": "and",
+"start": 261.57,
+"end": 261.87,
+"sec": "plan"
+},
+{
+"word": "rollers,",
+"start": 261.87,
+"end": 262.35,
+"sec": "plan"
+},
+{
+"word": "and",
+"start": 262.71,
+"end": 262.95,
+"sec": "plan"
+},
+{
+"word": "covered",
+"start": 262.95,
+"end": 263.25,
+"sec": "plan"
+},
+{
+"word": "them",
+"start": 263.25,
+"end": 263.53,
+"sec": "plan"
+},
+{
+"word": "with",
+"start": 263.53,
+"end": 263.81,
+"sec": "plan"
+},
+{
+"word": "fat",
+"start": 263.81,
+"end": 264.19,
+"sec": "plan"
+},
+{
+"word": "and",
+"start": 264.19,
+"end": 264.59,
+"sec": "plan"
+},
+{
+"word": "oil.",
+"start": 264.59,
+"end": 264.95,
+"sec": "plan"
+},
+{
+"word": "The",
+"start": 265.99,
+"end": 266.15,
+"sec": "plan"
+},
+{
+"word": "idea",
+"start": 266.15,
+"end": 266.45,
+"sec": "plan"
+},
+{
+"word": "wasn't",
+"start": 266.45,
+"end": 266.89,
+"sec": "plan"
+},
+{
+"word": "completely",
+"start": 266.89,
+"end": 267.37,
+"sec": "plan"
+},
+{
+"word": "new.",
+"start": 267.37,
+"end": 267.83,
+"sec": "plan"
+},
+{
+"word": "Only",
+"start": 268.53,
+"end": 268.81,
+"sec": "plan"
+},
+{
+"word": "fourteen",
+"start": 268.81,
+"end": 269.47,
+"sec": "plan"
+},
+{
+"word": "years",
+"start": 269.47,
+"end": 269.79,
+"sec": "plan"
+},
+{
+"word": "earlier,",
+"start": 269.79,
+"end": 270.31,
+"sec": "plan"
+},
+{
+"word": "the",
+"start": 270.77,
+"end": 270.81,
+"sec": "plan"
+},
+{
+"word": "Venetians",
+"start": 270.81,
+"end": 271.37,
+"sec": "plan"
+},
+{
+"word": "had",
+"start": 271.37,
+"end": 271.55,
+"sec": "plan"
+},
+{
+"word": "hauled",
+"start": 271.55,
+"end": 271.85,
+"sec": "plan"
+},
+{
+"word": "a",
+"start": 271.85,
+"end": 272.05,
+"sec": "plan"
+},
+{
+"word": "fleet",
+"start": 272.05,
+"end": 272.23,
+"sec": "plan"
+},
+{
+"word": "over",
+"start": 272.23,
+"end": 272.63,
+"sec": "plan"
+},
+{
+"word": "the",
+"start": 272.63,
+"end": 272.81,
+"sec": "plan"
+},
+{
+"word": "mountains",
+"start": 272.81,
+"end": 273.23,
+"sec": "plan"
+},
+{
+"word": "to",
+"start": 273.23,
+"end": 273.51,
+"sec": "plan"
+},
+{
+"word": "Lake",
+"start": 273.51,
+"end": 273.71,
+"sec": "plan"
+},
+{
+"word": "Garda",
+"start": 273.71,
+"end": 274.17,
+"sec": "plan"
+},
+{
+"word": "in",
+"start": 274.17,
+"end": 274.33,
+"sec": "plan"
+},
+{
+"word": "Italy.",
+"start": 274.33,
+"end": 274.71,
+"sec": "plan"
+},
+{
+"word": "But",
+"start": 275.43,
+"end": 275.65,
+"sec": "plan"
+},
+{
+"word": "no",
+"start": 275.65,
+"end": 276.03,
+"sec": "plan"
+},
+{
+"word": "one",
+"start": 276.03,
+"end": 276.25,
+"sec": "plan"
+},
+{
+"word": "expected",
+"start": 276.25,
+"end": 276.77,
+"sec": "plan"
+},
+{
+"word": "it",
+"start": 276.77,
+"end": 277.01,
+"sec": "plan"
+},
+{
+"word": "here,",
+"start": 277.01,
+"end": 277.43,
+"sec": "plan"
+},
+{
+"word": "and",
+"start": 277.91,
+"end": 278.17,
+"sec": "plan"
+},
+{
+"word": "certainly",
+"start": 278.17,
+"end": 278.75,
+"sec": "plan"
+},
+{
+"word": "not",
+"start": 278.75,
+"end": 279.47,
+"sec": "plan"
+},
+{
+"word": "this",
+"start": 279.47,
+"end": 279.89,
+"sec": "plan"
+},
+{
+"word": "fast.",
+"start": 279.89,
+"end": 280.31,
+"sec": "plan"
+},
+{
+"word": "On",
+"start": 281.96,
+"end": 282.32,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 282.32,
+"end": 282.46,
+"sec": "night"
+},
+{
+"word": "night",
+"start": 282.46,
+"end": 282.72,
+"sec": "night"
+},
+{
+"word": "of",
+"start": 282.72,
+"end": 283.06,
+"sec": "night"
+},
+{
+"word": "April",
+"start": 283.06,
+"end": 283.4,
+"sec": "night"
+},
+{
+"word": "twenty-second,",
+"start": 283.4,
+"end": 284.68,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 284.84,
+"end": 284.86,
+"sec": "night"
+},
+{
+"word": "operation",
+"start": 284.86,
+"end": 285.4,
+"sec": "night"
+},
+{
+"word": "began.",
+"start": 285.4,
+"end": 286.06,
+"sec": "night"
+},
+{
+"word": "Ships",
+"start": 287.3,
+"end": 287.3,
+"sec": "night"
+},
+{
+"word": "were",
+"start": 287.3,
+"end": 287.62,
+"sec": "night"
+},
+{
+"word": "pulled",
+"start": 287.62,
+"end": 287.96,
+"sec": "night"
+},
+{
+"word": "from",
+"start": 287.96,
+"end": 288.26,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 288.26,
+"end": 288.4,
+"sec": "night"
+},
+{
+"word": "Bosphorus",
+"start": 288.4,
+"end": 288.96,
+"sec": "night"
+},
+{
+"word": "onto",
+"start": 288.96,
+"end": 289.28,
+"sec": "night"
+},
+{
+"word": "cradles,",
+"start": 289.28,
+"end": 289.86,
+"sec": "night"
+},
+{
+"word": "and",
+"start": 290.24,
+"end": 290.46,
+"sec": "night"
+},
+{
+"word": "teams",
+"start": 290.46,
+"end": 290.9,
+"sec": "night"
+},
+{
+"word": "of",
+"start": 290.9,
+"end": 291.14,
+"sec": "night"
+},
+{
+"word": "oxen",
+"start": 291.14,
+"end": 291.7,
+"sec": "night"
+},
+{
+"word": "and",
+"start": 291.7,
+"end": 291.88,
+"sec": "night"
+},
+{
+"word": "men",
+"start": 291.88,
+"end": 292.22,
+"sec": "night"
+},
+{
+"word": "hauled",
+"start": 292.22,
+"end": 292.76,
+"sec": "night"
+},
+{
+"word": "them",
+"start": 292.76,
+"end": 292.98,
+"sec": "night"
+},
+{
+"word": "up",
+"start": 292.98,
+"end": 293.12,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 293.12,
+"end": 293.32,
+"sec": "night"
+},
+{
+"word": "slope",
+"start": 293.32,
+"end": 293.62,
+"sec": "night"
+},
+{
+"word": "on",
+"start": 293.62,
+"end": 293.96,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 293.96,
+"end": 294.08,
+"sec": "night"
+},
+{
+"word": "greased",
+"start": 294.08,
+"end": 294.46,
+"sec": "night"
+},
+{
+"word": "rollers.",
+"start": 294.46,
+"end": 294.98,
+"sec": "night"
+},
+{
+"word": "According",
+"start": 296.02,
+"end": 296.3,
+"sec": "night"
+},
+{
+"word": "to",
+"start": 296.3,
+"end": 296.56,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 296.56,
+"end": 296.76,
+"sec": "night"
+},
+{
+"word": "chroniclers,",
+"start": 296.76,
+"end": 297.2,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 297.68,
+"end": 297.76,
+"sec": "night"
+},
+{
+"word": "sailors",
+"start": 297.76,
+"end": 298.14,
+"sec": "night"
+},
+{
+"word": "sat",
+"start": 298.14,
+"end": 298.6,
+"sec": "night"
+},
+{
+"word": "at",
+"start": 298.6,
+"end": 298.76,
+"sec": "night"
+},
+{
+"word": "their",
+"start": 298.76,
+"end": 298.94,
+"sec": "night"
+},
+{
+"word": "oars",
+"start": 298.94,
+"end": 299.38,
+"sec": "night"
+},
+{
+"word": "and",
+"start": 299.38,
+"end": 299.82,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 299.82,
+"end": 299.98,
+"sec": "night"
+},
+{
+"word": "sails",
+"start": 299.98,
+"end": 300.28,
+"sec": "night"
+},
+{
+"word": "were",
+"start": 300.28,
+"end": 300.62,
+"sec": "night"
+},
+{
+"word": "raised,",
+"start": 300.62,
+"end": 301.04,
+"sec": "night"
+},
+{
+"word": "as",
+"start": 301.36,
+"end": 301.62,
+"sec": "night"
+},
+{
+"word": "if",
+"start": 301.62,
+"end": 301.76,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 301.76,
+"end": 301.94,
+"sec": "night"
+},
+{
+"word": "ships",
+"start": 301.94,
+"end": 302.14,
+"sec": "night"
+},
+{
+"word": "were",
+"start": 302.14,
+"end": 302.42,
+"sec": "night"
+},
+{
+"word": "already",
+"start": 302.42,
+"end": 302.92,
+"sec": "night"
+},
+{
+"word": "at",
+"start": 302.92,
+"end": 303.2,
+"sec": "night"
+},
+{
+"word": "sea,",
+"start": 303.2,
+"end": 303.54,
+"sec": "night"
+},
+{
+"word": "while",
+"start": 304.04,
+"end": 304.26,
+"sec": "night"
+},
+{
+"word": "drums",
+"start": 304.26,
+"end": 304.7,
+"sec": "night"
+},
+{
+"word": "and",
+"start": 304.7,
+"end": 305.08,
+"sec": "night"
+},
+{
+"word": "trumpets",
+"start": 305.08,
+"end": 305.56,
+"sec": "night"
+},
+{
+"word": "played.",
+"start": 305.56,
+"end": 305.92,
+"sec": "night"
+},
+{
+"word": "By",
+"start": 306.91,
+"end": 307.26,
+"sec": "night"
+},
+{
+"word": "morning,",
+"start": 307.26,
+"end": 307.68,
+"sec": "night"
+},
+{
+"word": "around",
+"start": 308.2,
+"end": 308.26,
+"sec": "night"
+},
+{
+"word": "seventy",
+"start": 308.26,
+"end": 308.8,
+"sec": "night"
+},
+{
+"word": "ships",
+"start": 308.8,
+"end": 309.24,
+"sec": "night"
+},
+{
+"word": "had",
+"start": 309.24,
+"end": 309.52,
+"sec": "night"
+},
+{
+"word": "crossed",
+"start": 309.52,
+"end": 309.86,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 309.86,
+"end": 310.1,
+"sec": "night"
+},
+{
+"word": "hill",
+"start": 310.1,
+"end": 310.34,
+"sec": "night"
+},
+{
+"word": "and",
+"start": 310.34,
+"end": 310.74,
+"sec": "night"
+},
+{
+"word": "slid",
+"start": 310.74,
+"end": 311.08,
+"sec": "night"
+},
+{
+"word": "down",
+"start": 311.08,
+"end": 311.52,
+"sec": "night"
+},
+{
+"word": "into",
+"start": 311.52,
+"end": 311.78,
+"sec": "night"
+},
+{
+"word": "the",
+"start": 311.78,
+"end": 311.92,
+"sec": "night"
+},
+{
+"word": "Golden",
+"start": 311.92,
+"end": 312.16,
+"sec": "night"
+},
+{
+"word": "Horn.",
+"start": 312.16,
+"end": 312.54,
+"sec": "night"
+},
+{
+"word": "These",
+"start": 313.68,
+"end": 313.84,
+"sec": "night"
+},
+{
+"word": "weren't",
+"start": 313.84,
+"end": 314.22,
+"sec": "night"
+},
+{
+"word": "giant",
+"start": 314.22,
+"end": 314.54,
+"sec": "night"
+},
+{
+"word": "warships.",
+"start": 314.54,
+"end": 315.04,
+"sec": "night"
+},
+{
+"word": "Most",
+"start": 315.8,
+"end": 315.94,
+"sec": "night"
+},
+{
+"word": "were",
+"start": 315.94,
+"end": 316.24,
+"sec": "night"
+},
+{
+"word": "light",
+"start": 316.24,
+"end": 316.52,
+"sec": "night"
+},
+{
+"word": "galleys",
+"start": 316.52,
+"end": 317.12,
+"sec": "night"
+},
+{
+"word": "and",
+"start": 317.12,
+"end": 317.32,
+"sec": "night"
+},
+{
+"word": "smaller",
+"start": 317.32,
+"end": 317.72,
+"sec": "night"
+},
+{
+"word": "vessels.",
+"start": 317.72,
+"end": 318.06,
+"sec": "night"
+},
+{
+"word": "But",
+"start": 318.92,
+"end": 319.28,
+"sec": "night"
+},
+{
+"word": "they",
+"start": 319.28,
+"end": 319.46,
+"sec": "night"
+},
+{
+"word": "were",
+"start": 319.46,
+"end": 319.68,
+"sec": "night"
+},
+{
+"word": "enough.",
+"start": 319.68,
+"end": 320.04,
+"sec": "night"
+},
+{
+"word": "The",
+"start": 321.69,
+"end": 322.13,
+"sec": "change"
+},
+{
+"word": "chain",
+"start": 322.13,
+"end": 322.49,
+"sec": "change"
+},
+{
+"word": "had",
+"start": 322.49,
+"end": 322.79,
+"sec": "change"
+},
+{
+"word": "not",
+"start": 322.79,
+"end": 323.09,
+"sec": "change"
+},
+{
+"word": "been",
+"start": 323.09,
+"end": 323.35,
+"sec": "change"
+},
+{
+"word": "broken,",
+"start": 323.35,
+"end": 323.73,
+"sec": "change"
+},
+{
+"word": "but",
+"start": 324.29,
+"end": 324.55,
+"sec": "change"
+},
+{
+"word": "it",
+"start": 324.55,
+"end": 324.81,
+"sec": "change"
+},
+{
+"word": "no",
+"start": 324.81,
+"end": 325.13,
+"sec": "change"
+},
+{
+"word": "longer",
+"start": 325.13,
+"end": 325.53,
+"sec": "change"
+},
+{
+"word": "mattered.",
+"start": 325.53,
+"end": 325.97,
+"sec": "change"
+},
+{
+"word": "Now",
+"start": 326.81,
+"end": 326.99,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 326.99,
+"end": 327.23,
+"sec": "change"
+},
+{
+"word": "defenders",
+"start": 327.23,
+"end": 327.59,
+"sec": "change"
+},
+{
+"word": "had",
+"start": 327.59,
+"end": 328.01,
+"sec": "change"
+},
+{
+"word": "to",
+"start": 328.01,
+"end": 328.21,
+"sec": "change"
+},
+{
+"word": "guard",
+"start": 328.21,
+"end": 328.41,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 328.41,
+"end": 328.65,
+"sec": "change"
+},
+{
+"word": "long",
+"start": 328.65,
+"end": 329.03,
+"sec": "change"
+},
+{
+"word": "sea",
+"start": 329.03,
+"end": 329.41,
+"sec": "change"
+},
+{
+"word": "walls",
+"start": 329.41,
+"end": 329.79,
+"sec": "change"
+},
+{
+"word": "along",
+"start": 329.79,
+"end": 330.09,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 330.09,
+"end": 330.29,
+"sec": "change"
+},
+{
+"word": "harbor,",
+"start": 330.29,
+"end": 330.57,
+"sec": "change"
+},
+{
+"word": "and",
+"start": 330.57,
+"end": 331.25,
+"sec": "change"
+},
+{
+"word": "pull",
+"start": 331.25,
+"end": 331.53,
+"sec": "change"
+},
+{
+"word": "men",
+"start": 331.53,
+"end": 331.79,
+"sec": "change"
+},
+{
+"word": "away",
+"start": 331.79,
+"end": 332.27,
+"sec": "change"
+},
+{
+"word": "from",
+"start": 332.27,
+"end": 332.55,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 332.55,
+"end": 332.73,
+"sec": "change"
+},
+{
+"word": "land",
+"start": 332.73,
+"end": 332.97,
+"sec": "change"
+},
+{
+"word": "walls,",
+"start": 332.97,
+"end": 333.33,
+"sec": "change"
+},
+{
+"word": "where",
+"start": 333.33,
+"end": 333.77,
+"sec": "change"
+},
+{
+"word": "they",
+"start": 333.77,
+"end": 333.89,
+"sec": "change"
+},
+{
+"word": "were",
+"start": 333.89,
+"end": 334.05,
+"sec": "change"
+},
+{
+"word": "desperately",
+"start": 334.05,
+"end": 334.61,
+"sec": "change"
+},
+{
+"word": "needed.",
+"start": 334.61,
+"end": 335.13,
+"sec": "change"
+},
+{
+"word": "On",
+"start": 336.11,
+"end": 336.33,
+"sec": "change"
+},
+{
+"word": "April",
+"start": 336.33,
+"end": 336.61,
+"sec": "change"
+},
+{
+"word": "twenty-eighth,",
+"start": 336.61,
+"end": 337.77,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 337.81,
+"end": 337.87,
+"sec": "change"
+},
+{
+"word": "Venetians",
+"start": 337.87,
+"end": 338.37,
+"sec": "change"
+},
+{
+"word": "tried",
+"start": 338.37,
+"end": 338.67,
+"sec": "change"
+},
+{
+"word": "to",
+"start": 338.67,
+"end": 338.91,
+"sec": "change"
+},
+{
+"word": "burn",
+"start": 338.91,
+"end": 339.23,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 339.23,
+"end": 339.45,
+"sec": "change"
+},
+{
+"word": "new",
+"start": 339.45,
+"end": 339.73,
+"sec": "change"
+},
+{
+"word": "Ottoman",
+"start": 339.73,
+"end": 340.13,
+"sec": "change"
+},
+{
+"word": "fleet",
+"start": 340.13,
+"end": 340.51,
+"sec": "change"
+},
+{
+"word": "in",
+"start": 340.51,
+"end": 340.81,
+"sec": "change"
+},
+{
+"word": "a",
+"start": 340.81,
+"end": 340.95,
+"sec": "change"
+},
+{
+"word": "night",
+"start": 340.95,
+"end": 341.11,
+"sec": "change"
+},
+{
+"word": "raid.",
+"start": 341.11,
+"end": 341.41,
+"sec": "change"
+},
+{
+"word": "The",
+"start": 342.17,
+"end": 342.37,
+"sec": "change"
+},
+{
+"word": "Ottomans",
+"start": 342.37,
+"end": 342.85,
+"sec": "change"
+},
+{
+"word": "had",
+"start": 342.85,
+"end": 343.11,
+"sec": "change"
+},
+{
+"word": "been",
+"start": 343.11,
+"end": 343.27,
+"sec": "change"
+},
+{
+"word": "warned.",
+"start": 343.27,
+"end": 343.69,
+"sec": "change"
+},
+{
+"word": "The",
+"start": 344.21,
+"end": 344.47,
+"sec": "change"
+},
+{
+"word": "attack",
+"start": 344.47,
+"end": 344.85,
+"sec": "change"
+},
+{
+"word": "failed,",
+"start": 344.85,
+"end": 345.31,
+"sec": "change"
+},
+{
+"word": "and",
+"start": 345.71,
+"end": 345.93,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 345.93,
+"end": 346.07,
+"sec": "change"
+},
+{
+"word": "lead",
+"start": 346.07,
+"end": 346.29,
+"sec": "change"
+},
+{
+"word": "ship",
+"start": 346.29,
+"end": 346.63,
+"sec": "change"
+},
+{
+"word": "was",
+"start": 346.63,
+"end": 346.91,
+"sec": "change"
+},
+{
+"word": "sunk.",
+"start": 346.91,
+"end": 347.27,
+"sec": "change"
+},
+{
+"word": "Soon",
+"start": 348.19,
+"end": 348.57,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 348.87,
+"end": 348.95,
+"sec": "change"
+},
+{
+"word": "Ottomans",
+"start": 348.95,
+"end": 349.41,
+"sec": "change"
+},
+{
+"word": "built",
+"start": 349.41,
+"end": 349.63,
+"sec": "change"
+},
+{
+"word": "a",
+"start": 349.63,
+"end": 349.89,
+"sec": "change"
+},
+{
+"word": "floating",
+"start": 349.89,
+"end": 350.29,
+"sec": "change"
+},
+{
+"word": "bridge",
+"start": 350.29,
+"end": 350.71,
+"sec": "change"
+},
+{
+"word": "across",
+"start": 350.71,
+"end": 351.27,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 351.27,
+"end": 351.55,
+"sec": "change"
+},
+{
+"word": "Golden",
+"start": 351.55,
+"end": 351.81,
+"sec": "change"
+},
+{
+"word": "Horn,",
+"start": 351.81,
+"end": 352.19,
+"sec": "change"
+},
+{
+"word": "letting",
+"start": 352.75,
+"end": 352.97,
+"sec": "change"
+},
+{
+"word": "troops",
+"start": 352.97,
+"end": 353.33,
+"sec": "change"
+},
+{
+"word": "and",
+"start": 353.33,
+"end": 353.63,
+"sec": "change"
+},
+{
+"word": "cannons",
+"start": 353.63,
+"end": 354.03,
+"sec": "change"
+},
+{
+"word": "reach",
+"start": 354.03,
+"end": 354.45,
+"sec": "change"
+},
+{
+"word": "the",
+"start": 354.45,
+"end": 354.69,
+"sec": "change"
+},
+{
+"word": "harbor",
+"start": 354.69,
+"end": 354.91,
+"sec": "change"
+},
+{
+"word": "walls.",
+"start": 354.91,
+"end": 355.35,
+"sec": "change"
+},
+{
+"word": "The",
+"start": 356.25,
+"end": 356.41,
+"sec": "change"
+},
+{
+"word": "city",
+"start": 356.41,
+"end": 356.65,
+"sec": "change"
+},
+{
+"word": "was",
+"start": 356.65,
+"end": 356.97,
+"sec": "change"
+},
+{
+"word": "now",
+"start": 356.97,
+"end": 357.29,
+"sec": "change"
+},
+{
+"word": "under",
+"start": 357.29,
+"end": 357.57,
+"sec": "change"
+},
+{
+"word": "pressure",
+"start": 357.57,
+"end": 357.97,
+"sec": "change"
+},
+{
+"word": "from",
+"start": 357.97,
+"end": 358.29,
+"sec": "change"
+},
+{
+"word": "almost",
+"start": 358.29,
+"end": 358.79,
+"sec": "change"
+},
+{
+"word": "every",
+"start": 358.79,
+"end": 359.39,
+"sec": "change"
+},
+{
+"word": "side.",
+"start": 359.39,
+"end": 359.79,
+"sec": "change"
+},
+{
+"word": "Before",
+"start": 361.44,
+"end": 362.1,
+"sec": "end"
+},
+{
+"word": "dawn",
+"start": 362.1,
+"end": 362.54,
+"sec": "end"
+},
+{
+"word": "on",
+"start": 362.94,
+"end": 363.02,
+"sec": "end"
+},
+{
+"word": "May",
+"start": 363.02,
+"end": 363.34,
+"sec": "end"
+},
+{
+"word": "twenty-ninth,",
+"start": 363.34,
+"end": 364.113,
+"sec": "end"
+},
+{
+"word": "fourteen",
+"start": 364.113,
+"end": 364.887,
+"sec": "end"
+},
+{
+"word": "fifty-three,",
+"start": 364.887,
+"end": 365.66,
+"sec": "end"
+},
+{
+"word": "after",
+"start": 366.34,
+"end": 366.46,
+"sec": "end"
+},
+{
+"word": "nearly",
+"start": 366.46,
+"end": 366.88,
+"sec": "end"
+},
+{
+"word": "two",
+"start": 366.88,
+"end": 367.34,
+"sec": "end"
+},
+{
+"word": "months",
+"start": 367.34,
+"end": 367.82,
+"sec": "end"
+},
+{
+"word": "of",
+"start": 367.82,
+"end": 368.1,
+"sec": "end"
+},
+{
+"word": "siege,",
+"start": 368.1,
+"end": 368.42,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 369.08,
+"end": 369.22,
+"sec": "end"
+},
+{
+"word": "Ottomans",
+"start": 369.22,
+"end": 369.76,
+"sec": "end"
+},
+{
+"word": "launched",
+"start": 369.76,
+"end": 370.22,
+"sec": "end"
+},
+{
+"word": "their",
+"start": 370.22,
+"end": 370.48,
+"sec": "end"
+},
+{
+"word": "final",
+"start": 370.48,
+"end": 371.0,
+"sec": "end"
+},
+{
+"word": "assault.",
+"start": 371.0,
+"end": 371.5,
+"sec": "end"
+},
+{
+"word": "For",
+"start": 372.3,
+"end": 372.56,
+"sec": "end"
+},
+{
+"word": "hours",
+"start": 372.56,
+"end": 373.12,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 373.54,
+"end": 373.62,
+"sec": "end"
+},
+{
+"word": "defenders",
+"start": 373.62,
+"end": 373.98,
+"sec": "end"
+},
+{
+"word": "held.",
+"start": 373.98,
+"end": 374.46,
+"sec": "end"
+},
+{
+"word": "Then",
+"start": 375.28,
+"end": 375.62,
+"sec": "end"
+},
+{
+"word": "Giustiniani",
+"start": 375.62,
+"end": 376.66,
+"sec": "end"
+},
+{
+"word": "was",
+"start": 376.66,
+"end": 376.82,
+"sec": "end"
+},
+{
+"word": "badly",
+"start": 376.82,
+"end": 377.36,
+"sec": "end"
+},
+{
+"word": "wounded",
+"start": 377.36,
+"end": 377.76,
+"sec": "end"
+},
+{
+"word": "and",
+"start": 377.76,
+"end": 378.16,
+"sec": "end"
+},
+{
+"word": "carried",
+"start": 378.16,
+"end": 378.56,
+"sec": "end"
+},
+{
+"word": "from",
+"start": 378.56,
+"end": 378.8,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 378.8,
+"end": 378.94,
+"sec": "end"
+},
+{
+"word": "walls.",
+"start": 378.94,
+"end": 379.2,
+"sec": "end"
+},
+{
+"word": "According",
+"start": 380.18,
+"end": 380.42,
+"sec": "end"
+},
+{
+"word": "to",
+"start": 380.42,
+"end": 380.7,
+"sec": "end"
+},
+{
+"word": "one",
+"start": 380.7,
+"end": 380.94,
+"sec": "end"
+},
+{
+"word": "famous",
+"start": 380.94,
+"end": 381.36,
+"sec": "end"
+},
+{
+"word": "story,",
+"start": 381.36,
+"end": 381.74,
+"sec": "end"
+},
+{
+"word": "a",
+"start": 382.2,
+"end": 382.32,
+"sec": "end"
+},
+{
+"word": "small",
+"start": 382.32,
+"end": 382.74,
+"sec": "end"
+},
+{
+"word": "gate",
+"start": 382.74,
+"end": 383.14,
+"sec": "end"
+},
+{
+"word": "called",
+"start": 383.14,
+"end": 383.52,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 383.52,
+"end": 383.82,
+"sec": "end"
+},
+{
+"word": "Kerkoporta",
+"start": 383.82,
+"end": 384.48,
+"sec": "end"
+},
+{
+"word": "had",
+"start": 384.48,
+"end": 384.76,
+"sec": "end"
+},
+{
+"word": "been",
+"start": 384.76,
+"end": 384.9,
+"sec": "end"
+},
+{
+"word": "left",
+"start": 384.9,
+"end": 385.14,
+"sec": "end"
+},
+{
+"word": "open,",
+"start": 385.14,
+"end": 385.54,
+"sec": "end"
+},
+{
+"word": "and",
+"start": 386.04,
+"end": 386.22,
+"sec": "end"
+},
+{
+"word": "Ottoman",
+"start": 386.22,
+"end": 386.6,
+"sec": "end"
+},
+{
+"word": "soldiers",
+"start": 386.6,
+"end": 387.08,
+"sec": "end"
+},
+{
+"word": "slipped",
+"start": 387.08,
+"end": 387.64,
+"sec": "end"
+},
+{
+"word": "through.",
+"start": 387.64,
+"end": 388.06,
+"sec": "end"
+},
+{
+"word": "The",
+"start": 388.74,
+"end": 389.08,
+"sec": "end"
+},
+{
+"word": "defense",
+"start": 389.08,
+"end": 389.46,
+"sec": "end"
+},
+{
+"word": "broke,",
+"start": 389.46,
+"end": 390.0,
+"sec": "end"
+},
+{
+"word": "and",
+"start": 390.68,
+"end": 390.72,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 390.72,
+"end": 390.84,
+"sec": "end"
+},
+{
+"word": "last",
+"start": 390.84,
+"end": 391.22,
+"sec": "end"
+},
+{
+"word": "Byzantine",
+"start": 391.22,
+"end": 391.72,
+"sec": "end"
+},
+{
+"word": "emperor",
+"start": 391.72,
+"end": 392.26,
+"sec": "end"
+},
+{
+"word": "died",
+"start": 392.26,
+"end": 392.76,
+"sec": "end"
+},
+{
+"word": "fighting",
+"start": 392.76,
+"end": 393.3,
+"sec": "end"
+},
+{
+"word": "at",
+"start": 393.3,
+"end": 393.6,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 393.6,
+"end": 393.76,
+"sec": "end"
+},
+{
+"word": "walls.",
+"start": 393.76,
+"end": 394.04,
+"sec": "end"
+},
+{
+"word": "Constantinople",
+"start": 395.24,
+"end": 395.7,
+"sec": "end"
+},
+{
+"word": "fell.",
+"start": 395.7,
+"end": 396.38,
+"sec": "end"
+},
+{
+"word": "More",
+"start": 397.36,
+"end": 397.48,
+"sec": "end"
+},
+{
+"word": "than",
+"start": 397.48,
+"end": 397.66,
+"sec": "end"
+},
+{
+"word": "a",
+"start": 397.66,
+"end": 397.78,
+"sec": "end"
+},
+{
+"word": "thousand",
+"start": 397.78,
+"end": 398.22,
+"sec": "end"
+},
+{
+"word": "years",
+"start": 398.22,
+"end": 398.68,
+"sec": "end"
+},
+{
+"word": "of",
+"start": 398.68,
+"end": 398.94,
+"sec": "end"
+},
+{
+"word": "Roman",
+"start": 398.94,
+"end": 399.3,
+"sec": "end"
+},
+{
+"word": "rule",
+"start": 399.3,
+"end": 399.64,
+"sec": "end"
+},
+{
+"word": "in",
+"start": 399.64,
+"end": 399.86,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 399.86,
+"end": 399.96,
+"sec": "end"
+},
+{
+"word": "east",
+"start": 399.96,
+"end": 400.28,
+"sec": "end"
+},
+{
+"word": "came",
+"start": 400.28,
+"end": 400.74,
+"sec": "end"
+},
+{
+"word": "to",
+"start": 400.74,
+"end": 400.98,
+"sec": "end"
+},
+{
+"word": "an",
+"start": 400.98,
+"end": 401.1,
+"sec": "end"
+},
+{
+"word": "end,",
+"start": 401.1,
+"end": 401.44,
+"sec": "end"
+},
+{
+"word": "and",
+"start": 401.76,
+"end": 402.12,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 402.12,
+"end": 402.2,
+"sec": "end"
+},
+{
+"word": "city",
+"start": 402.2,
+"end": 402.54,
+"sec": "end"
+},
+{
+"word": "became",
+"start": 402.54,
+"end": 403.06,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 403.06,
+"end": 403.26,
+"sec": "end"
+},
+{
+"word": "new",
+"start": 403.26,
+"end": 403.58,
+"sec": "end"
+},
+{
+"word": "Ottoman",
+"start": 403.58,
+"end": 404.0,
+"sec": "end"
+},
+{
+"word": "capital:",
+"start": 404.0,
+"end": 404.5,
+"sec": "end"
+},
+{
+"word": "Istanbul.",
+"start": 405.26,
+"end": 405.56,
+"sec": "end"
+},
+{
+"word": "The",
+"start": 406.84,
+"end": 407.22,
+"sec": "end"
+},
+{
+"word": "ships",
+"start": 407.22,
+"end": 407.44,
+"sec": "end"
+},
+{
+"word": "that",
+"start": 407.44,
+"end": 407.72,
+"sec": "end"
+},
+{
+"word": "crossed",
+"start": 407.72,
+"end": 407.98,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 407.98,
+"end": 408.18,
+"sec": "end"
+},
+{
+"word": "hill",
+"start": 408.18,
+"end": 408.4,
+"sec": "end"
+},
+{
+"word": "didn't",
+"start": 408.4,
+"end": 408.88,
+"sec": "end"
+},
+{
+"word": "win",
+"start": 408.88,
+"end": 409.12,
+"sec": "end"
+},
+{
+"word": "the",
+"start": 409.12,
+"end": 409.3,
+"sec": "end"
+},
+{
+"word": "siege",
+"start": 409.3,
+"end": 409.54,
+"sec": "end"
+},
+{
+"word": "by",
+"start": 409.54,
+"end": 409.76,
+"sec": "end"
+},
+{
+"word": "themselves.",
+"start": 409.76,
+"end": 410.2,
+"sec": "end"
+},
+{
+"word": "But",
+"start": 410.72,
+"end": 411.22,
+"sec": "end"
+},
+{
+"word": "in",
+"start": 411.22,
+"end": 411.36,
+"sec": "end"
+},
+{
+"word": "a",
+"start": 411.36,
+"end": 411.56,
+"sec": "end"
+},
+{
+"word": "single",
+"start": 411.56,
+"end": 411.82,
+"sec": "end"
+},
+{
+"word": "night,",
+"start": 411.82,
+"end": 412.18,
+"sec": "end"
+},
+{
+"word": "they",
+"start": 412.18,
+"end": 412.68,
+"sec": "end"
+},
+{
+"word": "turned",
+"start": 412.68,
+"end": 412.96,
+"sec": "end"
+},
+{
+"word": "an",
+"start": 412.96,
+"end": 413.18,
+"sec": "end"
+},
+{
+"word": "impossible",
+"start": 413.18,
+"end": 413.72,
+"sec": "end"
+},
+{
+"word": "wall",
+"start": 413.72,
+"end": 414.24,
+"sec": "end"
+},
+{
+"word": "of",
+"start": 414.24,
+"end": 414.42,
+"sec": "end"
+},
+{
+"word": "water",
+"start": 414.42,
+"end": 414.78,
+"sec": "end"
+},
+{
+"word": "into",
+"start": 414.78,
+"end": 415.18,
+"sec": "end"
+},
+{
+"word": "just",
+"start": 415.18,
+"end": 415.58,
+"sec": "end"
+},
+{
+"word": "another",
+"start": 415.58,
+"end": 416.0,
+"sec": "end"
+},
+{
+"word": "front,",
+"start": 416.0,
+"end": 416.42,
+"sec": "end"
+},
+{
+"word": "and",
+"start": 416.82,
+"end": 417.36,
+"sec": "end"
+},
+{
+"word": "showed",
+"start": 417.36,
+"end": 417.68,
+"sec": "end"
+},
+{
+"word": "what",
+"start": 417.68,
+"end": 417.9,
+"sec": "end"
+},
+{
+"word": "a",
+"start": 417.9,
+"end": 418.02,
+"sec": "end"
+},
+{
+"word": "twenty-one-year-old",
+"start": 418.02,
+"end": 418.98,
+"sec": "end"
+},
+{
+"word": "sultan",
+"start": 418.98,
+"end": 419.38,
+"sec": "end"
+},
+{
+"word": "was",
+"start": 419.38,
+"end": 419.76,
+"sec": "end"
+},
+{
+"word": "willing",
+"start": 419.76,
+"end": 420.1,
+"sec": "end"
+},
+{
+"word": "to",
+"start": 420.1,
+"end": 420.38,
+"sec": "end"
+},
+{
+"word": "try.",
+"start": 420.38,
+"end": 420.7,
+"sec": "end"
+}
+]
+}

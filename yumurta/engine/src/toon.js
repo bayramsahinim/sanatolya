@@ -236,6 +236,17 @@ function hat(g, kind, w, h, look, lit) {
     g.lineWidth = 22; g.strokeStyle = PLUM; g.beginPath(); g.ellipse(0, -h * .08, w * .47, h * .42, 0, Math.PI * 1.12, Math.PI * 1.88); g.stroke();
     g.lineWidth = 13; g.strokeStyle = '#f0c040'; g.stroke();
     g.fillStyle = '#4ac0e8'; g.strokeStyle = PLUM; g.lineWidth = 5; g.beginPath(); g.arc(0, -h * .49, 15, 0, 6.29); g.fill(); g.stroke();
+  } else if (kind === 'kamelaukion') {                // a Byzantine emperor's closed crown: a gold dome, a jewelled band, pearl pendants at the temples
+    const col = look.hatColor || '#f0c040';
+    for (const s of [-1, 1]) { g.strokeStyle = PLUM; g.lineWidth = 9; g.beginPath(); g.moveTo(s * w * .44, -h * .36); g.lineTo(s * w * .47, -h * .02); g.stroke();
+      g.fillStyle = '#f6f2ea'; g.lineWidth = 4; for (let k = 0; k < 3; k++) { g.beginPath(); g.arc(s * w * .45 + s * k * 1.2, -h * .3 + k * h * .11, 9, 0, 6.29); g.fill(); g.stroke(); } }
+    const dome = () => { g.beginPath(); g.moveTo(-w * .46, -h * .4); g.quadraticCurveTo(-w * .46, -h * 1.0, 0, -h * 1.02); g.quadraticCurveTo(w * .46, -h * 1.0, w * .46, -h * .4); g.closePath(); };
+    shaded(g, dome, { cx: 0, cy: -h * .7, w: w * .92, h: h * .62 }, shade(col, 1.15), shade(col, .62), { lit, blur: 12, push: .14, lift: .12 });
+    g.strokeStyle = PLUM; g.lineWidth = OUT - 1; dome(); g.stroke();
+    g.strokeStyle = shade(col, .6); g.lineWidth = 5; for (const x of [-.22, 0, .22]) { g.beginPath(); g.moveTo(w * x, -h * .44); g.quadraticCurveTo(w * x * 1.1, -h * .8, w * x * .2, -h * 1.0); g.stroke(); }
+    g.fillStyle = shade(col, .85); g.strokeStyle = PLUM; g.lineWidth = OUT - 2; g.beginPath(); g.roundRect(-w * .5, -h * .5, w, h * .13, 10); g.fill(); g.stroke();
+    for (let k = -2; k <= 2; k++) { g.fillStyle = k % 2 ? '#d8343a' : '#3a8ad8'; g.lineWidth = 4; g.beginPath(); g.arc(k * w * .18, -h * .435, 10, 0, 6.29); g.fill(); g.stroke(); }
+    g.fillStyle = col; g.lineWidth = 5; g.beginPath(); g.moveTo(0, -h * 1.0); g.lineTo(0, -h * 1.14); g.stroke(); g.beginPath(); g.moveTo(-w * .05, -h * 1.09); g.lineTo(w * .05, -h * 1.09); g.stroke();
   } else if (kind === 'scholar') {                    // a scholar's black silk cap: a low rounded crown, a ridge, two ribbons falling behind
     const col = look.hatColor || '#2a2838';
     g.strokeStyle = PLUM; g.lineWidth = 16; g.lineCap = 'round';

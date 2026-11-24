@@ -1,0 +1,47 @@
+[
+ {
+  "id": "hook",
+  "start": 0.6,
+  "end": 31.11
+ },
+ {
+  "id": "city",
+  "start": 34.51,
+  "end": 86.1
+ },
+ {
+  "id": "sultan",
+  "start": 87.5,
+  "end": 150.59
+ },
+ {
+  "id": "chain",
+  "start": 151.99,
+  "end": 191.36
+ },
+ {
+  "id": "defeat",
+  "start": 192.76,
+  "end": 230.93
+ },
+ {
+  "id": "plan",
+  "start": 232.33,
+  "end": 280.56
+ },
+ {
+  "id": "night",
+  "start": 281.96,
+  "end": 320.29
+ },
+ {
+  "id": "change",
+  "start": 321.69,
+  "end": 360.04
+ },
+ {
+  "id": "end",
+  "start": 361.44,
+  "end": 420.95
+ }
+]
