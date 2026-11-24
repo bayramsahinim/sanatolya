@@ -155,7 +155,7 @@ def write_srt():
 
 
 def final():
-    parts = [os.path.join(ST, "out", p + ".mp4") for p in ("part1", "part2")]
+    parts = [os.path.join(ST, "out", p + ".mp4") for p in ("p1", "p2", "p3")]
     lst = os.path.join(ST, "out", "parts.txt")
     open(lst, "w").write("".join(f"file '{p}'\n" for p in parts))
     silent = os.path.join(ST, "out", "video_silent.mp4")
