@@ -15,7 +15,7 @@ export const NAME = 'alcatraz-en';
 export const FPS = 30;
 export let DUR = 64;
 export const CUES = [];
-export const CAPTION = { font: '"Montserrat", "Arial Black", sans-serif', size: 76 };
+export const CAPTION = { font: '"Montserrat", "Arial Black", sans-serif', size: 60, weight: 800, stroke: .13, shadow: .25, y: .7, mode: 'phrase', maxChars: 22 };
 
 const S = smoother;
 const ramp = (t, a, b) => S((t - a) / (b - a));
@@ -766,8 +766,8 @@ function setBeam(m, a, b) {
 // ---------------------------------------------------------------- 2D overlay (labels, tags, stamps, notes)
 const proj = (p, Wd, Ht) => { const v = p.clone().project(C.cam); return v.z > 1 ? null : [(v.x + 1) / 2 * Wd, (1 - v.y) / 2 * Ht]; };
 function label(g, s, x, y, size, col, a = 1, rot = 0) {
-  g.save(); g.globalAlpha = a; g.translate(x, y); g.rotate(rot); g.font = `900 ${size}px "Montserrat", sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.lineJoin = 'round'; g.strokeStyle = '#140c1c'; g.lineWidth = size * .22; g.strokeText(s, 0, 0); g.fillStyle = col; g.fillText(s, 0, 0); g.restore();
+  g.save(); g.globalAlpha = a; g.translate(x, y); g.rotate(rot); g.font = `800 ${size}px "Montserrat", sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.lineJoin = 'round'; g.shadowColor = 'rgba(10,6,20,.6)'; g.shadowBlur = size * .2; g.shadowOffsetY = size * .07; g.strokeStyle = '#140c1c'; g.lineWidth = size * .14; g.strokeText(s, 0, 0); g.shadowColor = 'transparent'; g.fillStyle = col; g.fillText(s, 0, 0); g.restore();
 }
 function tag(g, Wd, Ht, name, txt, k) {
   const y = Ht * .235, sc = Wd / 1080; g.save(); g.translate(Wd / 2, y); g.scale((.9 + .1 * k) * sc, (.9 + .1 * k) * sc);

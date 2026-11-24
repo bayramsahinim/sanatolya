@@ -2,7 +2,7 @@
 // URL: /engine/index.html?story=is-odasi[&scale=0.5][&nocap=1]
 import * as THREE from 'three';
 import { Post } from './post.js';
-import { groupWords, drawCaption } from './captions.js';
+import { groupWords, groupPhrases, drawCaption } from './captions.js';
 
 const q = new URLSearchParams(location.search);
 const STORY = q.get('story') || 'is-odasi';
@@ -23,7 +23,7 @@ const base = `/stories/${STORY}/`;
 const story = await import(base + 'story.js');
 const words = await (await fetch(base + (story.WORDS || 'voice/words.json'))).json();
 const env = await (await fetch(base + (story.ENV || 'voice/env.json'))).json().catch(() => []);
-const groups = groupWords(words.words);
+const groups = story.CAPTION && story.CAPTION.mode === 'phrase' ? groupPhrases(words.words, story.CAPTION.maxChars) : groupWords(words.words);
 const scene = new THREE.Scene();
 const cam = new THREE.PerspectiveCamera(50, W / H, .1, 400);
 const ctx = { THREE, scene, cam, renderer, W, H, words: words.words, env, fps: story.FPS || 30 };
