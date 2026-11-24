@@ -115,6 +115,27 @@ const PROPS = {
     g.fillStyle = '#9a6a3a'; g.beginPath(); g.roundRect(-6, -150, 12, 180, 5); g.fill(); g.stroke();
     g.fillStyle = '#b8bcc8'; g.beginPath(); g.moveTo(-70, -128); g.quadraticCurveTo(0, -172, 70, -128); g.quadraticCurveTo(0, -150, -70, -128); g.closePath(); g.fill(); g.stroke(); g.restore(); },
   rope(g, x, y, s) { g.save(); g.translate(x, y); g.strokeStyle = '#c9a66b'; g.lineWidth = 9; g.beginPath(); g.ellipse(0, -4, 22, 12, 0, 0, 6.29); g.stroke(); g.restore(); },
+  // an accordion held across the chest: the bellows open and close with p.squeeze (0 = shut, 1 = wide open)
+  accordion(g, x, y, s, p) { const o = 70 + 90 * (p.squeeze ?? .5), x0 = x - s * o; g.save(); g.strokeStyle = PLUM; g.lineWidth = 6; g.lineJoin = 'round';
+    const top = y - 78, bot = y + 78, n = 7;
+    g.fillStyle = '#e8e0d0'; g.beginPath(); g.moveTo(x0, top + 8);
+    for (let k = 1; k <= n; k++) { const xx = x0 + (x - x0) * k / n; g.lineTo(xx - (x - x0) / n / 2, k % 2 ? top - 6 : top + 8); g.lineTo(xx, top + 8); }
+    g.lineTo(x, bot - 8); for (let k = n - 1; k >= 0; k--) { const xx = x0 + (x - x0) * k / n; g.lineTo(xx + (x - x0) / n / 2, k % 2 ? bot + 6 : bot - 8); g.lineTo(xx, bot - 8); }
+    g.closePath(); g.fill(); g.stroke();
+    g.strokeStyle = '#b84a3a'; g.lineWidth = 4; for (let k = 1; k < n; k++) { const xx = x0 + (x - x0) * k / n; g.beginPath(); g.moveTo(xx, top + 10); g.lineTo(xx, bot - 10); g.stroke(); }
+    g.strokeStyle = PLUM; g.lineWidth = 6;
+    for (const [bx, w2] of [[x0, -s * 44], [x, s * 44]]) { g.fillStyle = '#c0392b'; g.beginPath(); g.roundRect(Math.min(bx, bx + w2), top - 14, Math.abs(w2), bot - top + 28, 10); g.fill(); g.stroke(); }
+    g.fillStyle = '#f7f3ea'; for (let k = 0; k < 4; k++) { g.beginPath(); g.roundRect(x + s * 8 - 7, top + 6 + k * 36, 14, 24, 4); g.fill(); g.stroke(); }
+    g.restore(); },
+  flashlight(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-1.35 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
+    g.fillStyle = '#3a3a44'; g.beginPath(); g.roundRect(-12, -20, 24, 96, 8); g.fill(); g.stroke();
+    g.fillStyle = '#5a5a66'; g.beginPath(); g.moveTo(-20, 70); g.lineTo(20, 70); g.lineTo(26, 110); g.lineTo(-26, 110); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = '#fff6c8'; g.beginPath(); g.ellipse(0, 110, 26, 8, 0, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
+  needle(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.8 * s); g.strokeStyle = PLUM; g.lineWidth = 5; g.fillStyle = '#d8dce8';
+    g.beginPath(); g.moveTo(-4, -50); g.lineTo(4, -50); g.lineTo(0, 30); g.closePath(); g.fill(); g.stroke();
+    g.strokeStyle = '#e04a3a'; g.lineWidth = 4; g.beginPath(); g.moveTo(0, -46); g.quadraticCurveTo(40, -90, 20, -140); g.stroke(); g.restore(); },
+  paddle(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.5 * s); g.strokeStyle = PLUM; g.lineWidth = 6; g.fillStyle = '#9a6a3a';
+    g.beginPath(); g.roundRect(-6, -180, 12, 300, 5); g.fill(); g.stroke(); g.beginPath(); g.roundRect(-28, 110, 56, 120, 20); g.fill(); g.stroke(); g.restore(); },
   spoon(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(.2 * s); g.strokeStyle = PLUM; g.lineWidth = 6; g.fillStyle = '#a8763e';
     g.beginPath(); g.roundRect(-5, -10, 10, 80, 5); g.fill(); g.stroke(); g.beginPath(); g.ellipse(0, 84, 16, 22, 0, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
 };
@@ -137,6 +158,14 @@ function hat(g, kind, w, h, look, lit) {
     }
     g.restore();
     g.strokeStyle = PLUM; g.lineWidth = OUT - 1; wrap(); g.stroke();
+  } else if (kind === 'cap') {                        // a guard's peaked cap: a soft crown, a black visor, a badge
+    const col = look.hatColor || '#2f4a3a';
+    const crown = () => { g.beginPath(); g.moveTo(-w * .5, -h * .42); g.quadraticCurveTo(-w * .56, -h * .86, -w * .1, -h * .9); g.quadraticCurveTo(w * .5, -h * .92, w * .58, -h * .66); g.quadraticCurveTo(w * .6, -h * .5, w * .5, -h * .42); g.closePath(); };
+    shaded(g, crown, { cx: 0, cy: -h * .66, w: w * 1.1, h: h * .5 }, shade(col, 1.12), shade(col, .68), { lit, blur: 12, push: .14, lift: .12 });
+    g.strokeStyle = PLUM; crown(); g.stroke();
+    g.fillStyle = shade(col, .55); g.beginPath(); g.roundRect(-w * .5, -h * .5, w * 1.0, h * .1, 10); g.fill(); g.stroke();
+    g.fillStyle = '#1e1a24'; g.beginPath(); g.moveTo(-w * .46, -h * .41); g.quadraticCurveTo(0, -h * .27, w * .52, -h * .41); g.quadraticCurveTo(0, -h * .36, -w * .46, -h * .41); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = '#f0c040'; g.beginPath(); g.moveTo(0, -h * .78); g.lineTo(w * .07, -h * .7); g.lineTo(0, -h * .6); g.lineTo(-w * .07, -h * .7); g.closePath(); g.fill(); g.lineWidth = 5; g.stroke();
   } else if (kind === 'kulah') {                       // short felt cap of a builder
     const col = look.hatColor || '#8a5a3a';
     const cap = () => { g.beginPath(); g.moveTo(-w * .44, -h * .4); g.quadraticCurveTo(-w * .4, -h * .92, 0, -h * .94); g.quadraticCurveTo(w * .4, -h * .92, w * .44, -h * .4); g.closePath(); };
@@ -404,6 +433,10 @@ export class Toon {
     if (L.collar !== false) {                                                 // a V collar under the chin
       g.strokeStyle = shade(cloth, .5); g.lineWidth = 5; g.lineJoin = 'round';
       g.beginPath(); g.moveTo(cx - tw * .34, bodyTop + 2); g.lineTo(cx, bodyTop + 64); g.lineTo(cx + tw * .34, bodyTop + 2); g.stroke();
+    }
+    if (L.patch) {                                                            // a prisoner's number on the chest
+      g.fillStyle = '#f7f3ea'; g.strokeStyle = shade('#f7f3ea', .6); g.lineWidth = 4; g.beginPath(); g.roundRect(cx + bw * .04, bodyTop + 78, bw * .34, 46, 6); g.fill(); g.stroke();
+      g.fillStyle = PLUM; g.font = '900 30px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(L.patch, cx + bw * .21, bodyTop + 102);
     }
     if (L.apron) { g.fillStyle = '#f7f3ea'; g.strokeStyle = shade('#f7f3ea', .7); g.lineWidth = 4; g.beginPath(); g.roundRect(cx - bw * .34, bodyTop + 100, bw * .68, bodyBot - bodyTop - 112, 16); g.fill(); g.stroke();
       g.beginPath(); g.roundRect(cx - 26, bodyTop + 190, 52, 42, 8); g.stroke(); }
