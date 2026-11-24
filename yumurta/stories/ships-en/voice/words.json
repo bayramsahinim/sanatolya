@@ -1,0 +1,939 @@
+{
+"words": [
+{
+"word": "To",
+"start": 0.0,
+"end": 0.26
+},
+{
+"word": "win",
+"start": 0.26,
+"end": 0.44
+},
+{
+"word": "a",
+"start": 0.44,
+"end": 0.58
+},
+{
+"word": "battle",
+"start": 0.58,
+"end": 0.74
+},
+{
+"word": "at",
+"start": 0.74,
+"end": 0.96
+},
+{
+"word": "sea,",
+"start": 0.96,
+"end": 1.2
+},
+{
+"word": "he",
+"start": 1.48,
+"end": 1.56
+},
+{
+"word": "pulled",
+"start": 1.56,
+"end": 1.82
+},
+{
+"word": "seventy",
+"start": 1.82,
+"end": 2.4
+},
+{
+"word": "warships",
+"start": 2.4,
+"end": 2.98
+},
+{
+"word": "out",
+"start": 2.98,
+"end": 3.4
+},
+{
+"word": "of",
+"start": 3.4,
+"end": 3.56
+},
+{
+"word": "the",
+"start": 3.56,
+"end": 3.66
+},
+{
+"word": "sea.",
+"start": 3.66,
+"end": 3.86
+},
+{
+"word": "You",
+"start": 4.12,
+"end": 4.12
+},
+{
+"word": "see,",
+"start": 4.12,
+"end": 4.26
+},
+{
+"word": "the",
+"start": 4.44,
+"end": 4.48
+},
+{
+"word": "city's",
+"start": 4.48,
+"end": 4.8
+},
+{
+"word": "harbor",
+"start": 4.8,
+"end": 4.94
+},
+{
+"word": "is",
+"start": 4.94,
+"end": 5.16
+},
+{
+"word": "locked",
+"start": 5.16,
+"end": 5.44
+},
+{
+"word": "by",
+"start": 5.44,
+"end": 5.66
+},
+{
+"word": "a",
+"start": 5.66,
+"end": 6.02
+},
+{
+"word": "giant",
+"start": 6.02,
+"end": 6.38
+},
+{
+"word": "iron",
+"start": 6.38,
+"end": 6.76
+},
+{
+"word": "chain.",
+"start": 6.76,
+"end": 7.2
+},
+{
+"word": "His",
+"start": 7.6,
+"end": 7.7
+},
+{
+"word": "fleet",
+"start": 7.7,
+"end": 7.94
+},
+{
+"word": "rams",
+"start": 7.94,
+"end": 8.4
+},
+{
+"word": "it,",
+"start": 8.4,
+"end": 8.6
+},
+{
+"word": "and",
+"start": 8.6,
+"end": 8.84
+},
+{
+"word": "bounces",
+"start": 8.84,
+"end": 9.2
+},
+{
+"word": "right",
+"start": 9.2,
+"end": 9.5
+},
+{
+"word": "off.",
+"start": 9.5,
+"end": 9.74
+},
+{
+"word": "The",
+"start": 10.2,
+"end": 10.3
+},
+{
+"word": "defenders",
+"start": 10.3,
+"end": 10.54
+},
+{
+"word": "laugh",
+"start": 10.54,
+"end": 10.9
+},
+{
+"word": "from",
+"start": 10.9,
+"end": 11.2
+},
+{
+"word": "the",
+"start": 11.2,
+"end": 11.32
+},
+{
+"word": "walls:",
+"start": 11.32,
+"end": 11.56
+},
+{
+"word": "\"Ships",
+"start": 12.04,
+"end": 12.08
+},
+{
+"word": "can't",
+"start": 12.08,
+"end": 12.48
+},
+{
+"word": "climb",
+"start": 12.48,
+"end": 12.68
+},
+{
+"word": "hills.\"",
+"start": 12.68,
+"end": 13.02
+},
+{
+"word": "Weeks",
+"start": 13.52,
+"end": 13.64
+},
+{
+"word": "pass.",
+"start": 13.64,
+"end": 14.08
+},
+{
+"word": "The",
+"start": 14.56,
+"end": 14.68
+},
+{
+"word": "walls",
+"start": 14.68,
+"end": 14.92
+},
+{
+"word": "hold.",
+"start": 14.92,
+"end": 15.26
+},
+{
+"word": "Supply",
+"start": 15.98,
+"end": 15.98
+},
+{
+"word": "ships",
+"start": 15.98,
+"end": 16.24
+},
+{
+"word": "slip",
+"start": 16.24,
+"end": 16.52
+},
+{
+"word": "into",
+"start": 16.52,
+"end": 16.76
+},
+{
+"word": "the",
+"start": 16.76,
+"end": 16.94
+},
+{
+"word": "harbor.",
+"start": 16.94,
+"end": 17.18
+},
+{
+"word": "And",
+"start": 17.48,
+"end": 17.64
+},
+{
+"word": "his",
+"start": 17.64,
+"end": 17.72
+},
+{
+"word": "own",
+"start": 17.72,
+"end": 17.98
+},
+{
+"word": "generals",
+"start": 17.98,
+"end": 18.32
+},
+{
+"word": "whisper",
+"start": 18.32,
+"end": 18.62
+},
+{
+"word": "that",
+"start": 18.62,
+"end": 18.86
+},
+{
+"word": "it's",
+"start": 18.86,
+"end": 19.26
+},
+{
+"word": "time",
+"start": 19.26,
+"end": 19.46
+},
+{
+"word": "to",
+"start": 19.46,
+"end": 19.6
+},
+{
+"word": "go",
+"start": 19.6,
+"end": 19.74
+},
+{
+"word": "home.",
+"start": 19.74,
+"end": 19.96
+},
+{
+"word": "So",
+"start": 20.28,
+"end": 20.4
+},
+{
+"word": "he",
+"start": 20.4,
+"end": 20.62
+},
+{
+"word": "orders",
+"start": 20.62,
+"end": 20.9
+},
+{
+"word": "his",
+"start": 20.9,
+"end": 21.14
+},
+{
+"word": "men",
+"start": 21.14,
+"end": 21.32
+},
+{
+"word": "to",
+"start": 21.32,
+"end": 21.5
+},
+{
+"word": "cut",
+"start": 21.5,
+"end": 21.7
+},
+{
+"word": "a",
+"start": 21.7,
+"end": 21.9
+},
+{
+"word": "forest",
+"start": 21.9,
+"end": 22.2
+},
+{
+"word": "into",
+"start": 22.2,
+"end": 22.54
+},
+{
+"word": "logs,",
+"start": 22.54,
+"end": 22.88
+},
+{
+"word": "lay",
+"start": 23.16,
+"end": 23.34
+},
+{
+"word": "them",
+"start": 23.34,
+"end": 23.48
+},
+{
+"word": "over",
+"start": 23.48,
+"end": 23.62
+},
+{
+"word": "the",
+"start": 23.62,
+"end": 23.76
+},
+{
+"word": "hill",
+"start": 23.76,
+"end": 23.98
+},
+{
+"word": "behind",
+"start": 23.98,
+"end": 24.26
+},
+{
+"word": "the",
+"start": 24.26,
+"end": 24.38
+},
+{
+"word": "harbor,",
+"start": 24.38,
+"end": 24.72
+},
+{
+"word": "and",
+"start": 24.94,
+"end": 25.24
+},
+{
+"word": "cover",
+"start": 25.24,
+"end": 25.52
+},
+{
+"word": "them",
+"start": 25.52,
+"end": 25.76
+},
+{
+"word": "in",
+"start": 25.76,
+"end": 26.0
+},
+{
+"word": "grease.",
+"start": 26.0,
+"end": 26.3
+},
+{
+"word": "His",
+"start": 26.7,
+"end": 26.8
+},
+{
+"word": "officers",
+"start": 26.8,
+"end": 27.12
+},
+{
+"word": "whisper,",
+"start": 27.12,
+"end": 27.56
+},
+{
+"word": "\"Does",
+"start": 27.66,
+"end": 27.94
+},
+{
+"word": "he",
+"start": 27.94,
+"end": 28.24
+},
+{
+"word": "think",
+"start": 28.24,
+"end": 28.4
+},
+{
+"word": "ships",
+"start": 28.4,
+"end": 28.64
+},
+{
+"word": "can",
+"start": 28.64,
+"end": 28.86
+},
+{
+"word": "walk?\"",
+"start": 28.86,
+"end": 29.22
+},
+{
+"word": "In",
+"start": 29.22,
+"end": 29.68
+},
+{
+"word": "one",
+"start": 29.68,
+"end": 29.96
+},
+{
+"word": "night,",
+"start": 29.96,
+"end": 30.22
+},
+{
+"word": "thousands",
+"start": 30.52,
+"end": 30.78
+},
+{
+"word": "of",
+"start": 30.78,
+"end": 30.98
+},
+{
+"word": "men",
+"start": 30.98,
+"end": 31.18
+},
+{
+"word": "drag",
+"start": 31.18,
+"end": 31.64
+},
+{
+"word": "the",
+"start": 31.64,
+"end": 31.82
+},
+{
+"word": "ships",
+"start": 31.82,
+"end": 32.0
+},
+{
+"word": "out",
+"start": 32.0,
+"end": 32.26
+},
+{
+"word": "of",
+"start": 32.26,
+"end": 32.36
+},
+{
+"word": "the",
+"start": 32.36,
+"end": 32.44
+},
+{
+"word": "water,",
+"start": 32.44,
+"end": 32.74
+},
+{
+"word": "onto",
+"start": 33.12,
+"end": 33.32
+},
+{
+"word": "the",
+"start": 33.32,
+"end": 33.52
+},
+{
+"word": "greasy",
+"start": 33.52,
+"end": 33.88
+},
+{
+"word": "logs,",
+"start": 33.88,
+"end": 34.16
+},
+{
+"word": "and",
+"start": 34.4,
+"end": 34.46
+},
+{
+"word": "up",
+"start": 34.46,
+"end": 34.68
+},
+{
+"word": "the",
+"start": 34.68,
+"end": 34.88
+},
+{
+"word": "hill.",
+"start": 34.88,
+"end": 35.16
+},
+{
+"word": "And",
+"start": 35.64,
+"end": 35.7
+},
+{
+"word": "the",
+"start": 35.7,
+"end": 35.8
+},
+{
+"word": "sailors",
+"start": 35.8,
+"end": 36.0
+},
+{
+"word": "sit",
+"start": 36.0,
+"end": 36.36
+},
+{
+"word": "at",
+"start": 36.36,
+"end": 36.52
+},
+{
+"word": "their",
+"start": 36.52,
+"end": 36.64
+},
+{
+"word": "oars,",
+"start": 36.64,
+"end": 37.0
+},
+{
+"word": "raise",
+"start": 37.16,
+"end": 37.42
+},
+{
+"word": "the",
+"start": 37.42,
+"end": 37.66
+},
+{
+"word": "sails,",
+"start": 37.66,
+"end": 37.88
+},
+{
+"word": "and",
+"start": 38.12,
+"end": 38.24
+},
+{
+"word": "row",
+"start": 38.24,
+"end": 38.58
+},
+{
+"word": "through",
+"start": 38.58,
+"end": 39.02
+},
+{
+"word": "the",
+"start": 39.02,
+"end": 39.16
+},
+{
+"word": "air,",
+"start": 39.16,
+"end": 39.46
+},
+{
+"word": "while",
+"start": 39.46,
+"end": 39.8
+},
+{
+"word": "the",
+"start": 39.8,
+"end": 39.94
+},
+{
+"word": "drums",
+"start": 39.94,
+"end": 40.14
+},
+{
+"word": "beat.",
+"start": 40.14,
+"end": 40.4
+},
+{
+"word": "You",
+"start": 40.66,
+"end": 40.7
+},
+{
+"word": "see,",
+"start": 40.7,
+"end": 40.82
+},
+{
+"word": "the",
+"start": 40.92,
+"end": 41.04
+},
+{
+"word": "chain",
+"start": 41.04,
+"end": 41.34
+},
+{
+"word": "guards",
+"start": 41.34,
+"end": 41.68
+},
+{
+"word": "the",
+"start": 41.68,
+"end": 41.92
+},
+{
+"word": "water.",
+"start": 41.92,
+"end": 42.24
+},
+{
+"word": "Nobody",
+"start": 42.76,
+"end": 42.98
+},
+{
+"word": "guards",
+"start": 42.98,
+"end": 43.32
+},
+{
+"word": "the",
+"start": 43.32,
+"end": 43.52
+},
+{
+"word": "hill.",
+"start": 43.52,
+"end": 43.74
+},
+{
+"word": "And",
+"start": 44.14,
+"end": 44.26
+},
+{
+"word": "on",
+"start": 44.26,
+"end": 44.38
+},
+{
+"word": "greased",
+"start": 44.38,
+"end": 44.62
+},
+{
+"word": "logs,",
+"start": 44.62,
+"end": 44.96
+},
+{
+"word": "a",
+"start": 45.12,
+"end": 45.24
+},
+{
+"word": "ship",
+"start": 45.24,
+"end": 45.42
+},
+{
+"word": "slides",
+"start": 45.42,
+"end": 45.78
+},
+{
+"word": "almost",
+"start": 45.78,
+"end": 46.16
+},
+{
+"word": "as",
+"start": 46.16,
+"end": 46.38
+},
+{
+"word": "easily",
+"start": 46.38,
+"end": 46.68
+},
+{
+"word": "as",
+"start": 46.68,
+"end": 46.92
+},
+{
+"word": "it",
+"start": 46.92,
+"end": 47.04
+},
+{
+"word": "floats.",
+"start": 47.04,
+"end": 47.26
+},
+{
+"word": "At",
+"start": 47.62,
+"end": 47.82
+},
+{
+"word": "dawn,",
+"start": 47.82,
+"end": 48.08
+},
+{
+"word": "the",
+"start": 48.3,
+"end": 48.4
+},
+{
+"word": "defenders",
+"start": 48.4,
+"end": 48.64
+},
+{
+"word": "look",
+"start": 48.64,
+"end": 48.94
+},
+{
+"word": "down",
+"start": 48.94,
+"end": 49.14
+},
+{
+"word": "at",
+"start": 49.14,
+"end": 49.28
+},
+{
+"word": "their",
+"start": 49.28,
+"end": 49.38
+},
+{
+"word": "safe",
+"start": 49.38,
+"end": 49.6
+},
+{
+"word": "harbor",
+"start": 49.6,
+"end": 49.86
+},
+{
+"word": "and",
+"start": 49.86,
+"end": 50.28
+},
+{
+"word": "freeze.",
+"start": 50.28,
+"end": 50.72
+},
+{
+"word": "Seventy",
+"start": 51.64,
+"end": 51.64
+},
+{
+"word": "enemy",
+"start": 51.64,
+"end": 51.92
+},
+{
+"word": "ships",
+"start": 51.92,
+"end": 52.2
+},
+{
+"word": "are",
+"start": 52.2,
+"end": 52.38
+},
+{
+"word": "floating",
+"start": 52.38,
+"end": 52.62
+},
+{
+"word": "inside",
+"start": 52.62,
+"end": 52.98
+},
+{
+"word": "it.",
+"start": 52.98,
+"end": 53.2
+},
+{
+"word": "And",
+"start": 53.46,
+"end": 53.6
+},
+{
+"word": "the",
+"start": 53.6,
+"end": 53.7
+},
+{
+"word": "chain?",
+"start": 53.7,
+"end": 53.9
+},
+{
+"word": "Still",
+"start": 54.24,
+"end": 54.4
+},
+{
+"word": "locked.",
+"start": 54.4,
+"end": 54.6
+}
+]
+}
