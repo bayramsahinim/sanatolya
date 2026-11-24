@@ -287,9 +287,9 @@ function pavingTex() {
 
 // ---------------------------------------------------------------- SET: the fort (x = 0)
 const WH = 8, WT = 5, WX = 64, GW = 5, GH = 5.6;      // wall height, thickness, half-length; gate width, height
-const HERO_P = [0, -1.9];                               // where the strategist sits on the wall (x, z)
-const ZITH = [0, -1.15];                                // the zither table
-const BURN = [1.25, -1.25];                             // the incense burner
+const HERO_P = [0, -1.75];                               // where the strategist sits on the wall (x, z)
+const ZITH = [0, -1.0];                                // the zither table
+const BURN = [1.2, -1.15];                             // the incense burner
 const STAIR = { x0: 18, x1: 9.5, z: -6.4 };             // the stair up the back of the wall (ground at x0, top at x1)
 const YARD = { hero: [0, -11.5], cook1: [-2.6, -12.6], cook2: [-3.9, -13.4], old: [2.7, -12.4], off1: [-1.5, -12.2], off2: [1.6, -12.3], pot: [-5.0, -14.2] };
 const banners = [];
@@ -320,19 +320,19 @@ function buildFort(scene) {
   // the walk on top, the crenels in front (an open balcony over the gate), a low parapet behind
   box(g, WX * 2, .12, WT, X, WH + .06, -WT / 2, top);
   for (let x = -WX + .8; x < WX; x += 2.2) { if (Math.abs(x) < 6.5) continue; box(g, 1.3, 1.3, .6, X + x, WH + .65, -.3, stoneS); }
-  box(g, WX * 2, .45, .6, X, WH + .22, -.3, stoneS);
-  for (let x = -6.4; x <= 6.4; x += .8) cyl(g, .05, .05, .55, X + x, WH + .55, -.25, red, [0, 0, 0], 6);
-  box(g, 12.9, .1, .14, X, WH + .85, -.25, red);
+  for (const s of [-1, 1]) { box(g, WX - 3.2, .45, .6, X + s * (3.2 + (WX - 3.2) / 2), WH + .22, -.3, stoneS); box(g, 3.3, .1, .14, X + s * 4.85, WH + .85, -.25, red); }
+  for (let x = 3.2; x <= 6.4; x += .8) for (const s of [-1, 1]) cyl(g, .05, .05, .55, X + s * x, WH + .55, -.25, red, [0, 0, 0], 6);
+  box(g, 6.4, .14, .7, X, WH + .07, -.25, flat('#b83a3a'));
   box(g, WX * 2, .6, .4, X, WH + .3, -WT + .2, stoneS);
   // the side and back walls (so the aerial shot reads as a walled town)
   for (const s of [-1, 1]) box(g, WT, WH, 96, X + s * (WX - WT / 2), WH / 2, -WT - 48, stone);
   for (const s of [-1, 1]) box(g, WX - 4, WH, WT, X + s * (WX / 2 + 2), WH / 2, -WT - 96 + WT / 2, stone);
   // the gate pavilion on the wall: red columns, a plastered back with a round window, two tiers of blue roof
-  const plaster = painted(plasterTex({ rep: [3, 1] }));
+  const plaster = painted(plasterTex({ base: '#fbf4e2', rep: [3, 1] }));
   for (const x of [-5.6, -2, 2, 5.6]) for (const z of [-.9, -4.4]) { cyl(g, .2, .22, 3.3, X + x, WH + 1.65, z, red, [0, 0, 0], 12); box(g, .5, .2, .5, X + x, WH + 3.35, z, gold); }
   box(g, 11.2, 3.2, .3, X, WH + 1.6, -4.6, plaster);
-  const win = new THREE.Mesh(new THREE.TorusGeometry(.8, .12, 8, 28), red); win.position.set(X, WH + 1.9, -4.42); g.add(win);
-  ball(g, .7, X, WH + 1.9, -4.48, flat('#3a3048'), [1, 1, .1]);
+  for (const s of [-1, 1]) { const win = new THREE.Mesh(new THREE.TorusGeometry(.55, .1, 8, 28), red); win.position.set(X + s * 3.8, WH + 2.0, -4.42); g.add(win); ball(g, .5, X + s * 3.8, WH + 2.0, -4.47, flat('#f4dca0'), [1, 1, .1]); }
+  for (const s of [-1, 1]) for (const y of [1.2, 2.2]) box(g, .9, .5, .06, X + s * 1.0, WH + y, -4.42, flat('#e8c860'));
   box(g, 12.4, .4, .3, X, WH + 3.1, -.9, red); box(g, 12.4, .4, .3, X, WH + 3.1, -4.4, red);
   box(g, 13.4, .14, 5.6, X, WH + 3.45, -2.65, roof);
   const hip1 = new THREE.Mesh(new THREE.ConeGeometry(1, 1.7, 4), roof); hip1.rotation.y = Math.PI / 4; hip1.scale.set(9.6, 1, 4.4); hip1.position.set(X, WH + 4.35, -2.65); g.add(hip1);
@@ -394,7 +394,7 @@ function buildFort(scene) {
   for (const y of [.8, 1.6]) box(g, 2.3, .08, .1, X + 7, y, -9, bw);
   for (let k = 0; k < 6; k++) { cyl(g, .025, .025, 2.6, X + 6.2 + k * .32, 1.3, -8.9, flat('#7a5236'), [0, 0, .08], 5); const tip = new THREE.Mesh(new THREE.ConeGeometry(.05, .2, 6), flat('#c8ccd8')); tip.position.set(X + 6.3 + k * .32, 2.65, -8.9); g.add(tip); }
   // the red carpet, rolled out on the road at "like guests are coming"
-  const cm = new THREE.MeshLambertMaterial({ color: '#d8343a' }); dyn.carpet = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 1).translate(0, .5, 0), cm);
+  const cm = new THREE.MeshLambertMaterial({ color: '#d8343a' }); dyn.carpet = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 1).translate(0, -.5, 0), cm);
   dyn.carpet.rotation.x = -Math.PI / 2; dyn.carpet.position.set(X, .05, -.5); g.add(dyn.carpet);
   dyn.carpetRoll = cyl(g, .22, .22, 2.2, X, .22, 0, cm, [0, 0, Math.PI / 2], 14);
   // the plain: trees in clumps beside the road, far hills
@@ -408,6 +408,8 @@ function buildFort(scene) {
   dyn.hemi = new THREE.HemisphereLight('#d4e8ff', '#b8a478', 2.3); Lg.add(dyn.hemi);
   dyn.sun = sunLight(Lg, X, [-.5, -.68, -.52], { color: '#ffe0b0', k: 3.1, size: 40 });
   dyn.sun.light.shadow.mapSize.set(4096, 4096);
+  const pf = new THREE.PointLight('#ffe4b8', 9, 12, 1.2); pf.position.set(X, WH + 2.6, -1.2); Lg.add(pf);
+  dyn.stairFill = new THREE.PointLight('#fff0d8', 0, 26, 1.1); dyn.stairFill.position.set(X + 12, 6, -13); Lg.add(dyn.stairFill);
   scene.add(Lg); sets.fort = { g, L: Lg }; shadows(g);
 }
 // the enemy's banners, carried in the army (they move with it)
@@ -437,7 +439,7 @@ export const LOOK = {
   scout: { ...BULK, hat: 'kettle', crest: '#2f5fa8', cloth: '#3f6fc0', sash: '#5a3a22', height: 1.7 },
   sweep1: { ...BULK, hat: 'kulah', hatColor: '#3a5a3a', cloth: '#9a7a50', sash: '#5a3a22', height: 1.66 },
   sweep2: { ...BULK, hat: 'kulah', hatColor: '#6a3a2a', cloth: '#7a9a6a', mustache: '#3a2618', height: 1.7 },
-  general: { ...BULK, body: 'robe', cloth: '#3a2e5a', trim: '#e0aa3e', hat: 'crown', hatColor: '#c8ccd8', pin: '#e0aa3e', hair: '#2a1a22', beard: '#2a1a22', beardLen: .5, mustache: '#2a1a22', height: 1.76 },
+  general: { ...BULK, body: 'robe', cloth: '#3a2e5a', trim: '#e0aa3e', hat: 'crown', hatColor: '#c8ccd8', pin: '#e0aa3e', beard: '#2a1a22', beardLen: .5, mustache: '#2a1a22', height: 1.76 },
   soldier: { ...BULK, hat: 'kettle', crest: '#2f5fa8', cloth: '#3f6fc0', sash: '#5a3a22', height: 1.7 },
   enemy: ENEMY,
   enemy2: { ...ENEMY, mustache: '#2a1a22', height: 1.72 },
@@ -449,7 +451,7 @@ export const LOOK = {
 const RUN0 = () => w(145) - .1;
 function armyZ(t) {
   if (t < w(19) - .06) return 37;
-  if (t < w(112) - .06) return 175 - Math.max(0, t - w(52)) * 4;
+  if (t < w(112) - .06) return 120 - Math.max(0, t - w(52)) * 4;
   if (t < RUN0()) return lerp(70, 37, ramp(t, w(112) - .06, w(118)));
   const u = t - RUN0(); return 37 + 2 * u * u + 6 * u;
 }
@@ -470,7 +472,7 @@ function cameraPath() {
     // HOOK: the general and his army fill the plain; the gate swings open; the strategist plays on the wall
     { t: 0, pos: [.2, 2.35, 29.6], look: [0, 2.2, 40], fov: 50, creep: .35, drift: .05 },
     { t: w(11) - .06, dur: .3, move: 'whip', pos: [1.2, 1.35, 15], look: [0, 4.6, -1], fov: 52, creep: .3 },
-    { t: w(15) - .06, dur: .3, move: 'whip', pos: [.55, HY + .35, 1.9], look: [0, HY - .2, hz], fov: 42, creep: .35 },
+    { t: w(15) - .06, dur: .3, move: 'whip', pos: [.55, HY + .4, 2.6], look: [0, HY - .3, hz], fov: 44, creep: .35 },
     // THE PROBLEM: the town from above, his army marching away behind it; the courtyard; a cook; an old guard
     { t: w(19) - .06, dur: .34, move: 'whip', pos: [14, 30, 34], look: [0, 0, -80], fov: 52, creep: .25 },
     { t: w(26) - .06, dur: .3, move: 'whip', pos: [.2, 1.85, -5.6], look: [0, 1.4, -12.6], fov: 54, creep: .3 },
@@ -479,7 +481,7 @@ function cameraPath() {
     // the scout runs in through the gate; his panic; from the wall the dust of the army on the horizon
     { t: w(41) - .06, dur: .3, move: 'whip', pos: [2.4, 1.7, -17.5], look: [0, 2.4, -2], fov: 52, creep: .3 },
     { t: w(46) - .06, dur: .3, move: 'whip', pos: [.9, 1.65, -8.3], look: [.6, 1.55, -10.9], fov: 42, creep: .3 },
-    { t: w(52) - .06, dur: .32, move: 'whip', pos: [5, WH + 2.4, -1.5], look: [0, 4, 120], fov: 46, creep: .3 },
+    { t: w(52) - .06, dur: .32, move: 'whip', pos: [9, WH + 2.6, -2], look: [0, 2, 90], fov: 44, creep: .3 },
     // run? fight? the officers panic
     { t: w(56) - .06, dur: .3, move: 'whip', pos: [.35, 1.8, -8.8], look: [0, 1.65, -11.5], fov: 42, creep: .3 },
     { t: w(59) - .06, dur: .3, move: 'whip', pos: [-1.9, 1.45, -9.6], look: [-3.0, 1.45, -12.9], fov: 46, creep: .3 },
@@ -487,35 +489,35 @@ function cameraPath() {
     // the orders: the calm strategist; flags down; soldiers hide; gates open; the road swept, a red carpet
     { t: w(66) - .06, dur: .3, move: 'whip', pos: [0, 1.7, -7.4], look: [0, 1.6, -11.8], fov: 50, creep: .3 },
     { t: w(75) - .06, dur: .32, move: 'whip', pos: [-15, 3.2, 15], look: [12, 6.2, -1], fov: 52, creep: .3 },
-    { t: w(79) - .06, dur: .3, move: 'whip', pos: [-5.5, WH - .6, 8.5], look: [-14, WH + .9, -1], fov: 44, creep: .3 },
+    { t: w(79) - .06, dur: .3, move: 'whip', pos: [-4, WH + 3.5, 7], look: [-13, WH + 1, -1.5], fov: 50, creep: .3 },
     { t: w(82) - .06, dur: .3, move: 'whip', pos: [0, 1.75, -9.5], look: [0, 2.6, 8], fov: 50, creep: .3 },
     { t: w(86) - .06, dur: .3, move: 'whip', pos: [3.2, 1.55, 13.6], look: [0, 1.4, 6], fov: 48, creep: .3 },
     // he climbs the wall, lights the incense, sits, plays
-    { t: w(94) - .06, dur: .32, move: 'whip', pos: [6.5, 3.2, -18.5], look: [13, 4.4, -6.4], fov: 52, creep: .25 },
-    { t: w(99) - .06, dur: .3, move: 'whip', pos: [BURN[0] + .9, WH + 1.05, .6], look: [BURN[0] - .1, WH + .6, BURN[1]], fov: 38, creep: .3 },
-    { t: w(102) - .06, dur: .3, move: 'whip', pos: [0, HY + .25, 3.1], look: [0, HY - .35, hz], fov: 46, creep: .3 },
-    { t: w(107) - .06, dur: .3, move: 'whip', pos: [.3, HY + .15, .5], look: [0, HY - .05, hz], fov: 40, creep: .35 },
+    { t: w(94) - .06, dur: .32, move: 'whip', pos: [8, WH + 4, -15], look: [13.5, 4.5, -6.4], fov: 50, creep: .25 },
+    { t: w(99) - .06, dur: .3, move: 'whip', pos: [BURN[0] + .9, WH + 1.15, .9], look: [BURN[0] - .2, WH + .55, BURN[1]], fov: 38, creep: .3 },
+    { t: w(102) - .06, dur: .3, move: 'whip', pos: [0, HY + .35, 3.6], look: [0, HY - .45, hz], fov: 46, creep: .3 },
+    { t: w(107) - .06, dur: .3, move: 'whip', pos: [.3, HY + .2, 1.6], look: [0, HY - .2, hz], fov: 42, creep: .35 },
     // the enemy arrives; the general freezes; what he sees; he knows this man; the trap he imagines
-    { t: w(112) - .06, dur: .34, move: 'whip', pos: [-7, 4.2, 82], look: [0, 5.5, 0], fov: 38, creep: .25 },
+    { t: w(112) - .06, dur: .34, move: 'whip', pos: [-8, 9, 100], look: [0, 4, 0], fov: 34, creep: .25 },
     { t: w(117) - .06, dur: .3, move: 'whip', pos: [.35, 1.8, 28.9], look: [0, 1.75, 31.6], fov: 42, creep: .3 },
     { t: w(119) - .06, dur: .3, move: 'whip', pos: [0, 1.85, 30.5], look: [0, 4.2, 0], fov: 36, creep: .3 },
     { t: w(121) - .06, dur: .3, move: 'whip', pos: [0, 1.75, 13], look: [0, 1.4, -40], fov: 30, creep: .3 },
-    { t: w(123) - .06, dur: .3, move: 'whip', pos: [0, 2.1, 24], look: [0, HY - .1, hz], fov: 14, creep: .3 },
+    { t: w(123) - .06, dur: .3, move: 'whip', pos: [0, 2.1, 24], look: [0, HY - .25, hz], fov: 9, creep: .3 },
     { t: w(127) - .06, dur: .3, move: 'whip', pos: [-.4, 1.78, 29.0], look: [0, 1.72, 31.6], fov: 38, creep: .3 },
-    { t: w(131) - .06, dur: .3, move: 'whip', pos: [-.9, HY + .3, 2.8], look: [0, HY - .3, hz], fov: 44, creep: .3 },
-    { t: w(136) - .06, dur: .32, move: 'whip', pos: [0, 3.4, 27], look: [0, 6.2, 0], fov: 50, creep: .3 },
+    { t: w(131) - .06, dur: .3, move: 'whip', pos: [-.9, HY + .4, 3.2], look: [0, HY - .35, hz], fov: 44, creep: .3 },
+    { t: w(136) - .06, dur: .32, move: 'whip', pos: [0, 4.4, 20], look: [0, 6.2, 0], fov: 56, creep: .3 },
     // the whole army turns and runs
     { t: w(143) - .06, dur: .32, move: 'whip', pos: [3, WH + 4.5, -1.0], look: [0, 1.5, 50], fov: 54, creep: .2 },
     { t: w(148) - .06, dur: .3, move: 'whip', pos: [.6, 1.9, 52], look: [0, 1.7, 44], fov: 46, creep: .25 },
     { t: w(151) + .3, dur: 1.2, pos: [.6, 1.9, 70], look: [0, 1.7, 62], fov: 46, creep: .25 },
     // why it works
-    { t: w(152) - .06, dur: .3, move: 'whip', pos: [.3, HY + .15, .55], look: [0, HY - .05, hz], fov: 40, creep: .3 },
-    { t: w(159) - .06, dur: .3, move: 'whip', pos: [-1.2, HY + .4, 2.4], look: [0, HY - .2, hz], fov: 42, creep: .3 },
+    { t: w(152) - .06, dur: .3, move: 'whip', pos: [.3, HY + .2, 1.7], look: [0, HY - .2, hz], fov: 42, creep: .3 },
+    { t: w(159) - .06, dur: .3, move: 'whip', pos: [-1.2, HY + .4, 2.8], look: [0, HY - .3, hz], fov: 42, creep: .3 },
     // the end: over the wall, nobody; just cooks; and one very good actor
-    { t: w(165) - .06, dur: .32, move: 'whip', pos: [0, WH + 7, 7], look: [0, 0, -16], fov: 54, creep: .2 },
-    { t: w(171) - .2, dur: 1.0, pos: [0, WH + 2.5, -3], look: [-2.5, .5, -15], fov: 54, creep: .2 },
+    { t: w(165) - .06, dur: .32, move: 'whip', pos: [13, WH + 7, 3], look: [-1, 0, -14], fov: 54, creep: .2 },
+    { t: w(171) - .2, dur: 1.0, pos: [2, 5, -6], look: [-3, 1, -13.5], fov: 54, creep: .2 },
     { t: w(172) - .06, dur: .3, move: 'whip', pos: [-2.4, 1.6, -9.2], look: [-3.2, 1.5, -13.1], fov: 46, creep: .3 },
-    { t: w(174) - .06, dur: .3, move: 'whip', pos: [.3, HY + .15, .5], look: [0, HY - .05, hz], fov: 40, creep: .35 },
+    { t: w(174) - .06, dur: .3, move: 'whip', pos: [.3, HY + .2, 1.5], look: [0, HY - .15, hz], fov: 40, creep: .35 },
   ];
   const cp = new CamPath(keys, { fps: FPS });
   cp.kick(w(14), .4); cp.kick(w(85), .5); cp.kick(w(118), .6); cp.kick(w(142), .8); cp.kick(RUN0(), .6);
@@ -571,6 +573,7 @@ export function frame(t, ctx) {
   for (const f of dyn.flames || []) f.f.visible = true;
   dyn.potFlame.scale.set(1, 1 + .18 * Math.sin(t * 17) * Math.sin(t * 5.3), 1);
   // ---- the world's moving parts
+  dyn.stairFill.intensity = t >= w(94) - .3 && t < w(99) ? 12 : 0;
   const dk = doorK(t); for (const d of dyn.doors) d.pv.rotation.y = d.s < 0 ? dk * 100 * DEG : -dk * 100 * DEG;
   for (const b of banners) {
     const t0 = w(76) + (Math.abs(b.x) - 9) / 40 * (w(79) - w(76)) * .8;
@@ -617,7 +620,7 @@ export function frame(t, ctx) {
       card(c, x, y, z, dyn.armyMats[c.k][st]);
     });
     dyn.armyFlags.forEach(F => { const z = aZ + F.row * 1.55 + (running ? (t - RUN0()) * .6 : 0); F.f.position.set(F.x, marching ? Math.abs(Math.sin(t * 6 + F.x)) * .08 : 0, z); F.f.rotation.z = running ? Math.sin(t * 9 + F.x) * .25 : 0; });
-    if (marching || running) dyn.dust.wisps.push({ n: 900, size: 5, alpha: running ? .55 : .4, speed: .05, path: (u, tt, i) => [-42 + hash(i, 3.3) * 84, .3 + hash(i, 7.1) * 2.5 + u * 1.5, aZ + 4 + hash(i, 1.9) * 26 + u * 2] });
+    if (running) dyn.dust.wisps.push({ n: 500, size: 3, alpha: running ? .3 : .22, speed: .05, path: (u, tt, i) => [-42 + hash(i, 3.3) * 84, .3 + hash(i, 7.1) * 1.5 + u * 1.2, aZ + 6 + hash(i, 1.9) * 26 + u * 2] });
   } else dyn.armyFlagG.visible = false;
 
   // ================= HOOK (a flash-forward) =================
@@ -687,7 +690,7 @@ export function frame(t, ctx) {
     } else if (t < w(86) - .06) {
       // flags come down; the soldiers on the wall duck out of sight; the gates swing open
       dyn.wallMen.forEach((c, i) => {
-        const x = (i % 2 ? 1 : -1) * (8 + Math.floor(i / 2) * 2.6), t0 = w(80) + (Math.abs(x) - 8) / 44 * .9 + c.r * .15;
+        const x = (i % 2 ? 1 : -1) * (8 + Math.floor(i / 2) * 2.6), t0 = w(81) + (Math.abs(x) - 8) / 44 * .9 + c.r * .15;
         if (t >= t0 + .3) { if (!(i === 3 && t > w(81) && t < w(81) + .5)) return; }
         const dn = 1.9 * S(lin(t, t0, t0 + .3)) * (i === 3 && t > w(81) ? 1 - Math.sin(lin(t, w(81), w(81) + .5) * Math.PI) : 1);
         card(c, x, WH + .12 - dn, -1.4, dyn.wallMats[c.k][t >= w(79) - .06 ? 1 : 0]);
@@ -745,7 +748,7 @@ export function frame(t, ctx) {
       dyn.ambush.forEach((c, i) => {
         const inGate = i >= 50, t0 = w(137) + c.r * 1.4 + (inGate ? .4 : 0), k = backOut(lin(t, t0, t0 + .25)); if (t < t0) return;
         if (inGate) card(c, (c.r2 - .5) * 4.2, 0, -1.5 - c.r3 * 3, dyn.ambushMats[c.k][0], [1.05, .9, .9], k);
-        else { const x = (i % 2 ? 1 : -1) * (7.5 + Math.floor(i / 2) * 1.6); card(c, x, WH + .12 - 1.6 * (1 - k), -1.2, dyn.ambushMats[c.k][0], [1.05, .9, .9]); }
+        else { const x = (i % 2 ? 1 : -1) * (3.6 + Math.floor(i / 2) * 1.3); card(c, x, WH + .12 - 1.6 * (1 - k), -1.2, dyn.ambushMats[c.k][0], [1.05, .9, .9]); }
       });
     }
     if (t >= w(148) - .06) {
@@ -779,7 +782,7 @@ export function frame(t, ctx) {
   for (const sm of [dyn.smoke, dyn.dust, dyn.steam]) sm.update(t);
   // ---- the look: bright and warm (see the header)
   const imagine = t >= w(136) - .06 && t < w(143) - .06;
-  const look = { sat: 1.26, lift: [.07, .07, .1], bloom: .55, bloomAt: 1.05, vignette: imagine ? .38 : .14, contrast: 1.03, tint: imagine ? [1.08, .98, .98] : [1.07, 1.05, 1.0] };
+  const look = { sat: 1.26, lift: [.07, .07, .1], bloom: .55, bloomAt: 1.05, vignette: imagine ? .38 : .14, contrast: 1.03, tint: imagine ? [1.04, .95, .95] : [1.03, 1.01, .97] };
   if (focus) Object.assign(look, { focus: cam.position.distanceTo(focus), coc: 4, range: 5 });
   look.blur = cp.moving > .15 ? 16 : 0;
   if (t >= BOOM() && t < BOOM() + .3) look.flash = Math.max(0, .3 - (t - BOOM()) * 1);
@@ -853,7 +856,7 @@ export function overlay(g, t, ctx) {
   if (t >= w(70) && t < w(75) - .06) big(g, W, H, 'STRANGEST ORDERS', '#ffd60a', pop(w(70)));
   // the orders checklist
   if (t >= w(75) - .1 && t < w(94) - .06) orders(g, W, H, t, sc);
-  if (t >= w(90) && t < w(94) - .06) { const p = proj(V(0, 2.6, 9), W, H); if (p) label(g, 'WELCOME!', p[0], p[1], 72 * sc, '#ffffff', pop(w(90))); }
+  if (t >= w(90) && t < w(94) - .06) { const p = proj(V(-.4, .5, 9.5), W, H); if (p) label(g, 'WELCOME!', p[0], Math.max(p[1], H * .46), 72 * sc, '#ffffff', pop(w(90))); }
   // the enemy's view
   if (t >= w(118) && t < w(119) - .06) { const p = proj(V(0, 2.25, armyZ(t) - 5.4), W, H); if (p) label(g, '!?', p[0] + 110 * sc, p[1] - 40 * sc, 120 * sc, '#ffd60a', pop(w(118), .15)); }
   if (t >= w(119) && t < w(121) - .06) big(g, W, H, 'OPEN GATES', '#ffffff', pop(w(119)));

@@ -152,7 +152,7 @@ export class Post {
     this.bl = [4, 8, 16, 32, 64].map(d => { const w = Math.max(2, Math.round(W / d)), h = Math.max(2, Math.round(H / d));
       const t = () => new THREE.WebGLRenderTarget(w, h, { type: THREE.HalfFloatType, depthBuffer: false }); return { w, h, a: t(), b: t() }; });
     this.normalMat = new THREE.MeshNormalMaterial();
-    this.depthOnly = new THREE.MeshBasicMaterial({ colorWrite: false });
+    this.depthOnly = new THREE.MeshBasicMaterial({ colorWrite: false, side: THREE.DoubleSide });   // two-sided: a banner seen from behind must still hide the sky
     this.fsCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const quad = (frag, uniforms) => {
       const m = new THREE.ShaderMaterial({ vertexShader: FS_VERT, fragmentShader: frag, uniforms, depthTest: false, depthWrite: false });
