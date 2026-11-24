@@ -29,7 +29,7 @@ const groups = groupWords(words.words);
 const scene = new THREE.Scene();
 const cam = new THREE.PerspectiveCamera(50, W / H, .1, 400);
 const ctx = { THREE, scene, cam, renderer, W, H, words: words.words, env, fps: story.FPS || 30 };
-try { await document.fonts.load('900 74px Montserrat'); } catch (e) {}
+try { await document.fonts.load('900 74px Montserrat'); await document.fonts.load('700 74px Cinzel'); await document.fonts.load('500 40px EBG'); await document.fonts.load('italic 500 40px EBG'); } catch (e) {}
 await story.setup(ctx);
 const post = new Post(renderer, W, H);
 
