@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 output/*_draft.mp4
 assets/audio/tts_troy/*_fast.wav
+yumurta/stories/ships-en/audio/mix.wav
