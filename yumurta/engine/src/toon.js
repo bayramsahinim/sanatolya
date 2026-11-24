@@ -131,6 +131,17 @@ const PROPS = {
     if (!p.capOff) { g.fillStyle = '#d8343a'; g.beginPath(); g.roundRect(-14, -166, 28, 18, 4); g.fill(); g.stroke(); }
     g.restore(); },
   // a feather fan: white feathers fanning out of a bound handle
+  // a straw broom held low: the handle up past the shoulder, the bristles near the feet
+  broom(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(.35 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
+    g.fillStyle = '#9a6a3a'; g.beginPath(); g.roundRect(-6, -200, 12, 420, 5); g.fill(); g.stroke();
+    g.fillStyle = '#e8c860'; g.beginPath(); g.moveTo(-12, 200); g.lineTo(12, 200); g.lineTo(48, 330); g.quadraticCurveTo(0, 346, -48, 330); g.closePath(); g.fill(); g.stroke();
+    g.strokeStyle = '#b8903a'; g.lineWidth = 3; for (let k = -2; k <= 2; k++) { g.beginPath(); g.moveTo(k * 4, 212); g.lineTo(k * 18, 330); g.stroke(); }
+    g.strokeStyle = '#c0392b'; g.lineWidth = 8; g.beginPath(); g.moveTo(-14, 214); g.lineTo(14, 214); g.stroke(); g.restore(); },
+  // a rolled-up banner on its pole (a soldier carrying a flag away)
+  flag(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.3 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
+    g.fillStyle = '#5a3a22'; g.beginPath(); g.roundRect(-6, -360, 12, 460, 5); g.fill(); g.stroke();
+    g.fillStyle = '#2f5fa8'; g.beginPath(); g.roundRect(-4, -350, 34 * s, 200, 10); g.fill(); g.stroke();
+    g.strokeStyle = '#e0aa3e'; g.lineWidth = 5; for (const yy of [-310, -250, -190]) { g.beginPath(); g.moveTo(0, yy); g.lineTo(30 * s, yy + 8); g.stroke(); } g.restore(); },
   fan(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.25 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
     g.fillStyle = '#7a4a2a'; g.beginPath(); g.roundRect(-6, -40, 12, 60, 5); g.fill(); g.stroke();
     g.fillStyle = '#ffffff'; g.beginPath(); g.moveTo(0, -36); g.bezierCurveTo(-74, -70, -66, -190, 0, -206); g.bezierCurveTo(66, -190, 74, -70, 0, -36); g.fill(); g.stroke();

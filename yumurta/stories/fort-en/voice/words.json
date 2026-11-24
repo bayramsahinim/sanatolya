@@ -1,0 +1,899 @@
+{
+"words": [
+{
+"word": "To",
+"start": 0.0,
+"end": 0.18
+},
+{
+"word": "stop",
+"start": 0.18,
+"end": 0.5
+},
+{
+"word": "an",
+"start": 0.5,
+"end": 0.68
+},
+{
+"word": "army",
+"start": 0.68,
+"end": 1.04
+},
+{
+"word": "of",
+"start": 1.04,
+"end": 1.34
+},
+{
+"word": "a",
+"start": 1.34,
+"end": 1.604
+},
+{
+"word": "hundred",
+"start": 1.604,
+"end": 1.868
+},
+{
+"word": "and",
+"start": 1.868,
+"end": 2.132
+},
+{
+"word": "fifty",
+"start": 2.132,
+"end": 2.396
+},
+{
+"word": "thousand",
+"start": 2.396,
+"end": 2.66
+},
+{
+"word": "men,",
+"start": 2.66,
+"end": 2.96
+},
+{
+"word": "he",
+"start": 3.54,
+"end": 3.6
+},
+{
+"word": "opened",
+"start": 3.6,
+"end": 3.98
+},
+{
+"word": "the",
+"start": 3.98,
+"end": 4.18
+},
+{
+"word": "gates.",
+"start": 4.18,
+"end": 4.64
+},
+{
+"word": "And",
+"start": 4.64,
+"end": 5.0
+},
+{
+"word": "played",
+"start": 5.0,
+"end": 5.22
+},
+{
+"word": "a",
+"start": 5.22,
+"end": 5.36
+},
+{
+"word": "song.",
+"start": 5.36,
+"end": 5.56
+},
+{
+"word": "You",
+"start": 6.02,
+"end": 6.08
+},
+{
+"word": "see,",
+"start": 6.08,
+"end": 6.24
+},
+{
+"word": "his",
+"start": 6.34,
+"end": 6.48
+},
+{
+"word": "soldiers",
+"start": 6.48,
+"end": 6.72
+},
+{
+"word": "are",
+"start": 6.72,
+"end": 6.98
+},
+{
+"word": "far",
+"start": 6.98,
+"end": 7.14
+},
+{
+"word": "away.",
+"start": 7.14,
+"end": 7.4
+},
+{
+"word": "In",
+"start": 7.76,
+"end": 7.86
+},
+{
+"word": "this",
+"start": 7.86,
+"end": 8.0
+},
+{
+"word": "little",
+"start": 8.0,
+"end": 8.22
+},
+{
+"word": "town",
+"start": 8.22,
+"end": 8.48
+},
+{
+"word": "he",
+"start": 8.5,
+"end": 8.62
+},
+{
+"word": "has",
+"start": 8.62,
+"end": 8.74
+},
+{
+"word": "a",
+"start": 8.74,
+"end": 8.84
+},
+{
+"word": "few",
+"start": 8.84,
+"end": 8.96
+},
+{
+"word": "thousand",
+"start": 8.96,
+"end": 9.22
+},
+{
+"word": "men,",
+"start": 9.22,
+"end": 9.46
+},
+{
+"word": "mostly",
+"start": 9.6,
+"end": 9.82
+},
+{
+"word": "cooks",
+"start": 9.82,
+"end": 10.14
+},
+{
+"word": "and",
+"start": 10.14,
+"end": 10.4
+},
+{
+"word": "old",
+"start": 10.4,
+"end": 10.62
+},
+{
+"word": "guards.",
+"start": 10.62,
+"end": 10.94
+},
+{
+"word": "Then",
+"start": 11.58,
+"end": 11.7
+},
+{
+"word": "a",
+"start": 11.7,
+"end": 11.84
+},
+{
+"word": "scout",
+"start": 11.84,
+"end": 12.02
+},
+{
+"word": "runs",
+"start": 12.02,
+"end": 12.28
+},
+{
+"word": "in:",
+"start": 12.28,
+"end": 12.52
+},
+{
+"word": "the",
+"start": 12.76,
+"end": 12.84
+},
+{
+"word": "enemy's",
+"start": 12.84,
+"end": 13.26
+},
+{
+"word": "entire",
+"start": 13.26,
+"end": 13.74
+},
+{
+"word": "army",
+"start": 13.74,
+"end": 14.18
+},
+{
+"word": "is",
+"start": 14.18,
+"end": 14.4
+},
+{
+"word": "coming,",
+"start": 14.4,
+"end": 14.64
+},
+{
+"word": "and",
+"start": 14.88,
+"end": 14.94
+},
+{
+"word": "it's",
+"start": 14.94,
+"end": 15.06
+},
+{
+"word": "almost",
+"start": 15.06,
+"end": 15.28
+},
+{
+"word": "here.",
+"start": 15.28,
+"end": 15.54
+},
+{
+"word": "Run?",
+"start": 16.08,
+"end": 16.24
+},
+{
+"word": "Too",
+"start": 16.24,
+"end": 16.74
+},
+{
+"word": "slow.",
+"start": 16.74,
+"end": 17.0
+},
+{
+"word": "Fight?",
+"start": 17.14,
+"end": 17.38
+},
+{
+"word": "Impossible.",
+"start": 17.72,
+"end": 18.1
+},
+{
+"word": "His",
+"start": 18.76,
+"end": 18.86
+},
+{
+"word": "officers",
+"start": 18.86,
+"end": 19.14
+},
+{
+"word": "start",
+"start": 19.14,
+"end": 19.42
+},
+{
+"word": "to",
+"start": 19.42,
+"end": 19.6
+},
+{
+"word": "panic.",
+"start": 19.6,
+"end": 19.88
+},
+{
+"word": "So",
+"start": 20.46,
+"end": 20.66
+},
+{
+"word": "he",
+"start": 20.66,
+"end": 20.8
+},
+{
+"word": "gives",
+"start": 20.8,
+"end": 21.0
+},
+{
+"word": "the",
+"start": 21.0,
+"end": 21.2
+},
+{
+"word": "strangest",
+"start": 21.2,
+"end": 21.8
+},
+{
+"word": "orders",
+"start": 21.8,
+"end": 22.06
+},
+{
+"word": "of",
+"start": 22.06,
+"end": 22.3
+},
+{
+"word": "the",
+"start": 22.3,
+"end": 22.4
+},
+{
+"word": "war.",
+"start": 22.4,
+"end": 22.64
+},
+{
+"word": "Take",
+"start": 22.86,
+"end": 22.96
+},
+{
+"word": "down",
+"start": 22.96,
+"end": 23.18
+},
+{
+"word": "every",
+"start": 23.18,
+"end": 23.62
+},
+{
+"word": "flag.",
+"start": 23.62,
+"end": 23.98
+},
+{
+"word": "Hide",
+"start": 24.5,
+"end": 24.52
+},
+{
+"word": "every",
+"start": 24.52,
+"end": 24.84
+},
+{
+"word": "soldier.",
+"start": 24.84,
+"end": 25.16
+},
+{
+"word": "Open",
+"start": 25.68,
+"end": 25.82
+},
+{
+"word": "all",
+"start": 25.82,
+"end": 26.18
+},
+{
+"word": "the",
+"start": 26.18,
+"end": 26.36
+},
+{
+"word": "gates.",
+"start": 26.36,
+"end": 26.6
+},
+{
+"word": "And",
+"start": 26.6,
+"end": 27.1
+},
+{
+"word": "sweep",
+"start": 27.1,
+"end": 27.28
+},
+{
+"word": "the",
+"start": 27.28,
+"end": 27.42
+},
+{
+"word": "road,",
+"start": 27.42,
+"end": 27.6
+},
+{
+"word": "like",
+"start": 27.84,
+"end": 28.04
+},
+{
+"word": "guests",
+"start": 28.04,
+"end": 28.28
+},
+{
+"word": "are",
+"start": 28.28,
+"end": 28.46
+},
+{
+"word": "coming.",
+"start": 28.46,
+"end": 28.68
+},
+{
+"word": "Then",
+"start": 28.68,
+"end": 29.18
+},
+{
+"word": "he",
+"start": 29.18,
+"end": 29.34
+},
+{
+"word": "climbs",
+"start": 29.34,
+"end": 29.6
+},
+{
+"word": "the",
+"start": 29.6,
+"end": 29.78
+},
+{
+"word": "wall,",
+"start": 29.78,
+"end": 29.98
+},
+{
+"word": "lights",
+"start": 30.28,
+"end": 30.3
+},
+{
+"word": "some",
+"start": 30.3,
+"end": 30.5
+},
+{
+"word": "incense,",
+"start": 30.5,
+"end": 30.92
+},
+{
+"word": "sits",
+"start": 31.26,
+"end": 31.42
+},
+{
+"word": "down",
+"start": 31.42,
+"end": 31.72
+},
+{
+"word": "with",
+"start": 31.72,
+"end": 31.88
+},
+{
+"word": "his",
+"start": 31.88,
+"end": 32.02
+},
+{
+"word": "zither,",
+"start": 32.02,
+"end": 32.24
+},
+{
+"word": "and",
+"start": 32.48,
+"end": 32.56
+},
+{
+"word": "starts",
+"start": 32.56,
+"end": 32.84
+},
+{
+"word": "to",
+"start": 32.84,
+"end": 33.12
+},
+{
+"word": "play.",
+"start": 33.12,
+"end": 33.36
+},
+{
+"word": "Smiling.",
+"start": 33.66,
+"end": 33.9
+},
+{
+"word": "The",
+"start": 34.28,
+"end": 34.4
+},
+{
+"word": "enemy",
+"start": 34.4,
+"end": 34.58
+},
+{
+"word": "general",
+"start": 34.58,
+"end": 34.86
+},
+{
+"word": "rides",
+"start": 34.86,
+"end": 35.14
+},
+{
+"word": "up",
+"start": 35.14,
+"end": 35.38
+},
+{
+"word": "and",
+"start": 35.38,
+"end": 35.68
+},
+{
+"word": "freezes.",
+"start": 35.68,
+"end": 36.06
+},
+{
+"word": "Open",
+"start": 36.52,
+"end": 36.64
+},
+{
+"word": "gates.",
+"start": 36.64,
+"end": 36.86
+},
+{
+"word": "Empty",
+"start": 37.36,
+"end": 37.54
+},
+{
+"word": "streets.",
+"start": 37.54,
+"end": 37.9
+},
+{
+"word": "A",
+"start": 38.54,
+"end": 38.68
+},
+{
+"word": "man",
+"start": 38.68,
+"end": 38.94
+},
+{
+"word": "playing",
+"start": 38.94,
+"end": 39.52
+},
+{
+"word": "music.",
+"start": 39.52,
+"end": 39.92
+},
+{
+"word": "He",
+"start": 40.3,
+"end": 40.4
+},
+{
+"word": "knows",
+"start": 40.4,
+"end": 40.58
+},
+{
+"word": "this",
+"start": 40.58,
+"end": 40.8
+},
+{
+"word": "man.",
+"start": 40.8,
+"end": 41.0
+},
+{
+"word": "He",
+"start": 41.24,
+"end": 41.36
+},
+{
+"word": "never",
+"start": 41.36,
+"end": 41.64
+},
+{
+"word": "takes",
+"start": 41.64,
+"end": 41.88
+},
+{
+"word": "risks.",
+"start": 41.88,
+"end": 42.18
+},
+{
+"word": "Never.",
+"start": 42.5,
+"end": 42.62
+},
+{
+"word": "So",
+"start": 43.34,
+"end": 43.56
+},
+{
+"word": "this",
+"start": 43.56,
+"end": 43.9
+},
+{
+"word": "has",
+"start": 43.9,
+"end": 44.32
+},
+{
+"word": "to",
+"start": 44.32,
+"end": 44.48
+},
+{
+"word": "be",
+"start": 44.48,
+"end": 44.6
+},
+{
+"word": "a",
+"start": 44.6,
+"end": 44.78
+},
+{
+"word": "trap.",
+"start": 44.78,
+"end": 45.0
+},
+{
+"word": "And",
+"start": 45.28,
+"end": 45.4
+},
+{
+"word": "he",
+"start": 45.4,
+"end": 45.5
+},
+{
+"word": "turns",
+"start": 45.5,
+"end": 45.7
+},
+{
+"word": "the",
+"start": 45.7,
+"end": 45.92
+},
+{
+"word": "whole",
+"start": 45.92,
+"end": 46.26
+},
+{
+"word": "army",
+"start": 46.26,
+"end": 46.54
+},
+{
+"word": "around",
+"start": 46.54,
+"end": 46.9
+},
+{
+"word": "and",
+"start": 46.9,
+"end": 47.38
+},
+{
+"word": "runs.",
+"start": 47.38,
+"end": 47.66
+},
+{
+"word": "You",
+"start": 48.04,
+"end": 48.08
+},
+{
+"word": "see,",
+"start": 48.08,
+"end": 48.24
+},
+{
+"word": "a",
+"start": 48.36,
+"end": 48.54
+},
+{
+"word": "careful",
+"start": 48.54,
+"end": 48.82
+},
+{
+"word": "man",
+"start": 48.82,
+"end": 49.08
+},
+{
+"word": "doesn't",
+"start": 49.08,
+"end": 49.46
+},
+{
+"word": "bluff.",
+"start": 49.46,
+"end": 49.62
+},
+{
+"word": "So",
+"start": 49.92,
+"end": 50.12
+},
+{
+"word": "nobody",
+"start": 50.12,
+"end": 50.38
+},
+{
+"word": "believed",
+"start": 50.38,
+"end": 50.72
+},
+{
+"word": "he",
+"start": 50.72,
+"end": 50.88
+},
+{
+"word": "was",
+"start": 50.88,
+"end": 51.0
+},
+{
+"word": "bluffing.",
+"start": 51.0,
+"end": 51.44
+},
+{
+"word": "Behind",
+"start": 51.92,
+"end": 52.22
+},
+{
+"word": "those",
+"start": 52.22,
+"end": 52.42
+},
+{
+"word": "walls",
+"start": 52.42,
+"end": 52.76
+},
+{
+"word": "there",
+"start": 52.86,
+"end": 53.08
+},
+{
+"word": "was",
+"start": 53.08,
+"end": 53.2
+},
+{
+"word": "no",
+"start": 53.2,
+"end": 53.54
+},
+{
+"word": "army.",
+"start": 53.54,
+"end": 53.86
+},
+{
+"word": "Just",
+"start": 54.4,
+"end": 54.62
+},
+{
+"word": "cooks.",
+"start": 54.62,
+"end": 54.88
+},
+{
+"word": "And",
+"start": 55.38,
+"end": 55.5
+},
+{
+"word": "one",
+"start": 55.5,
+"end": 55.84
+},
+{
+"word": "very",
+"start": 55.84,
+"end": 56.44
+},
+{
+"word": "good",
+"start": 56.44,
+"end": 56.64
+},
+{
+"word": "actor.",
+"start": 56.64,
+"end": 56.9
+}
+]
+}
