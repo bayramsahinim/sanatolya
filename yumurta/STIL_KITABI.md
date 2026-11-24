@@ -49,6 +49,42 @@ Kamera hareketi 10 kare arayla, 41 yakınlaşma adımında faz korelasyonuyla ö
 - **Döngü:** 10 videonun 3'ünde son cümle yarıda kesiliyor ve videonun başına bağlanıyor ("...drops straight onto the pirates'" → baş).
 - **Diyalog:** Tek anlatıcı sesi. Karakter repliklerini aynı ses okuyor, araya tırnak koyarak. Ayrı oyuncu yok.
 
+### Hikâye matematiği: gizli mekanizma (referans r11, "Bezelye ile hapisten kaçış")
+
+**Ölçüm:** 68,9 sn, 214 kelime, 3,15 kelime/sn, 20 cümle (ortalama 3,4 sn). Tırnak içinde 5 replik var. "You see" hiç yok. Kurgu kelime kelime ilerliyor; ilk 5 saniyede 3 görüntü var: karakter, kaşığın yakın planı, gülen gardiyanlarla geniş plan.
+
+**Ne işe yarıyor:**
+1. **Saçma eylem, sebebi saklı.** İlk cümle sadece absürt bir eylemi gösteriyor: "Aç bir mahkûm yemeğini duvara yediriyor." NEDEN'i söylemiyor. Açıklama 61,5. saniyede (%89) geliyor ve en kısa cümle: "Dry peas swell when they get wet." İzleyici sonuna kadar bu cevabı bekliyor.
+2. **Erken konan her şey geri dönüyor (ekim → hasat).**
+
+   | Ekilen | Saniye | Hasat | Saniye |
+   |---|---|---|---|
+   | Bezelye | 0 | Şişen bezelye | 61 |
+   | Bir bardak su | 9 | Su, çatlak | 51 |
+   | Duvardaki çatlak | 0 | Çatlak açılıyor | 59 |
+   | Gardiyan bezelye çalıyor | 40 | Testisi patlıyor | 55 |
+
+   Hikâyede boşta kalan nesne yok.
+3. **Düşman planı kendi eliyle yürütüyor (ironi motoru).**
+   - Gülen müdür porsiyonu ikiye katlıyor (25 sn).
+   - Bilet satıyor (35 sn).
+   - Çatlağı kendi kovasıyla suluyor (51 sn).
+
+   Her tırmanış basamağı, kahramana gülen birinin yaptığı bir yardım.
+4. **Gülme → donma dönüşü tam ortada.** 34,5 sn (%50): "and the laughter stops". İlk yarı alay ediyor, ikinci yarı merak ediyor.
+5. **Önce küçük kanıt, sonra büyük patlama.** Gardiyanın testisi 55 sn'de patlıyor (aynı mekanizmanın küçük modeli), duvar 59 sn'de. İzleyici sebebi duymadan önce görüyor.
+6. **Kahraman neredeyse hiç konuşmuyor.** Tek repliği 49 sn'de ve şifreli: "The wall is thirsty." Sessiz kahraman gizemi büyütüyor.
+7. **Açıklamadan sonra 4 sn içinde bitiyor.** Sonuç görüntüsü geliyor, kuyruk yok.
+
+**Bizim için kural:** Bilinen bir hikâyeyi (Truva gibi) anlatırken paradoks kancası yeterli. Ama en güçlü yapı **gizli fizik/kimya mekanizması** olan hikâyeler:
+- Kahraman saçma görünen bir şey yapıyor.
+- Herkes gülüyor; düşmanlar farkında olmadan planı büyütüyor.
+- Ortada gülme kesiliyor.
+- Önce küçük bir kanıt, sonra büyük sonuç.
+- En son tek cümlelik açıklama.
+
+Konu seçerken önce bu kalıba uyan hikâyeleri ara.
+
 ## 2. Kamera ve kurgu
 
 | Ölçüm | Değer (10 video) |
