@@ -27,7 +27,7 @@ const groups = story.CAPTION && story.CAPTION.mode === 'phrase' ? groupPhrases(w
 const scene = new THREE.Scene();
 const cam = new THREE.PerspectiveCamera(50, W / H, .1, 400);
 const ctx = { THREE, scene, cam, renderer, W, H, words: words.words, env, fps: story.FPS || 30 };
-try { await document.fonts.load('900 74px Montserrat'); } catch (e) {}
+try { await document.fonts.load('900 74px Montserrat'); await document.fonts.load('800 74px Poppins'); } catch (e) {}
 await story.setup(ctx);
 const post = new Post(renderer, W, H);
 

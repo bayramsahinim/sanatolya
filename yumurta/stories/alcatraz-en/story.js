@@ -15,7 +15,7 @@ export const NAME = 'alcatraz-en';
 export const FPS = 30;
 export let DUR = 64;
 export const CUES = [];
-export const CAPTION = { font: '"Montserrat", "Arial Black", sans-serif', size: 60, weight: 800, stroke: .13, shadow: .25, y: .7, mode: 'phrase', maxChars: 22 };
+export const CAPTION = { font: '"Poppins", "Arial Black", sans-serif', size: 60, weight: 800, stroke: .13, shadow: .25, y: .7, mode: 'phrase', maxChars: 22 };
 
 const S = smoother;
 const ramp = (t, a, b) => S((t - a) / (b - a));
@@ -766,21 +766,21 @@ function setBeam(m, a, b) {
 // ---------------------------------------------------------------- 2D overlay (labels, tags, stamps, notes)
 const proj = (p, Wd, Ht) => { const v = p.clone().project(C.cam); return v.z > 1 ? null : [(v.x + 1) / 2 * Wd, (1 - v.y) / 2 * Ht]; };
 function label(g, s, x, y, size, col, a = 1, rot = 0) {
-  g.save(); g.globalAlpha = a; g.translate(x, y); g.rotate(rot); g.font = `800 ${size}px "Montserrat", sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.save(); g.globalAlpha = a; g.translate(x, y); g.rotate(rot); g.font = `800 ${size}px "Poppins", sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
   g.lineJoin = 'round'; g.shadowColor = 'rgba(10,6,20,.6)'; g.shadowBlur = size * .2; g.shadowOffsetY = size * .07; g.strokeStyle = '#140c1c'; g.lineWidth = size * .14; g.strokeText(s, 0, 0); g.shadowColor = 'transparent'; g.fillStyle = col; g.fillText(s, 0, 0); g.restore();
 }
 function tag(g, Wd, Ht, name, txt, k) {
   const y = Ht * .235, sc = Wd / 1080; g.save(); g.translate(Wd / 2, y); g.scale((.9 + .1 * k) * sc, (.9 + .1 * k) * sc);
-  g.font = '900 54px "Montserrat", sans-serif'; const tw = g.measureText(txt).width, bw = tw + 44, bh = 82;
+  g.font = '900 54px "Poppins", sans-serif'; const tw = g.measureText(txt).width, bw = tw + 44, bh = 82;
   g.globalAlpha = k; g.fillStyle = 'rgba(0,0,0,.86)'; g.fillRect(-bw / 2, 0, bw, bh);
   g.fillStyle = '#fff'; g.textBaseline = 'middle'; g.textAlign = 'center'; g.fillText(txt, 0, bh / 2 + 2);
-  g.font = '900 44px "Montserrat", sans-serif'; g.textAlign = 'left'; g.lineWidth = 8; g.strokeStyle = 'rgba(0,0,0,.85)'; g.strokeText(name, -bw / 2 + 4, -24); g.fillStyle = '#ffd60a'; g.fillText(name, -bw / 2 + 4, -24);
+  g.font = '900 44px "Poppins", sans-serif'; g.textAlign = 'left'; g.lineWidth = 8; g.strokeStyle = 'rgba(0,0,0,.85)'; g.strokeText(name, -bw / 2 + 4, -24); g.fillStyle = '#ffd60a'; g.fillText(name, -bw / 2 + 4, -24);
   g.restore();
 }
 function stamp(g, s, x, y, size, k, rot, col = '#e8323a') {
   if (k <= 0) return; const sc = 1 + (1 - k) * 1.6;
   g.save(); g.globalAlpha = Math.min(1, k * 1.4); g.translate(x, y); g.rotate(rot); g.scale(sc, sc);
-  g.font = `900 ${size}px "Montserrat", sans-serif`; const tw = g.measureText(s).width;
+  g.font = `900 ${size}px "Poppins", sans-serif`; const tw = g.measureText(s).width;
   g.strokeStyle = col; g.lineWidth = size * .12; g.strokeRect(-tw / 2 - size * .3, -size * .7, tw + size * .6, size * 1.4);
   g.fillStyle = col; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(s, 0, size * .05); g.restore();
 }
@@ -805,7 +805,7 @@ export function overlay(g, t, ctx) {
   // name tags over the three
   if (where === 'prison' && t >= W('Frank') - .05 && t < W('stole') - .12) {
     const items = [['morris', 'FRANK MORRIS', W('Frank')], ['john', 'JOHN ANGLIN', W('Anglin')], ['clarence', 'CLARENCE ANGLIN', W('Anglin') + .15]];
-    for (const [n, s, t0] of items) { const p = proj(cast[n].toWorld(0, -60), Wd, Ht), k = pop(t0 - .05); if (p && k > 0) { g.font = `900 ${40 * sc}px Montserrat`; const hw = g.measureText(s).width / 2 + 20 * sc; label(g, s, Math.max(hw, Math.min(Wd - hw, p[0])), p[1], 40 * sc * k, '#ffd60a', k); } }
+    for (const [n, s, t0] of items) { const p = proj(cast[n].toWorld(0, -60), Wd, Ht), k = pop(t0 - .05); if (p && k > 0) { g.font = `900 ${40 * sc}px Poppins`; const hw = g.measureText(s).width / 2 + 20 * sc; label(g, s, Math.max(hw, Math.min(Wd - hw, p[0])), p[1], 40 * sc * k, '#ffd60a', k); } }
   }
   // "Too loud?" — a question mark over the guard
   if (where === 'prison' && t >= W('Too') && t < W('evening') - .5) { const p = proj(cast.gd1.toWorld(60, -80), Wd, Ht), k = pop(W('Too')); if (p) label(g, '?', p[0] + 60 * sc, p[1], 150 * sc * k, '#ffd60a', k, .15); }
