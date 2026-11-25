@@ -10,7 +10,20 @@ Then read `STIL_KITABI.md` and the report in `analiz/` for whatever you are abou
 - Setup: `cd engine && npm install`, `pip install -r requirements.txt`, ffmpeg and Google Chrome (or set `CHROME_PATH`).
 - Reply to the user in their language (usually Turkish).
 
-## Newest reference: `stories/troy-en/` (English, 69.5 s, approved by the user)
+## Newest reference: `stories/alcatraz-en/` (English, 63.6 s, approved by the user)
+
+The user wants EVERY new video made with this engine (see the root `CLAUDE.md` and the `/yumurta` skill). Copy
+`stories/alcatraz-en/`. On top of Troy it adds:
+
+- **Story maths.** The "hidden mechanism" structure (STIL_KITABI).
+- **Interior sets.** Prison cells, a utility corridor, and an island at dusk, night and dawn. Light rigs switch per time
+  of day.
+- **Captions.** Poppins ExtraBold in phrase mode, which the user picked.
+- **Word timing.** Uses `align.py`: whisper times mapped onto the script's own spelling.
+- **Mix.** Word-pinned SFX in `mix.py`.
+- **Resumable render.** `tools/render_resumable.sh <story>` (frames on disk, survives container restarts).
+
+## Previous reference: `stories/troy-en/` (English, 69.5 s, approved by the user)
 
 For a new episode in the same look, copy `stories/troy-en/` rather than `is-odasi`. It adds everything the user approved:
 

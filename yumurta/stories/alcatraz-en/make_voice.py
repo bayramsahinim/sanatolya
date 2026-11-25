@@ -1,4 +1,5 @@
-"""Narration for the Alcatraz story (same narrator as Troy). usage (repo root): python3 yumurta/stories/alcatraz-en/make_voice.py [model]"""
+"""Narration for the Alcatraz story (same narrator as Troy). usage (repo root): python3 yumurta/stories/<story>/make_voice.py [model]
+In a copied story, rewrite NOTES (the comic-timing beats name lines of that story's script)."""
 import json, os, sys
 sys.path.insert(0, '.')
 from cinecode import tts
@@ -13,7 +14,8 @@ NOTES = ("Narrator of a witty YouTube Shorts animation channel telling a wild tr
 lines = [l.strip() for l in open(os.path.join(D, 'voice', 'script.txt')) if l.strip()]
 txt = "### DIRECTOR'S NOTES\n" + NOTES + "\n\n#### TRANSCRIPT\n" + "\n\n".join(lines)
 model = sys.argv[1] if len(sys.argv) > 1 else CFG['model']
-os.makedirs('assets/audio/tts_alcatraz', exist_ok=True)
-p = f"assets/audio/tts_alcatraz/take_{model}_{tts.text_hash(txt, CFG['voice'], model)}.wav"
+OUTD = 'assets/audio/tts_' + os.path.basename(D).replace('-en', '').replace('-', '_')
+os.makedirs(OUTD, exist_ok=True)
+p = f"{OUTD}/take_{model}_{tts.text_hash(txt, CFG['voice'], model)}.wav"
 a = tts.synth(txt, p, model, voice=CFG['voice'])
 print(p, len(a) / tts.SR)

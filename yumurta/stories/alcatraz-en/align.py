@@ -1,7 +1,7 @@
 """Give each word of script.txt a time from the Whisper words (faster-whisper output of episodes/troy_en/words.py).
 Whisper spells numbers and names its own way ("50", "Alan", "Thirty -six"); the script's spelling is kept and the times
 are carried over by a sequence alignment. Unmatched script words get times interpolated from their neighbours.
-usage (repo root): python3 yumurta/stories/alcatraz-en/align.py
+usage (repo root): python3 yumurta/stories/<story>/align.py
 """
 import difflib, json, os, re, subprocess, sys
 
