@@ -136,6 +136,8 @@ const PROPS = {
     g.strokeStyle = '#e04a3a'; g.lineWidth = 4; g.beginPath(); g.moveTo(0, -46); g.quadraticCurveTo(40, -90, 20, -140); g.stroke(); g.restore(); },
   paddle(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.5 * s); g.strokeStyle = PLUM; g.lineWidth = 6; g.fillStyle = '#9a6a3a';
     g.beginPath(); g.roundRect(-6, -180, 12, 300, 5); g.fill(); g.stroke(); g.beginPath(); g.roundRect(-28, 110, 56, 120, 20); g.fill(); g.stroke(); g.restore(); },
+  stick(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.9 * s); g.strokeStyle = PLUM; g.lineWidth = 5; g.fillStyle = '#e8d2a0';
+    g.beginPath(); g.roundRect(-5, -90, 10, 110, 5); g.fill(); g.stroke(); g.beginPath(); g.arc(0, -92, 12, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
   spoon(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(.2 * s); g.strokeStyle = PLUM; g.lineWidth = 6; g.fillStyle = '#a8763e';
     g.beginPath(); g.roundRect(-5, -10, 10, 80, 5); g.fill(); g.stroke(); g.beginPath(); g.ellipse(0, 84, 16, 22, 0, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
 };
@@ -193,6 +195,32 @@ function hat(g, kind, w, h, look, lit) {
     g.lineWidth = 22; g.strokeStyle = PLUM; g.beginPath(); g.ellipse(0, -h * .08, w * .47, h * .42, 0, Math.PI * 1.12, Math.PI * 1.88); g.stroke();
     g.lineWidth = 13; g.strokeStyle = '#f0c040'; g.stroke();
     g.fillStyle = '#4ac0e8'; g.strokeStyle = PLUM; g.lineWidth = 5; g.beginPath(); g.arc(0, -h * .49, 15, 0, 6.29); g.fill(); g.stroke();
+  } else if (kind === 'tricorn') {                     // an 18th-century tricorn: a low crown, the brim cocked up into three points
+    const col = look.hatColor || '#2a2230', tr = look.hatTrim || '#e8c050';
+    const brim = () => { g.beginPath(); g.moveTo(-w * .66, -h * .36); g.quadraticCurveTo(-w * .5, -h * .98, 0, -h * .74); g.quadraticCurveTo(w * .5, -h * .98, w * .66, -h * .36);
+      g.quadraticCurveTo(w * .3, -h * .5, 0, -h * .3); g.quadraticCurveTo(-w * .3, -h * .5, -w * .66, -h * .36); g.closePath(); };
+    shaded(g, brim, { cx: 0, cy: -h * .6, w: w * 1.32, h: h * .6 }, shade(col, 1.25), shade(col, .7), { lit, blur: 12, push: .14, lift: .12 });
+    g.strokeStyle = PLUM; brim(); g.stroke();
+    g.strokeStyle = tr; g.lineWidth = 6; g.beginPath(); g.moveTo(-w * .6, -h * .38); g.quadraticCurveTo(-w * .46, -h * .88, 0, -h * .68); g.quadraticCurveTo(w * .46, -h * .88, w * .6, -h * .38); g.stroke();
+    g.fillStyle = '#f2ead8'; g.strokeStyle = PLUM; g.lineWidth = 4; g.beginPath(); g.arc(-w * .3, -h * .62, 13, 0, 6.29); g.fill(); g.stroke();
+  } else if (kind === 'ushanka') {                     // a fur hat with the ear flaps down
+    const col = look.hatColor || '#7a5a44', fur = shade(col, 1.25);
+    for (const s of [-1, 1]) { g.fillStyle = fur; g.beginPath(); g.ellipse(s * w * .46, -h * .1, w * .11, h * .2, s * .15, 0, 6.29); g.fill(); g.stroke(); }
+    const crown = () => { g.beginPath(); g.moveTo(-w * .46, -h * .44); g.quadraticCurveTo(-w * .44, -h * 1.0, 0, -h * 1.0); g.quadraticCurveTo(w * .44, -h * 1.0, w * .46, -h * .44); g.closePath(); };
+    shaded(g, crown, { cx: 0, cy: -h * .72, w: w * .92, h: h * .56 }, shade(col, 1.1), shade(col, .7), { lit, blur: 12, push: .14, lift: .12 });
+    g.strokeStyle = PLUM; crown(); g.stroke();
+    const band = () => { g.beginPath(); g.roundRect(-w * .54, -h * .58, w * 1.08, h * .2, 26); };
+    shaded(g, band, { cx: 0, cy: -h * .48, w: w * 1.08, h: h * .2 }, fur, shade(col, .8), { lit, blur: 10, push: .14, lift: .12 });
+    g.strokeStyle = PLUM; band(); g.stroke();
+    g.strokeStyle = shade(col, .75); g.lineWidth = 3.5; for (let k = -5; k <= 5; k++) { g.beginPath(); g.moveTo(k * w * .09, -h * .56); g.lineTo(k * w * .09 + 6, -h * .42); g.stroke(); }
+  } else if (kind === 'crown') {                       // a small imperial crown: a jewelled band, two arches, a cross
+    const gold = '#f0c040';
+    g.fillStyle = '#c23a40'; g.beginPath(); g.ellipse(0, -h * .7, w * .2, h * .2, 0, 0, 6.29); g.fill(); g.stroke();
+    g.lineWidth = 10; g.strokeStyle = PLUM; for (const s of [-1, 1]) { g.beginPath(); g.ellipse(s * w * .1, -h * .62, w * .12, h * .26, 0, Math.PI, 2 * Math.PI); g.stroke(); }
+    g.lineWidth = 6; g.strokeStyle = gold; for (const s of [-1, 1]) { g.beginPath(); g.ellipse(s * w * .1, -h * .62, w * .12, h * .26, 0, Math.PI, 2 * Math.PI); g.stroke(); }
+    g.fillStyle = gold; g.strokeStyle = PLUM; g.lineWidth = 5; g.beginPath(); g.roundRect(-w * .24, -h * .66, w * .48, h * .12, 8); g.fill(); g.stroke();
+    g.beginPath(); g.roundRect(-5, -h * .98, 10, 34, 3); g.fill(); g.stroke(); g.beginPath(); g.roundRect(-14, -h * .93, 28, 9, 3); g.fill(); g.stroke();
+    g.fillStyle = '#4ac0e8'; for (const x of [-.14, 0, .14]) { g.beginPath(); g.arc(w * x, -h * .6, 7, 0, 6.29); g.fill(); g.stroke(); }
   } else if (kind === 'cook') {                        // a toque: puffy top, straight band
     const o = -h * .1;
     const puff = () => { g.beginPath(); g.moveTo(-w * .3, o - h * .5); g.bezierCurveTo(-w * .62, o - h * .62, -w * .46, o - h * 1.12, -w * .12, o - h * .98);
