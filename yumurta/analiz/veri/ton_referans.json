@@ -1,0 +1,112 @@
+{
+ "r01": {
+  "kare": 130,
+  "kirmizi": 43.7,
+  "sari-turuncu": 22.8,
+  "yesil": 0.2,
+  "camgobegi": 3.0,
+  "mavi": 27.0,
+  "mor-pembe": 3.4,
+  "en_buyuk": 65.7,
+  "aile": 2.0
+ },
+ "r02": {
+  "kare": 130,
+  "kirmizi": 55.6,
+  "sari-turuncu": 5.7,
+  "yesil": 0.1,
+  "camgobegi": 1.5,
+  "mavi": 32.7,
+  "mor-pembe": 4.4,
+  "en_buyuk": 74.4,
+  "aile": 2.0
+ },
+ "r03": {
+  "kare": 121,
+  "kirmizi": 13.5,
+  "sari-turuncu": 14.5,
+  "yesil": 8.0,
+  "camgobegi": 7.3,
+  "mavi": 55.1,
+  "mor-pembe": 1.6,
+  "en_buyuk": 68.6,
+  "aile": 2.0
+ },
+ "r04": {
+  "kare": 129,
+  "kirmizi": 23.5,
+  "sari-turuncu": 20.5,
+  "yesil": 0.1,
+  "camgobegi": 4.3,
+  "mavi": 50.8,
+  "mor-pembe": 0.9,
+  "en_buyuk": 72.4,
+  "aile": 2.0
+ },
+ "r05": {
+  "kare": 78,
+  "kirmizi": 57.7,
+  "sari-turuncu": 16.2,
+  "yesil": 0.0,
+  "camgobegi": 13.7,
+  "mavi": 12.0,
+  "mor-pembe": 0.4,
+  "en_buyuk": 66.4,
+  "aile": 2.0
+ },
+ "r06": {
+  "kare": 90,
+  "kirmizi": 35.2,
+  "sari-turuncu": 19.1,
+  "yesil": 0.3,
+  "camgobegi": 1.1,
+  "mavi": 40.2,
+  "mor-pembe": 4.1,
+  "en_buyuk": 63.4,
+  "aile": 2.0
+ },
+ "r07": {
+  "kare": 119,
+  "kirmizi": 30.8,
+  "sari-turuncu": 9.8,
+  "yesil": 2.0,
+  "camgobegi": 3.7,
+  "mavi": 46.0,
+  "mor-pembe": 7.6,
+  "en_buyuk": 67.6,
+  "aile": 2.0
+ },
+ "r08": {
+  "kare": 126,
+  "kirmizi": 12.8,
+  "sari-turuncu": 4.8,
+  "yesil": 14.1,
+  "camgobegi": 7.9,
+  "mavi": 59.8,
+  "mor-pembe": 0.7,
+  "en_buyuk": 63.9,
+  "aile": 2.0
+ },
+ "r09": {
+  "kare": 130,
+  "kirmizi": 27.4,
+  "sari-turuncu": 6.7,
+  "yesil": 1.5,
+  "camgobegi": 32.8,
+  "mavi": 17.6,
+  "mor-pembe": 14.0,
+  "en_buyuk": 68.6,
+  "aile": 2.0
+ },
+ "r10": {
+  "kare": 127,
+  "kirmizi": 43.4,
+  "sari-turuncu": 14.7,
+  "yesil": 1.4,
+  "camgobegi": 30.1,
+  "mavi": 5.4,
+  "mor-pembe": 5.0,
+  "en_buyuk": 63.6,
+  "aile": 2.0
+ }
+}

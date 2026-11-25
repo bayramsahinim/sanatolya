@@ -1,0 +1,52 @@
+{
+ "r01": {
+  "kare": 888,
+  "titrek_pct": 2.255,
+  "en_kotu": 6.557
+ },
+ "r02": {
+  "kare": 695,
+  "titrek_pct": 4.533,
+  "en_kotu": 10.135
+ },
+ "r03": {
+  "kare": 872,
+  "titrek_pct": 2.59,
+  "en_kotu": 5.916
+ },
+ "r04": {
+  "kare": 885,
+  "titrek_pct": 3.361,
+  "en_kotu": 9.815
+ },
+ "r05": {
+  "kare": 912,
+  "titrek_pct": 1.582,
+  "en_kotu": 4.903
+ },
+ "r06": {
+  "kare": 903,
+  "titrek_pct": 2.249,
+  "en_kotu": 6.152
+ },
+ "r07": {
+  "kare": 896,
+  "titrek_pct": 2.009,
+  "en_kotu": 5.989
+ },
+ "r08": {
+  "kare": 753,
+  "titrek_pct": 4.571,
+  "en_kotu": 10.03
+ },
+ "r09": {
+  "kare": 1240,
+  "titrek_pct": 2.477,
+  "en_kotu": 5.441
+ },
+ "r10": {
+  "kare": 725,
+  "titrek_pct": 2.622,
+  "en_kotu": 6.155
+ }
+}
