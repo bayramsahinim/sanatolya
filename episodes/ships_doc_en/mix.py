@@ -25,7 +25,7 @@ SECS = json.load(open(os.path.join(ST, "voice", "sections.json")))
 SEC = {}
 for x in WORDS: SEC.setdefault(x["sec"], []).append(x)
 ws = lambda s, i: SEC[s][min(i, len(SEC[s]) - 1)]["start"]
-DUR = np.ceil((WORDS[-1]["end"] + 1.6) * 30) / 30
+DUR = np.ceil((WORDS[-1]["end"] + 4.5) * 30) / 30
 
 
 # ------------------------------------------------------------------ the score

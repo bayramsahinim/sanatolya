@@ -760,7 +760,7 @@ export async function setup(ctx) {
   C = ctx; WORDS = ctx.words;
   for (const wd of WORDS) (SEC[wd.sec] ||= { w: [] }).w.push(wd);
   w = i => WORDS[i].start; A = i => WORDS[i].start - 2 / FPS;
-  DUR = Math.ceil((WORDS[WORDS.length - 1].end + 1.6) * FPS) / FPS;
+  DUR = Math.ceil((WORDS[WORDS.length - 1].end + 4.5) * FPS) / FPS;
   NT0 = ws('night', 0);
   const { scene } = ctx;
   scene.background = new THREE.Color('#9ac4ec');
