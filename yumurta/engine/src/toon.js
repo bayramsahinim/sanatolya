@@ -140,6 +140,25 @@ const PROPS = {
     g.beginPath(); g.roundRect(-5, -90, 10, 110, 5); g.fill(); g.stroke(); g.beginPath(); g.arc(0, -92, 12, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
   spoon(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(.2 * s); g.strokeStyle = PLUM; g.lineWidth = 6; g.fillStyle = '#a8763e';
     g.beginPath(); g.roundRect(-5, -10, 10, 80, 5); g.fill(); g.stroke(); g.beginPath(); g.ellipse(0, 84, 16, 22, 0, 0, 6.29); g.fill(); g.stroke(); g.restore(); },
+  // a paint roller held up: a handle, a bent wire, a fat roller wet with paint (p.paint, default Baker-Miller pink)
+  roller(g, x, y, s, p) { g.save(); g.translate(x, y); g.rotate(-.25 * s); g.strokeStyle = PLUM; g.lineWidth = 6; g.lineJoin = 'round';
+    g.fillStyle = '#3a3a44'; g.beginPath(); g.roundRect(-8, -10, 16, 60, 6); g.fill(); g.stroke();
+    g.lineWidth = 7; g.beginPath(); g.moveTo(0, -10); g.lineTo(0, -70); g.lineTo(s * 30, -88); g.stroke();
+    g.fillStyle = p.paint || '#ff91af'; g.lineWidth = 6; g.beginPath(); g.roundRect(s * 30 - 46, -118, 92, 40, 16); g.fill(); g.stroke(); g.restore(); },
+  // a paint bucket hanging from the hand by its wire handle, pink paint at the rim
+  bucket(g, x, y, s, p) { g.save(); g.translate(x, y); g.strokeStyle = PLUM; g.lineWidth = 6; g.lineJoin = 'round';
+    g.beginPath(); g.arc(0, 40, 40, Math.PI * 1.05, Math.PI * 1.95); g.stroke();
+    g.fillStyle = '#c8ccd4'; g.beginPath(); g.moveTo(-42, 40); g.lineTo(42, 40); g.lineTo(34, 120); g.lineTo(-34, 120); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = p.paint || '#ff91af'; g.beginPath(); g.ellipse(0, 40, 42, 9, 0, 0, 6.29); g.fill(); g.stroke();
+    g.beginPath(); g.moveTo(-30, 44); g.quadraticCurveTo(-26, 70, -20, 72); g.quadraticCurveTo(-16, 60, -12, 44); g.fill(); g.restore(); },
+  // a clipboard: a brown board, a clip, a sheet with lines
+  clipboard(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.15 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
+    g.fillStyle = '#b07a42'; g.beginPath(); g.roundRect(-40, -90, 80, 110, 8); g.fill(); g.stroke();
+    g.fillStyle = '#fbf8f0'; g.fillRect(-30, -76, 60, 86); g.fillStyle = '#8a8a96'; for (let k = 0; k < 5; k++) g.fillRect(-22, -60 + k * 15, 44 - (k % 2) * 14, 4);
+    g.fillStyle = '#9aa0aa'; g.beginPath(); g.roundRect(-16, -98, 32, 16, 4); g.fill(); g.stroke(); g.restore(); },
+  // a colour card held up (p.paint)
+  card(g, x, y, s, p) { g.save(); g.translate(x, y); g.rotate(-.1 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
+    g.fillStyle = p.paint || '#ff91af'; g.beginPath(); g.roundRect(-48, -150, 96, 130, 8); g.fill(); g.stroke(); g.restore(); },
 };
 
 // ---------- hats ----------
