@@ -159,6 +159,21 @@ const PROPS = {
   // a colour card held up (p.paint)
   card(g, x, y, s, p) { g.save(); g.translate(x, y); g.rotate(-.1 * s); g.strokeStyle = PLUM; g.lineWidth = 6;
     g.fillStyle = p.paint || '#ff91af'; g.beginPath(); g.roundRect(-48, -150, 96, 130, 8); g.fill(); g.stroke(); g.restore(); },
+  // a service pistol held out level, the barrel pointing away from the body (p.aimTilt tilts it, radians)
+  pistol(g, x, y, s, p) { g.save(); g.translate(x, y); g.scale(s * 1.35, 1.35); g.rotate(-(p.aimTilt || 0)); g.strokeStyle = PLUM; g.lineWidth = 5; g.lineJoin = 'round';
+    g.fillStyle = '#9a9cac'; g.beginPath(); g.roundRect(-12, -30, 112, 30, 6); g.fill(); g.stroke();            // the slide and barrel (steel: reads against dark uniforms)
+    g.fillStyle = '#6a4a32'; g.beginPath(); g.moveTo(-14, -4); g.lineTo(22, -4); g.lineTo(14, 52); g.lineTo(-20, 48); g.closePath(); g.fill(); g.stroke();   // the grip
+    g.fillStyle = '#e8eaf2'; g.fillRect(4, -25, 86, 6); g.restore(); },
+  // a fat cigar between the fingers, a glowing tip
+  cigar(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.35 * s); g.strokeStyle = PLUM; g.lineWidth = 5;
+    g.fillStyle = '#7a4a2a'; g.beginPath(); g.roundRect(-10, -86, 20, 92, 9); g.fill(); g.stroke();
+    g.fillStyle = '#d8b070'; g.fillRect(-10, -40, 20, 10);
+    g.fillStyle = '#ff7a30'; g.beginPath(); g.ellipse(0, -86, 9, 5, 0, 0, 6.29); g.fill(); g.restore(); },
+  // a block of pykrete (grey-brown, flecked with wood pulp) held out on the palm
+  block(g, x, y, s) { g.save(); g.translate(x, y); g.strokeStyle = PLUM; g.lineWidth = 6; g.lineJoin = 'round';
+    g.fillStyle = '#b8b0a0'; g.beginPath(); g.roundRect(-58, -96, 116, 92, 10); g.fill(); g.stroke();
+    g.fillStyle = '#d6d0c4'; g.beginPath(); g.roundRect(-50, -90, 100, 18, 6); g.fill();
+    g.fillStyle = '#8a7058'; for (let k = 0; k < 14; k++) g.fillRect(-46 + (k * 37) % 92, -64 + (k * 23) % 52, 9, 3); g.restore(); },
 };
 
 // ---------- hats ----------
