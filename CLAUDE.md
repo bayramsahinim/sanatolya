@@ -14,8 +14,11 @@ lists the steps.
 ## The user's approved settings (do not change without asking)
 
 - **Language.** Reply to the user in Turkish. Videos are in English unless the user says otherwise.
-- **Newest reference story.** `yumurta/stories/alcatraz-en/`. Copy it to start a new story. `stories/troy-en/` is the
-  one before that.
+- **Newest reference story.** `yumurta/stories/pink-en/` (Baker-Miller pink prison, Nov 2026). Copy it to start a new
+  story. Before it: `thunder-en`, `alcatraz-en`, `troy-en`.
+- **Hook.** The user wants a very strong hook every time: the absurd act is shown on screen in the first 2 s.
+- **Bell at 0 s.** Very short and quiet (user asked twice): `add(sfx, bell(660, .6, k=.15), 0.0, .5)` as in
+  `stories/pink-en/mix.py`. Never a long ringing bell.
 - **Story structure.** The "hidden mechanism" maths in `yumurta/STIL_KITABI.md` (section "Hikâye matematiği"):
   - An absurd act at 0 s.
   - A reversal around 50 %.
@@ -32,10 +35,19 @@ lists the steps.
 - **Sound.** Music bed about 14 dB under the voice, about one SFX per second, all pinned to words (see
   `stories/alcatraz-en/mix.py`).
 - **Delivery.**
-  - Loudness must be -14 LUFS, true peak ≤ -1 dB: `python3 -m episodes.troy_en.qa <mp4>`. Fix with
-    `ffmpeg -af loudnorm=I=-14:TP=-1.5:LRA=11`.
+  - Loudness must be -14 LUFS, true peak ≤ -1 dB: `python3 -m episodes.troy_en.qa <mp4>`. Single-pass loudnorm
+    fails here; use this (V = `out/<story>_video.mp4`, A = `audio/mix.wav`, it passed for pink-en):
+    ```
+    PRE="volume=5dB,alimiter=limit=0.6:attack=1:release=50:level=false"
+    J=$(ffmpeg -hide_banner -i $A -af "$PRE,loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json" -f null - 2>&1 | sed -n '/^{/,/^}/p')
+    g(){ echo "$J" | python3 -c "import json,sys;print(json.load(sys.stdin)['$1'])"; }
+    ffmpeg -y -i $V -i $A -map 0:v -map 1:a -c:v copy -af "$PRE,loudnorm=I=-14:TP=-1.5:LRA=11:measured_I=$(g input_i):measured_TP=$(g input_tp):measured_LRA=$(g input_lra):measured_thresh=$(g input_thresh):offset=$(g target_offset):linear=true,aresample=192000,alimiter=limit=0.7:attack=0.5:level=false,aresample=48000" -c:a aac -b:a 192k -shortest $O
+    ```
   - The final file goes to `output/<Name>_yumurta.mp4`. Commit it (`git add -f`) and send it with SendUserFile.
   - Offer the user a YouTube title and tags.
+- **Publishing advice already given** (don't re-derive): audience is US. Post 1 Short/day at the same time;
+  weekdays 20:00–22:00 Turkey time (12–14 ET), weekends 17:00–19:00. Go to 2/day only if retention stays > 70 %.
+- **Facts.** Verify every fact online (Wikipedia + one more source); leave out numbers that sources disagree on.
 
 ## Rendering in the cloud container
 
