@@ -1,0 +1,114 @@
+{
+ "r01": {
+  "kare": 130,
+  "kontrast": 0.577,
+  "parlak_pct": 1.28,
+  "koyu_pct": 0.13,
+  "sicak_pct": 27.4,
+  "soguk_pct": 8.0,
+  "ikili_pct": 23.8,
+  "isikli_pct": 77.7
+ },
+ "r02": {
+  "kare": 130,
+  "kontrast": 0.595,
+  "parlak_pct": 1.48,
+  "koyu_pct": 0.11,
+  "sicak_pct": 20.3,
+  "soguk_pct": 12.9,
+  "ikili_pct": 28.5,
+  "isikli_pct": 75.4
+ },
+ "r03": {
+  "kare": 121,
+  "kontrast": 0.64,
+  "parlak_pct": 0.13,
+  "koyu_pct": 0.86,
+  "sicak_pct": 3.9,
+  "soguk_pct": 28.2,
+  "ikili_pct": 19.8,
+  "isikli_pct": 47.9
+ },
+ "r04": {
+  "kare": 129,
+  "kontrast": 0.805,
+  "parlak_pct": 5.16,
+  "koyu_pct": 3.83,
+  "sicak_pct": 22.0,
+  "soguk_pct": 37.6,
+  "ikili_pct": 39.5,
+  "isikli_pct": 74.4
+ },
+ "r05": {
+  "kare": 78,
+  "kontrast": 0.628,
+  "parlak_pct": 0.1,
+  "koyu_pct": 19.29,
+  "sicak_pct": 17.0,
+  "soguk_pct": 5.1,
+  "ikili_pct": 26.9,
+  "isikli_pct": 32.1
+ },
+ "r06": {
+  "kare": 90,
+  "kontrast": 0.703,
+  "parlak_pct": 1.66,
+  "koyu_pct": 7.04,
+  "sicak_pct": 9.8,
+  "soguk_pct": 44.9,
+  "ikili_pct": 13.3,
+  "isikli_pct": 84.4
+ },
+ "r07": {
+  "kare": 119,
+  "kontrast": 0.614,
+  "parlak_pct": 0.21,
+  "koyu_pct": 0.75,
+  "sicak_pct": 14.6,
+  "soguk_pct": 29.5,
+  "ikili_pct": 42.0,
+  "isikli_pct": 55.5
+ },
+ "r08": {
+  "kare": 126,
+  "kontrast": 0.575,
+  "parlak_pct": 1.03,
+  "koyu_pct": 0.6,
+  "sicak_pct": 2.7,
+  "soguk_pct": 44.4,
+  "ikili_pct": 16.7,
+  "isikli_pct": 74.6
+ },
+ "r09": {
+  "kare": 130,
+  "kontrast": 0.619,
+  "parlak_pct": 2.46,
+  "koyu_pct": 0.52,
+  "sicak_pct": 0.4,
+  "soguk_pct": 13.9,
+  "ikili_pct": 1.5,
+  "isikli_pct": 87.7
+ },
+ "r10": {
+  "kare": 127,
+  "kontrast": 0.588,
+  "parlak_pct": 0.67,
+  "koyu_pct": 0.09,
+  "sicak_pct": 35.9,
+  "soguk_pct": 18.7,
+  "ikili_pct": 56.7,
+  "isikli_pct": 63.0
+ },
+ "tek_kare_r05": {
+  "golge_aydinlik": 0.46,
+  "golge_aydinlik_R": 0.42,
+  "golge_aydinlik_B": 0.5,
+  "hale": {
+   "cekirdek": 41,
+   "p4": 0.66,
+   "p10": 0.55,
+   "p20": 0.45,
+   "p40": 0.37
+  }
+ }
+}

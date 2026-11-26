@@ -1,0 +1,102 @@
+{
+ "r01": {
+  "olculen_sn": 46.7,
+  "donen_pct": 2.6,
+  "hareket_10sn": 0.43,
+  "aci_p50": 5.8,
+  "aci_p90": 7.5,
+  "sure_p50": 12.0,
+  "hiz_p90": 0.033,
+  "olculen_pct": 72.0
+ },
+ "r02": {
+  "olculen_sn": 27.6,
+  "donen_pct": 15.9,
+  "hareket_10sn": 1.45,
+  "aci_p50": 2.8,
+  "aci_p90": 5.2,
+  "sure_p50": 25.5,
+  "hiz_p90": 0.111,
+  "olculen_pct": 42.0
+ },
+ "r03": {
+  "olculen_sn": 36.6,
+  "donen_pct": 14.2,
+  "hareket_10sn": 1.91,
+  "aci_p50": 2.6,
+  "aci_p90": 7.2,
+  "sure_p50": 21.0,
+  "hiz_p90": 0.128,
+  "olculen_pct": 61.0
+ },
+ "r04": {
+  "olculen_sn": 31.8,
+  "donen_pct": 17.9,
+  "hareket_10sn": 1.89,
+  "aci_p50": 2.3,
+  "aci_p90": 25.4,
+  "sure_p50": 18.0,
+  "hiz_p90": 0.167,
+  "olculen_pct": 49.0
+ },
+ "r05": {
+  "olculen_sn": 27.5,
+  "donen_pct": 0.7,
+  "hareket_10sn": 0.0,
+  "aci_p50": 0.0,
+  "aci_p90": 0.0,
+  "sure_p50": 0.0,
+  "hiz_p90": 0.03,
+  "olculen_pct": 71.0
+ },
+ "r06": {
+  "olculen_sn": 38.4,
+  "donen_pct": 5.7,
+  "hareket_10sn": 0.52,
+  "aci_p50": 3.7,
+  "aci_p90": 4.8,
+  "sure_p50": 30.0,
+  "hiz_p90": 0.073,
+  "olculen_pct": 86.0
+ },
+ "r07": {
+  "olculen_sn": 36.8,
+  "donen_pct": 3.8,
+  "hareket_10sn": 0.54,
+  "aci_p50": 2.5,
+  "aci_p90": 2.7,
+  "sure_p50": 13.5,
+  "hiz_p90": 0.067,
+  "olculen_pct": 62.0
+ },
+ "r08": {
+  "olculen_sn": 31.9,
+  "donen_pct": 4.7,
+  "hareket_10sn": 0.63,
+  "aci_p50": 2.0,
+  "aci_p90": 2.3,
+  "sure_p50": 22.5,
+  "hiz_p90": 0.061,
+  "olculen_pct": 51.0
+ },
+ "r09": {
+  "olculen_sn": 45.1,
+  "donen_pct": 5.1,
+  "hareket_10sn": 1.33,
+  "aci_p50": 2.3,
+  "aci_p90": 2.9,
+  "sure_p50": 16.5,
+  "hiz_p90": 0.069,
+  "olculen_pct": 69.0
+ },
+ "r10": {
+  "olculen_sn": 26.4,
+  "donen_pct": 6.4,
+  "hareket_10sn": 0.0,
+  "aci_p50": 0.0,
+  "aci_p90": 0.0,
+  "sure_p50": 0.0,
+  "hiz_p90": 0.073,
+  "olculen_pct": 42.0
+ }
+}

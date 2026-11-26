@@ -1,0 +1,57 @@
+{
+ "salon": {
+  "kare": 46,
+  "kirmizi": 31.9,
+  "sari-turuncu": 2.8,
+  "yesil": 0.1,
+  "camgobegi": 2.2,
+  "mavi": 44.8,
+  "mor-pembe": 18.1,
+  "en_buyuk": 48.9,
+  "aile": 3.0
+ },
+ "mutfak": {
+  "kare": 6,
+  "kirmizi": 52.1,
+  "sari-turuncu": 1.9,
+  "yesil": 2.8,
+  "camgobegi": 6.5,
+  "mavi": 26.6,
+  "mor-pembe": 10.0,
+  "en_buyuk": 54.9,
+  "aile": 3.0
+ },
+ "is_odasi": {
+  "kare": 9,
+  "kirmizi": 21.2,
+  "sari-turuncu": 3.2,
+  "yesil": 0.0,
+  "camgobegi": 5.2,
+  "mavi": 44.3,
+  "mor-pembe": 26.1,
+  "en_buyuk": 55.1,
+  "aile": 3.0
+ },
+ "hattat": {
+  "kare": 17,
+  "kirmizi": 32.2,
+  "sari-turuncu": 31.7,
+  "yesil": 0.0,
+  "camgobegi": 0.0,
+  "mavi": 23.0,
+  "mor-pembe": 13.0,
+  "en_buyuk": 43.5,
+  "aile": 4.0
+ },
+ "tumu": {
+  "kare": 78,
+  "kirmizi": 32.3,
+  "sari-turuncu": 9.1,
+  "yesil": 0.3,
+  "camgobegi": 2.4,
+  "mavi": 38.6,
+  "mor-pembe": 17.3,
+  "en_buyuk": 48.9,
+  "aile": 3.0
+ }
+}

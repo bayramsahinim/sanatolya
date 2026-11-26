@@ -47,6 +47,43 @@ python -m episodes.rome_7_days.thumbnail
 python -m episodes.rome_7_days.qa output/I_Got_Stuck_in_Ancient_Rome_for_7_Days.mp4
 ```
 
+## Episode: "The Trojan Horse" (English, vertical short, new cast)
+
+The Trojan Horse told shot-for-shot in the style of story-driven history shorts: 2D sticker-outlined
+characters over layered, lit, depth-blurred 2.5D sets, one-word captions, a cut every ~2.5 s.
+Script and Turkish draft: `episodes/truva/SENARYO.md`.
+
+| Deliverable | Path |
+|---|---|
+| Final video (1080×1920, 30 fps, H.264/AAC, ~67 s, -14 LUFS) | `output/Just_Needy_The_Trojan_Horse_EN.mp4` |
+| English subtitles | `output/Just_Needy_The_Trojan_Horse_EN.en.srt` |
+
+```
+episodes/troy_en/
+  script.py     narration lines + caption highlight words
+  make_voice.py one Gemini TTS take (channel voice, Puck) -> assets/audio/tts_troy
+  words.py      faster-whisper word timestamps for the take
+  voice.py      tighten pauses -> build/troy_en/voice.wav + timing.json (word + line timing)
+  cast.py       new cast on the Cinecode rig (egg heads, outlined limbs, Greek/Trojan costumes)
+  gfx.py        vertical canvas, parallax camera, depth blur, sticker halo, grading
+  world.py      sets (beach, sea, reeds, walls, plaza, inside the horse; day/night) + props
+  shots.py      26 shots, each anchored to narration word times
+  render.py     one-word captions, joke tags, parallel encode, stills/contact sheet
+  mix.py        section music, cue SFX, ducking, loudness, SRT, final mux
+  qa.py         pre-delivery checks
+```
+
+```bash
+pip install pycairo numpy scipy soundfile pillow librosa opencv-python-headless faster-whisper
+python episodes/troy_en/make_voice.py gemini-3.8-flash-tts        # cached in assets/audio/tts_troy
+python episodes/troy_en/words.py assets/audio/tts_troy/<take>.wav  # cached next to the take
+python -m episodes.troy_en.voice
+python -m episodes.troy_en.render stills       # contact sheet for review
+python -m episodes.troy_en.render video
+python -m episodes.troy_en.mix audio && python -m episodes.troy_en.mix final
+python -m episodes.troy_en.qa output/Just_Needy_The_Trojan_Horse_EN.mp4
+```
+
 ## Episode: "What If Every Human Is Related?" (English adaptation, vertical)
 
 English adaptation of the Turkish shared-ancestry short, rebuilt shot for shot in Cinecode with
