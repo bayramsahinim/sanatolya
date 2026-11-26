@@ -53,19 +53,20 @@ def noise(d, lo, hi, a=.01, r=.1, seed=1):
     return x / (np.abs(x).max() + 1e-9) * e
 
 
-def bell(f=660, d=4.5, bright=1.0):
+def bell(f=660, d=4.5, bright=1.0, k=1.0):
     """A struck church bell ("tin"): hum, prime, minor third, fifth, nominal and upper partials, each with its own
-    decay, a short metallic strike transient and a slow beat between paired partials."""
+    decay, a short metallic strike transient and a slow beat between paired partials. k scales every decay
+    (k<1 = a short "tin" that dies fast); the last 40 % of d is faded out so nothing is cut."""
     tt = np.arange(int(d * SR)) / SR
     parts = [(.5, .5, 3.2), (1, 1, 2.4), (1.19, .55, 1.9), (1.5, .35, 1.5), (2, .7, 1.3), (2.51, .3 * bright, .8),
              (2.66, .25 * bright, .7), (3.01, .22 * bright, .6), (4.07, .15 * bright, .35), (5.2, .1 * bright, .2)]
     x = np.zeros_like(tt)
     for r, a, tau in parts:
         ph = np.random.default_rng(int(r * 100)).uniform(0, 6.28)
-        x += a * np.sin(2 * np.pi * f * r * tt + ph) * np.exp(-tt / tau) * (1 + .12 * np.sin(2 * np.pi * (1.3 + r * .4) * tt))
+        x += a * np.sin(2 * np.pi * f * r * tt + ph) * np.exp(-tt / (tau * k)) * (1 + .12 * np.sin(2 * np.pi * (1.3 + r * .4) * tt))
     strike = noise(.04, 2000, 9000, .001, .03, 11)
     x[:len(strike)] += strike * .6
-    x *= np.minimum(1, tt / .002)
+    x *= np.minimum(1, tt / .002) * np.clip((d - tt) / (.4 * d), 0, 1)
     return x / np.abs(x).max()
 
 
@@ -96,8 +97,8 @@ music(W('why') - .1, W('Because') - .05, 'suspense', .5)
 music(W('Because') - .05, DUR, 'warm', .6)
 
 # ---- the bell: "tin" at frame 0, and again when the statue appears today (the loop back to the hook)
-add(sfx, bell(660), 0.0, 1.5)
-add(sfx, bell(495, 5.0, .8), W('Peter', 2) - .75, 1.0)
+add(sfx, bell(660, .6, k=.15), 0.0, .5)            # user: short and quieter (was 4.5 s at 1.5)
+add(sfx, bell(495, .7, .8, k=.15), W('Peter', 2) - .75, .35)
 
 # ---- SFX, about one per second, pinned to words
 S('pop', W('Empress'), .4); S('whoosh', W('move') - .15, .5); add(sfx, rumble(1.2), W('rock'), .5)
