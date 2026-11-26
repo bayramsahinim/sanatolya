@@ -194,15 +194,15 @@ function stageAt(t) {
 }
 
 // ---------------------------------------------------------------- CAMERA (every key pinned to a word)
-const KISSY = 1.5;
+const KISSY = 1.53;
 function cameraPath() {
   const c = n => W('Closer', n) - .1, gap = (X, z = 6, fov = 74, y = MID) => ({ pos: [X, y, z], look: [X, y, -24], fov });
   const back = W('Even', 2) - .1;
   const keys = [
     // HOOK — the two faces close up, closing in on each other
-    { t: 0, pos: [PK, 1.6, 3.3], look: [PK, 1.52, 0], fov: 44, creep: .1, drift: .02 },
+    { t: 0, pos: [PK, 1.6, 2.6], look: [PK, 1.53, 0], fov: 44, creep: .1, drift: .02 },
     // "Let's zoom in.": straight into the point where the lips meet
-    { t: W('Lets') - .05, dur: .2, move: 'glide', pos: [PK, 1.6, 2.9], look: [PK, 1.52, 0], fov: 44, creep: .2 },
+    { t: W('Lets') - .05, dur: .2, move: 'glide', pos: [PK, 1.6, 2.4], look: [PK, 1.53, 0], fov: 44, creep: .2 },
     { t: W('Wrinkles') - .2, dur: .6, move: 'glide', pos: [PK, KISSY, 2.2], look: [PK, KISSY, 0], fov: 14 },
     // each step: a whip forward into the next world, then a steady push (the creep) deeper into the gap
     { t: W('Wrinkles') - .05, dur: .2, move: 'whip', ...gap(LP), creep: .6 },
@@ -217,7 +217,7 @@ function cameraPath() {
     { t: back + .2, dur: .2, move: 'whip', ...gap(FB, 6), creep: .1 },
     { t: back + .45, dur: .2, move: 'whip', ...gap(CE, 6), creep: .1 },
     { t: back + .7, dur: .2, move: 'whip', ...gap(LP, 6), creep: .1 },
-    { t: back + 1.0, dur: .25, move: 'whip', pos: [PK, 1.6, 3.2], look: [PK, 1.5, 0], fov: 44, creep: .2 },
+    { t: back + 1.0, dur: .25, move: 'whip', pos: [PK, 1.6, 2.6], look: [PK, 1.53, 0], fov: 44, creep: .2 },
     // "Send this...": pull back to the couple
     { t: W('Send') - .1, dur: .7, move: 'glide', pos: [PK + .05, 1.5, 3.4], look: [PK + .05, 1.32, 0], fov: 48, creep: .25 },
   ];
@@ -271,16 +271,16 @@ export function frame(t, ctx) {
 
   // ================= PARK: the kiss =================
   if (where === 'park') {
+    // two faces in profile, eyes shut, lips pushed out; they close in until the lips meet on "contact"
     const k = ramp(t, .2, W('contact') + .1), end = t >= W('Even', 2);
-    const off = end ? .31 : lerp(.47, .31, k);
-    const closed = t >= W('contact') - .4;
+    const off = end ? .37 : lerp(.62, .37, k);
     const wave = t >= W('Send') - .1;
-    put('him', PK - off, 0, wave ? { expr: 'grin', look: .4, blink: bl(1, W('Send')), armR: [150 + Math.sin(t * 12) * 16, 20], armL: [14, 10], lean: 2 }
-      : { expr: 'smile', look: 1, blink: closed ? 1 : bl(1, W('contact')), lid: closed ? 0 : .3, armR: [40, 40], armL: [14, 10], lean: 4 });
-    put('her', PK + off, -.02, wave ? { expr: 'smug', look: -.4, blink: bl(2, W('Send')), armL: [20, 20], armR: [14, 10], lean: -2 }
-      : { expr: 'smile', look: -1, blink: closed ? 1 : bl(2, W('contact')), lid: closed ? 0 : .3, armL: [40, 40], armR: [14, 10], lean: -4, bob: -10 });
-    dyn.mouths = [cast.him.toWorld(118, 268), cast.her.toWorld(-118, 268)];
-    if (closed || end) dyn.hearts.wisps.push({ n: 8, size: .05, alpha: .8, speed: .25, seed: 3, path: (u, tt, i) => [PK + Math.sin(i * 2.1 + tt * 2) * .2, KISSY + .15 + u * .7, .05] });
+    put('him', PK - off, 0, wave ? { expr: 'grin', look: .4, blink: bl(1, W('Send')), armR: [150 + Math.sin(t * 12) * 16, 20], armL: [14, 10] }
+      : { expr: 'neutral', look: 1, blink: 1, pucker: 1, armR: [30, 30], armL: [14, 10] });
+    put('her', PK + off, -.02, wave ? { expr: 'smug', look: -.4, blink: bl(2, W('Send')), armL: [20, 20], armR: [14, 10] }
+      : { expr: 'neutral', look: -1, blink: 1, pucker: 1, armL: [30, 30], armR: [14, 10] }, { y: wave ? 0 : .1 });
+    dyn.mouths = [cast.him.toWorld(184, 258), cast.her.toWorld(-184, 258)];
+    if (t >= W('contact') - .2 || end) dyn.hearts.wisps.push({ n: 8, size: .05, alpha: .8, speed: .25, seed: 3, path: (u, tt, i) => [PK + Math.sin(i * 2.1 + tt * 2) * .2, KISSY + .15 + u * .7, .05] });
     focus = V(PK, KISSY, 0);
   }
 

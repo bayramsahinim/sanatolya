@@ -325,7 +325,16 @@ function face(g, w, h, f, L) {
   const mx = fx + turn * w * .03, my = fy + h * .2, m = clamp(f.mouth || 0, 0, 1), sg = turn < 0 ? -1 : 1;
   g.strokeStyle = PLUM; g.lineWidth = lw * .95;
   const kind = E.mouth;
-  if (kind === 'grin') {
+  if (f.pucker) {
+    // puckered lips pushed out past the side of the head (a kiss in profile): two plump pink lobes, a dark seam
+    const p = clamp(f.pucker, 0, 1), bx = sg * w * .4, tip = bx + sg * w * (.06 + .24 * p), ly = my - h * .01, lh = w * (.07 + .04 * p);
+    const cx = (bx + tip) / 2, rx = Math.abs(tip - bx) / 2 + w * .02;
+    const lip = s2 => { g.beginPath(); g.ellipse(cx, ly - s2 * lh * .48, rx, lh * (s2 > 0 ? .56 : .64), -sg * s2 * .12, 0, 6.29); };
+    g.lineWidth = lw * .8; g.strokeStyle = PLUM;
+    for (const s2 of [-1, 1]) { lip(s2); g.fillStyle = s2 > 0 ? '#e05a74' : '#ec6a82'; g.fill(); g.stroke(); }
+    g.fillStyle = 'rgba(255,255,255,.55)'; g.beginPath(); g.ellipse((bx + tip) / 2 + sg * w * .02, ly - lh * .55, w * .035, w * .014, 0, 0, 6.29); g.fill();
+    g.lineWidth = lw * .55; g.beginPath(); g.moveTo(bx, ly); g.lineTo(tip, ly); g.stroke();
+  } else if (kind === 'grin') {
     const k = .55 + .45 * Math.max(m, f.expr === 'laugh' ? .5 : .3), mw = w * .135, mh = w * .13 * k;
     const shp = () => { g.beginPath(); g.moveTo(mx - mw, my - w * .03); g.lineTo(mx + mw, my - w * .03); g.quadraticCurveTo(mx + mw * .92, my + mh, mx, my + mh); g.quadraticCurveTo(mx - mw * .92, my + mh, mx - mw, my - w * .03); g.closePath(); };
     shp(); g.fillStyle = '#5a1f2e'; g.fill();
