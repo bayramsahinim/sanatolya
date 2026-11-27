@@ -90,12 +90,10 @@ rn = noise(W('All', 2) - W('way', 2) + .4, 1500, 8000, .15, .25, 31); add(sfx, r
 # ---- SFX, about one per second, pinned to words
 # user: "too many SFX" -> only the key beats, softer (about one every 3-4 s instead of one per second)
 add(sfx, noise(1.2, 300, 3000, .05, .5, 7), W('fire'), .12)
-S('dun', W('prove'), .3)
 S('portal', W('colorblind') - .1, .22)
 S('pop', W('Thats'), .25)
 S('sparkle', W('actually'), .22)
 S('whoosh', W('Your', 3) - .14, .25)
-S('dun', W('twist'), .4)
 S('sparkle', W('sunset'), .22)
 S('drip', W('rain'), .22)
 S('whoosh', W('So', 2) - .14, .25)
