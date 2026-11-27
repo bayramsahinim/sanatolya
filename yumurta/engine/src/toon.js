@@ -512,6 +512,13 @@ export class Toon {
     if (L.apron) { g.fillStyle = '#f7f3ea'; g.strokeStyle = shade('#f7f3ea', .7); g.lineWidth = 4; g.beginPath(); g.roundRect(cx - bw * .34, bodyTop + 100, bw * .68, bodyBot - bodyTop - 112, 16); g.fill(); g.stroke();
       g.beginPath(); g.roundRect(cx - 26, bodyTop + 190, 52, 42, 8); g.stroke(); }
     if (L.buttons) { g.fillStyle = L.buttons; g.strokeStyle = shade(L.buttons, .55); g.lineWidth = 3; for (let y = bodyTop + 84; y < bodyBot - 50; y += 50) { g.beginPath(); g.arc(cx + 2, y, 8, 0, 6.29); g.fill(); g.stroke(); } }
+    if (L.tie) {                                                              // a necktie: a small knot under the chin, a long blade to the belly
+      const tc = L.tie, ty = bodyTop + 2;
+      g.fillStyle = tc; g.strokeStyle = PLUM; g.lineWidth = 5; g.lineJoin = 'round';
+      g.beginPath(); g.moveTo(cx - 13, ty + 30); g.lineTo(cx - 26, ty + 200); g.lineTo(cx, ty + 236); g.lineTo(cx + 26, ty + 200); g.lineTo(cx + 13, ty + 30); g.closePath(); g.fill(); g.stroke();
+      g.beginPath(); g.moveTo(cx - 22, ty - 4); g.lineTo(cx + 22, ty - 4); g.lineTo(cx + 14, ty + 34); g.lineTo(cx - 14, ty + 34); g.closePath(); g.fillStyle = shade(tc, .9); g.fill(); g.stroke();
+      g.strokeStyle = shade(tc, .75); g.lineWidth = 3; g.beginPath(); g.moveTo(cx - 6, ty + 60); g.lineTo(cx + 18, ty + 110); g.moveTo(cx - 16, ty + 120); g.lineTo(cx + 20, ty + 176); g.stroke();
+    }
     if (L.pocket) { g.strokeStyle = shade(cloth, .55); g.lineWidth = 4; g.beginPath(); g.roundRect(cx - bw * .32, bodyTop + 200, 44, 40, 6); g.stroke(); }
     if (p.soot) { g.fillStyle = '#2a2234'; g.globalAlpha = .35 * p.soot; for (let k = 0; k < 9; k++) { g.beginPath(); g.ellipse(cx - 70 + (k * 47) % 150, bodyTop + 80 + (k * 71) % 240, 24, 15, k, 0, 6.29); g.fill(); } g.globalAlpha = 1; }
     g.restore();
@@ -556,6 +563,12 @@ export class Toon {
     }
     if (L.beard) beard(g, hw, hh, L, lit);
     if (L.hat && !L.hatBack) hat(g, L.hat, hw, hh, L, lit);
+    if (p.phones) {                                                            // headphones: a band over the crown, two cups on the sides
+      g.strokeStyle = PLUM; g.lineWidth = 7; g.fillStyle = '#5a6478';
+      g.beginPath(); g.ellipse(0, -hh * .02, hw * .52, hh * .56, 0, Math.PI * 1.06, Math.PI * 1.94); g.lineWidth = 22; g.strokeStyle = PLUM; g.stroke(); g.lineWidth = 14; g.strokeStyle = '#7a8498'; g.stroke();
+      g.lineWidth = 7; g.strokeStyle = PLUM;
+      for (const s of [-1, 1]) { g.beginPath(); g.roundRect(s * hw * .5 - 26, -hh * .12, 52, hh * .4, 22); g.fill(); g.stroke(); }
+    }
     face(g, hw, hh, p, L);                                                     // after the hat: raised brows stay visible on its edge
     if (p.sweat) { g.globalAlpha = Math.min(1, p.sweat); g.fillStyle = '#9fd4ff'; g.strokeStyle = PLUM; g.lineWidth = 5; g.beginPath(); g.moveTo(hw * .44, -hh * .3); g.quadraticCurveTo(hw * .58, -hh * .08, hw * .47, -hh * .04); g.quadraticCurveTo(hw * .35, -hh * .08, hw * .44, -hh * .3); g.fill(); g.stroke(); g.globalAlpha = 1; }
     if (p.laughMarks) { g.strokeStyle = PLUM; g.lineWidth = 6; g.lineCap = 'round'; g.globalAlpha = p.laughMarks; for (const s of [-1, 1]) for (let k = 0; k < 3; k++) { const a = (-40 + k * 25) * D2R; g.beginPath(); g.moveTo(s * (hw * .62 + 6), -hh * .1 + Math.sin(a) * 60); g.lineTo(s * (hw * .62 + 36), -hh * .1 + Math.sin(a) * 80); g.stroke(); } g.globalAlpha = 1; }
