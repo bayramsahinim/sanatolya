@@ -187,10 +187,12 @@ export function frame(t, ctx) {
   const sent = t >= W('send') + .05, cong = t >= W('Congratulations') - .1;
 
   // Dave: upside down out of the attic, his phone held "up" (below his head), staring at the hero
+  if (!cong) {
   const dv = put('dave', HATCH.x, HATCH.z + .05, { expr: cong ? 'grin' : sent ? 'smile' : 'neutral', look: -.35, gazeX: -.7, gazeY: .4, blink: bl(2, W('send')),
     armL: [170, 4], armR: [174, -4], propR: 'phone', screen: sent && t < W('send') + .8 ? '#8af08a' : '#bfe0ff', bob: Math.sin(t * 1.6) * 6 }, { y: CEIL + 1.25, scale: .95, shadow: false });
   dv.mesh.rotation.z = Math.PI + Math.sin(t * 1.3) * .04;
   dyn.marks.dave = dv.toWorld(0, 60);
+  }   // user: Dave leaves for the congratulations (the hatch is empty)
 
   // the hero
   const hold = t >= W('Pick') - .1, raise = ramp(t, W('Pick') - .1, W('phone'));
