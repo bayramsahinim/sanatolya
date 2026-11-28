@@ -9,12 +9,14 @@
 :root {
   --ink: #1d1b19; --muted: #6b645c; --paper: #fbf6ec; --card: #ffffff;
   --accent: #ffb21a; --accent-soft: #fff1cf; --line: #e7dfd1;
-  --p: #6c5ce7; --c: #e2574c; --d: #2a9d8f;
+  --w: #2f6fdf; --p: #6c5ce7; --c: #e2574c; --d: #2a9d8f;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; background: var(--paper); color: var(--ink);
+html, body { counter-reset: pg; margin: 0; background: var(--paper); color: var(--ink);
   font-family: "Liberation Sans", "DejaVu Sans", Arial, sans-serif; font-size: 10.6pt; line-height: 1.5; }
 .page { width: 210mm; min-height: 297mm; padding: 18mm 17mm 16mm; position: relative; page-break-after: always; overflow: hidden; }
+.page { counter-increment: pg; }
+.foot span:last-child::after { content: counter(pg); }
 .page:last-child { page-break-after: auto; }
 h1, h2, h3, .num, .big { font-family: "PoppinsX", sans-serif; font-weight: 800; letter-spacing: -0.01em; }
 h1 { font-size: 40pt; line-height: 1.02; margin: 0 0 6mm; }
@@ -26,7 +28,8 @@ p { margin: 0 0 3mm; }
 .foot { position: absolute; bottom: 9mm; left: 17mm; right: 17mm; display: flex; justify-content: space-between; font-size: 8pt; color: var(--muted); }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: 4mm; padding: 5mm 6mm; margin: 0 0 4mm; }
 .tag { display: inline-block; font-size: 8pt; font-weight: 700; padding: .6mm 2.4mm; border-radius: 10mm; color: #fff; margin-right: 1.5mm; }
-.tp { background: var(--p); } .tc { background: var(--c); } .td { background: var(--d); }
+.tw { background: var(--w); } .tp { background: var(--p); } .tc { background: var(--c); } .td { background: var(--d); }
+.mini { padding: 3.5mm 4.5mm; margin: 0; font-size: 9.6pt; } .mini h3 { margin: 1.5mm 0 1mm !important; } .mini p { margin: 0 0 1mm; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
 .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
 ol, ul { margin: 0 0 3mm; padding-left: 5mm; }
@@ -73,12 +76,13 @@ th { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .06em; color: 
 <section class="page cover">
   <div class="kicker" style="color:#ffb21a">Just Needy · Creator Kit Vol. 1</div>
   <h1>The 60-Second<br><span>Script Kit</span></h1>
-  <p class="lead">The three Shorts formats behind the Just Needy channel, broken down beat by beat, with fill-in templates and 90 topics ready to film.</p>
+  <p class="lead">The four Shorts formats behind the Just Needy channel, broken down beat by beat, with fill-in templates and 120 topics ready to film.</p>
+  <div style="margin-top:8mm;position:relative;z-index:1"><div style="font-family:PoppinsX;font-size:30pt;color:#ffb21a;line-height:1">4.3M views</div><div style="color:#d9d3c9;font-size:11pt">in 30 days, from just 7 Shorts</div></div>
   <div class="egg"></div>
   <div class="inside">
-    <div><b>3</b>proven formats</div>
-    <div><b>4</b>real scripts, annotated</div>
-    <div><b>90</b>topic ideas</div>
+    <div><b>4</b>proven formats</div>
+    <div><b>3</b>real scripts, annotated</div>
+    <div><b>120</b>topic ideas</div>
   </div>
   <div class="by">@itsjustneedy · For personal use. Please don't resell or reshare this file.</div>
 </section>
@@ -90,28 +94,104 @@ th { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .06em; color: 
   <p class="lead">People don't scroll past a video because it looks bad. They scroll because nothing in the first sentence makes them need the next one.</p>
   <p>Every script in this kit follows one rule: <b>each line has to earn the next one.</b> The hook opens a question, the middle keeps adding to it, and the payoff answers it, usually with a twist the viewer didn't see coming. A Short built like this gets watched to the end, and that's the number the algorithm cares about most.</p>
 
-  <h3>The three formats</h3>
-  <div class="grid3">
-    <div class="card"><span class="tag tp">Format 1</span><h3 style="margin-top:2mm">The Paradox</h3><p>One mind-bending idea, told calmly. It gets comments because everyone has an opinion.</p><p style="color:var(--muted);font-size:9pt">45–60 s · ~18 lines</p></div>
-    <div class="card"><span class="tag tc">Format 2</span><h3 style="margin-top:2mm">The Countdown</h3><p>"3 secret advantages of…" Fast, funny, and it gets sent to friends.</p><p style="color:var(--muted);font-size:9pt">25–35 s · ~16 lines</p></div>
-    <div class="card"><span class="tag td">Format 3</span><h3 style="margin-top:2mm">The Deadpan Tutorial</h3><p>A painfully simple task explained like it's rocket science. Gets rewatched and shared.</p><p style="color:var(--muted);font-size:9pt">15–20 s · ~7 lines</p></div>
+  <h3>The four formats</h3>
+  <div class="grid2">
+    <div class="card mini"><span class="tag tw">Format 1</span><h3 style="margin-top:2mm">The Big What-If</h3><p>Take a giant number and make it something you can see: the Earth as a cake, split between 8 billion people. This is the format behind the channel's 2.1M-view video.</p><p style="color:var(--muted);font-size:9pt">40–60 s · ~16 lines</p></div>
+    <div class="card mini"><span class="tag tp">Format 2</span><h3 style="margin-top:2mm">The Paradox</h3><p>One mind-bending idea, told calmly. It gets comments because everyone has an opinion.</p><p style="color:var(--muted);font-size:9pt">45–60 s · ~18 lines</p></div>
+    <div class="card mini"><span class="tag tc">Format 3</span><h3 style="margin-top:2mm">The Countdown</h3><p>"3 secret advantages of…" Fast, funny, and it gets sent to friends.</p><p style="color:var(--muted);font-size:9pt">25–35 s · ~16 lines</p></div>
+    <div class="card mini"><span class="tag td">Format 4</span><h3 style="margin-top:2mm">The Deadpan Tutorial</h3><p>A painfully simple task explained like it's rocket science. Gets rewatched and shared.</p><p style="color:var(--muted);font-size:9pt">15–20 s · ~7 lines</p></div>
   </div>
 
   <h3>How to use this kit</h3>
   <ol>
     <li><b>Pick a format</b> that fits the mood you want: deep, funny, or dry.</li>
-    <li><b>Pick a topic</b> from that format's idea list, or use the topic-finding method on page 11.</li>
+    <li><b>Pick a topic</b> from that format's idea list, or use the 10-minute topic method near the end.</li>
     <li><b>Fill in the template</b> line by line. Don't skip any beats; each one has a job.</li>
-    <li><b>Run it through the checklist</b> on page 13 before you record.</li>
-    <li><b>Record or generate the voice</b> using the voice direction prompts on page 10.</li>
+    <li><b>Run it through the pre-record checklist</b> on the last page.</li>
+    <li><b>Record or generate the voice</b> using the narrator directions in the Voice section.</li>
   </ol>
   <div class="tip"><b>Rule of thumb:</b> read your script out loud with a timer. A Short that's 10 seconds too long almost always has one beat repeated twice. Find it and cut it.</div>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>2</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
+</section>
+
+
+<!-- WHAT-IF STRUCTURE -->
+<section class="page">
+  <span class="tag tw">Format 1</span>
+  <h2 style="margin-top:3mm">The Big What-If</h2>
+  <p class="lead">Nobody can picture 8 billion of anything. Turn a huge number into one everyday object, split it, and show the result. The viewer stays to see the answer.</p>
+  <div class="card">
+    <ol class="beats">
+      <li><span class="t">What if</span><span>"What if we split [the Earth / all the money / all the water] equally between all 8 billion people?" The thumbnail and first line ask the same thing.</span></li>
+      <li><span class="t">Make it an object</span><span>Turn the abstract thing into something you can hold: the Earth as a cake, the ocean as a bathtub, history as a single day.</span></li>
+      <li><span class="t">The cut</span><span>Do the split on screen in one simple line. No long math, just the knife going in.</span></li>
+      <li><span class="t">First reveal</span><span>Your share is ___. Say it plainly, then pause so it sinks in.</span></li>
+      <li><span class="t">Make it real</span><span>Compare the share to something the viewer owns: "about the size of a football field," "enough for one coffee a day."</span></li>
+      <li><span class="t">Plot twist</span><span>"But here's the problem." Most of the share is useless: ocean, desert, ice. The real answer is smaller or weirder.</span></li>
+      <li><span class="t">Final number</span><span>The surprising final answer. This is the line people quote in the comments.</span></li>
+      <li><span class="t">CTA</span><span>"What should we split next?" Every comment is a free topic for the next video.</span></li>
+    </ol>
+  </div>
+  <div class="tip"><b>Why it works:</b> the viewer can't stop until they hear their share. The hook asks a question with a number answer, and people stay for numbers. Then "What should we split next?" turns your comments into a never-ending series.</div>
+  <div class="tip" style="background:#fff;color:var(--ink);border:1px solid var(--line)"><b style="color:var(--c)">Check every number.</b> This format lives on facts. Confirm each figure with two reliable sources before you record. One wrong number in the comments can bury a good video.</div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
+</section>
+
+<!-- WHAT-IF TEMPLATE + IDEAS -->
+<section class="page">
+  <span class="tag tw">Format 1 · Template</span>
+  <h2 style="margin-top:3mm">Fill in the blanks</h2>
+  <div class="fill">What if we split [huge thing] equally between all 8 billion people?
+Imagine [huge thing] is [everyday object].
+[Fact that sets the size: one line.]
+Now we cut it into 8 billion slices.
+Your slice is [first answer].
+That's about [everyday comparison].
+Not bad, right?
+But here's the problem.
+[Most of it is unusable / not what it seems: one or two lines.]
+So your real share is [final surprising answer].
+[One-line reaction: funny or a little shocking.]
+What should we split next?</div>
+  <h3>30 what-if topics</h3>
+  <ol class="ideas">
+    <li>Split all the land on Earth</li>
+    <li>Split all the money in the world</li>
+    <li>Split all the gold ever mined</li>
+    <li>Split all the fresh water</li>
+    <li>Split the Moon</li>
+    <li>Split all the food made in one day</li>
+    <li>Split every tree on Earth</li>
+    <li>Split all the oxygen you breathe</li>
+    <li>Split the Amazon rainforest</li>
+    <li>Split all the world's chickens</li>
+    <li>Split the internet's data</li>
+    <li>Split all the cars on Earth</li>
+    <li>Split the Sun's energy hitting Earth in one hour</li>
+    <li>Split all the ants on Earth</li>
+    <li>Split all the world's coffee</li>
+    <li>What if all 8 billion people stood shoulder to shoulder?</li>
+    <li>What if everyone jumped at the same time?</li>
+    <li>What if all humans were in one city?</li>
+    <li>What if Earth's history were one 24-hour day?</li>
+    <li>What if everyone on Earth held hands in a line?</li>
+    <li>What if we stacked all 8 billion people?</li>
+    <li>What if everyone flushed at once?</li>
+    <li>What if everyone sent you $1?</li>
+    <li>What if the ocean were a bathtub?</li>
+    <li>What if the Earth were the size of a marble?</li>
+    <li>What if all the world's people were 100 people?</li>
+    <li>What if we split all the world's chocolate?</li>
+    <li>What if every human planted one tree?</li>
+    <li>What if we split all the plastic ever made?</li>
+    <li>What if we split all the time humans have lived?</li>
+  </ol>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 3 PARADOX STRUCTURE -->
 <section class="page">
-  <span class="tag tp">Format 1</span>
+  <span class="tag tp">Format 2</span>
   <h2 style="margin-top:3mm">The Paradox</h2>
   <p class="lead">Take something everyone thinks is obvious and show them it isn't. The tone is calm and curious, like telling a friend a strange thought late at night.</p>
   <div class="card">
@@ -129,12 +209,12 @@ th { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .06em; color: 
     </ol>
   </div>
   <div class="tip"><b>Why it works:</b> beat 2 gets the viewer to agree, so beat 3 feels like it's happening to them. And the yes/no question at the end is easy to answer in one word, which is why paradox videos fill up with comments.</div>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>3</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 4 PARADOX EXAMPLE -->
 <section class="page">
-  <span class="tag tp">Format 1 · Real script</span>
+  <span class="tag tp">Format 2 · Real script</span>
   <h2 style="margin-top:3mm">"The Colorblind Paradox" annotated</h2>
   <p style="color:var(--muted)">The exact narration from the Just Needy video (52 seconds). Left: the line. Right: what it's doing.</p>
   <div class="card script">
@@ -153,12 +233,12 @@ th { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .06em; color: 
     <div class="row"><span><span class="beat">Landing</span>Your sunset, your favorite song, the way rain feels. / All yours, and no one else will ever see it quite the same.</span><span class="note">Turns the scary idea into something beautiful.</span></div>
     <div class="row"><span><span class="beat">CTA</span>So what do you think? / Do we all see the same colors? / Comment yes or no. / Follow for a new paradox every day.</span><span class="note">A one-word answer gets more comments. Also promises a series.</span></div>
   </div>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>4</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 5 PARADOX TEMPLATE + IDEAS -->
 <section class="page">
-  <span class="tag tp">Format 1 · Template</span>
+  <span class="tag tp">Format 2 · Template</span>
   <h2 style="margin-top:3mm">Fill in the blanks</h2>
   <div class="fill">[Obvious fact 1], [obvious fact 2], [obvious fact 3].
 Everyone agrees, right?
@@ -207,12 +287,12 @@ Comment [answer]. Follow for a new paradox every day.</div>
     <li>The holiday paradox: fun trips fly by, then feel long in memory</li>
     <li>The free-will paradox: did you choose to watch this?</li>
   </ol>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>5</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 6 COUNTDOWN -->
 <section class="page">
-  <span class="tag tc">Format 2</span>
+  <span class="tag tc">Format 3</span>
   <h2 style="margin-top:3mm">The Countdown</h2>
   <p class="lead">"Being ___ has 3 secret advantages." Fast, cheeky, and made to be sent to a friend. The viewer should see someone they know in it.</p>
   <div class="card">
@@ -235,12 +315,12 @@ Comment [answer]. Follow for a new paradox every day.</div>
     <div class="row"><span><span class="beat">#3</span>Three: the best hiding spot. / When the teacher picks someone for the board... / the tallest kid becomes your shield. / A human shield... against math.</span><span class="note">Most absurd one last. Read like a movie trailer.</span></div>
     <div class="row"><span><span class="beat">CTA</span>Send this to your shortest friend.</span><span class="note">Asks for a send, not a follow.</span></div>
   </div>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>6</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 7 COUNTDOWN TEMPLATE + IDEAS -->
 <section class="page">
-  <span class="tag tc">Format 2 · Template</span>
+  <span class="tag tc">Format 3 · Template</span>
   <h2 style="margin-top:3mm">Fill in the blanks</h2>
   <div class="fill">Being [group] has 3 secret advantages.
 One: [situation in 2–3 words].
@@ -288,12 +368,12 @@ Send this to your [most ___] friend.</div>
     <li>Being the shortest in the family photo</li>
   </ol>
   <div class="tip"><b>Pro move:</b> make it a series. "Tall people," then "Short people," then "Middle-height people (nobody talks about us)." Each video promotes the next one in the comments.</div>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>7</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 8 DEADPAN -->
 <section class="page">
-  <span class="tag td">Format 3</span>
+  <span class="tag td">Format 4</span>
   <h2 style="margin-top:3mm">The Deadpan Tutorial</h2>
   <p class="lead">A tutorial for something embarrassingly simple, read completely seriously. The joke lives in one single step that's a little too true.</p>
   <div class="card">
@@ -312,12 +392,12 @@ Send this to your [most ___] friend.</div>
     <div class="row"><span><span class="beat">Medal</span>Congratulations, you have texted back.</span><span class="note">Proud, like awarding a medal.</span></div>
   </div>
   <div class="tip"><b>Why it's so short:</b> deadpan dies if it drags. Seven lines, under 20 seconds, so it loops. A video that's rewatched on loop counts as more watch time than its length.</div>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>8</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 9 DEADPAN TEMPLATE + IDEAS -->
 <section class="page">
-  <span class="tag td">Format 3 · Template</span>
+  <span class="tag td">Format 4 · Template</span>
   <h2 style="margin-top:3mm">Fill in the blanks</h2>
   <div class="fill">How to [simple task everyone fails at].
 Step one: [literal first action].
@@ -359,7 +439,7 @@ Congratulations, you have [done the task].</div>
     <li>How to ask for directions</li>
     <li>How to unsubscribe from one newsletter</li>
   </ol>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>9</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 10 VOICE -->
@@ -372,19 +452,20 @@ Congratulations, you have [done the task].</div>
   <div class="fill">Narrator of a witty Shorts channel. Voice: young adult, energetic but natural, clean and bright, medium-fast pace, lightly sarcastic and clever. Natural pauses and comic timing. Not deep, not booming, not a documentary voice, never shouting, no fake excitement.</div>
   <table>
     <tr><th style="width:22%">Format</th><th>Add to the base note</th></tr>
+    <tr><td><span class="tag tw">What-If</span></td><td>Curious and playful, like doing a fun experiment with a friend. The split line slow and satisfying. The first answer proud; "But here's the problem." a beat of drama; the final number a little stunned. Pauses of about a third of a second.</td></tr>
     <tr><td><span class="tag tp">Paradox</span></td><td>Calm, curious, a sense of wonder, like telling a friend a mind-bending thought late at night. "But here's…" lower and intriguing. The question slow, gently mind-blown. "Here's the twist." a beat of drama. Pauses of about a third of a second between lines.</td></tr>
     <tr><td><span class="tag tc">Countdown</span></td><td>Fast pace like a well-edited Short, a knowing smile in the voice. Each number a quick, upbeat title. Dilemmas read as tragic, wins read as smug, stats read deadpan, the last item like a movie trailer. Pauses of about a quarter of a second.</td></tr>
     <tr><td><span class="tag td">Deadpan</span></td><td>A calm, slightly patronising instructional voice, completely straight-faced. Each "Step ___:" like a tutorial heading, short pause, then the instruction, flat. The joke step a touch slower and more pointed. The final line proud and over-the-top sincere.</td></tr>
   </table>
   <div class="tip"><b>Line-level notes are the secret.</b> Don't just say "be funny." Pick the 3–4 lines that matter most and say exactly how each should sound: "<i>'Cold feet… or cold shoulders.'</i> as a tragic dilemma."</div>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>10</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 11 TOPIC FINDING -->
 <section class="page">
   <div class="kicker">Never run out of ideas</div>
   <h2>The 10-minute topic method</h2>
-  <p class="lead">90 topics will get you through three months of posting. After that, use this method to find more.</p>
+  <p class="lead">120 topics will get you through four months of daily-ish posting. After that, use this method to find more.</p>
   <h3>Where to look</h3>
   <div class="grid2">
     <div class="card"><span class="tag tp">Paradox</span><ul style="margin-top:2mm"><li>Wikipedia's "List of paradoxes" and "List of cognitive biases"</li><li>Questions that start with "Why do I…" in search autocomplete</li><li>Shower-thought style forums and threads</li><li>Psychology terms with a catchy name</li></ul></div>
@@ -401,7 +482,7 @@ Congratulations, you have [done the task].</div>
     <tr><td>Can it be shown visually (blanket, sky, phone…)?</td><td>0–2</td></tr>
   </table>
   <p style="margin-top:3mm"><b>7 or more:</b> make it this week. <b>4–6:</b> rework the hook. <b>Under 4:</b> skip it.</p>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>11</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 12 HOOK + CTA BANK -->
@@ -412,7 +493,7 @@ Congratulations, you have [done the task].</div>
     <div>
       <h3>Hooks</h3>
       <ol style="font-size:9.6pt">
-        <li>Being [X] has 3 secret advantages.</li>
+        <li>What if we split [X] between 8 billion people?</li>
         <li>But here's something no one can prove.</li>
         <li>How to [simple task].</li>
         <li>You've been doing [X] wrong your whole life.</li>
@@ -443,15 +524,15 @@ Congratulations, you have [done the task].</div>
         <li>Follow for a new paradox every day.</li>
         <li>Tag the person who needs this tutorial.</li>
         <li>Part 2 if this gets [X] comments.</li>
-        <li>Which one did I miss?</li>
+        <li>What should we split next?</li>
         <li>Congratulations, you have [done X].</li>
         <li>Watch it again. Did you notice?</li>
         <li>What would you have chosen?</li>
       </ol>
-      <div class="tip" style="margin-top:6mm"><b>Pick one CTA per video.</b> "Comment, follow, and share" means none of them get done. Match it to the format: paradox → comment, countdown → send, deadpan → tag.</div>
+      <div class="tip" style="margin-top:6mm"><b>Pick one CTA per video.</b> "Comment, follow, and share" means none of them get done. Match it to the format: what-if → "what next?", paradox → comment, countdown → send, deadpan → tag.</div>
     </div>
   </div>
-  <div class="foot"><span>The 60-Second Script Kit</span><span>12</span></div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span></span></div>
 </section>
 
 <!-- 13 CHECKLIST -->
@@ -466,7 +547,7 @@ Congratulations, you have [done the task].</div>
     <li>There's one twist or punchline, and it's near the end.</li>
     <li>The ending feels good (warm, funny, or proud), not dark.</li>
     <li>Exactly one call to action, and it matches the format.</li>
-    <li>Read out loud with a timer: Paradox ≤ 60 s, Countdown ≤ 35 s, Deadpan ≤ 20 s.</li>
+    <li>Read out loud with a timer: What-If ≤ 60 s, Paradox ≤ 60 s, Countdown ≤ 35 s, Deadpan ≤ 20 s.</li>
     <li>Director's note written for the whole video plus 3–4 key lines.</li>
     <li>Every line can be shown on screen as an image or action.</li>
     <li>Captions are on screen. Most people watch on mute at first.</li>
@@ -476,7 +557,7 @@ Congratulations, you have [done the task].</div>
     <h3 style="margin-top:0">Want the full production system?</h3>
     <p>This kit covers the writing. The full Just Needy workflow (3D characters, word-synced sound effects, auto captions and voice) is coming as a complete kit. Follow <b>@itsjustneedy</b> to hear when it drops.</p>
   </div>
-  <div class="foot"><span>The 60-Second Script Kit · @itsjustneedy</span><span>13</span></div>
+  <div class="foot"><span>The 60-Second Script Kit · @itsjustneedy</span><span></span></div>
 </section>
 
 </body>
