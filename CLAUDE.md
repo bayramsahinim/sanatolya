@@ -14,8 +14,8 @@ lists the steps.
 ## The user's approved settings (do not change without asking)
 
 - **Language.** Reply to the user in Turkish. Videos are in English unless the user says otherwise.
-- **Newest reference story.** `yumurta/stories/pink-en/` (Baker-Miller pink prison, Nov 2026). Copy it to start a new
-  story. Before it: `thunder-en`, `alcatraz-en`, `troy-en`.
+- **Newest reference story.** `yumurta/stories/pink-en/` (Baker-Miller pink prison, Nov 2026) for original stories;
+  `cham-en` / `text-en` are the newest remakes. Copy one to start a new story. Before it: `thunder-en`, `alcatraz-en`, `troy-en`.
 - **Hook.** The user wants a very strong hook every time: the absurd act is shown on screen in the first 2 s.
 - **Bell at 0 s.** Very short and quiet (user asked twice): `add(sfx, bell(660, .6, k=.15), 0.0, .5)` as in
   `stories/pink-en/mix.py`. Never a long ringing bell.
@@ -32,8 +32,9 @@ lists the steps.
   export const CAPTION = { font: '"Poppins", "Arial Black", sans-serif', size: 60, weight: 800, stroke: .13, shadow: .25, y: .7, mode: 'phrase', maxChars: 22 };
   ```
   On-screen labels use `800 Poppins` too.
-- **Sound.** Music bed about 14 dB under the voice, about one SFX per second, all pinned to words (see
-  `stories/alcatraz-en/mix.py`).
+- **Sound.** Music bed about 14 dB under the voice. **SFX sparse and soft** (user, Nov 2026: "çok fazla ses efekti var"):
+  about one every 3–4 s, gain about .2, only on key beats, pinned to words — see `stories/cham-en/mix.py`. **No crowd
+  murmur / "rabarba" beds** (user removed them). No "dun" hits.
 - **Delivery.**
   - Loudness must be -14 LUFS, true peak ≤ -1 dB: `python3 -m episodes.troy_en.qa <mp4>`. Single-pass loudnorm
     fails here; use this (V = `out/<story>_video.mp4`, A = `audio/mix.wav`, it passed for pink-en):
@@ -48,6 +49,16 @@ lists the steps.
 - **Publishing advice already given** (don't re-derive): audience is US. Post 1 Short/day at the same time;
   weekdays 20:00–22:00 Turkey time (12–14 ET), weekends 17:00–19:00. Go to 2/day only if retention stays > 70 %.
 - **Facts.** Verify every fact online (Wikipedia + one more source); leave out numbers that sources disagree on.
+
+## Remaking an uploaded video (the user often just uploads an .mp4 with no text)
+
+An uploaded Short with no instructions means: remake it in the yumurta engine. Transcribe it (faster-whisper; read the
+audio with soundfile and pass the array), keep the **narration word for word**, follow its scenes beat for beat, then
+the normal pipeline. Done this way: `color-en` (ColorblindParadox), `cham-en` (ChameleonParadox), `text-en` (TextBack).
+Duration is then whatever the original is (the QA 55–75 s check fails; that is expected — say so).
+Don't add extra characters the original doesn't have: the user had Dave (a man hanging from the attic hatch) removed
+from `text-en`. When the user says "remove X", remove it from the whole video, not only the part being discussed.
+To change only part of a finished render: delete those `out/frames/fNNNNN.png` and rerun `render_resumable.sh`.
 
 ## Rendering in the cloud container
 
