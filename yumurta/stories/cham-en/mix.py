@@ -83,9 +83,7 @@ music(W('Heres', 2) - .1, DUR, 'warm', .6)
 # ---- the bell: the same short quiet "tin" at frame 0
 add(sfx, bell(660, .6, k=.15), 0.0, .5)
 
-# ---- beds: party chatter, the crowd hall, the campfires, snow wind
-S('murmur', 0.05, .18)
-S('murmur', W('Psychologists') - .1, .12)
+# ---- beds: the campfires, snow wind (user: no crowd murmur)
 add(sfx, noise(W('belong') - W('harder') + .3, 300, 3000, .1, .3, 7), W('harder') - .1, .08)
 add(sfx, noise(W('Because') - W('belong') + .3, 200, 1200, .2, .3, 9), W('belong') - .3, .1)
 
