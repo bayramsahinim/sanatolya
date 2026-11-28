@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Just Needy Playbook</title>
+<style>
+@font-face { font-family: "PoppinsX"; src: url("../yumurta/engine/fonts/Poppins-ExtraBold.ttf"); font-weight: 800; }
+@page { size: A4; margin: 16mm 17mm 18mm; background: #fbf6ec;
+  @bottom-left { content: "The Just Needy Playbook"; font: 8pt "Liberation Sans", Arial, sans-serif; color: #8a8278; }
+  @bottom-right { content: counter(page); font: 8pt "Liberation Sans", Arial, sans-serif; color: #8a8278; } }
+@page cover { margin: 0; @bottom-left { content: none; } @bottom-right { content: none; } }
+:root { --ink:#1d1b19; --muted:#6b645c; --paper:#fbf6ec; --card:#fff; --accent:#ffb21a; --accent-soft:#fff1cf; --line:#e7dfd1;
+  --w:#2f6fdf; --p:#6c5ce7; --c:#e2574c; --d:#2a9d8f; --m:#b5582b; }
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body { margin: 0; color: var(--ink); font-family: "Liberation Sans","DejaVu Sans",Arial,sans-serif; font-size: 10.4pt; line-height: 1.5; }
+h1,h2,h3,.big { font-family: "PoppinsX",sans-serif; font-weight: 800; letter-spacing: -.01em; }
+h2 { font-size: 21pt; line-height: 1.1; margin: 0 0 4mm; break-after: avoid; }
+h3 { font-size: 12.5pt; margin: 6mm 0 2mm; break-after: avoid; }
+p { margin: 0 0 3mm; }
+a { color: var(--w); text-decoration: none; }
+.sec { break-before: page; }
+.kicker { text-transform: uppercase; letter-spacing: .14em; font-size: 8.5pt; font-weight: 700; color: var(--muted); margin-bottom: 2.5mm; }
+.lead { font-size: 12pt; color: #3a3631; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 4mm; padding: 4.5mm 5.5mm; margin: 0 0 4mm; break-inside: avoid; }
+.tag { display: inline-block; font-size: 8pt; font-weight: 700; padding: .5mm 2.4mm; border-radius: 10mm; color: #fff; margin-right: 1.5mm; vertical-align: 1px; }
+.tw{background:var(--w)} .tp{background:var(--p)} .tc{background:var(--c)} .td{background:var(--d)} .tm{background:var(--m)}
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+ol, ul { margin: 0 0 3mm; padding-left: 5mm; } li { margin-bottom: 1.2mm; }
+.beats { counter-reset: b; list-style: none; padding: 0; margin: 0; }
+.beats li { counter-increment: b; display: grid; grid-template-columns: 8mm 26mm 1fr; gap: 2mm; padding: 2mm 0; border-bottom: 1px dashed var(--line); margin: 0; break-inside: avoid; }
+.beats li:last-child { border-bottom: 0; }
+.beats li::before { content: counter(b); font-family: "PoppinsX"; font-size: 13pt; color: var(--accent); line-height: 1.1; }
+.beats .t { font-weight: 700; font-size: 8.6pt; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; padding-top: .6mm; }
+.script { font-family: "Liberation Mono","DejaVu Sans Mono",monospace; font-size: 8.9pt; line-height: 1.5; }
+.script .row { display: grid; grid-template-columns: 1fr 46mm; gap: 4mm; padding: 1.3mm 0; border-bottom: 1px solid #f1ebe0; break-inside: avoid; }
+.script .row:last-child { border-bottom: 0; }
+.script .note { font-family: "Liberation Sans",Arial,sans-serif; font-size: 8.2pt; color: var(--muted); font-style: italic; }
+.beat { font-family: "Liberation Sans",Arial,sans-serif; font-size: 7.3pt; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); background: var(--ink); padding: .3mm 1.6mm; border-radius: 1mm; margin-right: 1.5mm; }
+.fill { font-family: "Liberation Mono",monospace; font-size: 9.1pt; background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 4mm 5mm; border-radius: 0 3mm 3mm 0; white-space: pre-wrap; margin-bottom: 4mm; break-inside: avoid; }
+pre, code { font-family: "Liberation Mono","DejaVu Sans Mono",monospace; }
+pre { background: #24211e; color: #f3ede2; font-size: 8.6pt; line-height: 1.5; padding: 3.5mm 4.5mm; border-radius: 3mm; white-space: pre-wrap; word-break: break-word; margin: 0 0 4mm; break-inside: avoid; }
+pre .c { color: #a89f92; }
+code { font-size: 9pt; background: #efe7d8; padding: .2mm 1.2mm; border-radius: 1mm; }
+.ideas { columns: 2; column-gap: 7mm; font-size: 9.4pt; padding-left: 6mm; }
+.ideas li { break-inside: avoid; }
+.tip { background: var(--ink); color: #fff; border-radius: 4mm; padding: 4mm 5.5mm; margin: 4mm 0; break-inside: avoid; }
+.tip b { color: var(--accent); }
+.warn { background: #fff; border: 1.5px solid var(--c); border-radius: 4mm; padding: 4mm 5.5mm; margin: 4mm 0; break-inside: avoid; }
+.warn b:first-child { color: var(--c); }
+.check { padding-left: 0; } .check li { list-style: none; position: relative; padding-left: 7mm; }
+.check li::before { content: ""; position: absolute; left: 0; top: 1mm; width: 3.6mm; height: 3.6mm; border: 1.6px solid var(--ink); border-radius: 1mm; }
+table { width: 100%; border-collapse: collapse; font-size: 9.4pt; margin-bottom: 4mm; }
+th, td { text-align: left; padding: 2mm 2.5mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 8.3pt; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+tr { break-inside: avoid; }
+.flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2.5mm; margin: 4mm 0 5mm; }
+.flow div { background: var(--card); border: 1px solid var(--line); border-radius: 3mm; padding: 3mm; font-size: 8.6pt; position: relative; }
+.flow b { display: block; font-family: "PoppinsX"; font-size: 15pt; color: var(--accent); line-height: 1; margin-bottom: 1mm; }
+.flow i { display: block; font-style: normal; font-weight: 700; font-size: 9.2pt; margin-bottom: .8mm; }
+.part { break-before: page; height: 255mm; display: flex; flex-direction: column; justify-content: center; }
+.part .n { font-family: "PoppinsX"; font-size: 80pt; color: var(--accent); line-height: 1; }
+.part h1 { font-size: 34pt; margin: 2mm 0 4mm; line-height: 1.05; }
+.part p { font-size: 12pt; color: var(--muted); max-width: 140mm; }
+.toc td:first-child { width: 14mm; font-family: "PoppinsX"; color: var(--accent); }
+/* cover */
+.cover { page: cover; background: var(--ink); color: #fff; width: 210mm; height: 297mm; padding: 20mm 18mm; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.cover h1 { font-size: 46pt; line-height: 1.02; margin: 26mm 0 6mm; color: #fff; }
+.cover h1 span { color: var(--accent); }
+.cover .lead { color: #d9d3c9; font-size: 13.5pt; max-width: 150mm; }
+.egg { width: 60mm; height: 78mm; background: var(--accent); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; position: absolute; right: 18mm; bottom: 42mm; }
+.egg::before, .egg::after { content: ""; position: absolute; top: 29mm; width: 6mm; height: 9mm; background: var(--ink); border-radius: 50%; }
+.egg::before { left: 18mm; } .egg::after { right: 18mm; }
+.cover .inside { margin-top: auto; display: grid; grid-template-columns: repeat(3, 40mm); gap: 4mm; position: relative; z-index: 1; }
+.cover .inside div { border-top: 2px solid var(--accent); padding-top: 2.5mm; font-size: 9.5pt; color: #d9d3c9; }
+.cover .inside b { display: block; font-family: "PoppinsX"; font-size: 19pt; color: #fff; line-height: 1.1; }
+.cover .by { margin-top: 9mm; font-size: 8.5pt; color: #9c958b; position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="cover">
+  <div class="kicker" style="color:#ffb21a">Just Needy · The complete guide</div>
+  <h1>How I Make<br>Animated Shorts<br><span>With AI</span></h1>
+  <p class="lead">From an empty computer to a finished, posted Short. Every tool, every setting and every prompt I use on @itsjustneedy.</p>
+  <div style="margin-top:8mm;position:relative;z-index:1"><div class="big" style="font-size:30pt;color:#ffb21a;line-height:1">4.3M views</div><div style="color:#d9d3c9;font-size:11pt">in 30 days on @itsjustneedy, from 7 Shorts</div></div>
+  <div class="egg"></div>
+  <div class="inside">
+    <div><b>10 steps</b>from idea to posted video</div>
+    <div><b>5 formats</b>with templates and examples</div>
+    <div><b>150</b>topic ideas + prompt library</div>
+  </div>
+  <div class="by">@itsjustneedy · For personal use. Please don't resell or reshare this file.</div>
+</section>
+
+<!-- ============ CONTENTS ============ -->
+<section class="sec">
+  <div class="kicker">Inside</div>
+  <h2>Contents</h2>
+  <table class="toc">
+    <tr><td>01</td><td><b>The basics</b>: what this is, how the whole thing works on one page, and every tool and what it costs</td></tr>
+    <tr><td>02</td><td><b>Setup from zero</b>: two ways to get started (no install, or on your own computer), and your "house rules" file</td></tr>
+    <tr><td>03</td><td><b>Making a video, step by step</b>: topic → script → voice → timing → scenes → captions → sound → render → final check → posting</td></tr>
+    <tr><td>04</td><td><b>Script formats</b>: Hidden Mechanism, Big What-If, Paradox, Countdown and Deadpan Tutorial, each with a structure, a full example, a fill-in template and topic ideas</td></tr>
+    <tr><td>05</td><td><b>Toolbox</b>: copy-paste prompts, the mistakes I made so you don't have to, and the final checklist</td></tr>
+  </table>
+  <div class="card">
+    <h3 style="margin-top:0">Who this is for</h3>
+    <p>You want to run a faceless animated Shorts channel (Instagram Reels, YouTube Shorts, TikTok) that looks like a real studio made it, without drawing or knowing how to animate.</p>
+    <p style="margin:0"><b>You don't need to know how to code.</b> In this workflow an AI agent writes and runs all the code. Your job is to choose the story, give directions and say what looks wrong. You do need to be comfortable copying a few commands and reading what the AI tells you.</p>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">An honest note before we start</h3>
+    <ul style="margin:0">
+      <li>This is not a "one click, viral video" button. A Short takes me a few hours of AI work and about 30–60 minutes of my own attention: picking the story, checking pictures and asking for fixes.</li>
+      <li>Views come from the story first. A great-looking video with a weak hook still flops. That's why a big part of this guide is about scripts.</li>
+      <li>AI tools change fast. Model names, quotas and prices in this guide are correct at the time of writing; check the current ones before you start.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PART 1 ============ -->
+<section class="part"><div class="n">01</div><h1>The basics</h1><p>What happens between "I have an idea" and "it's posted," and which tool does each part.</p></section>
+
+<section class="sec">
+  <div class="kicker">The big picture</div>
+  <h2>How a Just Needy Short is made</h2>
+  <p class="lead">Every video goes through the same ten steps. An AI agent does the heavy lifting in each one; you approve and correct.</p>
+  <div class="flow">
+    <div><b>1</b><i>Topic</i>A true, surprising story or a mind-bending question.</div>
+    <div><b>2</b><i>Script</i>~120–200 words in a proven structure.</div>
+    <div><b>3</b><i>Voice</i>AI narrator reads it with director's notes.</div>
+    <div><b>4</b><i>Timing</i>Every spoken word gets a timestamp.</div>
+    <div><b>5</b><i>Scenes</i>3D sets and egg-head characters, built in code.</div>
+    <div><b>6</b><i>Captions</i>Big bold 3–4-word captions, timed to the voice.</div>
+    <div><b>7</b><i>Sound</i>Quiet music and a few sound effects, pinned to words.</div>
+    <div><b>8</b><i>Render</i>Check stills first, then render 1080×1920.</div>
+    <div><b>9</b><i>Final check</i>Loudness, length, a last look at the frames.</div>
+    <div><b>10</b><i>Post</i>Same time every day, one clear call to action.</div>
+  </div>
+  <h3>The one idea that makes it all work: everything is pinned to words</h3>
+  <p>Most AI video tools generate random clips and you cut them together by hand. This workflow works the other way around. The voice comes first. Every word in it gets a timestamp, and every picture, camera move, caption and sound effect is attached to a <i>word</i>, not to a second.</p>
+  <p>Say the narrator says "...and the head rolled onto the floor." The head starts falling exactly on "rolled" and the thud lands on "floor." If you change the voice later, everything moves with it automatically. That is why the videos feel edited by a professional even though nobody touched a timeline.</p>
+  <h3>Why code instead of an AI video generator?</h3>
+  <table>
+    <tr><th></th><th>AI video generators</th><th>This workflow (code + AI agent)</th></tr>
+    <tr><td><b>Characters</b></td><td>Change face from shot to shot</td><td>The same character in every frame, every video</td></tr>
+    <tr><td><b>Timing</b></td><td>You line up clips by hand</td><td>Every action lands on its exact word</td></tr>
+    <tr><td><b>Fixes</b></td><td>Regenerate and hope</td><td>"Make his hat red": only that changes</td></tr>
+    <tr><td><b>Text on screen</b></td><td>Often garbled</td><td>Perfect captions and numbers</td></tr>
+    <tr><td><b>Cost per video</b></td><td>Pay per second of video</td><td>Mostly free tools + your AI subscription</td></tr>
+  </table>
+</section>
+
+<section class="sec">
+  <div class="kicker">The toolkit</div>
+  <h2>Every tool I use, and what it costs</h2>
+  <table>
+    <tr><th style="width:26%">Tool</th><th>What it does in the pipeline</th><th style="width:22%">Cost</th></tr>
+    <tr><td><b>Claude Code</b><br><span style="color:var(--muted);font-size:8.5pt">by Anthropic</span></td><td><b>The director and the whole crew.</b> An AI agent that writes the script with me, checks facts, writes the scene code, runs every command, looks at the rendered frames and fixes what's wrong. I talk to it in plain language (I even talk to it in my own language while the videos are in English).</td><td>Paid Claude plan (check current plans at claude.com)</td></tr>
+    <tr><td><b>Gemini TTS</b><br><span style="color:var(--muted);font-size:8.5pt">Google AI Studio</span></td><td><b>The narrator.</b> Google's text-to-speech model. I use the prebuilt voice <b>"Puck"</b> on every video so the channel always sounds the same. It follows written "director's notes" for tone and pace.</td><td>Small free daily quota; paid above it</td></tr>
+    <tr><td><b>Whisper</b><br><span style="color:var(--muted);font-size:8.5pt">open source</span></td><td><b>The ears.</b> Listens to the narration and gives every word a start and end time. It runs on your own machine.</td><td>Free</td></tr>
+    <tr><td><b>yumurta engine</b><br><span style="color:var(--muted);font-size:8.5pt">three.js, by Kodla Çiz</span></td><td><b>The studio.</b> An open-source "egg-head" animation engine: 3D sets in the browser (three.js), flat 2D cartoon characters with expressions, lighting, shadows, camera moves and captions. Free on GitHub under the MIT license.</td><td>Free</td></tr>
+    <tr><td><b>Chrome + Puppeteer</b></td><td><b>The camera.</b> Opens each scene in a hidden browser and saves it frame by frame (30 frames per second).</td><td>Free</td></tr>
+    <tr><td><b>Python</b> (numpy etc.)</td><td><b>The sound studio.</b> Builds the music bed and sound effects from code and mixes them under the voice.</td><td>Free</td></tr>
+    <tr><td><b>ffmpeg</b></td><td><b>The editor.</b> Joins frames and audio into the final MP4 and sets the loudness to platform standard.</td><td>Free</td></tr>
+    <tr><td><b>GitHub</b></td><td>Stores every project, so nothing gets lost and Claude can pick up where it left off.</td><td>Free</td></tr>
+  </table>
+  <div class="tip"><b>The real cost:</b> your Claude subscription. Everything else is free or nearly free at one video a day. No paid video generator, no stock footage, no editing app.</div>
+  <h3>Optional</h3>
+  <ul>
+    <li><b>Kokoro</b>: a free voice model that runs on your own computer. A good backup when the Gemini quota runs out.</li>
+    <li><b>Claude's cloud sessions</b> (claude.ai/code): run everything on a cloud machine. Nothing to install, and it works from a phone. More on this in Part 2.</li>
+  </ul>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section class="part"><div class="n">02</div><h1>Setup from zero</h1><p>Two ways to set up: in the cloud with nothing to install, or on your own computer. Then the one file that makes every video match your style.</p></section>
+
+<section class="sec">
+  <div class="kicker">Setup</div>
+  <h2>Option A: the cloud (no install)</h2>
+  <p class="lead">This is how I work most days. Claude runs on a cloud computer and I direct it from the Claude app or the browser, even from my phone.</p>
+  <ol class="beats">
+    <li><span class="t">Accounts</span><span>Create a <b>Claude</b> account with a plan that includes Claude Code, a <b>GitHub</b> account, and a <b>Google</b> account for AI Studio.</span></li>
+    <li><span class="t">Your repo</span><span>On GitHub, create a new private repository for your channel, for example <code>my-shorts</code>.</span></li>
+    <li><span class="t">Connect</span><span>Open <b>claude.ai/code</b>, connect your GitHub and pick that repository. Claude now gets its own cloud computer with your repo on it.</span></li>
+    <li><span class="t">Voice key</span><span>Go to <b>aistudio.google.com</b> → "Get API key" and create a key. Add it to your Claude cloud environment as a secret for the host <code>generativelanguage.googleapis.com</code>, or follow the steps Claude gives you when it asks for the key. Never paste keys into a chat.</span></li>
+    <li><span class="t">First message</span><span>Paste the setup prompt below. Claude downloads the engine, installs everything and renders a test.</span></li>
+  </ol>
+  <pre><span class="c"># First message to Claude</span>
+Set up this repo as my animated Shorts studio.
+1. Add the open-source engine github.com/kodlaciz/yumurta-stili into a folder
+   called yumurta/ (keep its MIT LICENSE file).
+2. Install what it needs (npm install in yumurta/engine, the Python
+   requirements, ffmpeg, a headless Chrome) and render a few stills of the
+   sample story so I can see it works.
+3. Create CLAUDE.md with my house rules (I'll paste them next).
+Explain each step to me in simple words.</pre>
+  <div class="warn"><b>Cloud renders are slow.</b> Cloud machines have no graphics card, so a full 60-second render took me 2.5–3.5 hours there. The machine can also restart. Ask Claude to use a <b>resumable</b> render that saves one image per frame and continues where it stopped. Short test renders at half size take only minutes.</div>
+
+  </section>
+<section class="sec">
+  <div class="kicker">Setup</div>
+  <h2>Option B: your own computer</h2>
+  <p>Faster renders if you have a decent graphics card (a 40-second sample renders in a few minutes on a good machine). Install these once:</p>
+  <table>
+    <tr><th>Install</th><th>Where</th></tr>
+    <tr><td>Claude Code</td><td>claude.com/claude-code (desktop app or terminal)</td></tr>
+    <tr><td>Node.js 18 or newer</td><td>nodejs.org</td></tr>
+    <tr><td>Python 3.10 or newer</td><td>python.org</td></tr>
+    <tr><td>ffmpeg</td><td>ffmpeg.org (Mac: <code>brew install ffmpeg</code>)</td></tr>
+    <tr><td>Google Chrome</td><td>google.com/chrome</td></tr>
+    <tr><td>Git</td><td>git-scm.com</td></tr>
+  </table>
+  <pre><span class="c"># In a terminal, once</span>
+git clone https://github.com/kodlaciz/yumurta-stili.git my-shorts
+cd my-shorts/engine &amp;&amp; npm install
+cd .. &amp;&amp; pip install -r requirements.txt
+<span class="c"># then start Claude Code in that folder</span>
+claude</pre>
+  <p>Set your Gemini key as an environment variable called <code>GEMINI_API_KEY</code>. Claude can show you how on your system.</p>
+</section>
+
+<section class="sec">
+  <div class="kicker">Setup</div>
+  <h2>Your house rules: CLAUDE.md</h2>
+  <p class="lead">This is the most important file in the whole system. Claude reads it at the start of every session, so every video comes out in your style without repeating yourself.</p>
+  <p>Every time you correct something ("too many sound effects," "the bell is too long"), ask Claude to <b>write the rule into CLAUDE.md</b>. After a few videos the file holds all of your taste, and new videos come out right the first time. Here is a version of mine you can start from:</p>
+  <pre># CLAUDE.md — read this first in every session
+
+## Default for every new video
+Make a vertical 1080x1920, 30 fps Short with the yumurta engine (yumurta/).
+Copy the newest finished story folder as the starting point.
+
+## Approved settings (don't change without asking)
+- Language: talk to me in [your language]. Videos are in English.
+- Hook: the absurd or surprising act is ON SCREEN in the first 2 seconds.
+- Story: ~120–200 words, 45–70 s. Structure from the style book
+  (absurd act at 0 s, reversal near the middle, small proof, reveal at ~89%).
+- Voice: Gemini TTS, voice "Puck", same director's notes every video,
+  sped up x1.12 after trimming pauses.
+- Captions: Poppins ExtraBold, 3–4 words per caption, at 70% height,
+  never covering faces.
+- Sound: music ~14 dB under the voice. Sound effects sparse and soft,
+  about one every 3–4 s, only on key words. Bell at 0 s very short and quiet.
+  No crowd murmur.
+- Delivery: -14 LUFS, true peak at or below -1 dB. Save to output/.
+- Facts: check every fact online (2 sources). If sources disagree on a
+  number, don't say the number.
+- Look at still frames BEFORE the long render. Fix, then render.
+
+## Things I asked you to stop doing
+- (add a line every time you correct something)</pre>
+  <div class="tip"><b>Tip:</b> also ask Claude to turn your workflow into a <b>skill</b>, a saved step-by-step recipe. Then "new video: [title] + one line of story" is all you have to type.</div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section class="part"><div class="n">03</div><h1>Making a video,<br>step by step</h1><p>The full process for one Short, in the order I do it, with what you say to Claude at each step and what to check.</p></section>
+
+<section class="sec">
+  <div class="kicker">Step 1</div>
+  <h2>Pick a topic that already wants to be watched</h2>
+  <p class="lead">The topic is 80% of the result. A strong topic has a question the viewer must hear answered.</p>
+  <h3>What works on my channel</h3>
+  <ul>
+    <li><b>Hidden mechanisms:</b> someone does something that looks absurd, and the reason only comes at the end (escaping Alcatraz with spoons, painting a jail cell pink).</li>
+    <li><b>Big what-ifs:</b> a huge number made visible (splitting the Earth like a cake between 8 billion people).</li>
+    <li><b>Paradoxes:</b> a question with no answer that everyone has an opinion on.</li>
+    <li><b>Relatable comedy:</b> countdowns and deadpan tutorials people send to a friend.</li>
+  </ul>
+  <h3>Where to find topics</h3>
+  <div class="grid2">
+    <div class="card"><b>Fact-based</b><ul style="margin:2mm 0 0"><li>Wikipedia: "List of prison escapes," "List of paradoxes," "List of cognitive biases," "Unusual deaths," "Hoaxes"</li><li>History stories with a clever trick inside</li><li>Science "why does…" questions</li></ul></div>
+    <div class="card"><b>Trend-based</b><ul style="margin:2mm 0 0"><li>Shorts that blew up in <b>another language</b>: the topic and format usually haven't been done in English yet</li><li>Your own comments: "do one about ___"</li><li>The sequel to your best video</li></ul></div>
+  </div>
+  <div class="warn"><b>Take the idea, not the words.</b> Facts and formats can't be owned. "Split the Earth between 8 billion people" is a fact-based idea anyone can make. Someone else's script, their exact sentences, jokes and order, belongs to them, and translating it word for word is still copying. When a video in another language inspires you, ask Claude to <b>research the facts from scratch and write a new script in your own structure</b>. Your video will be better anyway, because it's built for your audience.</div>
+  <h3>Score it before you make it</h3>
+  <table>
+    <tr><th>Question</th><th style="width:16%">Score</th></tr>
+    <tr><td>Can I say the hook in one sentence a 10-year-old understands?</td><td>0–2</td></tr>
+    <tr><td>Is there something absurd or surprising I can SHOW in the first 2 seconds?</td><td>0–2</td></tr>
+    <tr><td>Is there an answer the viewer has to wait for?</td><td>0–2</td></tr>
+    <tr><td>Will people argue about it or send it to someone?</td><td>0–2</td></tr>
+    <tr><td>Are the facts checkable in two reliable sources?</td><td>0–2</td></tr>
+  </table>
+  <p><b>8 or more:</b> make it. <b>5–7:</b> find a stronger hook. <b>Under 5:</b> skip it.</p>
+</section>
+
+<section class="sec">
+  <div class="kicker">Step 2</div>
+  <h2>Write the script</h2>
+  <p class="lead">I give Claude a title and one line. Claude researches the facts, writes the script in one of the five structures from Part 4, and lists its sources. I read it out loud and ask for changes.</p>
+  <pre><span class="c"># What I actually type</span>
+New video: "They Painted a Prison PINK to Stop Fights?!"
+One line: in 1979 a scientist said pink calms angry men, so a Navy jail
+painted a cell pink.
+Use the hidden-mechanism structure. Check every fact in 2 sources and list
+them. ~200 words. Show me the script before doing anything else.</pre>
+  <h3>The rules every script follows</h3>
+  <ul>
+    <li><b>First sentence = the hook.</b> It shows the strangest moment of the story without explaining it.</li>
+    <li><b>Short sentences.</b> About 3.4 seconds each on average. If you need a breath in the middle, split it.</li>
+    <li><b>Pace:</b> about 3–3.7 English words per second once sped up. 200 words ≈ 60–65 s.</li>
+    <li><b>Everything planted pays off.</b> If you mention the accordion early, it has to come back (it becomes the pump).</li>
+    <li><b>A turn in the middle.</b> The laughing stops; the plan works; the "fact" turns out to be wrong.</li>
+    <li><b>Show the proof before the explanation.</b> The small version of the payoff first, then the big one.</li>
+    <li><b>End within ~4 seconds of the reveal.</b> No long goodbye.</li>
+  </ul>
+  <h3>Fact-checking is not optional</h3>
+  <p>On a fact channel, one wrong number in the comments can bury a video. My rule for Claude: <b>check every fact in two sources; if they disagree on a number, don't say the number</b> ("hundreds of," not "275"). Round numbers and say "about."</p>
+</section>
+
+<section class="sec">
+  <div class="kicker">Step 2 · Real example</div>
+  <h2>"The Pink Prison" annotated</h2>
+  <p style="color:var(--muted)">My script for the Baker-Miller Pink video (59 s), with what each line is doing.</p>
+  <div class="card script">
+    <div class="row"><span><span class="beat">Hook</span>This man tried to calm down violent prisoners... with a bucket of bubblegum pink paint.</span><span class="note">The absurd act, no reason given. On screen in frame one.</span></div>
+    <div class="row"><span><span class="beat">Setup</span>You see, it's 1979. Scientist Alexander Schauss thinks colors can change how we feel.</span><span class="note">"You see" = the switch to context.</span></div>
+    <div class="row"><span>He stares at a pink card... and his heart slows down.</span><span class="note">A small, visual "proof."</span></div>
+    <div class="row"><span>So he walks into a Navy jail in Seattle, and asks the directors, Baker and Miller, to paint a cell pink. / Not just any cell. The room where angry new prisoners sit alone and cool off.</span><span class="note">Plants the detail that pays off at the end: "alone."</span></div>
+    <div class="row"><span><span class="beat">Doubt</span>The guards laugh. "Pink? For these guys?"</span><span class="note">Someone laughs: the viewer roots for the idea.</span></div>
+    <div class="row"><span><span class="beat">Escalate</span>But then the Navy report comes in. No hostile incidents. None. / The color gets a name: Baker-Miller Pink. Jails across America grab their paint rollers. / A football coach in Iowa even paints the visitors' locker room pink.</span><span class="note">It works, and it spreads. The coach is a fun plant for the last line.</span></div>
+    <div class="row"><span><span class="beat">Turn</span>Then a jail in California tries it... and after the first month, the fights go up.</span><span class="note">The reversal, about halfway through.</span></div>
+    <div class="row"><span><span class="beat">Proof</span>So in Switzerland, scientists finally test it properly. Fifty-nine angry prisoners. Half get a pink cell. Half get a white one. / Three days later... both groups are calmer. Exactly the same.</span><span class="note">The test shown before the answer.</span></div>
+    <div class="row"><span><span class="beat">Reveal</span>So what calmed them down? / Not the paint. Time. An angry man left alone in a quiet room cools off... whatever color the walls are.</span><span class="note">The one-line mechanism, at about 89%.</span></div>
+    <div class="row"><span><span class="beat">Button</span>But in Iowa, the visitors' locker room is still pink.</span><span class="note">A funny last line that pays off a plant. Ends right after the reveal.</span></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="kicker">Step 3</div>
+  <h2>Give it a voice</h2>
+  <p class="lead">One AI narrator for every video. A consistent voice is part of your brand, just like the characters.</p>
+  <h3>The setup I use</h3>
+  <table>
+    <tr><td style="width:32%"><b>Model</b></td><td>Gemini TTS (flash TTS model, through Google AI Studio). Keep a fallback model in mind for days the free quota runs out.</td></tr>
+    <tr><td><b>Voice</b></td><td>Puck (prebuilt). Young, bright, clear: a good fit for curious and funny stories.</td></tr>
+    <tr><td><b>Recording</b></td><td>The whole script in ONE request, so tone and pace stay consistent. Lines separated by blank lines.</td></tr>
+    <tr><td><b>Save every take</b></td><td>Cache each recording in the repo, so re-rendering never spends quota again.</td></tr>
+    <tr><td><b>After recording</b></td><td>Trim long pauses (sentence end ~0.22 s, comma ~0.14 s), then speed up ×1.12.</td></tr>
+  </table>
+  <h3>Director's notes: the secret to a voice that doesn't sound robotic</h3>
+  <p>Gemini TTS follows written directions. Put them above the transcript: one base note that never changes, and a few line-level notes for the moments that matter.</p>
+  <pre>### DIRECTOR'S NOTES
+Narrator of a witty YouTube Shorts / Instagram Reels animation channel.
+Voice: young adult American male, energetic but natural, clean and bright,
+medium-fast pace, lightly sarcastic and clever. Natural pauses and comic
+timing. Not deep, not booming, not a documentary voice, never shouting,
+no fake excitement.
+The first line is the hook: punchy and intriguing.
+'The guards laugh.' amused; '"Pink? For these guys?"' mocking.
+'Not the paint. Time.' slow, a small reveal.
+Leave short pauses between lines (about a third of a second).
+Speak only the transcript below, nothing else.
+
+#### TRANSCRIPT
+This man tried to calm down violent prisoners...</pre>
+  <p>The API call itself is small. You won't need to write it, Claude does, but this is what happens under the hood:</p>
+  <pre><span class="c"># POST to generativelanguage.googleapis.com/v1beta/models/&lt;tts-model&gt;:generateContent</span>
+{ "contents": [{ "parts": [{ "text": "&lt;director's notes + transcript&gt;" }] }],
+  "generationConfig": {
+    "responseModalities": ["AUDIO"],
+    "speechConfig": { "voiceConfig": { "prebuiltVoiceConfig": { "voiceName": "Puck" } } } } }
+<span class="c"># the answer is 24 kHz mono audio; save it as a .wav</span></pre>
+  
+</section>
+
+<section class="sec">
+  <div class="kicker">Step 4</div>
+  <h2>Give every word a timestamp</h2>
+  <p class="lead">This is the step that makes the whole video feel professionally edited.</p>
+  <p>Whisper listens to the narration and returns when each word starts and ends. Whisper sometimes mishears names and numbers ("Alan" for "Allen," "50" for "fifty"). So the tool keeps <b>your script's spelling</b> and only borrows Whisper's <b>times</b>, matching the two word lists side by side.</p>
+  <pre>{"words": [
+  {"word": "This",   "start": 0.03, "end": 0.18},
+  {"word": "man",    "start": 0.18, "end": 0.39},
+  {"word": "tried",  "start": 0.39, "end": 0.61}, ... ]}</pre>
+  <p>Then two small extras come from the same audio:</p>
+  <ul>
+    <li><b>Mouth envelope:</b> how loud the voice is at each moment, so a talking character's mouth flaps in sync.</li>
+    <li><b>Pause trimming:</b> long gaps cut to fixed lengths before speeding up (sentence end .22 s, comma .14 s, inside a phrase .09 s).</li>
+  </ul>
+  <h3>How the scene uses it</h3>
+  <p>In the scene file, nothing is typed in seconds. Everything points at a word:</p>
+  <pre><span class="c">// camera whips to the jail on the word "Navy"; the guards laugh on "laugh"</span>
+{ t: W('Navy') - .15, move: 'whip', pos: [...], look: [...] }
+guard.draw({ expr: t &gt; W('laugh') ? 'laugh' : 'neutral' })</pre>
+  <p><code>W('word', 2)</code> means the 2nd time that word is said. Re-record the voice, re-run the timing, and every action lands on its new word automatically.</p>
+</section>
+
+<section class="sec">
+  <div class="kicker">Step 5</div>
+  <h2>Build the scenes</h2>
+  <p class="lead">This is where the engine and Claude do the work. You describe what each moment should show; Claude writes the sets, characters, props and camera in a single story file.</p>
+  <h3>What a scene is made of</h3>
+  <table>
+    <tr><td style="width:24%"><b>Sets</b></td><td>3D rooms and places (a jail cell, a beach, a lab), placed far apart in one 3D world. The camera flies or whips between them.</td></tr>
+    <tr><td><b>Characters</b></td><td>Flat white egg-head cartoon cards standing in the 3D world, with ten expressions (neutral, smile, smug, focused, angry, proud, surprised, worried, laugh, grin), blinking, mouth flaps and real shadows.</td></tr>
+    <tr><td><b>Props</b></td><td>3D objects (buckets, spoons, lamps) or painted textures (tiles, posters).</td></tr>
+    <tr><td><b>Camera</b></td><td>A list of key moments, each pinned to a word: glide, whip (fast pan with motion blur) or cut.</td></tr>
+    <tr><td><b>Look</b></td><td>Per-shot focus, blur, colour, glow and vignette.</td></tr>
+  </table>
+  <h3>The style rules that make it look expensive</h3>
+  <p>These come from measuring popular egg-head Shorts frame by frame (they're written up in the engine's style book). Keep them in CLAUDE.md:</p>
+  <ul>
+    <li><b>The hook is 3–4 pictures in the first 5 seconds</b>, one per phrase of the first sentence. In frame one the character is already doing the strange thing.</li>
+    <li><b>The camera never stands still.</b> Holds slowly push in; at most one or two hard cuts per video.</li>
+    <li><b>Every set has ONE light you can see:</b> a lamp, a window, the moon. Warm against cool, with real shadows. Flat light is the #1 reason a render looks cheap.</li>
+    <li><b>No pure black.</b> The darkest colour is navy or plum. Warm and cool colours share every frame.</li>
+    <li><b>Heads stay white</b> in every scene; only a hint of the room's light touches them.</li>
+    <li><b>Characters who aren't acting stand still</b>, with no idle bobbing. They blink every 1–2.5 seconds, and their expression changes with the beat.</li>
+    <li><b>Hands really touch things.</b> If a character holds a spoon, the hand is on the spoon in every frame.</li>
+    <li><b>Big walls need a pattern</b> (tiles, a painted band, a poster), or the frame looks empty.</li>
+  </ul>
+  <h3>How I direct this step</h3>
+  <pre>Now build the video. Copy my newest finished story as the starting point.
+Scenes: (1) hook: the scientist with a bucket, splashing pink on a cell wall,
+(2) 1979 lab with a pink card, (3) Navy jail, guards laughing, ...
+Keep my caption style and colours. Render stills at these words:
+"bucket", "1979", "laugh", "California", "Time", "pink" (last).
+Show me a contact sheet before the full render.</pre>
+</section>
+
+<section class="sec">
+  <div class="kicker">Step 6</div>
+  <h2>Captions</h2>
+  <p class="lead">Most people start watching on mute. Captions are not optional, and the style of your captions is part of your brand.</p>
+  <table>
+    <tr><td style="width:30%"><b>Font</b></td><td>Poppins ExtraBold (free, Google Fonts). I picked it from samples, so pick yours once and never change it.</td></tr>
+    <tr><td><b>Size and outline</b></td><td>Big (about 60 px on a 1080-wide frame), white with a dark outline and a soft shadow.</td></tr>
+    <tr><td><b>Chunk</b></td><td>3–4 words per caption (max ~22 characters), appearing exactly with the words.</td></tr>
+    <tr><td><b>Position</b></td><td>About 70% down the screen. Faces live at 35–60% height, so captions never cover them. Keep clear of the bottom, where the app's buttons are.</td></tr>
+    <tr><td><b>Numbers</b></td><td>Write digits on screen ("2.5 million") even when the voice says them in words.</td></tr>
+  </table>
+  <p>The engine's caption settings, in one line:</p>
+  <pre>CAPTION = { font: '"Poppins", "Arial Black", sans-serif', size: 60, weight: 800,
+            stroke: .13, shadow: .25, y: .7, mode: 'phrase', maxChars: 22 }</pre>
+  <div class="tip"><b>Also export an .srt file</b> (subtitles) for YouTube. It helps accessibility and search.</div>
+
+  <div class="kicker" style="margin-top:9mm">Step 7</div>
+  <h2>Sound</h2>
+  <p class="lead">Good sound is felt, not noticed. My biggest lesson: <b>less is more.</b></p>
+  <ul>
+    <li><b>Music:</b> about 14 dB under the voice, ducking a bit further whenever the narrator talks. Change the mood with the story: suspense under the hook, playful while the idea spreads, suspense again at the turn, warm at the reveal.</li>
+    <li><b>Sound effects:</b> sparse and soft, <b>about one every 3–4 seconds</b>, only on key words (a whoosh on a camera whip, a click, a splash). Every effect is pinned to a word, like everything else.</li>
+    <li><b>Opening bell:</b> a very short, quiet "ding" at 0 seconds. A long ringing bell sounds cheap.</li>
+    <li><b>Avoid:</b> crowd murmur beds, dramatic "dun" hits on every line, effects louder than the voice. A crowded soundtrack is tiring to listen to.</li>
+  </ul>
+  <p>The music and effects are made from code (synthesized), so there are no copyright claims and no stock library to pay for.</p>
+</section>
+
+<section class="sec">
+  <div class="kicker">Step 8</div>
+  <h2>Check stills, then render</h2>
+  <p class="lead">A full render takes time. A still frame takes seconds. Always look before you render.</p>
+  <ol class="beats">
+    <li><span class="t">Stills</span><span>Ask Claude for half-size stills at one moment per scene and per beat, laid out on one contact sheet. It takes minutes.</span></li>
+    <li><span class="t">Look</span><span>Go through the list below. Ask for fixes in plain words: "the hat is cut off," "the room is too orange," "his hand isn't on the bucket."</span></li>
+    <li><span class="t">Draft</span><span>Render the whole video at half size and watch it once from start to finish. Some problems only show in motion.</span></li>
+    <li><span class="t">Final</span><span>Full 1080×1920 at 30 fps. On the cloud, use the resumable render and let it run.</span></li>
+  </ol>
+  <h3>What to look for in the stills</h3>
+  <div class="grid2">
+    <ul class="check">
+      <li>Captions covering a face</li>
+      <li>A character cut by the edge of the frame</li>
+      <li>A hat or prop sliced off in a straight line</li>
+      <li>A hand in one place, its object somewhere else</li>
+      <li>A room with no visible light source</li>
+      <li>A room that's one colour (all orange)</li>
+    </ul>
+    <ul class="check">
+      <li>Flat colour behind a window</li>
+      <li>Empty or dark frames during a camera whip</li>
+      <li>A character drifting out of frame at the END of a shot</li>
+      <li>Something blurry or flickering (watch 10 frames in a row)</li>
+      <li>The hook frame: is the strange thing visible at 0 s?</li>
+      <li>The last frame: does it pay off the story?</li>
+    </ul>
+  </div>
+  <div class="tip"><b>Fix only what changed.</b> If one scene is wrong after a full render, ask Claude to delete just those frames and re-render them. The rest stays.</div>
+</section>
+
+<section class="sec">
+  <div class="kicker">Step 9</div>
+  <h2>The final check</h2>
+  <p class="lead">Before a video leaves the computer, it passes the same checks every time. Ask Claude to run them and show you the results.</p>
+  <table>
+    <tr><th style="width:30%">Check</th><th>Target</th></tr>
+    <tr><td><b>Format</b></td><td>1080×1920, 30 fps, H.264 video, AAC audio</td></tr>
+    <tr><td><b>Loudness</b></td><td>-14 LUFS integrated, true peak at or below -1 dB (the standard for YouTube and Instagram)</td></tr>
+    <tr><td><b>Length</b></td><td>Matches the format (see Part 4); usually 45–70 s</td></tr>
+    <tr><td><b>Sync</b></td><td>Captions and mouth flaps line up with the voice</td></tr>
+    <tr><td><b>First and last frame</b></td><td>First: the hook is visible. Last: it ends on the payoff (or loops back into the hook)</td></tr>
+    <tr><td><b>Contact sheet</b></td><td>One frame every few seconds from the FINAL file, checked by eye</td></tr>
+  </table>
+  <div class="warn"><b>A loudness gotcha:</b> a simple one-pass loudness filter in ffmpeg often misses the target on voice-heavy mixes. Ask Claude for a <b>two-pass loudnorm with a limiter</b> and to measure the result afterwards.</div>
+
+</section>
+<section class="sec">
+  <div class="kicker">Step 10</div>
+  <h2>Post it</h2>
+  <ul>
+    <li><b>Same time every day.</b> My audience is mostly in the US, so I post on weekdays at 12:00–14:00 US Eastern and on weekends a bit earlier. Find your own audience's time in Instagram's "Audience" tab.</li>
+    <li><b>One a day.</b> Go to two a day only if your retention stays high (above ~70%).</li>
+    <li><b>Title:</b> the hook as a question, plus one emoji. "They Painted a Prison PINK to Stop Fights?! 🩷"</li>
+    <li><b>Cover:</b> a frame from the hook with a 2–4-word title in your caption font.</li>
+    <li><b>One call to action:</b> paradox → "comment yes or no," what-if → "what should we split next?", comedy → "send this to…". Only one.</li>
+    <li><b>Turn viewers into followers:</b> on my account 99.9% of views came from non-followers. A reason to follow ("Part 2 tomorrow," "a new paradox every day") matters as much as the video.</li>
+  </ul>
+  <h3>Read your numbers after 48 hours</h3>
+  <table>
+    <tr><th>If…</th><th>…then</th></tr>
+    <tr><td>Most people swipe in the first 3 s</td><td>The hook frame isn't strange enough. Show the act, not the setup.</td></tr>
+    <tr><td>People leave in the middle</td><td>A beat repeats itself, or the turn comes too late.</td></tr>
+    <tr><td>High views, few follows</td><td>Add a series promise and make the next part.</td></tr>
+    <tr><td>One video beats the others by 10×</td><td>Make a sequel in the same format this week.</td></tr>
+  </table>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section class="part"><div class="n">04</div><h1>Script formats</h1><p>Five structures I use, each with the beats, a full example script written for this guide, a fill-in template and topic ideas.</p></section>
+
+<!-- HIDDEN MECHANISM -->
+<section class="sec">
+  <span class="tag tm">Format 1</span>
+  <h2 style="margin-top:3mm">The Hidden Mechanism</h2>
+  <p class="lead">My strongest story format. Someone does something absurd, everyone laughs, and the reason, a real piece of physics, chemistry or psychology, is only revealed at the very end. 60–70 s, ~200 words.</p>
+  <div class="card">
+    <ol class="beats">
+      <li><span class="t">Absurd act · 0 s</span><span>Show the strange act. Don't explain it. "This prisoner is sculpting his own head out of soap."</span></li>
+      <li><span class="t">You see</span><span>"You see, it's [year/place]." The context in two sentences.</span></li>
+      <li><span class="t">Plan + plants</span><span>The steps, each with an object or detail that will come back later.</span></li>
+      <li><span class="t">Doubt</span><span>Someone laughs or objects, in a quoted line.</span></li>
+      <li><span class="t">Turn · ~50%</span><span>The laughing stops, or the plan hits a wall.</span></li>
+      <li><span class="t">Small proof</span><span>A small version of the payoff, shown before it's explained.</span></li>
+      <li><span class="t">Reveal · ~89%</span><span>The mechanism in one short sentence.</span></li>
+      <li><span class="t">Button</span><span>One last image or line that pays off a plant. End within ~4 s.</span></li>
+    </ol>
+  </div>
+  <p>Full example: "The Pink Prison" in Step 2. A second one of mine, "Alcatraz," follows the same beats: the soap head (hook), spoons, the accordion that covers the noise and later becomes the raft pump, the man left behind, the guard who reaches in and the head that rolls onto the floor.</p>
+  </section>
+<section class="sec">
+  <h3 style="margin-top:0">Template</h3>
+  <div class="fill">This [person] is [absurd act]... [with an odd object].
+You see, it's [year], [place]. [Why it matters: one line].
+[Step 1 of the plan, with a detail you'll reuse later].
+[Problem?] [Clever fix, also reused later].
+[Someone] laughs. "[Mocking line]"
+[Escalation: it works, or it spreads].
+Then [the turn]...
+[Small proof: a little version of the result].
+So what [really happened / made it work]?
+[The mechanism in one short sentence.]
+[Button: a last image that pays off an early detail.]</div>
+  <h3>30 hidden-mechanism topics</h3>
+  <ol class="ideas">
+    <li>The Great Escape's tunnel sand hidden in trouser bags</li>
+    <li>Why ancient Romans' concrete heals its own cracks</li>
+    <li>The WWII "ghost army" of inflatable tanks</li>
+    <li>How a man used peas to break a wall (swelling seeds)</li>
+    <li>Why sailors were given limes</li>
+    <li>The Trojan Horse, told as a mechanism</li>
+    <li>How lighthouses were made visible for miles (Fresnel lens)</li>
+    <li>How John Dillinger escaped jail with a fake gun</li>
+    <li>The Leaning Tower that stopped leaning more</li>
+    <li>How Venice stands on wooden poles</li>
+    <li>Why Vikings could navigate on cloudy days (sunstone theory)</li>
+    <li>Could the Alcatraz raincoat raft really float?</li>
+    <li>How one man survived 3 days in a sunken ship (air pocket)</li>
+    <li>Why the Titanic's rivets mattered</li>
+    <li>How ice was shipped from Boston to India</li>
+    <li>Why cats always land on their feet</li>
+    <li>The Pykrete aircraft-carrier made of ice and sawdust</li>
+    <li>How a hot-air balloon escape from East Germany worked</li>
+    <li>The "thunder stone" and how people explained lightning</li>
+    <li>Why the Dead Sea floats you</li>
+    <li>How the Eiffel Tower grows in summer</li>
+    <li>How carrier pigeons found their way home</li>
+    <li>Why old glass windows are thicker at the bottom (myth)</li>
+    <li>How a prisoner escaped by mailing himself</li>
+    <li>Why ships float but a steel ball sinks</li>
+    <li>How a felt-tip pen saved Apollo 11 (the broken switch)</li>
+    <li>How the Great Pyramid's stones were moved (wet sand)</li>
+    <li>How the Romans cooled their houses</li>
+    <li>The man who walked across Niagara on a rope (balance pole)</li>
+    <li>Why bread goes stale (and why the toaster fixes it)</li>
+  </ol>
+  <p style="font-size:9pt;color:var(--muted)">Some of these are famous myths. Research first: the "myth check" twist can be the whole video.</p>
+</section>
+
+<!-- WHAT-IF -->
+<section class="sec">
+  <span class="tag tw">Format 2</span>
+  <h2 style="margin-top:3mm">The Big What-If</h2>
+  <p class="lead">Nobody can picture 8 billion of anything. Turn a huge number into an everyday object and show the result. The viewer stays for the answer. 40–60 s.</p>
+  <div class="card">
+    <ol class="beats">
+      <li><span class="t">What if</span><span>One question with a number answer. The thumbnail asks it too.</span></li>
+      <li><span class="t">Make it an object</span><span>The Earth as a cake, the ocean as a bathtub, history as one day.</span></li>
+      <li><span class="t">Answer 1</span><span>The first result, said plainly. Pause.</span></li>
+      <li><span class="t">Make it real</span><span>Compare it to something the viewer knows: a football field, an island.</span></li>
+      <li><span class="t">Answers 2–4</span><span>Each answer more surprising than the last. Save the craziest for last.</span></li>
+      <li><span class="t">Recap</span><span>All the numbers in one breath.</span></li>
+      <li><span class="t">CTA</span><span>"What should we [split / try] next?" Every comment is a future topic.</span></li>
+    </ol>
+  </div>
+  <h3>Example script (written for this guide)</h3>
+  <div class="card script">
+    <div class="row"><span><span class="beat">What if</span>What if all 8 billion people on Earth stood in one place?</span><span class="note">Number question, instantly clear.</span></div>
+    <div class="row"><span>Let's pack them in.</span><span class="note">Invites the viewer into the experiment.</span></div>
+    <div class="row"><span><span class="beat">Answer 1</span>One square meter each. Room to breathe. / That's 8,000 square kilometers. / A bit smaller than Puerto Rico.</span><span class="note">Number, then a place the viewer can picture.</span></div>
+    <div class="row"><span>The whole human race... on one island.</span><span class="note">Pause. Let it land.</span></div>
+    <div class="row"><span><span class="beat">Answer 2</span>Now squeeze. Concert crowd. Four people per square meter. / We fit in 2,000 square kilometers. / A city a bit bigger than London.</span><span class="note">Smaller and stranger.</span></div>
+    <div class="row"><span><span class="beat">Twist</span>And if all of us jumped at the same time? / The Earth wouldn't even notice.</span><span class="note">The surprise: humans are tiny.</span></div>
+    <div class="row"><span><span class="beat">CTA</span>So where should we put everyone? Tell me in the comments.</span><span class="note">An open question = comments.</span></div>
+  </div>
+  <p style="font-size:9pt;color:var(--muted)">Rounded figures from a world population of ~8 billion. As with every fact video, check the numbers again before you post.</p>
+  </section>
+<section class="sec">
+  <h3 style="margin-top:0">Template</h3>
+  <div class="fill">What if [huge thing] were [split / packed / stacked] [between 8 billion people]?
+Let's [split it / try it].
+[First answer]. That's about [everyday comparison].
+[Second answer, more surprising].
+But the real surprise? [Third answer].
+[Recap: number, number, number...]
+What should we [split] next?</div>
+  <h3>30 what-if topics</h3>
+  <ol class="ideas">
+    <li>Split all the fresh water</li><li>Split all the money in the world</li><li>Split the Moon</li><li>Split all the food made in one day</li><li>Split all the world's coffee</li><li>Split the Sun's energy hitting Earth in an hour</li><li>Split all the plastic ever made</li><li>Split all the cars on Earth</li><li>Split all the world's chocolate</li><li>Split the internet's data</li><li>Split all the fish in the sea</li><li>Split all the world's cows</li><li>Split all the oxygen trees make</li><li>Split all the electricity used in a day</li><li>Split all the world's books</li>
+    <li>What if everyone held hands in a line?</li><li>What if we stacked all 8 billion people?</li><li>What if Earth's history were one day?</li><li>What if the Earth were the size of a marble?</li><li>What if the world were 100 people?</li><li>What if everyone sent you $1?</li><li>What if everyone flushed at once?</li><li>What if the ocean were a bathtub?</li><li>What if every human planted one tree?</li><li>What if everyone stopped using phones for a day?</li><li>What if all ants stood on a scale against all humans?</li><li>What if we drained the oceans?</li><li>What if everyone lived in one tower?</li><li>What if all the world's ice melted at once?</li><li>What if the Earth stopped spinning for a second?</li>
+  </ol>
+</section>
+
+<!-- PARADOX -->
+<section class="sec">
+  <span class="tag tp">Format 3</span>
+  <h2 style="margin-top:3mm">The Paradox</h2>
+  <p class="lead">Take something everyone thinks is obvious and show them it isn't. Calm and curious, like telling a friend a strange thought late at night. 45–60 s.</p>
+  <div class="card">
+    <ol class="beats">
+      <li><span class="t">Obvious</span><span>2–3 facts nobody would argue with, in a quick rhythm.</span></li>
+      <li><span class="t">Crack</span><span>"But here's something no one can prove." Lower the voice.</span></li>
+      <li><span class="t">Question</span><span>The paradox as one simple question.</span></li>
+      <li><span class="t">Title</span><span>"This is the ___ paradox." A name is easy to remember and search.</span></li>
+      <li><span class="t">Explain</span><span>3–5 short lines built around one everyday image.</span></li>
+      <li><span class="t">Twist</span><span>"Here's the twist." It's bigger than it looked.</span></li>
+      <li><span class="t">Warm landing</span><span>End on something comforting. Dark endings get fewer shares.</span></li>
+      <li><span class="t">CTA</span><span>A yes/no or "which one are you" question.</span></li>
+    </ol>
+  </div>
+  <h3>Example script (written for this guide)</h3>
+  <div class="card script">
+    <div class="row"><span><span class="beat">Obvious</span>Your skin, your blood, your bones. All you, right?</span><span class="note">Three things, no argument.</span></div>
+    <div class="row"><span><span class="beat">Crack</span>But many of the cells in your body today weren't there ten years ago.</span><span class="note">The hook.</span></div>
+    <div class="row"><span><span class="beat">Question</span>So are you still the same person?</span><span class="note">Simple, personal.</span></div>
+    <div class="row"><span><span class="beat">Title</span>This is the Ship of Theseus paradox.</span><span class="note">Named.</span></div>
+    <div class="row"><span><span class="beat">Explain</span>A hero's wooden ship sits in a harbor. / Every year one rotten plank is replaced. / After enough years... not one original plank is left. / Is it still his ship?</span><span class="note">One image, step by step.</span></div>
+    <div class="row"><span>Now, someone collects all the old planks... and builds them back into a ship. / Which one is the real one?</span><span class="note">Escalation.</span></div>
+    <div class="row"><span><span class="beat">Twist</span>Here's the twist. Your body does this all the time. Cells are replaced, day after day.</span><span class="note">Brings it home (keep the claim general: not every cell is replaced).</span></div>
+    <div class="row"><span><span class="beat">Landing</span>Maybe "you" isn't the planks. Maybe it's the shape they keep.</span><span class="note">Warm.</span></div>
+    <div class="row"><span><span class="beat">CTA</span>Same ship, or new ship? Comment your answer.</span><span class="note">One-word answer.</span></div>
+  </div>
+  </section>
+<section class="sec">
+  <h3 style="margin-top:0">Template</h3>
+  <div class="fill">[Fact 1], [fact 2], [fact 3]. [Agree?]
+But here's something no one can prove.
+What if [the paradox as one question]?
+This is the [name] paradox.
+[Everyday image that sets it up: 3–5 short lines.]
+Here's the twist. [It's bigger than it looked.]
+[Warm landing.]
+[Yes/no question]? Comment [answer].</div>
+  <h3>30 paradox topics</h3>
+  <ol class="ideas">
+    <li>The grandfather paradox</li><li>Fermi paradox: where is everybody?</li><li>The birthday paradox</li><li>The paradox of choice</li><li>The liar paradox</li><li>Zeno's paradox</li><li>The sorites (heap) paradox</li><li>The teleporter paradox</li><li>The friendship paradox</li><li>Moravec's paradox</li><li>The Abilene paradox</li><li>The bootstrap paradox</li><li>The Monty Hall problem</li><li>Newcomb's paradox</li><li>Simpson's paradox</li><li>The potato paradox</li><li>The unexpected exam paradox</li><li>The crocodile dilemma</li><li>The Pinocchio paradox</li><li>The hedonic treadmill</li><li>The Jevons paradox</li><li>The holiday paradox</li><li>The tolerance paradox</li><li>The Ben Franklin effect</li><li>The Dunning–Kruger effect</li><li>Memory reconsolidation</li><li>The free-will question</li><li>The Mandela effect</li><li>The inverted-color question (do we see the same colors?)</li><li>The "which version of you is real" question</li>
+  </ol>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="sec">
+  <span class="tag tc">Format 4</span>
+  <h2 style="margin-top:3mm">The Countdown</h2>
+  <p class="lead">"Being ___ has 3 secret advantages." Fast, cheeky and made to be sent to a friend. 25–35 s.</p>
+  <div class="card">
+    <ol class="beats">
+      <li><span class="t">Hook</span><span>"Being [group] has 3 secret advantages." Pick something people get teased about.</span></li>
+      <li><span class="t">Number + title</span><span>"One: the back seat." Two or three words, instantly pictured.</span></li>
+      <li><span class="t">Others suffer</span><span>Show the "normal" people struggling.</span></li>
+      <li><span class="t">Flip + escalate</span><span>The group wins, then push it one step too far. That's the laugh.</span></li>
+      <li><span class="t">×3</span><span>Same rhythm. The third is the most absurd.</span></li>
+      <li><span class="t">Send CTA</span><span>"Send this to your [youngest] friend."</span></li>
+    </ol>
+  </div>
+  <h3>Example script (written for this guide)</h3>
+  <div class="card script">
+    <div class="row"><span><span class="beat">Hook</span>Being the youngest sibling has 3 secret advantages.</span><span class="note">A familiar tease, flipped.</span></div>
+    <div class="row"><span><span class="beat">#1</span>One: the rules. / The oldest had a bedtime of eight. / The youngest? Bedtime is... a suggestion. / By the third kid, the parents are just tired.</span><span class="note">Struggle → win → escalate.</span></div>
+    <div class="row"><span><span class="beat">#2</span>Two: the mistakes. / The oldest walks into every trap first. / The youngest takes notes.</span><span class="note">Short and smug.</span></div>
+    <div class="row"><span><span class="beat">#3</span>Three: the blame. / Something breaks. Everyone turns around. / The youngest is already crying. / Case closed.</span><span class="note">Most absurd last, like a courtroom drama.</span></div>
+    <div class="row"><span><span class="beat">CTA</span>Send this to your little brother or sister.</span><span class="note">Asks for a send.</span></div>
+  </div>
+  </section>
+<section class="sec">
+  <h3 style="margin-top:0">Template</h3>
+  <div class="fill">Being [group] has 3 secret advantages.
+One: [situation]. [Others] [struggle]. [Group]? [Wins]. [One step too far].
+Two: [situation]. [Others]: [bad]. [Group]: [good]. [Deadpan one-liner].
+Three: [most absurd situation]. [Tension...] [Absurd payoff].
+Send this to your [most ___] friend.</div>
+  <h3>30 countdown topics</h3>
+  <ol class="ideas">
+    <li>Being tall</li><li>Being short</li><li>Being the oldest sibling</li><li>Being an only child</li><li>Being a middle child</li><li>Being an introvert</li><li>Being left-handed</li><li>Being always late</li><li>Being a light sleeper</li><li>Having a common name</li><li>Having a rare name</li><li>Being the quiet friend</li><li>Being bad at directions</li><li>Being a picky eater</li><li>Wearing glasses</li><li>Being always cold</li><li>Having curly hair</li><li>Being a night owl</li><li>Having no social media</li><li>Being the planner friend</li><li>Laughing at everything</li><li>Being bad at sports</li><li>Having a loud laugh</li><li>Having a baby face</li><li>Being the designated driver</li><li>Never replying to texts</li><li>Having big feet</li><li>Always being hungry</li><li>Being a slow walker</li><li>Being a fast walker</li>
+  </ol>
+</section>
+
+<!-- DEADPAN -->
+<section class="sec">
+  <span class="tag td">Format 5</span>
+  <h2 style="margin-top:3mm">The Deadpan Tutorial</h2>
+  <p class="lead">A tutorial for an embarrassingly simple task, read with a straight face. The whole joke is one step that's a little too true. 15–20 s, so it loops.</p>
+  <div class="card">
+    <ol class="beats">
+      <li><span class="t">Title</span><span>"How to [simple task]." No joke yet.</span></li>
+      <li><span class="t">Steps 1–4</span><span>Literal, obvious steps, read flat. A short pause after each "Step ___:".</span></li>
+      <li><span class="t">The step</span><span>One step that calls out the real bad habit. Slower, pointed.</span></li>
+      <li><span class="t">Medal</span><span>Over-the-top sincere congratulations.</span></li>
+    </ol>
+  </div>
+  <h3>Example script (written for this guide)</h3>
+  <div class="card script">
+    <div class="row"><span><span class="beat">Title</span>How to leave a party.</span><span class="note">Tutorial voice.</span></div>
+    <div class="row"><span><span class="beat">1–4</span>Step one: Say "I should get going." / Step two: Stand up. / Step three: Say goodbye to everyone. / Step four: Walk to the door.</span><span class="note">Flat, patronising.</span></div>
+    <div class="row"><span><span class="beat">The step</span>Step five: Do not start a new conversation at the door. / For forty-five minutes.</span><span class="note">The joke everyone tags a friend on.</span></div>
+    <div class="row"><span><span class="beat">Medal</span>Congratulations. You have left the party.</span><span class="note">Proud, like a medal ceremony.</span></div>
+  </div>
+  </section>
+<section class="sec">
+  <h3 style="margin-top:0">Template</h3>
+  <div class="fill">How to [simple task everyone fails at].
+Step one: [literal action]. Step two: [literal action].
+Step three: [literal action]. Step four: [the "finishing" action].
+Step five: [the real bad habit, called out gently].
+Congratulations, you have [done the task].</div>
+  <h3>30 deadpan topics</h3>
+  <ol class="ideas">
+    <li>How to reply to an email</li><li>How to go to sleep</li><li>How to say no</li><li>How to drink water</li><li>How to return something you borrowed</li><li>How to cancel a subscription</li><li>How to order at a restaurant</li><li>How to answer a phone call</li><li>How to put clothes away (not on the chair)</li><li>How to end a phone call</li><li>How to start the assignment</li><li>How to go to the gym</li><li>How to wake up on the first alarm</li><li>How to read the group chat</li><li>How to pick a movie</li><li>How to clean your room</li><li>How to stop after one episode</li><li>How to wash the dishes today</li><li>How to arrive on time</li><li>How to take a compliment</li><li>How to apologize without "but"</li><li>How to read the instructions first</li><li>How to close your browser tabs</li><li>How to back up your photos</li><li>How to update your phone</li><li>How to ask for directions</li><li>How to unsubscribe from one email</li><li>How to text back</li><li>How to choose a profile picture</li><li>How to leave a voice message</li>
+  </ol>
+</section>
+
+<!-- ============ PART 5 ============ -->
+<section class="part"><div class="n">05</div><h1>Toolbox</h1><p>The prompts I copy-paste, the mistakes I paid for, and the checklist every video goes through.</p></section>
+
+<section class="sec pl">
+  <div class="kicker">Copy-paste</div>
+  <h2>Prompt library</h2>
+  <style>.pl h3{margin:3.5mm 0 1.5mm} .pl pre{font-size:8.2pt;padding:2.6mm 4mm;margin-bottom:2.5mm}</style>
+  <p class="lead">These are the messages I actually send to Claude. Replace the [brackets].</p>
+  <h3>New video</h3>
+  <pre>New video: "[Title with the hook]?!"
+One line: [the story in one sentence].
+Use the [hidden-mechanism / what-if / paradox / countdown / deadpan] structure.
+Check every fact in 2 sources and list them. Show me the script first.</pre>
+  <h3>From an idea you saw in another language</h3>
+  <pre>I saw a popular Short about [topic] in [language]. Don't translate it.
+Research the topic from scratch, find the most surprising true facts, and
+write an ORIGINAL English script in my [format] structure, with your own
+hook, order and ending. List your sources.</pre>
+  <h3>Fix the script</h3>
+  <pre>Read the script out loud in your head. Cut anything that repeats.
+Make the first sentence show the strangest moment without explaining it.
+Keep it under [60] seconds at 3.3 words per second.</pre>
+  <h3>Voice</h3>
+  <pre>Record the voice with my standard director's notes. Add line notes:
+'[line]' [how it should sound]; '[line]' [how it should sound].
+Trim the pauses, speed up x1.12, and tell me the final length.</pre>
+  <h3>Before rendering</h3>
+  <pre>Render half-size stills at these words: [word], [word], [word], and the
+last frame. Put them on one contact sheet and check them against the
+style rules yourself first. Tell me what you fixed.</pre>
+  <h3>Corrections</h3>
+  <pre>[Problem in plain words, e.g. "there are too many sound effects"].
+Fix it in the whole video, not only this scene, and add a rule to
+CLAUDE.md so it never happens again.</pre>
+  <h3>Delivery</h3>
+  <pre>Run the final checks (format, -14 LUFS, true peak ≤ -1 dB, length),
+show me a contact sheet of the final file, save it to output/, and suggest
+3 titles, a caption and 10 hashtags for Instagram and YouTube.</pre>
+</section>
+
+<section class="sec">
+  <div class="kicker">Learn from mine</div>
+  <h2>12 mistakes I made (so you don't have to)</h2>
+  <table>
+    <tr><th style="width:38%">Mistake</th><th>What fixed it</th></tr>
+    <tr><td>Too many sound effects</td><td>One effect every 3–4 seconds, soft, only on key words.</td></tr>
+    <tr><td>A long ringing bell at the start</td><td>A very short, quiet ding. Long bells sound cheap.</td></tr>
+    <tr><td>Crowd murmur under scenes</td><td>Removed. It made the mix muddy and tiring.</td></tr>
+    <tr><td>A slow opening (character just standing)</td><td>The strange act is on screen in frame one: 3–4 pictures in the first 5 s.</td></tr>
+    <tr><td>Flat, even lighting</td><td>One visible light per set, warm vs cool, real shadows.</td></tr>
+    <tr><td>An extra character the story didn't need</td><td>Removed from the whole video. Every character must earn its place.</td></tr>
+    <tr><td>Fixing one scene but not the others</td><td>"Remove X" means from the whole video. Say it explicitly.</td></tr>
+    <tr><td>Rendering before looking</td><td>Stills first, always. A 3-hour render of a mistake is 3 hours lost.</td></tr>
+    <tr><td>Losing hours to a cloud restart</td><td>A resumable render that saves each frame and continues.</td></tr>
+    <tr><td>A number the sources disagreed on</td><td>If sources disagree, don't say the number.</td></tr>
+    <tr><td>Captions covering faces</td><td>Captions at 70% height; faces live at 35–60%.</td></tr>
+    <tr><td>Repeating the same correction every video</td><td>Every correction becomes a line in CLAUDE.md.</td></tr>
+  </table>
+  <h3>20 hooks to steal</h3>
+  <ol class="ideas">
+    <li>This [person] is [absurd act]... with [odd object].</li><li>What if we split [X] between 8 billion people?</li><li>But here's something no one can prove.</li><li>Being [X] has 3 secret advantages.</li><li>How to [simple task].</li><li>They [did something absurd] to [solve a problem]?!</li><li>Everyone laughed at him. Then [result].</li><li>This sounds fake, but it's true.</li><li>What if [obvious thing] isn't true?</li><li>Scientists still can't explain this.</li><li>Nobody talks about this part of [X].</li><li>You've been doing [X] wrong your whole life.</li><li>Your brain is lying to you right now.</li><li>There's a name for what you do when [X].</li><li>This one question breaks everyone.</li><li>So, which one is the real you?</li><li>The [X] paradox in 50 seconds.</li><li>In [year], [someone] tried to [absurd plan].</li><li>[Number] people. One [thing]. Let's split it.</li><li>Step one: [absurdly obvious action].</li>
+  </ol>
+</section>
+
+<section class="sec">
+  <div class="kicker">Every single video</div>
+  <h2>The final checklist</h2>
+  <h3>Script</h3>
+  <ul class="check">
+    <li>The first sentence shows the strangest moment, without explaining it.</li>
+    <li>Every fact is checked in two sources; disputed numbers left out.</li>
+    <li>There's a turn in the middle and a payoff near the end.</li>
+    <li>Everything planted early comes back.</li>
+    <li>It reads out loud within the target length.</li>
+    <li>Exactly one call to action.</li>
+  </ul>
+  <h3>Picture</h3>
+  <ul class="check">
+    <li>3–4 pictures in the first 5 seconds; the act is visible at 0 s.</li>
+    <li>Every set has a visible light source and real shadows.</li>
+    <li>The camera never stands still; whips have motion blur.</li>
+    <li>Nothing cut off, no captions over faces, hands touching what they hold.</li>
+    <li>Stills checked, then a half-size draft watched start to finish.</li>
+  </ul>
+  <h3>Sound</h3>
+  <ul class="check">
+    <li>The same narrator voice and base director's notes as every video.</li>
+    <li>Music ~14 dB under the voice; effects sparse and soft.</li>
+    <li>-14 LUFS, true peak at or below -1 dB.</li>
+  </ul>
+  <h3>Posting</h3>
+  <ul class="check">
+    <li>Title = the hook as a question. Cover = the hook frame + 2–4 words.</li>
+    <li>Posted at your usual time. Numbers checked after 48 hours.</li>
+    <li>A reason to follow: a series, a part 2, a daily promise.</li>
+  </ul>
+  <div class="card" style="margin-top:6mm">
+    <h3 style="margin-top:0">Credits and license</h3>
+    <p style="margin:0">The animation engine used here is <b>yumurta-stili</b> by Kodla Çiz (github.com/kodlaciz/yumurta-stili), free and open source under the MIT license. This guide covers my own workflow, settings and scripts on top of it. Claude is a product of Anthropic; Gemini is a product of Google. This guide isn't affiliated with or endorsed by any of them.</p>
+  </div>
+  <p style="text-align:center;margin-top:8mm;font-family:PoppinsX;font-size:14pt">Now go make one. Then make another tomorrow.</p>
+  <p style="text-align:center;color:var(--muted)">@itsjustneedy</p>
+</section>
+
+</body>
+</html>
