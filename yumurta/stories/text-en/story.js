@@ -102,7 +102,7 @@ function buildRoom(scene) {
   for (const s of [-1, 1]) box(g, .02, .5, HD, HATCH.x + s * HW / 2, CEIL + .25, HATCH.z, new THREE.MeshBasicMaterial({ color: '#241c22' }));
   box(g, HW, .5, .02, HATCH.x, CEIL + .25, z0, new THREE.MeshBasicMaterial({ color: '#241c22' }));
   for (const [cx, cz, w2, d2] of [[HATCH.x, z0, HW + .08, .05], [HATCH.x, z1, HW + .08, .05], [x0, HATCH.z, .05, HD], [x1, HATCH.z, .05, HD]]) box(g, w2, .04, d2, cx, CEIL - .01, cz, flat('#d8c8a8'));
-  { const door = new THREE.Group(); door.position.set(HATCH.x, CEIL, z0); door.rotation.x = 1.25; g.add(door); box(door, HW - .04, .03, HD - .04, 0, 0, (HD - .04) / 2, flat('#d8c8a8')); }
+  { const door = new THREE.Group(); door.position.set(HATCH.x, CEIL - .005, z0); door.rotation.x = 0; g.add(door); box(door, HW - .04, .03, HD - .04, 0, 0, (HD - .04) / 2, flat('#d8c8a8')); }
   // the window (day / night), the calendar, a sofa, a lamp, a plant, a rug
   box(g, 1.1, 1.0, .06, WINP.x, WINP.y, WINP.z - .02, flat('#ffffff'));
   dyn.winDay = windowView('#7ab8f0', '#d8eefc'); dyn.winNight = nightView();
@@ -187,7 +187,7 @@ export function frame(t, ctx) {
   const sent = t >= W('send') + .05, cong = t >= W('Congratulations') - .1;
 
   // Dave: upside down out of the attic, his phone held "up" (below his head), staring at the hero
-  if (!cong) {
+  if (false) {   // user: no Dave at all
   const dv = put('dave', HATCH.x, HATCH.z + .05, { expr: cong ? 'grin' : sent ? 'smile' : 'neutral', look: -.35, gazeX: -.7, gazeY: .4, blink: bl(2, W('send')),
     armL: [170, 4], armR: [174, -4], propR: 'phone', screen: sent && t < W('send') + .8 ? '#8af08a' : '#bfe0ff', bob: Math.sin(t * 1.6) * 6 }, { y: CEIL + 1.25, scale: .95, shadow: false });
   dv.mesh.rotation.z = Math.PI + Math.sin(t * 1.3) * .04;
