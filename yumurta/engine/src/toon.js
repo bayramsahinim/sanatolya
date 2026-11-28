@@ -90,6 +90,9 @@ function mitten(g, x, y, s) {            // a round hand with a thumb nub on the
 
 // ---------- props held in a hand (drawn in design units around the hand point) ----------
 const PROPS = {
+  phone(g, x, y, s, p) { g.save(); g.translate(x, y); g.rotate(-.12 * s); g.strokeStyle = PLUM; g.lineWidth = 6; g.lineJoin = 'round';
+    g.fillStyle = '#2a2a34'; g.beginPath(); g.roundRect(-30, -96, 60, 108, 12); g.fill(); g.stroke();
+    g.fillStyle = p.screen || '#bfe0ff'; g.beginPath(); g.roundRect(-22, -86, 44, 86, 6); g.fill(); g.restore(); },
   brush(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(-.5 * s); g.fillStyle = '#9a6a3a'; g.strokeStyle = PLUM; g.lineWidth = 6;
     g.beginPath(); g.roundRect(-6, -70, 12, 90, 5); g.fill(); g.stroke(); g.fillStyle = '#f2e6c8'; g.beginPath(); g.roundRect(-14, -112, 28, 46, 8); g.fill(); g.stroke(); g.restore(); },
   trowel(g, x, y, s) { g.save(); g.translate(x, y); g.rotate(.9 * s); g.fillStyle = '#7a5a3a'; g.strokeStyle = PLUM; g.lineWidth = 6;
