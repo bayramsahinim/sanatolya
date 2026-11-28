@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The 60-Second Script Kit</title>
+<style>
+@font-face { font-family: "PoppinsX"; src: url("../yumurta/engine/fonts/Poppins-ExtraBold.ttf"); font-weight: 800; }
+@page { size: A4; margin: 0; }
+:root {
+  --ink: #1d1b19; --muted: #6b645c; --paper: #fbf6ec; --card: #ffffff;
+  --accent: #ffb21a; --accent-soft: #fff1cf; --line: #e7dfd1;
+  --p: #6c5ce7; --c: #e2574c; --d: #2a9d8f;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper); color: var(--ink);
+  font-family: "Liberation Sans", "DejaVu Sans", Arial, sans-serif; font-size: 10.6pt; line-height: 1.5; }
+.page { width: 210mm; min-height: 297mm; padding: 18mm 17mm 16mm; position: relative; page-break-after: always; overflow: hidden; }
+.page:last-child { page-break-after: auto; }
+h1, h2, h3, .num, .big { font-family: "PoppinsX", sans-serif; font-weight: 800; letter-spacing: -0.01em; }
+h1 { font-size: 40pt; line-height: 1.02; margin: 0 0 6mm; }
+h2 { font-size: 22pt; line-height: 1.1; margin: 0 0 4mm; }
+h3 { font-size: 12.5pt; margin: 6mm 0 2mm; }
+p { margin: 0 0 3mm; }
+.kicker { text-transform: uppercase; letter-spacing: .14em; font-size: 8.5pt; font-weight: 700; color: var(--muted); margin-bottom: 3mm; }
+.lead { font-size: 12.5pt; color: #3a3631; }
+.foot { position: absolute; bottom: 9mm; left: 17mm; right: 17mm; display: flex; justify-content: space-between; font-size: 8pt; color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 4mm; padding: 5mm 6mm; margin: 0 0 4mm; }
+.tag { display: inline-block; font-size: 8pt; font-weight: 700; padding: .6mm 2.4mm; border-radius: 10mm; color: #fff; margin-right: 1.5mm; }
+.tp { background: var(--p); } .tc { background: var(--c); } .td { background: var(--d); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
+ol, ul { margin: 0 0 3mm; padding-left: 5mm; }
+li { margin-bottom: 1.2mm; }
+.beats { counter-reset: b; list-style: none; padding: 0; margin: 0; }
+.beats li { counter-increment: b; display: grid; grid-template-columns: 9mm 23mm 1fr; gap: 2mm; padding: 2.2mm 0; border-bottom: 1px dashed var(--line); margin: 0; }
+.beats li:last-child { border-bottom: 0; }
+.beats li::before { content: counter(b); font-family: "PoppinsX"; font-size: 13pt; color: var(--accent); line-height: 1.1; }
+.beats .t { font-weight: 700; font-size: 9pt; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; padding-top: .6mm; }
+.script { font-family: "Liberation Mono", "DejaVu Sans Mono", monospace; font-size: 9pt; line-height: 1.55; }
+.script .row { display: grid; grid-template-columns: 1fr 44mm; gap: 4mm; padding: 1.3mm 0; border-bottom: 1px solid #f1ebe0; }
+.script .row:last-child { border-bottom: 0; }
+.script .note { font-family: "Liberation Sans", Arial, sans-serif; font-size: 8.3pt; color: var(--muted); font-style: italic; }
+.script .beat { font-family: "Liberation Sans", Arial, sans-serif; font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); background: var(--ink); padding: .3mm 1.6mm; border-radius: 1mm; margin-right: 1.5mm; }
+.fill { font-family: "Liberation Mono", monospace; font-size: 9.4pt; background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 4mm 5mm; border-radius: 0 3mm 3mm 0; white-space: pre-wrap; margin-bottom: 4mm; }
+.ideas { columns: 2; column-gap: 7mm; font-size: 9.6pt; padding-left: 6mm; }
+.ideas li { break-inside: avoid; }
+.tip { background: var(--ink); color: #fff; border-radius: 4mm; padding: 4.5mm 6mm; margin: 4mm 0; }
+.tip b { color: var(--accent); }
+.check li { list-style: none; position: relative; padding-left: 7mm; }
+.check li::before { content: ""; position: absolute; left: 0; top: 1mm; width: 3.6mm; height: 3.6mm; border: 1.6px solid var(--ink); border-radius: 1mm; }
+.check { padding-left: 0; }
+table { width: 100%; border-collapse: collapse; font-size: 9.6pt; }
+th, td { text-align: left; padding: 2mm 2.5mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+
+/* cover */
+.cover { background: var(--ink); color: #fff; display: flex; flex-direction: column; }
+.cover h1 { font-size: 50pt; color: #fff; margin-top: 30mm; }
+.cover h1 span { color: var(--accent); }
+.cover .lead { color: #d9d3c9; font-size: 14pt; max-width: 150mm; }
+.egg { width: 62mm; height: 80mm; background: var(--accent); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; position: absolute; right: 18mm; bottom: 40mm; }
+.egg::before, .egg::after { content: ""; position: absolute; top: 30mm; width: 6mm; height: 9mm; background: var(--ink); border-radius: 50%; }
+.egg::before { left: 19mm; } .egg::after { right: 19mm; }
+.cover .inside { margin-top: auto; display: grid; grid-template-columns: repeat(3, 38mm); gap: 4mm; position: relative; z-index: 1; }
+.cover .inside div { border-top: 2px solid var(--accent); padding-top: 2.5mm; font-size: 9.5pt; color: #d9d3c9; }
+.cover .inside b { display: block; font-family: "PoppinsX"; font-size: 20pt; color: #fff; line-height: 1.1; }
+.cover .by { margin-top: 10mm; font-size: 9pt; color: #9c958b; position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<!-- 1 COVER -->
+<section class="page cover">
+  <div class="kicker" style="color:#ffb21a">Just Needy · Creator Kit Vol. 1</div>
+  <h1>The 60-Second<br><span>Script Kit</span></h1>
+  <p class="lead">The three Shorts formats behind the Just Needy channel, broken down beat by beat, with fill-in templates and 90 topics ready to film.</p>
+  <div class="egg"></div>
+  <div class="inside">
+    <div><b>3</b>proven formats</div>
+    <div><b>4</b>real scripts, annotated</div>
+    <div><b>90</b>topic ideas</div>
+  </div>
+  <div class="by">@itsjustneedy · For personal use. Please don't resell or reshare this file.</div>
+</section>
+
+<!-- 2 HOW TO USE -->
+<section class="page">
+  <div class="kicker">Start here</div>
+  <h2>Why most Shorts die in the first 2 seconds</h2>
+  <p class="lead">People don't scroll past a video because it looks bad. They scroll because nothing in the first sentence makes them need the next one.</p>
+  <p>Every script in this kit follows one rule: <b>each line has to earn the next one.</b> The hook opens a question, the middle keeps adding to it, and the payoff answers it, usually with a twist the viewer didn't see coming. A Short built like this gets watched to the end, and that's the number the algorithm cares about most.</p>
+
+  <h3>The three formats</h3>
+  <div class="grid3">
+    <div class="card"><span class="tag tp">Format 1</span><h3 style="margin-top:2mm">The Paradox</h3><p>One mind-bending idea, told calmly. It gets comments because everyone has an opinion.</p><p style="color:var(--muted);font-size:9pt">45–60 s · ~18 lines</p></div>
+    <div class="card"><span class="tag tc">Format 2</span><h3 style="margin-top:2mm">The Countdown</h3><p>"3 secret advantages of…" Fast, funny, and it gets sent to friends.</p><p style="color:var(--muted);font-size:9pt">25–35 s · ~16 lines</p></div>
+    <div class="card"><span class="tag td">Format 3</span><h3 style="margin-top:2mm">The Deadpan Tutorial</h3><p>A painfully simple task explained like it's rocket science. Gets rewatched and shared.</p><p style="color:var(--muted);font-size:9pt">15–20 s · ~7 lines</p></div>
+  </div>
+
+  <h3>How to use this kit</h3>
+  <ol>
+    <li><b>Pick a format</b> that fits the mood you want: deep, funny, or dry.</li>
+    <li><b>Pick a topic</b> from that format's idea list, or use the topic-finding method on page 11.</li>
+    <li><b>Fill in the template</b> line by line. Don't skip any beats; each one has a job.</li>
+    <li><b>Run it through the checklist</b> on page 13 before you record.</li>
+    <li><b>Record or generate the voice</b> using the voice direction prompts on page 10.</li>
+  </ol>
+  <div class="tip"><b>Rule of thumb:</b> read your script out loud with a timer. A Short that's 10 seconds too long almost always has one beat repeated twice. Find it and cut it.</div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>2</span></div>
+</section>
+
+<!-- 3 PARADOX STRUCTURE -->
+<section class="page">
+  <span class="tag tp">Format 1</span>
+  <h2 style="margin-top:3mm">The Paradox</h2>
+  <p class="lead">Take something everyone thinks is obvious and show them it isn't. The tone is calm and curious, like telling a friend a strange thought late at night.</p>
+  <div class="card">
+    <ol class="beats">
+      <li><span class="t">Obvious</span><span>List 2–3 facts nobody would argue with. A quick rhythm, three items works best.</span></li>
+      <li><span class="t">Agree?</span><span>Get the viewer to agree: "Everyone agrees, right?" They're now on your side.</span></li>
+      <li><span class="t">Crack</span><span>"But here's something no one can prove." Lower your voice. This is the real hook.</span></li>
+      <li><span class="t">Question</span><span>Ask the paradox as one simple question a 10-year-old would understand.</span></li>
+      <li><span class="t">Title</span><span>"This is the ___ paradox." Naming it makes it feel real and easy to search.</span></li>
+      <li><span class="t">Explain</span><span>3–5 short lines: where the idea comes from, using one everyday image.</span></li>
+      <li><span class="t">Stakes</span><span>Make it personal and a little unsettling: "Your blue could be my green."</span></li>
+      <li><span class="t">Twist</span><span>"Here's the twist." Zoom out: the idea is bigger than it looked.</span></li>
+      <li><span class="t">Warm landing</span><span>End on something comforting or beautiful. Paradoxes that end dark get fewer shares.</span></li>
+      <li><span class="t">CTA</span><span>Ask a yes/no or "which one are you" question, then "Follow for a new paradox every day."</span></li>
+    </ol>
+  </div>
+  <div class="tip"><b>Why it works:</b> beat 2 gets the viewer to agree, so beat 3 feels like it's happening to them. And the yes/no question at the end is easy to answer in one word, which is why paradox videos fill up with comments.</div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>3</span></div>
+</section>
+
+<!-- 4 PARADOX EXAMPLE -->
+<section class="page">
+  <span class="tag tp">Format 1 · Real script</span>
+  <h2 style="margin-top:3mm">"The Colorblind Paradox" annotated</h2>
+  <p style="color:var(--muted)">The exact narration from the Just Needy video (52 seconds). Left: the line. Right: what it's doing.</p>
+  <div class="card script">
+    <div class="row"><span><span class="beat">Obvious</span>The sky is blue, grass is green, fire is orange.</span><span class="note">Three facts, rhythmic. Zero risk.</span></div>
+    <div class="row"><span><span class="beat">Agree</span>Everyone agrees, right?</span><span class="note">Viewer nods. Now they're invested.</span></div>
+    <div class="row"><span><span class="beat">Crack</span>But here's something no one can prove.</span><span class="note">The real hook, about 4 s in.</span></div>
+    <div class="row"><span><span class="beat">Question</span>What if the blue you see is not the blue I see?</span><span class="note">Simple enough for a child to get.</span></div>
+    <div class="row"><span><span class="beat">Title</span>This is the colorblind paradox.</span><span class="note">Named, so it's easy to remember.</span></div>
+    <div class="row"><span><span class="beat">Explain</span>Since we were kids, someone pointed at the sky and said, "That's blue."</span><span class="note">One everyday memory everyone shares.</span></div>
+    <div class="row"><span>So we all learned the same word.</span><span class="note"></span></div>
+    <div class="row"><span>But what that color actually looks like inside your head? Nobody else can ever see it.</span><span class="note">The core idea, in plain words.</span></div>
+    <div class="row"><span><span class="beat">Stakes</span>Your blue could be my green. / Your red could be my purple.</span><span class="note">Personal, a little unsettling.</span></div>
+    <div class="row"><span>We'd still agree on everything and never find out.</span><span class="note">Explains why it can never be tested.</span></div>
+    <div class="row"><span><span class="beat">Twist</span>Here's the twist. / It's not just colors.</span><span class="note">Zooms out.</span></div>
+    <div class="row"><span>Maybe nobody experiences the world exactly the way you do.</span><span class="note"></span></div>
+    <div class="row"><span><span class="beat">Landing</span>Your sunset, your favorite song, the way rain feels. / All yours, and no one else will ever see it quite the same.</span><span class="note">Turns the scary idea into something beautiful.</span></div>
+    <div class="row"><span><span class="beat">CTA</span>So what do you think? / Do we all see the same colors? / Comment yes or no. / Follow for a new paradox every day.</span><span class="note">A one-word answer gets more comments. Also promises a series.</span></div>
+  </div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>4</span></div>
+</section>
+
+<!-- 5 PARADOX TEMPLATE + IDEAS -->
+<section class="page">
+  <span class="tag tp">Format 1 · Template</span>
+  <h2 style="margin-top:3mm">Fill in the blanks</h2>
+  <div class="fill">[Obvious fact 1], [obvious fact 2], [obvious fact 3].
+Everyone agrees, right?
+But here's something no one can prove.
+What if [the paradox as one simple question]?
+This is the [name] paradox.
+[Everyday memory or image that sets it up.]
+[One line: what everyone assumes.]
+[One line: why that assumption can't be checked.]
+[Personal example A]. [Personal example B].
+Here's the twist.
+[The idea is bigger than it looked: one line.]
+[Warm, beautiful landing: one or two lines.]
+So what do you think? [Yes/no or "which one" question]?
+Comment [answer]. Follow for a new paradox every day.</div>
+  <h3>30 paradox topics</h3>
+  <ol class="ideas">
+    <li>Ship of Theseus: are you the same person after every cell is replaced?</li>
+    <li>The chameleon paradox: which version of you is real?</li>
+    <li>The Mandela effect: why do thousands remember the same wrong thing?</li>
+    <li>The birthday paradox: 23 people, 50% chance of a shared birthday</li>
+    <li>The grandfather paradox: can you go back and stop yourself?</li>
+    <li>Fermi paradox: if aliens exist, where is everybody?</li>
+    <li>The paradox of choice: more options, less happy</li>
+    <li>The sorites paradox: when does a pile of sand stop being a pile?</li>
+    <li>The liar paradox: "This sentence is false."</li>
+    <li>The teleporter paradox: is the copy at the other end you?</li>
+    <li>The hedonic treadmill: why getting what you want doesn't last</li>
+    <li>The friendship paradox: your friends have more friends than you</li>
+    <li>Moravec's paradox: robots find the easy stuff hard</li>
+    <li>The tolerance paradox: should you tolerate intolerance?</li>
+    <li>The Ben Franklin effect: asking for favors makes people like you</li>
+    <li>The bootstrap paradox: a song nobody actually wrote</li>
+    <li>Zeno's paradox: you can never reach the door</li>
+    <li>The Abilene paradox: everyone agrees to what nobody wants</li>
+    <li>The unexpected exam paradox</li>
+    <li>The Dunning–Kruger paradox: the less you know, the surer you are</li>
+    <li>Memory reconsolidation: every time you remember something, you change it</li>
+    <li>The Pinocchio paradox: "My nose will grow now."</li>
+    <li>The crocodile dilemma</li>
+    <li>The potato paradox (99% water)</li>
+    <li>Simpson's paradox: the data that flips when you combine it</li>
+    <li>The Monty Hall problem: always switch doors</li>
+    <li>Newcomb's paradox: the box that predicted you</li>
+    <li>The Jevons paradox: more efficient engines, more fuel burned</li>
+    <li>The holiday paradox: fun trips fly by, then feel long in memory</li>
+    <li>The free-will paradox: did you choose to watch this?</li>
+  </ol>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>5</span></div>
+</section>
+
+<!-- 6 COUNTDOWN -->
+<section class="page">
+  <span class="tag tc">Format 2</span>
+  <h2 style="margin-top:3mm">The Countdown</h2>
+  <p class="lead">"Being ___ has 3 secret advantages." Fast, cheeky, and made to be sent to a friend. The viewer should see someone they know in it.</p>
+  <div class="card">
+    <ol class="beats">
+      <li><span class="t">Hook</span><span>"Being [group] has 3 secret advantages." A trait people are usually teased about works best.</span></li>
+      <li><span class="t">Number + title</span><span>"One: the blanket." Name the situation in 2–3 words. Viewers instantly picture it.</span></li>
+      <li><span class="t">The others</span><span>Show the "normal" people struggling: "Tall people have to choose."</span></li>
+      <li><span class="t">The flip</span><span>The group wins: "Short people? They vanish under it."</span></li>
+      <li><span class="t">Escalate</span><span>Push it one step too far: "They even plant a flag on top." This is the laugh.</span></li>
+      <li><span class="t">Repeat ×3</span><span>Same rhythm for Two and Three. Make the third one the most absurd.</span></li>
+      <li><span class="t">Send CTA</span><span>"Send this to your shortest friend." Sends count more than likes.</span></li>
+    </ol>
+  </div>
+  <h3>Real script: "Short People" (30 s)</h3>
+  <div class="card script">
+    <div class="row"><span><span class="beat">Hook</span>Being short has 3 secret advantages.</span><span class="note">Takes a usual tease and makes it a win.</span></div>
+    <div class="row"><span><span class="beat">#1</span>One: the blanket. / Tall people have to choose. / Cold feet... or cold shoulders.</span><span class="note">Read like a tragic dilemma.</span></div>
+    <div class="row"><span>Short people? They vanish under it. / The blanket becomes a tent. / They even plant a flag on top.</span><span class="note">Flip → escalate → absurd.</span></div>
+    <div class="row"><span><span class="beat">#2</span>Two: photos. / Tall people: back row. / Short people: always front and center. / Risk of getting cropped out: zero.</span><span class="note">Deadpan stat as the punchline.</span></div>
+    <div class="row"><span><span class="beat">#3</span>Three: the best hiding spot. / When the teacher picks someone for the board... / the tallest kid becomes your shield. / A human shield... against math.</span><span class="note">Most absurd one last. Read like a movie trailer.</span></div>
+    <div class="row"><span><span class="beat">CTA</span>Send this to your shortest friend.</span><span class="note">Asks for a send, not a follow.</span></div>
+  </div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>6</span></div>
+</section>
+
+<!-- 7 COUNTDOWN TEMPLATE + IDEAS -->
+<section class="page">
+  <span class="tag tc">Format 2 · Template</span>
+  <h2 style="margin-top:3mm">Fill in the blanks</h2>
+  <div class="fill">Being [group] has 3 secret advantages.
+One: [situation in 2–3 words].
+[Others] have to [struggle].
+[Group]? [They win, in one short line].
+[Escalate: one step too far].
+Two: [situation].
+[Others]: [bad outcome]. [Group]: [good outcome].
+[Deadpan stat or one-liner].
+Three: [the most absurd situation].
+[Set it up as tension...]
+[Absurd payoff]... [one more twist on it].
+Send this to your [most ___] friend.</div>
+  <h3>30 countdown topics</h3>
+  <ol class="ideas">
+    <li>Being tall has 3 secret advantages</li>
+    <li>Being the youngest sibling</li>
+    <li>Being the oldest sibling</li>
+    <li>Being an introvert</li>
+    <li>Being left-handed</li>
+    <li>Being always late</li>
+    <li>Being a light sleeper</li>
+    <li>Having a really common name</li>
+    <li>Having a really rare name</li>
+    <li>Being the quiet one in the group</li>
+    <li>Being bad at directions</li>
+    <li>Being a picky eater</li>
+    <li>Being an only child</li>
+    <li>Having glasses</li>
+    <li>Being always cold</li>
+    <li>Having curly hair</li>
+    <li>Being a night owl</li>
+    <li>Being the friend with no social media</li>
+    <li>Being the friend who over-plans</li>
+    <li>Being the one who laughs at everything</li>
+    <li>Being terrible at sports</li>
+    <li>Having a loud laugh</li>
+    <li>Being a middle child</li>
+    <li>Having a baby face</li>
+    <li>Being the group's designated driver</li>
+    <li>Being the one who never replies</li>
+    <li>Having big feet</li>
+    <li>Being the friend who's always hungry</li>
+    <li>Being a slow walker</li>
+    <li>Being the shortest in the family photo</li>
+  </ol>
+  <div class="tip"><b>Pro move:</b> make it a series. "Tall people," then "Short people," then "Middle-height people (nobody talks about us)." Each video promotes the next one in the comments.</div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>7</span></div>
+</section>
+
+<!-- 8 DEADPAN -->
+<section class="page">
+  <span class="tag td">Format 3</span>
+  <h2 style="margin-top:3mm">The Deadpan Tutorial</h2>
+  <p class="lead">A tutorial for something embarrassingly simple, read completely seriously. The joke lives in one single step that's a little too true.</p>
+  <div class="card">
+    <ol class="beats">
+      <li><span class="t">Title</span><span>"How to [simple task]." A clear tutorial heading. No joke yet.</span></li>
+      <li><span class="t">Steps 1–4</span><span>Obvious, literal instructions, read flatly. Each one builds up the setup.</span></li>
+      <li><span class="t">The step</span><span>One step that calls out a real bad habit: "Do this within the same week." This is the whole video.</span></li>
+      <li><span class="t">Medal</span><span>Over-the-top sincere congratulations: "Congratulations, you have texted back."</span></li>
+    </ol>
+  </div>
+  <h3>Real script: "How to Text Back" (19 s)</h3>
+  <div class="card script">
+    <div class="row"><span><span class="beat">Title</span>How to text back.</span><span class="note">A tutorial heading, straight-faced.</span></div>
+    <div class="row"><span><span class="beat">1–4</span>Step one: Pick up your phone. / Step two: Open the message. / Step three: Type some words. / Step four: Press send.</span><span class="note">Patronising, flat, a pause after each "Step ___:".</span></div>
+    <div class="row"><span><span class="beat">The step</span>Step five: Do this within the same week.</span><span class="note">A touch slower and more pointed. Everyone gets tagged here.</span></div>
+    <div class="row"><span><span class="beat">Medal</span>Congratulations, you have texted back.</span><span class="note">Proud, like awarding a medal.</span></div>
+  </div>
+  <div class="tip"><b>Why it's so short:</b> deadpan dies if it drags. Seven lines, under 20 seconds, so it loops. A video that's rewatched on loop counts as more watch time than its length.</div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>8</span></div>
+</section>
+
+<!-- 9 DEADPAN TEMPLATE + IDEAS -->
+<section class="page">
+  <span class="tag td">Format 3 · Template</span>
+  <h2 style="margin-top:3mm">Fill in the blanks</h2>
+  <div class="fill">How to [simple task everyone fails at].
+Step one: [literal first action].
+Step two: [literal second action].
+Step three: [literal third action].
+Step four: [the action that "finishes" it].
+Step five: [the real bad habit, called out gently].
+Congratulations, you have [done the task].</div>
+  <h3>30 deadpan tutorial topics</h3>
+  <ol class="ideas">
+    <li>How to reply to an email ("…this month")</li>
+    <li>How to go to sleep ("…put the phone down")</li>
+    <li>How to leave a party ("…actually leave")</li>
+    <li>How to say no</li>
+    <li>How to drink water</li>
+    <li>How to return a borrowed item</li>
+    <li>How to cancel a subscription</li>
+    <li>How to make a decision at a restaurant</li>
+    <li>How to answer a phone call</li>
+    <li>How to put clothes away (not on the chair)</li>
+    <li>How to end a phone call</li>
+    <li>How to say goodbye once</li>
+    <li>How to start the assignment</li>
+    <li>How to go to the gym</li>
+    <li>How to wake up on the first alarm</li>
+    <li>How to read the group chat</li>
+    <li>How to pick a movie</li>
+    <li>How to clean your room (not just hide things)</li>
+    <li>How to stop watching after one episode</li>
+    <li>How to wash the dishes today</li>
+    <li>How to arrive on time</li>
+    <li>How to take a compliment</li>
+    <li>How to apologize without "but"</li>
+    <li>How to read the instructions first</li>
+    <li>How to close 47 browser tabs</li>
+    <li>How to back up your photos</li>
+    <li>How to actually use the gym membership</li>
+    <li>How to update your phone</li>
+    <li>How to ask for directions</li>
+    <li>How to unsubscribe from one newsletter</li>
+  </ol>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>9</span></div>
+</section>
+
+<!-- 10 VOICE -->
+<section class="page">
+  <div class="kicker">Voice</div>
+  <h2>Directing the narrator</h2>
+  <p class="lead">The same words can land or die depending on how they're read. Whether you record yourself or use an AI voice, give a director's note for the whole video and for each key line.</p>
+  <p>AI voice tools like Gemini TTS or ElevenLabs follow written directions surprisingly well. Paste the note above the script. If you record yourself, read the note before every take.</p>
+  <h3>Base note (use for every video, so your channel always sounds the same)</h3>
+  <div class="fill">Narrator of a witty Shorts channel. Voice: young adult, energetic but natural, clean and bright, medium-fast pace, lightly sarcastic and clever. Natural pauses and comic timing. Not deep, not booming, not a documentary voice, never shouting, no fake excitement.</div>
+  <table>
+    <tr><th style="width:22%">Format</th><th>Add to the base note</th></tr>
+    <tr><td><span class="tag tp">Paradox</span></td><td>Calm, curious, a sense of wonder, like telling a friend a mind-bending thought late at night. "But here's…" lower and intriguing. The question slow, gently mind-blown. "Here's the twist." a beat of drama. Pauses of about a third of a second between lines.</td></tr>
+    <tr><td><span class="tag tc">Countdown</span></td><td>Fast pace like a well-edited Short, a knowing smile in the voice. Each number a quick, upbeat title. Dilemmas read as tragic, wins read as smug, stats read deadpan, the last item like a movie trailer. Pauses of about a quarter of a second.</td></tr>
+    <tr><td><span class="tag td">Deadpan</span></td><td>A calm, slightly patronising instructional voice, completely straight-faced. Each "Step ___:" like a tutorial heading, short pause, then the instruction, flat. The joke step a touch slower and more pointed. The final line proud and over-the-top sincere.</td></tr>
+  </table>
+  <div class="tip"><b>Line-level notes are the secret.</b> Don't just say "be funny." Pick the 3–4 lines that matter most and say exactly how each should sound: "<i>'Cold feet… or cold shoulders.'</i> as a tragic dilemma."</div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>10</span></div>
+</section>
+
+<!-- 11 TOPIC FINDING -->
+<section class="page">
+  <div class="kicker">Never run out of ideas</div>
+  <h2>The 10-minute topic method</h2>
+  <p class="lead">90 topics will get you through three months of posting. After that, use this method to find more.</p>
+  <h3>Where to look</h3>
+  <div class="grid2">
+    <div class="card"><span class="tag tp">Paradox</span><ul style="margin-top:2mm"><li>Wikipedia's "List of paradoxes" and "List of cognitive biases"</li><li>Questions that start with "Why do I…" in search autocomplete</li><li>Shower-thought style forums and threads</li><li>Psychology terms with a catchy name</li></ul></div>
+    <div class="card"><span class="tag tc">Countdown</span><ul style="margin-top:2mm"><li>Anything people get teased about (height, names, habits)</li><li>Birth order, personality types, "the friend who…"</li><li>Your own comments: "do one about ___"</li><li>Flip an existing video to the opposite group</li></ul></div>
+  </div>
+  <div class="card"><span class="tag td">Deadpan</span> Write down every small task you put off this week. Each one is a video. The bad habit you're guilty of is the joke step.</div>
+  <h3>Score it before you write it</h3>
+  <table>
+    <tr><th>Question</th><th style="width:22%">Score</th></tr>
+    <tr><td>Can I say the hook in one sentence a 10-year-old understands?</td><td>0–2</td></tr>
+    <tr><td>Will the viewer think of a specific person (to send it to)?</td><td>0–2</td></tr>
+    <tr><td>Is there a one-word answer people will argue about in the comments?</td><td>0–2</td></tr>
+    <tr><td>Does it have a twist or punchline I can say in one line?</td><td>0–2</td></tr>
+    <tr><td>Can it be shown visually (blanket, sky, phone…)?</td><td>0–2</td></tr>
+  </table>
+  <p style="margin-top:3mm"><b>7 or more:</b> make it this week. <b>4–6:</b> rework the hook. <b>Under 4:</b> skip it.</p>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>11</span></div>
+</section>
+
+<!-- 12 HOOK + CTA BANK -->
+<section class="page">
+  <div class="kicker">Swipe file</div>
+  <h2>20 hooks and 10 endings</h2>
+  <div class="grid2">
+    <div>
+      <h3>Hooks</h3>
+      <ol style="font-size:9.6pt">
+        <li>Being [X] has 3 secret advantages.</li>
+        <li>But here's something no one can prove.</li>
+        <li>How to [simple task].</li>
+        <li>You've been doing [X] wrong your whole life.</li>
+        <li>So, which one is the real you?</li>
+        <li>Nobody talks about this part of [X].</li>
+        <li>This sounds fake, but it's true.</li>
+        <li>What if [obvious thing] isn't true?</li>
+        <li>There's a name for what you do when [X].</li>
+        <li>Scientists still can't explain this.</li>
+        <li>[Group] will never admit this.</li>
+        <li>Everyone agrees, right? Wrong.</li>
+        <li>3 things only [group] understand.</li>
+        <li>Your brain is lying to you right now.</li>
+        <li>This one question breaks everyone.</li>
+        <li>You do this every day and never notice.</li>
+        <li>Here's why [X] feels so [Y].</li>
+        <li>The [X] paradox explained in 50 seconds.</li>
+        <li>Step one: [absurdly obvious action].</li>
+        <li>If you're [X], this is your sign.</li>
+      </ol>
+    </div>
+    <div>
+      <h3>Endings (CTAs)</h3>
+      <ol style="font-size:9.6pt">
+        <li>Comment yes or no.</li>
+        <li>So be honest, which one are you?</li>
+        <li>Send this to your [most ___] friend.</li>
+        <li>Follow for a new paradox every day.</li>
+        <li>Tag the person who needs this tutorial.</li>
+        <li>Part 2 if this gets [X] comments.</li>
+        <li>Which one did I miss?</li>
+        <li>Congratulations, you have [done X].</li>
+        <li>Watch it again. Did you notice?</li>
+        <li>What would you have chosen?</li>
+      </ol>
+      <div class="tip" style="margin-top:6mm"><b>Pick one CTA per video.</b> "Comment, follow, and share" means none of them get done. Match it to the format: paradox → comment, countdown → send, deadpan → tag.</div>
+    </div>
+  </div>
+  <div class="foot"><span>The 60-Second Script Kit</span><span>12</span></div>
+</section>
+
+<!-- 13 CHECKLIST -->
+<section class="page">
+  <div class="kicker">Before you hit record</div>
+  <h2>The pre-record checklist</h2>
+  <ul class="check" style="font-size:11pt">
+    <li>The hook is in the first sentence, not the second.</li>
+    <li>The real hook (the "crack" or the flip) lands before second 5.</li>
+    <li>Every line is under ~15 words. Long lines get cut in half.</li>
+    <li>No two beats say the same thing.</li>
+    <li>There's one twist or punchline, and it's near the end.</li>
+    <li>The ending feels good (warm, funny, or proud), not dark.</li>
+    <li>Exactly one call to action, and it matches the format.</li>
+    <li>Read out loud with a timer: Paradox ≤ 60 s, Countdown ≤ 35 s, Deadpan ≤ 20 s.</li>
+    <li>Director's note written for the whole video plus 3–4 key lines.</li>
+    <li>Every line can be shown on screen as an image or action.</li>
+    <li>Captions are on screen. Most people watch on mute at first.</li>
+    <li>The first frame already shows something interesting (no logo intros).</li>
+  </ul>
+  <div class="card" style="margin-top:8mm">
+    <h3 style="margin-top:0">Want the full production system?</h3>
+    <p>This kit covers the writing. The full Just Needy workflow (3D characters, word-synced sound effects, auto captions and voice) is coming as a complete kit. Follow <b>@itsjustneedy</b> to hear when it drops.</p>
+  </div>
+  <div class="foot"><span>The 60-Second Script Kit · @itsjustneedy</span><span>13</span></div>
+</section>
+
+</body>
+</html>
